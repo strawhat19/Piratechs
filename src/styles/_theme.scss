@@ -1,0 +1,53 @@
+:root {
+  --space: 24px;
+  --space-sm: 12px;
+  --space-lg: 48px;
+  --maxWidth: 1180px;
+  --borderRadius: 6px;
+  --circle: 999px;
+  --font: 'Plus Jakarta Sans', Helvetica, Arial, sans-serif;
+  --navy: #04397b;
+  --navy-deep: #041b44;
+  --navy-dark: #00091b;
+  --piratechs: #2b4261;
+  --piratechsNeon: #00bfff;
+  --piratechsTeal: #13deb9;
+  --white: #ffffff;
+  --white-soft: #f8fafc;
+  --white-smoke: #e2e8f0;
+  --silver: #aab4c3;
+  --black: #020711;
+  --blackGlass: rgba(0, 0, 0, 0.72);
+  --darkGlass: rgba(0, 191, 255, 0.12);
+  --panelGlass: rgba(5, 21, 49, 0.78);
+  --foreground: var(--white);
+  --foregroundMuted: rgba(255, 255, 255, 0.72);
+  --background: var(--navy);
+  --backgroundDeep: var(--navy-dark);
+  --surface: rgba(4, 27, 68, 0.84);
+  --surfaceStrong: rgba(0, 9, 27, 0.88);
+  --border: rgba(0, 191, 255, 0.22);
+  --main: var(--piratechsNeon);
+  --links: var(--piratechsNeon);
+  --buttons: #0082c6;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1);
+}
+
+body[data-theme='light'] {
+  --foreground: #041b44;
+  --foregroundMuted: rgba(4, 27, 68, 0.72);
+  --background: #f8fafc;
+  --backgroundDeep: #edf4fb;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surfaceStrong: rgba(255, 255, 255, 0.96);
+  --border: rgba(4, 57, 123, 0.16);
+  --panelGlass: rgba(255, 255, 255, 0.86);
+  --shadow: 0 24px 60px rgba(4, 27, 68, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "piratechs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Piratechs static portfolio PWA for GitHub Pages.",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "sass src/styles/main.scss styles/main.css --style=expanded --no-source-map",
+    "build:js": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "sass": "^1.89.2",
+    "typescript": "^5.8.3"
+  }
+}
