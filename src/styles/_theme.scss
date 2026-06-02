@@ -2,7 +2,8 @@
   --space: 24px;
   --space-sm: 12px;
   --space-lg: 48px;
-  --maxWidth: 1180px;
+  --maxWidth: 100%;
+  --contentInset: clamp(18px, 4vw, 64px);
   --borderRadius: 6px;
   --circle: 999px;
   --font: 'Plus Jakarta Sans', Helvetica, Arial, sans-serif;
@@ -12,6 +13,8 @@
   --piratechs: #2b4261;
   --piratechsNeon: #00bfff;
   --piratechsTeal: #13deb9;
+  --navBar: #064486;
+  --navBarDeep: #04397b;
   --white: #ffffff;
   --white-soft: #f8fafc;
   --white-smoke: #e2e8f0;
@@ -30,6 +33,33 @@
   --main: var(--piratechsNeon);
   --links: var(--piratechsNeon);
   --buttons: #0082c6;
+  --circuit: rgba(0, 191, 255, 0.28);
+  --circuitSoft: rgba(19, 222, 185, 0.16);
+  --tech-angular: #dd0031;
+  --tech-api: #00bfff;
+  --tech-auth: #13deb9;
+  --tech-css: #1572b6;
+  --tech-design: #a855f7;
+  --tech-firebase: #ffca28;
+  --tech-github: #ffffff;
+  --tech-html: #e34f26;
+  --tech-javascript: #f7df1e;
+  --tech-json: #f5de19;
+  --tech-maps: #4285f4;
+  --tech-mobile: #00bfff;
+  --tech-motion: #ff0080;
+  --tech-mysql: #00758f;
+  --tech-next: #ffffff;
+  --tech-node: #5fa04e;
+  --tech-php: #777bb4;
+  --tech-pwa: #5a0fc8;
+  --tech-python: #3776ab;
+  --tech-react: #61dafb;
+  --tech-sass: #cc6699;
+  --tech-shopify: #95bf47;
+  --tech-sql: #f29111;
+  --tech-typescript: #3178c6;
+  --tech-wordpress: #21759b;
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
   --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1);
 }
@@ -43,7 +73,13 @@ body[data-theme='light'] {
   --surfaceStrong: rgba(255, 255, 255, 0.96);
   --border: rgba(4, 57, 123, 0.16);
   --panelGlass: rgba(255, 255, 255, 0.86);
+  --circuit: rgba(4, 57, 123, 0.2);
+  --circuitSoft: rgba(0, 191, 255, 0.14);
+  --tech-github: #181717;
+  --tech-next: #000000;
   --shadow: 0 24px 60px rgba(4, 27, 68, 0.12);
+  --navBar: #064486;
+  --navBarDeep: #04397b;
 }
 
 @media (prefers-color-scheme: dark) {

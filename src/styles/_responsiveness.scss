@@ -1,6 +1,6 @@
 $mobileBreakPoint7: 768px;
 $tabletBreakPoint9: 992px;
-$laptopBreakPoint12: 1200px;
+$laptopBreakPoint12: 1320px;
 
 @media (max-width: $laptopBreakPoint12) {
   .desktopNav {
@@ -53,6 +53,10 @@ $laptopBreakPoint12: 1200px;
     background: rgba(0, 191, 255, 0.06);
   }
 
+  .mobileNav .navLink:first-child span {
+    display: inline;
+  }
+
   .mobileAuth .authForm {
     box-shadow: none;
   }
@@ -71,6 +75,7 @@ $laptopBreakPoint12: 1200px;
 @media (max-width: $tabletBreakPoint9) {
   :root {
     --space: 18px;
+    --contentInset: 18px;
   }
 
   .authWrap {
@@ -90,10 +95,11 @@ $laptopBreakPoint12: 1200px;
   }
 
   .heroLogoPlate {
-    width: min(82vw, 320px);
+    width: min(82vw, 280px);
   }
 
   .experienceGrid,
+  .detailCards,
   .serviceGrid,
   .galleryGrid,
   .capabilityGrid {
@@ -115,7 +121,7 @@ $laptopBreakPoint12: 1200px;
   }
 
   .heroCopy h1 {
-    font-size: clamp(2.6rem, 16vw, 4.6rem);
+    font-size: clamp(2.15rem, 12vw, 3.6rem);
   }
 
   .heroActions,
@@ -131,6 +137,7 @@ $laptopBreakPoint12: 1200px;
 
   .heroMiniStats,
   .experienceGrid,
+  .detailCards,
   .serviceGrid,
   .galleryGrid,
   .capabilityGrid {

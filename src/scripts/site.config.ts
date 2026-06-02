@@ -2,6 +2,7 @@ export type NavItem = {
   id: string;
   label: string;
   href: string;
+  icon: string;
 };
 
 export type Project = {
@@ -22,6 +23,12 @@ export type PageCopy = {
   summary: string;
 };
 
+export type Skill = {
+  label: string;
+  group: string;
+  icon: string;
+};
+
 export const siteConfig = {
   title: `Piratechs`,
   description: `Full-stack software portfolio and digital studio.`,
@@ -32,13 +39,14 @@ export const siteConfig = {
     tile: `./public/assets/piratechs/images/Piratechs-Icon-App-Tile-Navy-BG.png`
   },
   nav: [
-    { id: `home`, label: `Home`, href: `./index.html` },
-    { id: `about`, label: `About`, href: `./about.html` },
-    { id: `projects`, label: `Projects`, href: `./projects.html` },
-    { id: `services`, label: `Services`, href: `./services.html` },
-    { id: `features`, label: `Features`, href: `./features.html` },
-    { id: `gallery`, label: `Gallery`, href: `./gallery.html` },
-    { id: `contact`, label: `Contact`, href: `./contact.html` }
+    { id: `home`, label: `Home`, href: `./index.html`, icon: `fa-solid fa-house` },
+    { id: `about`, label: `About`, href: `./about.html`, icon: `fa-solid fa-anchor` },
+    { id: `projects`, label: `Projects`, href: `./projects.html`, icon: `fa-solid fa-diagram-project` },
+    { id: `services`, label: `Services`, href: `./services.html`, icon: `fa-solid fa-screwdriver-wrench` },
+    { id: `store`, label: `Store`, href: `./store.html`, icon: `fa-solid fa-store` },
+    { id: `features`, label: `Features`, href: `./features.html`, icon: `fa-solid fa-list-check` },
+    { id: `gallery`, label: `Gallery`, href: `./gallery.html`, icon: `fa-solid fa-images` },
+    { id: `contact`, label: `Contact`, href: `./contact.html`, icon: `fa-solid fa-paper-plane` }
   ] satisfies NavItem[],
   pages: {
     home: {
@@ -60,6 +68,11 @@ export const siteConfig = {
       eyebrow: `Services`,
       title: `From landing pages to full-stack products`,
       summary: `A practical service map for responsive front ends, data-driven apps, CMS builds, automation, integrations, and branded product systems.`
+    },
+    store: {
+      eyebrow: `Store`,
+      title: `A future shelf for digital products and tools`,
+      summary: `This page will become the place for templates, small utilities, downloadable assets, and productized Piratechs experiments.`
     },
     features: {
       eyebrow: `Features`,
@@ -173,6 +186,24 @@ export const siteConfig = {
     { title: `Back-End + Data`, text: `Python, JSON, SQL, REST APIs, Firebase, WordPress/MySQL, automation, and practical integration work.` },
     { title: `CMS + Commerce`, text: `WordPress restorations, Shopify ideas, Squarespace support, branded pages, portfolio pieces, and content workflows.` }
   ],
+  skills: [
+    { label: `HTML`, group: `Markup`, icon: `fa-brands fa-html5` },
+    { label: `CSS`, group: `Style`, icon: `fa-brands fa-css3-alt` },
+    { label: `Sass`, group: `Style`, icon: `fa-brands fa-sass` },
+    { label: `JavaScript`, group: `Logic`, icon: `fa-brands fa-js` },
+    { label: `TypeScript`, group: `Logic`, icon: `fa-solid fa-code` },
+    { label: `React`, group: `UI`, icon: `fa-brands fa-react` },
+    { label: `Angular`, group: `UI`, icon: `fa-brands fa-angular` },
+    { label: `Node`, group: `Runtime`, icon: `fa-brands fa-node-js` },
+    { label: `Python`, group: `Backend`, icon: `fa-brands fa-python` },
+    { label: `SQL`, group: `Data`, icon: `fa-solid fa-database` },
+    { label: `JSON`, group: `Data`, icon: `fa-solid fa-file-code` },
+    { label: `Firebase`, group: `BaaS`, icon: `fa-solid fa-fire-flame-curved` },
+    { label: `WordPress`, group: `CMS`, icon: `fa-brands fa-wordpress` },
+    { label: `Shopify`, group: `Commerce`, icon: `fa-brands fa-shopify` },
+    { label: `GitHub`, group: `Code`, icon: `fa-brands fa-github` },
+    { label: `PWA`, group: `App`, icon: `fa-solid fa-mobile-screen-button` }
+  ] satisfies Skill[],
   capabilities: [`Python`, `JSON`, `SQL`, `REST`, `Firebase`, `WordPress`, `Shopify`, `Auth`, `PWA`, `Sass`, `TypeScript`, `Responsive UI`],
   gallery: [`Dashboards`, `WordPress`, `PWA Shells`, `Data Apps`, `Design Studies`, `Game UI`],
   social: [

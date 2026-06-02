@@ -46,12 +46,15 @@ img {
 
 .pageSection {
   position: relative;
-  padding: clamp(64px, 10vw, 118px) var(--space);
+  padding: clamp(64px, 9vw, 112px) var(--contentInset);
 }
 
 .sectionInner {
-  width: min(100%, var(--maxWidth));
-  margin: 0 auto;
+  width: 100%;
+  max-width: var(--maxWidth);
+  margin: 0;
+  z-index: 1;
+  position: relative;
 }
 
 .eyebrow {
@@ -65,7 +68,7 @@ img {
 }
 
 .sectionTitle {
-  width: min(100%, 720px);
+  width: min(100%, 840px);
   display: grid;
   gap: 13px;
   margin-bottom: 28px;

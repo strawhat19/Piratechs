@@ -1,7 +1,14 @@
-const CACHE_NAME = `piratechs-static-v1`;
+const CACHE_NAME = `piratechs-static-v5`;
 const APP_SHELL = [
   `./`,
   `./index.html`,
+  `./about.html`,
+  `./projects.html`,
+  `./services.html`,
+  `./store.html`,
+  `./features.html`,
+  `./gallery.html`,
+  `./contact.html`,
   `./styles/main.css`,
   `./scripts/site.config.js`,
   `./scripts/app.js`,

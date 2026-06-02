@@ -7,21 +7,74 @@ const app = document.querySelector<HTMLElement>(`[data-router-view]`);
 const toast = document.querySelector<HTMLElement>(`[data-toast]`);
 const pageCopy = siteConfig.pages[pageId] || siteConfig.pages.home;
 
+const iconMap: Record<string, string> = {
+  api: `fa-solid fa-cloud-arrow-up`,
+  admin: `fa-solid fa-user-shield`,
+  angular: `fa-brands fa-angular`,
+  auth: `fa-solid fa-fingerprint`,
+  css: `fa-brands fa-css3-alt`,
+  'cms + commerce': `fa-solid fa-store`,
+  design: `fa-solid fa-pen-ruler`,
+  dashboards: `fa-solid fa-table-columns`,
+  'data ui': `fa-solid fa-table-cells-large`,
+  'data/api': `fa-solid fa-database`,
+  'data apps': `fa-solid fa-chart-line`,
+  'design studies': `fa-solid fa-pen-ruler`,
+  firebase: `fa-solid fa-fire-flame-curved`,
+  'front-end systems': `fa-solid fa-display`,
+  'game ui': `fa-solid fa-gamepad`,
+  github: `fa-brands fa-github`,
+  html: `fa-brands fa-html5`,
+  javascript: `fa-brands fa-js`,
+  json: `fa-solid fa-file-code`,
+  maps: `fa-solid fa-map-location-dot`,
+  mobile: `fa-solid fa-mobile-screen-button`,
+  motion: `fa-solid fa-wave-square`,
+  mysql: `fa-solid fa-database`,
+  next: `fa-solid fa-n`,
+  'next.js': `fa-solid fa-n`,
+  node: `fa-brands fa-node-js`,
+  php: `fa-brands fa-php`,
+  pwa: `fa-solid fa-mobile-screen-button`,
+  'pwa shells': `fa-solid fa-mobile-screen-button`,
+  python: `fa-brands fa-python`,
+  react: `fa-brands fa-react`,
+  'responsive ui': `fa-solid fa-display`,
+  rest: `fa-solid fa-cloud-arrow-up`,
+  sass: `fa-brands fa-sass`,
+  shopify: `fa-brands fa-shopify`,
+  sql: `fa-solid fa-database`,
+  typescript: `fa-solid fa-code`,
+  wordpress: `fa-brands fa-wordpress`,
+  'back-end + data': `fa-solid fa-database`,
+  'weather api': `fa-solid fa-cloud-sun`,
+  websockets: `fa-solid fa-network-wired`,
+  'web app': `fa-solid fa-window-restore`
+};
+
+const techSlug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, `-`).replace(/^-|-$/g, ``);
+const iconFor = (label: string) => iconMap[label.toLowerCase()] || `fa-solid fa-code`;
+const iconMarkup = (label: string) => `<i class="${iconFor(label)} techIcon techIcon-${techSlug(label)}" aria-hidden="true"></i>`;
+
 const renderNav = (target: Element | null) => {
   if (!target) return;
   target.innerHTML = siteConfig.nav.map(item => `
-    <a class="navLink ${item.id === pageId ? `activeRoute` : ``}" href="${item.href}">${item.label}</a>
+    <a class="navLink ${item.id === pageId ? `activeRoute` : ``}" href="${item.href}">
+      <i class="${item.icon}" aria-hidden="true"></i>
+      <span>${item.label}</span>
+    </a>
   `).join(``);
 };
 
-const techList = (tech: string[]) => tech.map(item => `<span>${item}</span>`).join(``);
+const techList = (tech: string[]) => tech.map(item => `<span>${iconMarkup(item)}${item}</span>`).join(``);
 
 const projectCard = (project: Project) => `
   <article class="projectCard reveal" data-project-card data-type="${project.type}" data-featured="${project.featured ? `true` : `false`}">
     <div class="projectTop">
-      <span class="typeBadge">${project.type}</span>
-      <span class="statusPill">${project.status}</span>
+      <span class="typeBadge">${iconMarkup(project.type)}${project.type}</span>
+      <span class="statusPill"><i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>${project.status}</span>
     </div>
+    <div class="projectIconCloud" aria-hidden="true">${project.tech.slice(0, 4).map(item => iconMarkup(item)).join(``)}</div>
     <h3>${project.title}</h3>
     <p>${project.summary}</p>
     <div class="techList">${techList(project.tech)}</div>
@@ -61,7 +114,7 @@ const authMarkup = () => `
 `;
 
 const renderHero = () => `
-  <section class="heroSection pageSection">
+  <section class="heroSection pageSection ${pageId === `home` ? `homeHero` : `subHero`}">
     <div class="heroBg" aria-hidden="true">
       <span class="gridPlane gridPlaneA"></span>
       <span class="gridPlane gridPlaneB"></span>
@@ -111,8 +164,9 @@ const renderProjects = () => {
 const renderExperience = () => `
   <section class="pageSection experienceSection" id="about">
     <div class="sectionInner experienceGrid">
-      ${siteConfig.stats.map(stat => `
+      ${siteConfig.stats.map((stat, index) => `
         <article class="statCard reveal">
+          <i class="${[`fa-solid fa-briefcase`, `fa-solid fa-layer-group`, `fa-solid fa-terminal`][index] || `fa-solid fa-code`}" aria-hidden="true"></i>
           <span>${stat.label}</span>
           <strong>${stat.value}</strong>
           <p>${stat.text}</p>
@@ -129,7 +183,24 @@ const renderBackend = () => `
         ${sectionTitle(`Back End / API / Data`, `Reliable systems behind polished screens`, `This section becomes the backend credibility band: data modeling, REST contracts, authentication, automation, CMS work, and integration patterns.`)}
       </div>
       <div class="capabilityGrid reveal">
-        ${siteConfig.capabilities.map(item => `<span>${item}</span>`).join(``)}
+        ${siteConfig.capabilities.map(item => `<span>${iconMarkup(item)}<strong>${item}</strong></span>`).join(``)}
+      </div>
+    </div>
+  </section>
+`;
+
+const renderSkillsRefined = () => `
+  <section class="pageSection skillsSection" id="skills">
+    <div class="sectionInner">
+      ${sectionTitle(`Skills // Refined`, `The working stack behind the brand`, `A tighter version of the classic portfolio skills row, expanded into a reusable icon system for the new Piratechs site.`)}
+      <div class="skillsGrid">
+        ${siteConfig.skills.map(skill => `
+          <article class="skillTile reveal">
+            ${iconMarkup(skill.label)}
+            <span>${skill.group}</span>
+            <strong>${skill.label}</strong>
+          </article>
+        `).join(``)}
       </div>
     </div>
   </section>
@@ -142,10 +213,24 @@ const renderServices = () => `
       <div class="serviceGrid">
         ${siteConfig.services.map(service => `
           <article class="serviceCard reveal">
+            ${iconMarkup(service.title)}
             <h3>${service.title}</h3>
             <p>${service.text}</p>
           </article>
         `).join(``)}
+      </div>
+    </div>
+  </section>
+`;
+
+const renderStore = () => `
+  <section class="pageSection storeSection" id="store">
+    <div class="sectionInner">
+      ${sectionTitle(`Store`, `Digital products and tools will live here`, `This first pass reserves a clean app-style shelf for future templates, UI kits, utilities, downloadable assets, and productized experiments.`)}
+      <div class="serviceGrid">
+        <article class="serviceCard reveal"><i class="fa-solid fa-file-code" aria-hidden="true"></i><h3>Templates</h3><p>Future starter kits for portfolio pages, PWA shells, dashboards, and branded app layouts.</p></article>
+        <article class="serviceCard reveal"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i><h3>Utilities</h3><p>Small tools and scripts that can ship as public demos or downloadable resources.</p></article>
+        <article class="serviceCard reveal"><i class="fa-solid fa-icons" aria-hidden="true"></i><h3>Assets</h3><p>Logo packs, UI studies, icon treatments, and visual systems connected to the Piratechs brand.</p></article>
       </div>
     </div>
   </section>
@@ -158,6 +243,7 @@ const renderGallery = () => `
       <div class="galleryGrid">
         ${siteConfig.gallery.map((item, index) => `
           <article class="galleryTile reveal">
+            ${iconMarkup(item)}
             <span>0${index + 1}</span>
             <strong>${item}</strong>
           </article>
@@ -178,14 +264,73 @@ const renderContact = () => `
   </section>
 `;
 
-const renderPageShell = () => `
+const renderAbout = () => `
+  <section class="pageSection pageDetailSection">
+    <div class="sectionInner detailGrid">
+      ${sectionTitle(`About`, `Built around the brand, not a headshot`, `Piratechs is becoming the public proof layer for production engineering experience, side-project range, and a cleaner full-stack identity.`)}
+      <div class="detailCards">
+        ${siteConfig.stats.map(stat => `
+          <article class="statCard reveal">
+            <span>${stat.label}</span>
+            <strong>${stat.value}</strong>
+            <p>${stat.text}</p>
+          </article>
+        `).join(``)}
+      </div>
+    </div>
+  </section>
+`;
+
+const renderFeatures = () => `
+  ${renderBackend()}
+  ${renderSkillsRefined()}
+  <section class="pageSection pageDetailSection">
+    <div class="sectionInner">
+      ${sectionTitle(`PWA Foundation`, `Static today, scalable tomorrow`, `The first build is intentionally simple for GitHub Pages, but the design system is ready to move into Next, Angular/Nx/Ionic, and Expo later.`)}
+      <div class="serviceGrid">
+        <article class="serviceCard reveal"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i><h3>Installable</h3><p>Manifest and service worker basics are in place so the portfolio can behave like a lightweight app.</p></article>
+        <article class="serviceCard reveal"><i class="fa-solid fa-gears" aria-hidden="true"></i><h3>Config Driven</h3><p>Global page copy, nav items, projects, capabilities, and links live in a shared config object.</p></article>
+        <article class="serviceCard reveal"><i class="fa-solid fa-display" aria-hidden="true"></i><h3>Responsive First</h3><p>The same nav and auth widget pattern works across desktop, tablet, and mobile menu states.</p></article>
+      </div>
+    </div>
+  </section>
+`;
+
+const renderPageDetail = () => {
+  switch (pageId) {
+    case `about`:
+      return renderAbout();
+    case `projects`:
+      return renderProjects();
+    case `services`:
+      return renderServices();
+    case `store`:
+      return renderStore();
+    case `features`:
+      return renderFeatures();
+    case `gallery`:
+      return renderGallery();
+    case `contact`:
+      return renderContact();
+    default:
+      return renderServices();
+  }
+};
+
+const renderHomeShell = () => `
   ${renderHero()}
   ${renderProjects()}
   ${renderExperience()}
+  ${renderSkillsRefined()}
   ${renderBackend()}
-  ${pageId === `gallery` ? renderGallery() : renderServices()}
-  ${pageId === `gallery` ? `` : renderGallery()}
+  ${renderServices()}
+  ${renderGallery()}
   ${renderContact()}
+`;
+
+const renderPageShell = () => pageId === `home` ? renderHomeShell() : `
+  ${renderHero()}
+  ${renderPageDetail()}
 `;
 
 const renderFooter = () => {
