@@ -27,6 +27,7 @@
   --foregroundMuted: rgba(255, 255, 255, 0.72);
   --background: var(--navy);
   --backgroundDeep: var(--navy-dark);
+  --def_surface: rgba(4, 27, 68, 0.84);
   --surface: rgba(4, 27, 68, 0.84);
   --surfaceStrong: rgba(0, 9, 27, 0.88);
   --border: rgba(0, 191, 255, 0.22);
@@ -272,12 +273,13 @@ body[data-theme=light] .appShell {
 .siteHeader {
   top: 0;
   z-index: 10;
-  position: sticky;
   color: white;
-  border-bottom: 1px solid rgba(0, 191, 255, 0.22);
-  background: linear-gradient(90deg, var(--navBarDeep), var(--navBar));
-  box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
+  position: sticky;
+  background: transparent;
   transition: var(--transition);
+  box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
+  border-bottom: 1px solid rgba(0, 191, 255, 0.22);
+  /* background: linear-gradient(90deg, var(--navBarDeep), var(--navBar)); */
 }
 
 .siteHeader.headerScrolled,
@@ -287,9 +289,10 @@ body.menuOpen .siteHeader {
   backdrop-filter: blur(16px);
 }
 
-body[data-theme=light] .siteHeader.headerScrolled,
+body[data-theme=light] .siteHeader,
 body[data-theme=light].menuOpen .siteHeader {
-  background: linear-gradient(90deg, rgba(4, 57, 123, 0.96), rgba(6, 68, 134, 0.96));
+  background: var(--def_surface) !important;
+  /* background: linear-gradient(90deg, rgba(4, 57, 123, 0.96), rgba(6, 68, 134, 0.96)); */
 }
 
 .headerInner {

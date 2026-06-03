@@ -15,12 +15,13 @@ body[data-theme='light'] .appShell {
 .siteHeader {
   top: 0;
   z-index: 10;
-  position: sticky;
   color: white;
-  border-bottom: 1px solid rgba(0, 191, 255, 0.22);
-  background: linear-gradient(90deg, var(--navBarDeep), var(--navBar));
-  box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
+  position: sticky;
+  background: transparent;
   transition: var(--transition);
+  box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
+  border-bottom: 1px solid rgba(0, 191, 255, 0.22);
+  // background: linear-gradient(90deg, var(--navBarDeep), var(--navBar));
 }
 
 .siteHeader.headerScrolled,
