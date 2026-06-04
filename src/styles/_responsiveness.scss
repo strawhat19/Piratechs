@@ -126,4 +126,11 @@
   .navBar {
     gap: 8px;
   }
+
+  .scrollToTop {
+    width: 42px;
+    height: 42px;
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+  }
 }

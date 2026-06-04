@@ -8,6 +8,7 @@ import Footer from '@/app/components/footer/footer';
 import GlobalProvider from '@/shared/global-context';
 import { siteConfig } from '@/shared/config/site';
 import ScrollReveal from '@/app/components/effects/scroll-reveal';
+import ScrollToTop from '@/app/components/effects/scroll-to-top';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className={`siteMain`}>
             {children}
           </main>
+          <ScrollToTop />
           <Footer />
         </GlobalProvider>
       </body>
