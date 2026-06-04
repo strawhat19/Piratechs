@@ -19,6 +19,64 @@
   mix-blend-mode: screen;
 }
 
+.heroCircuitEnergyLayer {
+  z-index: 2;
+  display: block;
+  width: 110%;
+  height: 116%;
+  inset: -8% -5%;
+  position: absolute;
+  overflow: hidden;
+  contain: layout paint style;
+  pointer-events: none;
+}
+
+.heroCircuitEnergy {
+  --sweepTop: 34%;
+  --sweepWidth: min(340px, 32vw);
+  --sweepRotate: 0deg;
+  --sweepDuration: 8s;
+  --sweepDelay: 0s;
+
+  top: var(--sweepTop);
+  left: 0;
+  width: var(--sweepWidth);
+  height: 2px;
+  position: absolute;
+  opacity: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--heroCircuitPulse), rgba(255, 255, 255, 0.82), transparent);
+  transform: translate3d(-34vw, 0, 0) rotate(var(--sweepRotate));
+  transform-origin: 50% 50%;
+  animation: heroCircuitEnergySweep var(--sweepDuration) linear infinite;
+  animation-delay: var(--sweepDelay);
+  will-change: transform, opacity;
+}
+
+.heroCircuitEnergyA {
+  --sweepTop: 34%;
+  --sweepRotate: 4deg;
+  --sweepDuration: 8.4s;
+  --sweepDelay: -1.4s;
+}
+
+.heroCircuitEnergyB {
+  --sweepTop: 23%;
+  --sweepRotate: -6deg;
+  --sweepDuration: 10.2s;
+  --sweepDelay: -5.2s;
+
+  background: linear-gradient(90deg, transparent, var(--heroCircuitPulseAlt), rgba(255, 255, 255, 0.72), transparent);
+}
+
+.heroCircuitEnergyC {
+  --sweepTop: 78%;
+  --sweepWidth: min(420px, 38vw);
+  --sweepRotate: -2deg;
+  --sweepDuration: 11.6s;
+  --sweepDelay: -8.1s;
+}
+
 @keyframes opa {
   0% {
     opacity: 0.4;
@@ -112,8 +170,33 @@
   }
 }
 
+@keyframes heroCircuitEnergySweep {
+  0% {
+    opacity: 0;
+    transform: translate3d(-34vw, 0, 0) rotate(var(--sweepRotate));
+  }
+  8% {
+    opacity: 0.86;
+  }
+  44% {
+    opacity: 0.86;
+  }
+  58% {
+    opacity: 0;
+    transform: translate3d(116vw, 0, 0) rotate(var(--sweepRotate));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(116vw, 0, 0) rotate(var(--sweepRotate));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .heroCircuitOverlay[data-animate-pulses="true"] .circuitPulse {
+    animation: none;
+  }
+
+  .heroCircuitEnergy {
     animation: none;
   }
 }

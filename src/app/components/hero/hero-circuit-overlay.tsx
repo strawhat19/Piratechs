@@ -1,22 +1,29 @@
 type HeroCircuitOverlayProps = {
-  animatePulses?: boolean;
   blur?: boolean;
   blendMode?: boolean;
+  energySweep?: boolean;
+  animatePulses?: boolean;
 };
 
-export default function HeroCircuitOverlay({ animatePulses = false, blur = false, blendMode = false }: HeroCircuitOverlayProps) {
+export default function HeroCircuitOverlay({ 
+  blur = false, 
+  blendMode = false, 
+  energySweep = false, 
+  animatePulses = false, 
+}: HeroCircuitOverlayProps) {
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
 
   return (
-    <svg
-      className={`heroCircuitOverlay`}
-      data-animate-pulses={animatePulses ? `true` : `false`}
-      data-blur={blur ? `true` : `false`}
-      data-blend-mode={blendMode ? `true` : `false`}
-      viewBox={`0 0 1440 760`}
-      preserveAspectRatio={`xMidYMid slice`}
-      aria-hidden={`true`}
-    >
+    <>
+      <svg
+        aria-hidden={`true`}
+        viewBox={`0 0 1440 760`}
+        className={`heroCircuitOverlay`}
+        data-blur={blur ? `true` : `false`}
+        preserveAspectRatio={`xMidYMid slice`}
+        data-blend-mode={blendMode ? `true` : `false`}
+        data-animate-pulses={animatePulses ? `true` : `false`}
+      >
       {blur ? (
         <defs>
           <filter id={`piratechsCircuitGlow`} x={`-20%`} y={`-40%`} width={`140%`} height={`180%`} colorInterpolationFilters={`sRGB`}>
@@ -73,6 +80,15 @@ export default function HeroCircuitOverlay({ animatePulses = false, blur = false
         <circle className={`circuitNode nodeI`} cx={`364`} cy={`588`} r={`5`} />
         <circle className={`circuitNode nodeJ`} cx={`892`} cy={`588`} r={`5`} />
       </g>
-    </svg>
+      </svg>
+
+      {energySweep ? (
+        <span className={`heroCircuitEnergyLayer`} aria-hidden={`true`}>
+          <span className={`heroCircuitEnergy heroCircuitEnergyA`} />
+          <span className={`heroCircuitEnergy heroCircuitEnergyB`} />
+          <span className={`heroCircuitEnergy heroCircuitEnergyC`} />
+        </span>
+      ) : null}
+    </>
   );
 }
