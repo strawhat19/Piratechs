@@ -1,0 +1,42 @@
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import './globals.scss';
+
+import type { Metadata, Viewport } from 'next';
+import { Plus_Jakarta_Sans } from 'next/font/google';
+import Nav from '@/app/components/nav/nav';
+import Footer from '@/app/components/footer/footer';
+import { siteConfig } from '@/shared/config/site';
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-plusJakartaSans',
+});
+
+export const viewport: Viewport = {
+  themeColor: `#04397b`,
+};
+
+export const metadata: Metadata = {
+  title: siteConfig.title,
+  description: siteConfig.description,
+  manifest: `/manifest.json`,
+  icons: {
+    icon: `/icon-192x192.png`,
+    apple: `/icon-192x192.png`,
+    shortcut: `/icon-512x512.png`,
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang={`en`} className={plusJakartaSans.variable}>
+      <body>
+        <Nav />
+        <main className={`siteMain`}>
+          {children}
+        </main>
+        <Footer />
+      </body>
+    </html>
+  );
+}

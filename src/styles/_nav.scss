@@ -1,0 +1,183 @@
+.siteHeader {
+  top: 0;
+  width: 100%;
+  z-index: 20;
+  color: white;
+  position: fixed;
+  background: linear-gradient(90deg, rgba(4, 57, 123, 0.98), rgba(6, 68, 134, 0.98));
+  box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
+  border-bottom: 1px solid rgba(0, 191, 255, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.navBar {
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  padding: 0 var(--contentInset);
+}
+
+.homeButton {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  flex: 0 0 auto;
+  color: white;
+  place-items: center;
+  border-radius: var(--circle);
+  background: rgba(0, 191, 255, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.brandMark {
+  display: flex;
+  gap: 10px;
+  min-width: fit-content;
+  align-items: center;
+  color: white;
+  font-weight: 800;
+}
+
+.brandLogo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.brandMark span {
+  font-size: clamp(1.18rem, 2vw, 1.58rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.brandLogoLight,
+.footerLogoLight,
+body[data-theme="light"] .brandLogoDark,
+body[data-theme="light"] .footerLogoDark,
+body[data-theme="light"] .heroLogoDark {
+  display: none;
+}
+
+body[data-theme="light"] .brandLogoLight,
+body[data-theme="light"] .footerLogoLight,
+body[data-theme="light"] .heroLogoLight {
+  display: block;
+}
+
+.desktopNav {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.navLink {
+  min-height: 42px;
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  position: relative;
+  padding: 8px 7px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+  font-weight: 800;
+  transition: color var(--transition), transform var(--transition);
+}
+
+.navLink i {
+  color: var(--main);
+  font-size: 0.95rem;
+}
+
+.navLink::after {
+  left: 8px;
+  right: 8px;
+  bottom: 1px;
+  height: 2px;
+  content: "";
+  position: absolute;
+  background: var(--main);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.navLink:hover,
+.navLink.activeRoute {
+  color: white;
+}
+
+.navLink:hover::after,
+.navLink.activeRoute::after {
+  transform: scaleX(1);
+}
+
+.navActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.iconButton {
+  width: 38px;
+  height: 38px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(0, 191, 255, 0.26);
+  border-radius: var(--borderRadius);
+  color: white;
+  background: rgba(0, 191, 255, 0.16);
+  transition: transform var(--transition), border-color var(--transition), background var(--transition);
+}
+
+.iconButton:hover {
+  transform: translateY(-2px);
+  border-color: var(--main);
+  background: rgba(0, 191, 255, 0.26);
+}
+
+.mobileMenuButton {
+  display: none;
+}
+
+.mobileMenu {
+  width: min(100% - 32px, 520px);
+  right: 16px;
+  top: 72px;
+  z-index: 22;
+  display: grid;
+  gap: 14px;
+  position: fixed;
+  max-height: calc(100dvh - 92px);
+  padding: 16px;
+  overflow: auto;
+  pointer-events: none;
+  opacity: 0;
+  border: 1px solid rgba(0, 191, 255, 0.28);
+  border-radius: var(--borderRadius);
+  background: var(--surfaceStrong);
+  box-shadow: var(--shadow);
+  transform: translateY(-8px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+body.menuOpen .mobileMenu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mobileNav {
+  display: grid;
+  gap: 8px;
+}
+
+.mobileNav .navLink {
+  justify-content: space-between;
+  border: 1px solid var(--border);
+  border-radius: var(--borderRadius);
+  background: rgba(0, 191, 255, 0.06);
+}
