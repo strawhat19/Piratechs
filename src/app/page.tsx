@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import HomeLanding from '@/app/components/sections/home-landing';
 import { siteConfig } from '@/shared/config/site';
+import HomeLanding from '@/app/components/sections/home-landing';
 
 export const metadata: Metadata = {
-  title: `${siteConfig.title} | Full-Stack Portfolio`,
+  title: `${siteConfig.title} // Official Website`,
 };
 
 export default function HomePage() {

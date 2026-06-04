@@ -24,7 +24,11 @@ export const metadata: Metadata = {
   manifest: `/manifest.json`,
   description: siteConfig.description,
   icons: {
-    icon: `/icon-192x192.png`,
+    icon: [
+      { url: `/icon-16x16.png`, sizes: `16x16`, type: `image/png` },
+      { url: `/icon-32x32.png`, sizes: `32x32`, type: `image/png` },
+      { url: `/icon-192x192.png`, sizes: `192x192`, type: `image/png` },
+    ],
     apple: `/icon-192x192.png`,
     shortcut: `/icon-512x512.png`,
   },

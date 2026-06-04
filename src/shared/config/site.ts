@@ -4,12 +4,7 @@ export const siteConfig = {
   title: `Piratechs`,
   domain: `piratechs.com`,
   contactEmail: `info@piratechs.com`,
-  description: `Full-stack software portfolio and digital studio with a front-end focus.`,
-  logo: {
-    dark: `/assets/piratechs/svg/Piratechs-Icon-White.svg`,
-    light: `/assets/piratechs/svg/Piratechs-Icon-Navy.svg`,
-    tile: `/assets/piratechs/images/Piratechs-Icon-App-Tile-Navy-BG.png`,
-  },
+  description: `Built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG.`,
   nav: [
     { id: `home`, label: `Home`, href: `/`, icon: `fa-solid fa-house` },
     { id: `about`, label: `About`, href: `/about`, icon: `fa-solid fa-anchor` },
