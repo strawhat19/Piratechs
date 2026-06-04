@@ -59,3 +59,9 @@ export type SocialLink = {
   label: string;
   icon: string;
 };
+
+export type TopBarItem = {
+  text: string;
+  icon: string;
+  label?: string;
+};

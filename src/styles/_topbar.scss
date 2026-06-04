@@ -1,0 +1,88 @@
+.topBar {
+  width: 100%;
+  height: 45px;
+  overflow: hidden;
+  position: relative;
+  border-top: 1px solid rgba(0, 191, 255, 0.18);
+  border-bottom: 1px solid rgba(0, 191, 255, 0.34);
+  background: linear-gradient(90deg, rgba(0, 9, 27, 0.54), rgba(4, 57, 123, 0.36), rgba(0, 9, 27, 0.54));
+}
+
+.topBar::before,
+.topBar::after {
+  top: 0;
+  width: 60px;
+  height: 100%;
+  content: "";
+  z-index: 2;
+  position: absolute;
+  pointer-events: none;
+}
+
+.topBar::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(4, 57, 123, 0.98), transparent);
+}
+
+.topBar::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(6, 68, 134, 0.98), transparent);
+}
+
+.topBarScroller {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 var(--contentInset);
+  cursor: grab;
+  user-select: none;
+  scrollbar-width: none;
+  scroll-behavior: auto;
+  touch-action: pan-y;
+}
+
+.topBarScroller::-webkit-scrollbar {
+  display: none;
+}
+
+.topBarScroller.isDragging {
+  cursor: grabbing;
+}
+
+.topBarItem {
+  min-width: max-content;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  padding: 7px 12px;
+  border: 1px solid rgba(0, 191, 255, 0.2);
+  border-radius: var(--circle);
+  background: rgba(0, 191, 255, 0.07);
+}
+
+.topBarItem i {
+  color: var(--main);
+  font-size: 0.85rem;
+}
+
+.topBarItem strong {
+  color: white;
+  font-weight: 900;
+}
+
+.topBarItem span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+body[data-theme="light"] .topBar {
+  background: linear-gradient(90deg, rgba(4, 57, 123, 0.9), rgba(6, 68, 134, 0.82), rgba(4, 57, 123, 0.9));
+}

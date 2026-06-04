@@ -32,12 +32,12 @@
 }
 
 .brandMark {
-  display: flex;
   gap: 10px;
-  min-width: fit-content;
-  align-items: center;
+  display: flex;
   color: white;
   font-weight: 800;
+  align-items: center;
+  min-width: fit-content;
 }
 
 .brandLogo {
@@ -147,12 +147,12 @@ body[data-theme="light"] .heroLogoLight {
 .mobileMenu {
   width: min(100% - 32px, 520px);
   right: 16px;
-  top: 72px;
+  top: 108px;
   z-index: 22;
   display: grid;
   gap: 14px;
   position: fixed;
-  max-height: calc(100dvh - 92px);
+  max-height: calc(100dvh - 126px);
   padding: 16px;
   overflow: auto;
   pointer-events: none;

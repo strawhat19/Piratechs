@@ -4,8 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import AuthWidget from '@/app/components/auth/auth-widget';
+import NotificationBell from '@/app/components/notifications/notification-bell';
 import { siteConfig } from '@/shared/config/site';
 import { useGlobalContext } from '@/shared/global-context';
+import TopBar from '@/app/components/topbar/top-bar';
 
 export default function Nav() {
   const pathname = usePathname();
@@ -34,6 +36,7 @@ export default function Nav() {
 
   return (
     <header className={`siteHeader ${menuExpanded ? `headerMenuOpen` : ``}`}>
+      <TopBar />
       <div className={`navBar`}>
         <Link href={`/`} className={`homeButton`} aria-label={`Home`}>
           <i className={`fa-solid fa-house`} />
@@ -46,6 +49,7 @@ export default function Nav() {
         {renderLinks(`desktopNav`)}
         <div className={`navActions`}>
           <AuthWidget />
+          <NotificationBell />
           <button type={`button`} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
             <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
           </button>

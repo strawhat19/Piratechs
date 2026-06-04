@@ -1,4 +1,4 @@
-import type { NavItem, PageCopy, Project, Service, Skill, SocialLink, Stat } from '@/shared/types/site';
+import type { NavItem, PageCopy, Project, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/site';
 
 export const siteConfig = {
   title: `Piratechs`,
@@ -20,6 +20,16 @@ export const siteConfig = {
     { id: `gallery`, label: `Gallery`, href: `/gallery`, icon: `fa-solid fa-images` },
     { id: `contact`, label: `Contact`, href: `/contact`, icon: `fa-solid fa-paper-plane` },
   ] satisfies NavItem[],
+  topBarItems: [
+    { icon: `fa-solid fa-code`, label: `Stack`, text: `TypeScript + Sass + Next.js` },
+    { icon: `fa-solid fa-database`, label: `Data`, text: `Python, JSON, SQL, and REST APIs` },
+    { icon: `fa-solid fa-briefcase`, label: `Experience`, text: `4+ years software engineering at Mitsubishi Electric` },
+    { icon: `fa-solid fa-mobile-screen-button`, label: `PWA`, text: `Responsive web and installable app direction` },
+    { icon: `fa-brands fa-wordpress`, label: `CMS`, text: `WordPress restorations, CMS builds, and portfolio sites` },
+    { icon: `fa-brands fa-github`, label: `Projects`, text: `Live deployments and source-backed proof of work` },
+    { icon: `fa-solid fa-fire-flame-curved`, label: `Firebase`, text: `Auth-ready app shell for future database features` },
+    { icon: `fa-solid fa-screwdriver-wrench`, label: `Services`, text: `Front-end polish backed by full-stack delivery` },
+  ] satisfies TopBarItem[],
   pages: {
     home: {
       eyebrow: `Piratechs`,
