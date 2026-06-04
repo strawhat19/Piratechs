@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 import ProjectGrid from '@/app/components/sections/project-grid';
 import { siteConfig } from '@/shared/config/site';
 import { getTechnologyMeta } from '@/shared/utils/tech';
@@ -11,6 +12,7 @@ export default function HomeLanding() {
     <>
       <section className={`pageSection heroSection`}>
         <div className={`heroBg`}>
+          <HeroCircuitOverlay />
           <span className={`gridPlane gridPlaneA`} />
           <span className={`gridPlane gridPlaneB`} />
           <span className={`signalLine signalLineA`} />

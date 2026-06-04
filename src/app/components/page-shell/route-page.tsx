@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 import ProjectGrid from '@/app/components/sections/project-grid';
 import { siteConfig } from '@/shared/config/site';
 import { getTechnologyMeta } from '@/shared/utils/tech';
@@ -11,6 +12,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
     <>
       <section className={`pageSection heroSection subHero`}>
         <div className={`heroBg`}>
+          <HeroCircuitOverlay />
           <span className={`gridPlane gridPlaneA`} />
           <span className={`signalLine signalLineA`} />
         </div>
