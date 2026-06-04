@@ -17,7 +17,7 @@ export default function HomeLanding() {
           <span className={`signalLine signalLineB`} />
         </div>
         <div className={`sectionInner heroGrid`}>
-          <div className={`heroCopy`}>
+          <div className={`heroCopy reveal`}>
             <span className={`eyebrow`}>{page.eyebrow}</span>
             <h1>{page.title}</h1>
             <p>{page.summary}</p>
@@ -32,7 +32,7 @@ export default function HomeLanding() {
               </Link>
             </div>
           </div>
-          <div className={`heroBrand`}>
+          <div className={`heroBrand reveal`}>
             <div className={`heroLogoPlate`}>
               <span className={`heroOrbit`} />
               <Image className={`heroLogoDark`} src={siteConfig.logo.dark} width={320} height={320} alt={`Piratechs logo`} priority />
@@ -52,7 +52,7 @@ export default function HomeLanding() {
 
       <section className={`pageSection projectsSection`} id={`projects`}>
         <div className={`sectionInner`}>
-          <div className={`sectionTitle`}>
+          <div className={`sectionTitle reveal`}>
             <span className={`eyebrow`}>Featured Work</span>
             <h2>Project cards first, proof close behind</h2>
             <p>Live apps, CMS restorations, data work, game projects, and reusable product shells get the most visual weight.</p>
@@ -64,7 +64,7 @@ export default function HomeLanding() {
       <section className={`pageSection experienceSection`}>
         <div className={`sectionInner experienceGrid`}>
           {siteConfig.stats.map(stat => (
-            <article key={stat.label} className={`statCard`}>
+            <article key={stat.label} className={`statCard reveal`}>
               <span>{stat.label}</span>
               <strong>{stat.value}</strong>
               <p>{stat.text}</p>
@@ -75,12 +75,12 @@ export default function HomeLanding() {
 
       <section className={`pageSection backendSection`}>
         <div className={`sectionInner backendGrid`}>
-          <div className={`sectionTitle`}>
+          <div className={`sectionTitle reveal`}>
             <span className={`eyebrow`}>Back End / API / Data</span>
             <h2>Built for the parts recruiters actually inspect</h2>
             <p>Python, JSON, SQL, REST, Firebase, WordPress/MySQL, Shopify thinking, auth, and responsive UI are organized as a real app foundation instead of a one-off portfolio page.</p>
           </div>
-          <div className={`capabilityGrid`}>
+          <div className={`capabilityGrid reveal`}>
             {siteConfig.capabilities.map(capability => {
               const meta = getTechnologyMeta(capability);
               return (
@@ -96,7 +96,7 @@ export default function HomeLanding() {
 
       <section className={`pageSection skillsSection`}>
         <div className={`sectionInner`}>
-          <div className={`sectionTitle`}>
+          <div className={`sectionTitle reveal`}>
             <span className={`eyebrow`}>Skills // Refined</span>
             <h2>Front-end polish backed by full-stack range</h2>
           </div>
@@ -104,7 +104,7 @@ export default function HomeLanding() {
             {siteConfig.skills.map(skill => {
               const meta = getTechnologyMeta(skill.label);
               return (
-                <article key={skill.label} className={`skillTile`}>
+                <article key={skill.label} className={`skillTile reveal`}>
                   <i className={`${skill.icon || meta.icon} techIcon ${meta.className}`} />
                   <span>{skill.group}</span>
                   <strong>{skill.label}</strong>
@@ -117,13 +117,13 @@ export default function HomeLanding() {
 
       <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>
-          <div className={`sectionTitle`}>
+          <div className={`sectionTitle reveal`}>
             <span className={`eyebrow`}>Services</span>
             <h2>Useful enough for clients, sharp enough for hiring teams</h2>
           </div>
           <div className={`serviceGrid`}>
             {siteConfig.services.map(service => (
-              <article key={service.title} className={`serviceCard`}>
+              <article key={service.title} className={`serviceCard reveal`}>
                 <i className={service.icon} />
                 <h3>{service.title}</h3>
                 <p>{service.text}</p>
@@ -135,7 +135,7 @@ export default function HomeLanding() {
 
       <section className={`pageSection gallerySection`}>
         <div className={`sectionInner`}>
-          <div className={`sectionTitle`}>
+          <div className={`sectionTitle reveal`}>
             <span className={`eyebrow`}>Gallery</span>
             <h2>Visual buckets for the next portfolio pass</h2>
           </div>
@@ -143,7 +143,7 @@ export default function HomeLanding() {
             {siteConfig.gallery.map(item => {
               const meta = getTechnologyMeta(item);
               return (
-                <article key={item} className={`galleryTile`}>
+                <article key={item} className={`galleryTile reveal`}>
                   <i className={`${meta.icon} techIcon ${meta.className}`} />
                   <strong>{item}</strong>
                   <span>Portfolio Asset</span>
@@ -155,7 +155,7 @@ export default function HomeLanding() {
       </section>
 
       <section className={`pageSection contactSection`}>
-        <div className={`sectionInner contactBand`}>
+        <div className={`sectionInner contactBand reveal`}>
           <span className={`eyebrow`}>Contact</span>
           <h2>Ready for the next version</h2>
           <p>This first Next pass keeps the structure lean while setting up the app shell, pages, auth surface, PWA pieces, API route, and future Firebase growth path.</p>

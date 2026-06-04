@@ -1,5 +1,6 @@
 .buttonLink,
-.googleButton {
+.googleButton,
+.filterButton {
   min-height: 38px;
   display: inline-flex;
   gap: 8px;
@@ -15,7 +16,8 @@
   transition: color var(--transition), background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition), opacity var(--transition);
 }
 
-.buttonLink.primary {
+.buttonLink.primary,
+.filterButton.activeFilter {
   color: #001324;
   border-color: var(--main);
   background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
@@ -23,14 +25,83 @@
 }
 
 .buttonLink.ghost,
-.googleButton {
+.googleButton,
+.filterButton {
   background: rgba(0, 191, 255, 0.06);
 }
 
 .buttonLink:hover,
-.googleButton:hover {
+.googleButton:hover,
+.filterButton:hover {
   transform: translateY(-2px);
   border-color: var(--main);
+}
+
+.reveal {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+  transform-origin: center;
+}
+
+body.revealReady .reveal:not(.isVisible) {
+  --reveal-x: 0;
+  --reveal-y: 22px;
+  --reveal-blur: 1.6px;
+  opacity: 0;
+  // filter: blur(var(--reveal-blur));
+  transform: translate3d(var(--reveal-x), var(--reveal-y), 0);
+  will-change: opacity, transform, filter;
+}
+
+.reveal.isVisible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.5s ease, filter 0.46s ease, transform 0.58s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+body.revealReady .heroCopy.reveal:not(.isVisible) {
+  --reveal-x: -14px;
+  --reveal-y: 0;
+}
+
+body.revealReady .heroBrand.reveal:not(.isVisible),
+body.revealReady .pageBadge.reveal:not(.isVisible) {
+  --reveal-y: 16px;
+  --reveal-blur: 2px;
+}
+
+body.revealReady .projectCard.reveal:not(.isVisible),
+body.revealReady .skillTile.reveal:not(.isVisible),
+body.revealReady .serviceCard.reveal:not(.isVisible),
+body.revealReady .galleryTile.reveal:not(.isVisible),
+body.revealReady .statCard.reveal:not(.isVisible) {
+  --reveal-y: 28px;
+}
+
+body.revealReady .sectionTitle.reveal:not(.isVisible) {
+  --reveal-x: -10px;
+  --reveal-y: 10px;
+  --reveal-blur: 1.2px;
+}
+
+body.revealReady .capabilityGrid.reveal:not(.isVisible),
+body.revealReady .contactBand.reveal:not(.isVisible) {
+  --reveal-y: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.isVisible,
+  body.revealReady .reveal:not(.isVisible) {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    will-change: auto;
+    transition: none;
+  }
 }
 
 .techIcon {

@@ -47,6 +47,18 @@
   font-size: 0.76rem;
 }
 
+.authAvatarToggle {
+  color: white;
+  font-weight: 900;
+  background: rgba(0, 191, 255, 0.16);
+}
+
+.authAvatarLetter {
+  color: currentColor;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
 .authForm label {
   display: grid;
   gap: 5px;
@@ -85,10 +97,11 @@ body[data-theme="light"] .authForm input {
   height: 38px;
   display: grid;
   place-items: center;
-  color: #001324;
+  color: white;
   font-weight: 900;
-  border-radius: var(--circle);
-  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
+  border: 1px solid rgba(0, 191, 255, 0.26);
+  border-radius: var(--borderRadius);
+  background: rgba(0, 191, 255, 0.16);
 }
 
 .authUserCard div {

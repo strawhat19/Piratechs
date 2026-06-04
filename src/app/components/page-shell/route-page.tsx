@@ -15,7 +15,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
           <span className={`signalLine signalLineA`} />
         </div>
         <div className={`sectionInner heroGrid`}>
-          <div className={`heroCopy`}>
+          <div className={`heroCopy reveal`}>
             <span className={`eyebrow`}>{page.eyebrow}</span>
             <h1>{page.title}</h1>
             <p>{page.summary}</p>
@@ -30,7 +30,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
               </Link>
             </div>
           </div>
-          <div className={`pageBadge`}>
+          <div className={`pageBadge reveal`}>
             <i className={siteConfig.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} />
             <span>{page.eyebrow}</span>
           </div>
@@ -39,7 +39,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
 
       <section className={`pageSection detailSection`}>
         <div className={`sectionInner detailGrid`}>
-          <div className={`sectionTitle`}>
+          <div className={`sectionTitle reveal`}>
             <span className={`eyebrow`}>{page.eyebrow} Direction</span>
             <h2>{pageID == `projects` ? `Portfolio work stays prominent` : `A focused route ready to expand`}</h2>
             <p>{page.summary}</p>
@@ -51,7 +51,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
               {siteConfig.capabilities.slice(0, 6).map(capability => {
                 const meta = getTechnologyMeta(capability);
                 return (
-                  <article key={capability} className={`serviceCard`}>
+                  <article key={capability} className={`serviceCard reveal`}>
                     <i className={`${meta.icon} techIcon ${meta.className}`} />
                     <h3>{capability}</h3>
                     <p>This page can grow into a dedicated Piratechs section with content, API data, Firebase records, filters, and project links.</p>

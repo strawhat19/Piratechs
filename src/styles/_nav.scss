@@ -47,9 +47,10 @@
 }
 
 .brandMark span {
-  font-size: clamp(1.18rem, 2vw, 1.58rem);
   line-height: 1;
+  font-weight: 700;
   letter-spacing: 0;
+  font-size: clamp(1.18rem, 2vw, 1.58rem);
 }
 
 .brandLogoLight,
@@ -119,19 +120,6 @@ body[data-theme="light"] .heroLogoLight {
   display: flex;
   gap: 8px;
   align-items: center;
-}
-
-.userBadge {
-  width: 38px;
-  height: 38px;
-  display: inline-grid;
-  place-items: center;
-  color: #001324;
-  font-size: 0.9rem;
-  font-weight: 900;
-  border-radius: var(--circle);
-  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
-  box-shadow: 0 10px 24px rgba(0, 191, 255, 0.18);
 }
 
 .iconButton {

@@ -3,7 +3,7 @@ import type { Project } from '@/shared/types/site';
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className={`projectCard`}>
+    <article className={`projectCard reveal`}>
       <div className={`projectTop`}>
         <span className={`typeBadge`}>{project.type}</span>
         <span className={`statusPill`}>{project.status}</span>

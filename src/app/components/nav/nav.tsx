@@ -9,7 +9,7 @@ import { useGlobalContext } from '@/shared/global-context';
 
 export default function Nav() {
   const pathname = usePathname();
-  const { user, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
+  const { theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
 
   const isActiveRoute = (href: string) => {
     if (href == `/`) return pathname == `/`;
@@ -46,11 +46,6 @@ export default function Nav() {
         {renderLinks(`desktopNav`)}
         <div className={`navActions`}>
           <AuthWidget />
-          {user ? (
-            <span className={`userBadge`} title={user.email}>
-              {user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? `P`}
-            </span>
-          ) : null}
           <button type={`button`} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
             <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
           </button>

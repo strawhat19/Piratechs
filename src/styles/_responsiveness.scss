@@ -2,9 +2,11 @@
   .desktopNav {
     display: none;
   }
-
   .mobileMenuButton {
     display: inline-grid;
+  }
+  .navActions {
+    margin-left: auto;
   }
 }
 
@@ -30,9 +32,9 @@
     --contentInset: 18px;
   }
 
-  .navActions > .authWidget:not(.mobileAuthWidget) {
-    display: none;
-  }
+  // .navActions > .authWidget:not(.mobileAuthWidget) {
+  //   display: none;
+  // }
 
   .heroSection {
     min-height: auto;

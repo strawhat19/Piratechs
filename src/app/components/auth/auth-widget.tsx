@@ -12,6 +12,7 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
 
   const signInLabel = mode == `sign-in` ? `Sign In` : `Sign Up`;
   const modeLabel = mode == `sign-in` ? `Need Access?` : `Have Access?`;
+  const userInitial = user?.name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? `P`;
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,17 +38,18 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
       <button
         type={`button`}
         aria-expanded={open}
-        className={`iconButton authToggle`}
-        aria-label={`Open sign in form`}
+        title={user?.email || `Sign In`}
+        className={`iconButton authToggle ${user ? `authAvatarToggle` : ``}`}
+        aria-label={user ? `Open profile menu` : `Open sign in form`}
         onClick={() => setOpen(!open)}
       >
-        <i className={`fa-solid fa-user`} />
+        {user ? <span className={`authAvatarLetter`}>{userInitial}</span> : <i className={`fa-solid fa-user`} />}
       </button>
       <div className={`authPanel`}>
         {user ? (
           <div className={`authForm`}>
             <div className={`authUserCard`}>
-              <span>{user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? `P`}</span>
+              <span>{userInitial}</span>
               <div>
                 <strong>{user.name}</strong>
                 <small>{user.email || `Signed In`}</small>

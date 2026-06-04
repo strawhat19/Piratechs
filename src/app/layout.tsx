@@ -7,6 +7,7 @@ import Nav from '@/app/components/nav/nav';
 import Footer from '@/app/components/footer/footer';
 import GlobalProvider from '@/shared/global-context';
 import { siteConfig } from '@/shared/config/site';
+import ScrollReveal from '@/app/components/effects/scroll-reveal';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -31,8 +32,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={`en`} className={plusJakartaSans.variable}>
-      <body>
+      <body className={`revealReady`}>
         <GlobalProvider>
+          <ScrollReveal />
           <Nav />
           <main className={`siteMain`}>
             {children}
