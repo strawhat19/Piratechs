@@ -1,0 +1,370 @@
+// import { dev } from '../pages/_app';
+// import moment from 'moment-timezone';
+// import { User } from './models/User';
+// import { Grid } from './models/Grid';
+// import { List } from './models/List';
+// import { Item } from './models/Item';
+// import { Task } from './models/Task';
+// import { Types } from './types/types';
+// import { Board } from './models/Board';
+// import { toast } from 'react-toastify';
+
+export const maxCredits = 20_000;
+export const maxAuthAttempts = 5;
+export const pathPrefix = `https://`;
+export const defaultAuthenticateLabel = `Delete User & All Data`;
+export const capWords = (str: string) => str.replace(/\b\w/g, (match: string) => match.toUpperCase());
+export const userQueryFields = [`id`, `ID`, `uid`, `uuid`, `rank`, `name`, `role`, `email`, `image`, `avatar`, `phone`, `token`];
+export const decimalsString = (number: number, decimalPlaces: number = 1) => number?.toFixed(decimalPlaces)?.replace(/\.?0+$/, ``);
+
+export const months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];
+
+export const sortDescending = (arr: (string | number)[]): number[] => {
+  return arr.map(item => (typeof item === `number` ? item : parseFloat(item))).filter(item => !isNaN(item)).sort((a, b) => b - a);
+}
+
+export const isInStandaloneMode = () => {
+  if (typeof window === `undefined`) return false;
+  return window.matchMedia(`(display-mode: standalone)`).matches;
+}
+
+export const isMobileDevice = () => {
+  if (typeof window != `undefined` && window != undefined) {
+    if (navigator && window && window?.navigator) {
+      const userAgent = navigator?.userAgent || navigator?.vendor || (window as any)?.opera;
+      const platform = navigator?.platform;
+      if (userAgent && platform) {
+        const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+        const isPhoneUA  = /iphone|ipod|android.*mobile|windows phone|blackberry|bb10/.test(userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(platform) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        return mobileRegex.test(userAgent) || isIOS || isPhoneUA;
+      }
+    }
+  }
+}
+
+export const stripURLsFromString = (str: string, urls: string[]): string => {
+  if (urls?.length > 0) {
+    urls?.forEach((tURL: string) => {
+      const escapedURL = tURL.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
+      const regex = new RegExp(escapedURL, `gi`);
+      str = str.replace(regex, ``);
+    });
+    let newTaskNameNoURLs = str?.replace(/\s+/g, ` `).trim();
+    return newTaskNameNoURLs;
+  } else return str;
+}
+
+export const extractURLsFromText = (textArray: string[]) => {
+  const URLRegex = /(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9.-]+\.(com|net|org|io|co|gov|edu|us|uk|dev|app|info|biz|me|tv|xyz|ai|ca|in|nl|au|de)(?:[^\s]*)/gi;
+  const URLsFromText = textArray.flatMap(text => text.match(URLRegex) || []);
+  const lowerCasedURLsFromText = URLsFromText?.map(txt => txt?.toLowerCase());
+  const uniqueLCURLs = Array.from(new Set(lowerCasedURLsFromText));
+  return uniqueLCURLs;
+}
+
+export const extractRootDomain = (url: string, withPath = false, returnObj = false) => {
+  if (url) {
+    url = url?.toLowerCase()?.includes(pathPrefix) ? url : pathPrefix + url;
+    const parsedUrl = new URL(url);
+    const checkSlash = (string: string) => string != `/` ? string : ``;
+    const domain = parsedUrl?.hostname;
+    if (returnObj) {
+      return parsedUrl;
+    } else {
+      return withPath ? `${domain}${checkSlash(parsedUrl?.pathname)}${checkSlash(parsedUrl?.search)}${checkSlash(parsedUrl?.hash)}` : domain;
+    }
+  } else return url;
+}
+
+export const removeExtraSpacesFromString = (string: string) => string.trim().replace(/\s+/g, ` `);
+export const generateArray = (length: number, itemData: any) => Array.from({ length }, () => itemData);
+export const stringMatch = (string: string, check: string): boolean => string?.toLowerCase()?.includes(check?.toLowerCase());
+export const stringNoSpaces = (string: string) => string?.replaceAll(/[\s,:/]/g, `_`)?.replaceAll(/[\s,:/]/g, `-`).replaceAll(/-/g, `_`);
+
+export const momentFormats = {
+  default: `h:mm A M/D/YYYY`,
+  wSeconds: `h:mm:ss A M/D/YYYY`,
+}
+
+export const nameFields = {
+  grid: { min: 1, max: 10 },
+  board: { min: 1, max: 30 },
+  column: { min: 1, max: 15 },
+  list: { min: 1, max: 15 },
+  item: { min: 1, max: 25 },
+  task: { min: 1, max: 30 },
+}
+
+export const fontAwesomeIcons = {
+  inbox: `fas fa-inbox`,
+  folder: `fas fa-folder`,
+  archive: `fas fa-archive`,
+}
+
+export const forceFieldBlurOnPressEnter = (e: any) => {
+  if (e.key === `Enter`) {
+    e.preventDefault();
+    (e.target as any).blur();
+  }
+}
+
+// export const logToast = (message: string, content: any, error = false, data = null) => {
+//   let sendMsg = typeof content == `string` ? content : ``;
+//   if (dev()) {
+//     if (data != null) console.log(message, content, data);
+//     else console.log(message, content);
+//   }
+//   if (error == false) {
+//     toast.success(message + ` ` + sendMsg);
+//   } else {
+//     toast.error(message + ` ` + sendMsg);
+//   }
+// }
+
+export const removeNullAndUndefinedProperties = (object: any) => {
+  return Object.entries(object).reduce((accumulator: any, [key, value]) => {
+    if (value !== null && value !== undefined) {
+      accumulator[key] = value;
+    }
+    return accumulator;
+  }, {});
+}
+
+export const combineArraysByKey = <T>(data: T[], key: keyof T): any[] => {
+  return data.reduce((combined, item) => {
+    const arrayToCombine = item[key];
+    if (Array.isArray(arrayToCombine)) {
+      return combined.concat(arrayToCombine);
+    }
+    return combined;
+  }, [] as any[]);
+}
+
+// export const withinXTime = (formattedDate: string, time: number, interval = `hours`) => {
+//   const nowMoment = moment();
+//   const xMoment = moment()?.subtract(time, interval as any);
+//   const dateMoment = moment(new Date(Date.parse(formattedDate)));
+//   const dateWithinTime = dateMoment?.isBetween(xMoment, nowMoment);
+//   return dateWithinTime;
+// }
+
+export const withinXHours = (hours: number, formattedDate: string) => {
+  const currentTime = new Date();
+  const parsedDate = new Date(Date.parse(formattedDate));
+  const timeDifference = Math.abs(currentTime.getTime() - parsedDate.getTime());
+  const hourDifference = timeDifference / (1000 * 60 * 60);
+  const isWithinXHours = hourDifference <= hours;
+  return isWithinXHours;
+}
+
+export const findHighestNumberInArrayByKey = async ( arrayOfObjects: any[], key: string ): Promise<number | null> => {
+  try {
+    const filteredNumbers = arrayOfObjects
+      .map(obj => obj[key])
+      .filter(value => typeof value === `number`);
+    if (filteredNumbers.length === 0) return 0;
+    const highestNumber = Math.max(...filteredNumbers);
+    return highestNumber;
+  } catch (error) {
+    console.log(`Error while finding the highest number for key "${key}"`, error);
+    return 0;
+  }
+}
+
+export const setMaxLengthOnField = (e: any, maxLength: number) => {
+  const target = e.target as HTMLSpanElement;
+  if (target.innerText.length > maxLength) {
+    target.innerText = target.innerText.substring(0, maxLength);
+    const range = document.createRange();
+    const selection = window.getSelection();
+    range.selectNodeContents(target);
+    range.collapse(false);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  }
+}
+
+export const isValid = (item: any) => {
+  if (typeof item == `string`) {
+    let isInvalidString = !item || item == `` || item.trim() == `` || item == undefined || item == null;
+    return !isInvalidString;
+  } else if (typeof item == `number`) {
+    let isInvalidNumber = isNaN(item) || item == undefined || item == null;
+    return !isInvalidNumber;
+  } else if (typeof item == `object` && item != undefined && item != null) {
+    let isInvalidObject = Object.keys(item).length == 0 || item == undefined || item == null;
+    return !isInvalidObject;
+  } else {
+    let isUndefined = item == undefined || item == null;
+    return !isUndefined;
+  }
+}
+
+export const formatDateNoSpaces = (date: any = new Date()) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? `PM` : `AM`;
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? `0` + minutes : minutes;
+  let strTime = hours + `:` + minutes + ` ` + ampm;
+  let strTimeNoSpaces = hours + `-` + minutes + `-` + ampm;
+  let completedDate = strTime + ` ` + (date.getMonth() + 1) + `/` + date.getDate() + `/` + date.getFullYear();
+  completedDate = strTimeNoSpaces + `_` + (date.getMonth() + 1) + `-` + date.getDate() + `-` + date.getFullYear();
+  return completedDate;
+}
+
+export const countPropertiesInObject = (obj: any) => {
+  let count = 0;
+  if (typeof obj === `object` && obj !== null) {
+    for (const key in obj) {
+      count++;
+      count += countPropertiesInObject(obj[key]);
+    }
+    if (Array.isArray(obj)) {
+      obj.forEach(item => {
+        count += countPropertiesInObject(item);
+      });
+    }
+  }
+  return count;
+}
+
+export const getDateObj = (newDate: any = new Date()) => {
+  let datesObject: any = {};
+
+  let hour = newDate.getHours();
+  let minutes = newDate.getMinutes();
+  let ampmxm = hour >= 12 ? `PM` : `AM`;
+
+  hour = hour % 12;
+  hour = hour ? hour : 12;
+  minutes = minutes < 10 ? `0` + minutes : minutes;
+
+  let strTime = hour + `:` + minutes + ` ` + ampmxm;
+
+  let day = newDate.getDate();
+  let year = newDate.getFullYear();
+  let month = newDate.getMonth() + 1;
+  let monthName = months[newDate.getMonth()];
+
+  let time = strTime + ` ` + month + `/` + day + `/` + year;
+  let date = month + `/` + day + `/` + year;
+
+  let ms = newDate.getMilliseconds();
+  let millisecondsStr = Math.round(ms / 10).toString().padStart(2, `0`);
+  let milliseconds = parseFloat(millisecondsStr);
+  let updStrTime = `${hour}:${minutes}:${millisecondsStr} ${ampmxm}`;
+
+  let datetime = `${updStrTime} ${month}/${day}/${String(year).slice(2)}`;
+
+  datesObject = {
+    ...datesObject,
+    day,
+    time,
+    year,
+    hour,
+    date,
+    month,
+    ampmxm,
+    minutes,
+    datetime,
+    monthName,
+    milliseconds,
+  }
+  
+  return datesObject;
+}
+
+export const flattenURLs = (obj: any): string[] => {
+  let result: string[] = [];
+
+  function recurse(value: any) {
+    if (Array.isArray(value)) {
+      result.push(...value);
+    } else if (typeof value === 'object' && value !== null) {
+      for (const key in value) {
+        recurse(value[key]);
+      }
+    }
+  }
+
+  recurse(obj);
+  return result;
+}
+
+// export const getRankAndNumber = async (type: Types, docs: any[], docIDs: string[], users, user, IDs?) => {
+//   let docsLn = docs?.length;
+//   let docsRank = (docsLn > 0 && docs[0]?.rank) ? await findHighestNumberInArrayByKey(docs, `rank`) : 0;
+//   let docsNumber = (docsLn > 0 && docs[0]?.number) ? await findHighestNumberInArrayByKey(docs, `number`) : 0;
+
+//   let userDocsLength = docIDs?.length;
+//   let docsIDX = docsRank > docsLn ? docsRank : docsLn;
+//   let docsRanks = docIDs?.map(dcID => extractRankFromDocId(dcID, user?.email, type));
+
+//   let allDocsRanks = [];
+  
+//   if (users && users?.length > 0) {
+//     users.forEach(usr => {
+//       if (!IDs) IDs = usr?.data?.[`${type?.toLowerCase()}IDs`];
+//       let usrDocsRanks = IDs?.map(dcID => extractRankFromDocId(dcID, usr?.email, type));
+//       usrDocsRanks?.forEach(dcRank => allDocsRanks?.push(dcRank));
+//     })
+//     allDocsRanks = sortDescending(allDocsRanks);
+//   }
+
+//   let allDocsRanksLn = allDocsRanks?.length;
+  
+//   let allRanks = [docsIDX, userDocsLength, docsNumber, ...docsRanks];
+//   let maxRank = sortDescending(allRanks)[0];
+  
+//   let rank = maxRank + 1;
+//   let number = allDocsRanksLn + 1;
+
+//   number = number > rank ? number : rank;
+
+//   return {
+//     rank,
+//     number,
+//   }
+// }
+
+export const formatDateMain = (date: Date, specificPortion?: string) => {
+  let datesObject: any = {};
+
+  let hours = date.getHours();
+  let minutes: any = date.getMinutes();
+  let ampm = hours >= 12 ? `PM` : `AM`;
+
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? `0` + minutes : minutes;
+
+  let strTime = hours + `:` + minutes + ` ` + ampm;
+  let completedDate = strTime + ` ` + (date.getMonth() + 1) + `/` + date.getDate() + `/` + date.getFullYear();
+
+  if (specificPortion == `time`) {
+    completedDate = strTime;
+    datesObject.time = completedDate;
+  } else if (specificPortion == `date`) {
+    completedDate = (date.getMonth() + 1) + `/` + date.getDate() + `/` + date.getFullYear();
+    datesObject.date = completedDate;
+  } else if (specificPortion == `update`) {
+    let milliseconds = date.getMilliseconds();
+    let ms = Math.round(milliseconds / 10).toString().padStart(2, `0`);
+    strTime = `${hours}:${minutes}:${ms} ${ampm}`;
+    return `${strTime} ${(date.getMonth() + 1)}/${date.getDate()}/${String(date.getFullYear()).slice(2)}`;
+    // completedDate = `${strTime} ${(date.getMonth() + 1)}/${date.getDate()}/${String(date.getFullYear()).slice(2)}`;
+    // datesObject.update = completedDate;
+  } else {
+    completedDate = strTime + ` ` + (date.getMonth() + 1) + `/` + date.getDate() + `/` + date.getFullYear();
+    datesObject.datetime = completedDate;
+  }
+
+  // if (obj) {
+    // return datesObject;
+  // } else {
+    return completedDate;
+  // }
+}

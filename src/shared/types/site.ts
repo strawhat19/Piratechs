@@ -39,6 +39,7 @@ export type Project = {
   tech: string[];
   liveUrl?: string;
   codeUrl?: string;
+  urlImage?: string;
   featured?: boolean;
 };
 

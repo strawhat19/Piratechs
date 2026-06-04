@@ -1,12 +1,28 @@
-import { getTechnologyMeta } from '@/shared/utils/tech';
+import URL from '../url/url';
 import type { Project } from '@/shared/types/site';
+import { getTechnologyMeta } from '@/shared/utils/tech';
+import { capWords, extractRootDomain } from '@/shared/common/scripts/globals';
 
 export default function ProjectCard({ project }: { project: Project }) {
+
+  const getURLLabel = (url: string) => {
+    let rootDomainName = String(extractRootDomain(url));
+    if (rootDomainName && rootDomainName?.length >= 25) {
+      rootDomainName = rootDomainName?.split(`.`)[0];
+    }
+    let urlLabel = capWords(rootDomainName);
+    return urlLabel;
+  }
+
   return (
     <article className={`projectCard reveal`}>
       <div className={`projectTop`}>
-        <span className={`typeBadge`}>{project.type}</span>
-        <span className={`statusPill`}>{project.status}</span>
+        <span className={`typeBadge`}>
+          {project.type}
+        </span>
+        <span className={`statusPill`}>
+          {project.status}
+        </span>
       </div>
       <div className={`projectIconCloud`} aria-hidden={`true`}>
         {project.tech.slice(0, 5).map(tech => {
@@ -28,17 +44,18 @@ export default function ProjectCard({ project }: { project: Project }) {
         })}
       </div>
       <div className={`projectActions`}>
-        {project.liveUrl ? (
-          <a href={project.liveUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink primary`}>
-            <i className={`fa-solid fa-arrow-up-right-from-square`} />
-            Live
-          </a>
-        ) : null}
         {project.codeUrl ? (
           <a href={project.codeUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink ghost`}>
             <i className={`fa-brands fa-github`} />
             Code
           </a>
+        ) : null}
+        {project.liveUrl ? (
+          <URL label={getURLLabel(project.liveUrl)} url={project.liveUrl} image={project?.urlImage} className={`buttonLink primary`} />
+          // <a href={project.liveUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink primary`}>
+          //   <i className={`fa-solid fa-arrow-up-right-from-square`} />
+          //   {project.liveUrl}
+          // </a>
         ) : null}
       </div>
     </article>

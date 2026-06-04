@@ -259,6 +259,9 @@ body[data-theme="light"] .heroCircuitOverlay {
 
 .heroLogo {
   max-width: 300px;
+  @media (max-width: 768px) {
+    max-width: 250px;
+  }
 }
 
 .heroLogoPlate {
