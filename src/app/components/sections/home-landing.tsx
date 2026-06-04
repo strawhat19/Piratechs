@@ -1,9 +1,9 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
-import ProjectGrid from '@/app/components/sections/project-grid';
+import Logo from '../logo/logo';
 import { siteConfig } from '@/shared/config/site';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+import ProjectGrid from '@/app/components/sections/project-grid';
+import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
 export default function HomeLanding() {
   const page = siteConfig.pages.home;
@@ -20,25 +20,26 @@ export default function HomeLanding() {
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy reveal`}>
-            <span className={`eyebrow`}>{page.eyebrow}</span>
+            <span className={`eyebrow`}>
+              {page.eyebrow}
+            </span>
             <h1>{page.title}</h1>
             <p>{page.summary}</p>
             <div className={`heroActions`}>
-              <Link href={`/projects`} className={`buttonLink primary`}>
-                <i className={`fa-solid fa-diagram-project`} />
-                Featured Projects
-              </Link>
-              <Link href={`/contact`} className={`buttonLink ghost`}>
+              <Link href={`/contact`} className={`buttonLink primary`}>
                 <i className={`fa-solid fa-paper-plane`} />
-                Contact
+                Get In Touch
+              </Link>
+              <Link href={`/projects`} className={`buttonLink ghost`}>
+                <i className={`fa-solid fa-diagram-project`} />
+                Projects
               </Link>
             </div>
           </div>
           <div className={`heroBrand reveal`}>
             <div className={`heroLogoPlate`}>
               <span className={`heroOrbit`} />
-              <Image className={`heroLogoDark`} src={siteConfig.logo.dark} width={320} height={320} alt={`Piratechs logo`} priority />
-              <Image className={`heroLogoLight`} src={siteConfig.logo.light} width={320} height={320} alt={`Piratechs logo`} priority />
+              <Logo className={`heroLogo`} />
             </div>
             <div className={`heroMiniStats`}>
               {siteConfig.stats.map(stat => (
@@ -55,9 +56,11 @@ export default function HomeLanding() {
       <section className={`pageSection projectsSection`} id={`projects`}>
         <div className={`sectionInner`}>
           <div className={`sectionTitle reveal`}>
-            <span className={`eyebrow`}>Featured Work</span>
-            <h2>Project cards first, proof close behind</h2>
-            <p>Live apps, CMS restorations, data work, game projects, and reusable product shells get the most visual weight.</p>
+            <span className={`eyebrow`}>
+              Our Work
+            </span>
+            <h2>Projects</h2>
+            <p>Applications, CMS, APIs, Games, and other Design // Development.</p>
           </div>
           <ProjectGrid featuredOnly />
         </div>

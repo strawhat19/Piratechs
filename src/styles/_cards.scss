@@ -1,11 +1,11 @@
 .projectGrid {
+  gap: 18px;
   width: 100%;
   display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   overflow-x: auto;
   padding: 4px 4px 18px;
   scroll-snap-type: x proximity;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
 }
 
 .projectCard,
@@ -14,12 +14,12 @@
 .galleryTile,
 .skillTile,
 .pageBadge {
-  position: relative;
   overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow);
+  background: var(--panelGlass);
   border: 1px solid var(--border);
   border-radius: var(--borderRadius);
-  background: var(--panelGlass);
-  box-shadow: var(--shadow);
 }
 
 .projectCard::after,
@@ -72,8 +72,8 @@
 }
 
 .projectTop {
-  display: flex;
   gap: 8px;
+  display: flex;
   align-items: center;
   justify-content: space-between;
 }
@@ -100,11 +100,11 @@
 }
 
 .projectIconCloud {
-  display: flex;
   gap: 8px;
-  font-size: clamp(1.18rem, 1.8vw, 1.58rem);
+  display: flex;
   line-height: 1;
   pointer-events: none;
+  font-size: clamp(1.18rem, 1.8vw, 1.58rem);
 }
 
 .projectIconCloud .techIcon {
@@ -119,13 +119,13 @@
 .projectCard p,
 .serviceCard p,
 .statCard p {
-  color: var(--foregroundMuted);
   line-height: 1.65;
+  color: var(--foregroundMuted);
 }
 
 .techList {
-  display: flex;
   gap: 7px;
+  display: flex;
   flex-wrap: wrap;
   margin-top: auto;
 }
@@ -137,26 +137,26 @@
 }
 
 .statCard {
-  display: grid;
   gap: 8px;
+  display: grid;
   padding: 20px;
 }
 
 .statCard span {
+  font-weight: 800;
   color: var(--main);
   font-size: 0.78rem;
-  font-weight: 800;
   text-transform: uppercase;
 }
 
 .statCard strong {
-  font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1;
+  font-size: clamp(2rem, 5vw, 3.5rem);
 }
 
 .serviceCard {
-  display: grid;
   gap: 13px;
+  display: grid;
   padding: 22px;
 }
 
@@ -167,20 +167,20 @@
 }
 
 .skillTile {
-  min-height: 148px;
-  display: grid;
   gap: 8px;
-  align-content: end;
+  display: grid;
   padding: 18px;
+  min-height: 148px;
+  align-content: end;
 }
 
 .skillTile i {
   top: 16px;
   right: 16px;
+  opacity: 0.82;
+  font-size: 2rem;
   position: absolute;
   color: var(--techColor, var(--main));
-  font-size: 3.3rem;
-  opacity: 0.82;
 }
 
 .skillTile span {

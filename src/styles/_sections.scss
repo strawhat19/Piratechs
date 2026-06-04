@@ -85,10 +85,33 @@
   z-index: 2;
   opacity: var(--heroCircuitOpacity);
   position: absolute;
-  filter: saturate(1.08);
+  filter: saturate(1.16);
   mix-blend-mode: screen;
   transform: rotate(-1deg) scale(1.01);
-  pointer-events: none;
+  pointer-events: none;  
+  animation: opa 5s ease-in-out infinite alternate-reverse;
+  // transition: var(--transition);
+}
+
+@keyframes opa {
+  0% {
+    opacity: 0.4;
+  }
+  20% {
+    opacity: 0.45;
+  }
+  40% {
+    opacity: 0.55;
+  }
+  60% {
+    opacity: 0.65;
+  }
+  80% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 0.84;
+  }
 }
 
 .circuitLayer {
@@ -96,12 +119,12 @@
 }
 
 .circuitLayerBack {
-  opacity: 0.42;
+  opacity: 0.72;
 }
 
 .circuitTrace {
   fill: none;
-  opacity: 0.64;
+  opacity: 0.54;
   stroke-width: 1.3;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -109,48 +132,47 @@
   vector-effect: non-scaling-stroke;
 }
 
+.circuitTrace.tight {
+  stroke-width: 1.22;
+  stroke: var(--heroCircuitStrong);
+}
+
 .circuitTrace.strong {
-  opacity: 0.78;
+  opacity: 0.9;
   stroke-width: 1.85;
   stroke: var(--heroCircuitStrong);
 }
 
 .circuitPulse {
   fill: none;
-  opacity: 0.92;
-  stroke-width: 3;
+  opacity: 0.98;
+  stroke-width: 2.9;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 24 520;
+  stroke-dasharray: 18 760;
   stroke: var(--heroCircuitPulse);
   vector-effect: non-scaling-stroke;
-  animation: circuitEnergy 5.2s linear infinite;
+  animation: circuitEnergy 10.8s linear infinite;
 }
 
 .pulseB {
   stroke: var(--heroCircuitPulseAlt);
-  animation-delay: -1.35s;
-  animation-duration: 6.1s;
+  animation-delay: -4.8s;
+  animation-duration: 12.6s;
 }
 
 .pulseC {
-  animation-delay: -2.7s;
-  animation-duration: 6.7s;
-}
-
-.pulseD {
-  stroke: var(--heroCircuitPulseAlt);
-  animation-delay: -3.4s;
-  animation-duration: 4.9s;
+  animation-delay: -7.2s;
+  animation-duration: 14.2s;
 }
 
 .circuitNode {
-  opacity: 0.82;
+  opacity: 1;
   fill: var(--heroCircuitNode);
 }
 
 body[data-theme="light"] .heroCircuitOverlay {
-  filter: saturate(1.06);
+  filter: saturate(1.12);
   mix-blend-mode: multiply;
 }
 
@@ -233,6 +255,10 @@ body[data-theme="light"] .heroCircuitOverlay {
   display: grid;
   gap: 18px;
   justify-items: center;
+}
+
+.heroLogo {
+  max-width: 300px;
 }
 
 .heroLogoPlate {
@@ -378,23 +404,28 @@ body[data-theme="light"] .heroLogoPlate {
 }
 
 .backendGrid {
-  display: grid;
   gap: 34px;
-  grid-template-columns: minmax(0, 0.72fr) minmax(320px, 1fr);
+  display: grid;
   align-items: center;
+  grid-template-columns: minmax(0, 0.72fr) minmax(320px, 1fr);
 }
 
 .capabilityGrid {
-  display: grid;
   gap: 10px;
+  display: grid;
+  font-size: 18px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.capabilityGrid i {
+  font-size: 18px;
+}
+
 .capabilityGrid span {
-  min-height: 52px;
   gap: 9px;
-  border-radius: var(--borderRadius);
+  min-height: 52px;
   background: var(--surface);
+  border-radius: var(--borderRadius);
 }
 
 .skillsSection {

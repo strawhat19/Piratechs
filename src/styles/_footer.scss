@@ -22,6 +22,10 @@ body[data-theme="light"] .siteFooter {
   align-items: center;
 }
 
+.copyright {
+  color: var(--foreground);
+}
+
 .footerLogo {
   width: 54px;
   height: 54px;
@@ -38,11 +42,11 @@ body[data-theme="light"] .siteFooter {
   line-height: 1.45;
 }
 
-.footerNav,
-.footerLinks {
-  display: flex;
+.footerNav, .footerLinks {
   gap: 12px;
+  display: flex;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .footerLinks {

@@ -1,6 +1,6 @@
 # Piratechs
 
-Piratechs is being rebuilt as a modern Next.js portfolio and app shell for Vercel. The root app uses the Piratechs brand system, a dark-mode-first navy/cyan palette, responsive app-style navigation, PWA support, Firebase-ready auth wiring, clean route rewrites, and a typed content config that can scale into pages, API routes, projects, services, store features, and future database-backed work.
+Piratechs is built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG
 
 The existing GitHub Pages version is preserved in `docs/`.
 

@@ -8,11 +8,16 @@
   --circle: 999px;
   --font: var(--font-plusJakartaSans), "Plus Jakarta Sans", Helvetica, Arial, sans-serif;
   --navy: #04397b;
+  --light_font_muted: #001324;
+  --blue_navy: #214d87;
+  --blue_navy_muted: white;
+  // --blue_navy_muted: var(--light_font_muted);
   --navy-deep: #041b44;
   --navy-dark: #00091b;
   --piratechs: #2b4261;
   --piratechsNeon: #00bfff;
   --piratechsTeal: #13deb9;
+  --neon_badge_font_color: var(--blue_navy_muted);
   --navBar: #064486;
   --navBarDeep: #04397b;
   --white: #ffffff;
@@ -35,12 +40,12 @@
   --buttons: #0082c6;
   --circuit: rgba(0, 191, 255, 0.28);
   --circuitSoft: rgba(19, 222, 185, 0.16);
-  --heroCircuitTrack: rgba(0, 191, 255, 0.2);
-  --heroCircuitStrong: rgba(0, 191, 255, 0.44);
-  --heroCircuitPulse: var(--piratechsNeon);
-  --heroCircuitPulseAlt: var(--piratechsTeal);
-  --heroCircuitNode: var(--piratechsNeon);
-  --heroCircuitOpacity: 0.78;
+  --heroCircuitTrack: var(--main);
+  --heroCircuitStrong: var(--main);
+  --heroCircuitPulse: var(--main);
+  --heroCircuitPulseAlt: var(--main);
+  --heroCircuitNode: var(--main);
+  --heroCircuitOpacity: 0.4;
   --tech-admin: #ff3860;
   --tech-angular: #dd0031;
   --tech-api: #00bfff;
@@ -73,7 +78,8 @@
 }
 
 body[data-theme="light"] {
-  --foreground: #041b44;
+  --foreground: var(--blue_navy);
+  // --foreground: #041b44;
   --foregroundMuted: rgba(4, 27, 68, 0.72);
   --background: #f8fafc;
   --backgroundDeep: #edf4fb;
@@ -83,12 +89,12 @@ body[data-theme="light"] {
   --panelGlass: rgba(255, 255, 255, 0.86);
   --circuit: rgba(4, 57, 123, 0.2);
   --circuitSoft: rgba(0, 191, 255, 0.14);
-  --heroCircuitTrack: rgba(4, 57, 123, 0.17);
-  --heroCircuitStrong: rgba(0, 130, 198, 0.32);
-  --heroCircuitPulse: #0082c6;
-  --heroCircuitPulseAlt: #13bda3;
-  --heroCircuitNode: #0082c6;
-  --heroCircuitOpacity: 0.64;
+  --heroCircuitTrack: var(--main);
+  --heroCircuitStrong: var(--main);
+  --heroCircuitPulse: var(--main);
+  --heroCircuitPulseAlt: var(--main);
+  --heroCircuitNode: var(--main);
+  --heroCircuitOpacity: 0.5;
   --tech-github: #181717;
   --tech-next: #000000;
   --tech-unity: #000000;

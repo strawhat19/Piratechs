@@ -4,17 +4,23 @@
   z-index: 20;
   color: white;
   position: fixed;
-  background: linear-gradient(90deg, rgba(4, 57, 123, 0.98), rgba(6, 68, 134, 0.98));
+  backdrop-filter: blur(18px);
   box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
   border-bottom: 1px solid rgba(0, 191, 255, 0.28);
-  backdrop-filter: blur(18px);
+  background: linear-gradient(90deg, rgba(4, 57, 123, 0.15), rgb(6, 68, 134, 0.25));
+}
+
+body[data-theme="light"] .siteHeader {
+  .homeButton, .brandMark, .navLink, .iconButton {
+    color: var(--foreground) !important;
+  }
 }
 
 .navBar {
-  width: 100%;
-  min-height: 58px;
-  display: flex;
   gap: 11px;
+  width: 100%;
+  display: flex;
+  min-height: 58px;
   align-items: center;
   padding: 0 var(--contentInset);
 }
@@ -58,21 +64,21 @@
 body[data-theme="light"] .brandLogoDark,
 body[data-theme="light"] .footerLogoDark,
 body[data-theme="light"] .heroLogoDark {
-  display: none;
+  display: block;
 }
 
 body[data-theme="light"] .brandLogoLight,
 body[data-theme="light"] .footerLogoLight,
 body[data-theme="light"] .heroLogoLight {
-  display: block;
+  display: none;
 }
 
 .desktopNav {
-  display: flex;
   gap: 8px;
+  display: flex;
+  margin-left: auto;
   align-items: center;
   justify-content: flex-end;
-  margin-left: auto;
 }
 
 .navLink {

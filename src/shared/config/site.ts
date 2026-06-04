@@ -33,8 +33,8 @@ export const siteConfig = {
   pages: {
     home: {
       eyebrow: `Piratechs`,
-      title: `Full-stack systems with a sharp front-end edge`,
-      summary: `Piratechs is evolving into a modern portfolio, product lab, and proof-of-work hub for polished interfaces, practical APIs, data workflows, and production-minded software.`,
+      title: `Design & Develop Full-Stack Applications`,
+      summary: `Built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG`,
     },
     about: {
       eyebrow: `About`,
@@ -74,10 +74,10 @@ export const siteConfig = {
   } satisfies Record<string, PageCopy>,
   stats: [
     { label: `Years of Experience`, value: `10+`, text: `Full Stack Design // Development` },
-    { label: `Industry Role`, value: `4+`, text: `Software Engineering at Mitsubishi Electric` },
-    { label: `Modernized`, value: `Stack`, text: `TypeScript, Sass, APIs, data, PWA, and CMS work` },
+    { label: `Technologies`, value: `100+`, text:  `PWAs, Websites, E-Commerce, Games, APIs` },
+    { label: `Applications`, value: `1000+`, text: `Enterprise Level with Robust Feature Sets` },
   ] satisfies Stat[],
-  filters: [`Featured`, `All`, `PWA`, `Website`, `WordPress`, `E-Commerce`, `Game`, `Data`],
+  filters: [`Featured`, `All`, `PWA`, `Website`, `WordPress`, `E-Commerce`, `Game`, `API`],
   projects: [
     {
       type: `PWA`,
@@ -101,10 +101,10 @@ export const siteConfig = {
     },
     {
       id: `mydex`,
+      type: `API`,
       status: `Live`,
       featured: true,
       title: `MyDex Pokedex`,
-      type: `Data`,
       liveUrl: `https://mydex-pokedex.com/`,
       tech: [`PHP`, `Sass`, `Firebase`, `API`],
       codeUrl: `https://github.com/strawhat19/MyDex-Pokedex-Clone`,
@@ -133,7 +133,7 @@ export const siteConfig = {
       summary: `Game-flavored leaderboard and admin tooling with searchable player stats and custom UI identity.`,
     },
     {
-      type: `Data`,
+      type: `API`,
       id: `geodata`,
       status: `Live`,
       featured: true,

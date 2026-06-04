@@ -5,7 +5,6 @@
   position: relative;
   border-top: 1px solid rgba(0, 191, 255, 0.18);
   border-bottom: 1px solid rgba(0, 191, 255, 0.34);
-  background: linear-gradient(90deg, rgba(0, 9, 27, 0.54), rgba(4, 57, 123, 0.36), rgba(0, 9, 27, 0.54));
 }
 
 .topBar::before,
@@ -83,6 +82,22 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
-body[data-theme="light"] .topBar {
-  background: linear-gradient(90deg, rgba(4, 57, 123, 0.9), rgba(6, 68, 134, 0.82), rgba(4, 57, 123, 0.9));
+body[data-theme="light"] .siteHeader {
+  .topBarItem {
+    strong, span {
+      color: var(--foreground) !important;
+    }
+  }
+}
+
+// body[data-theme="light"] .topBar {
+//   background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(6, 68, 134, 0.82), rgba(4, 57, 123, 0.9));
+// }
+
+body[data-theme="light"] .topBar::before {
+  background: linear-gradient(90deg, #b9d8ea, transparent);
+}
+
+body[data-theme="light"] .topBar::after {
+  background: linear-gradient(270deg, #b9d8ea, transparent);
 }

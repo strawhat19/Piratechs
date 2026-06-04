@@ -8,6 +8,7 @@ import NotificationBell from '@/app/components/notifications/notification-bell';
 import { siteConfig } from '@/shared/config/site';
 import { useGlobalContext } from '@/shared/global-context';
 import TopBar from '@/app/components/topbar/top-bar';
+import Logo from '../logo/logo';
 
 export default function Nav() {
   const pathname = usePathname();
@@ -42,8 +43,7 @@ export default function Nav() {
           <i className={`fa-solid fa-house`} />
         </Link>
         <Link href={`/`} className={`brandMark`} aria-label={`Piratechs home`}>
-          <Image className={`brandLogo brandLogoDark`} src={siteConfig.logo.dark} width={42} height={42} alt={`Piratechs logo`} priority />
-          <Image className={`brandLogo brandLogoLight`} src={siteConfig.logo.light} width={42} height={42} alt={`Piratechs logo`} priority />
+          <Logo className={`brandLogo`} />
           <span>{siteConfig.title}</span>
         </Link>
         {renderLinks(`desktopNav`)}

@@ -1,40 +1,38 @@
-.buttonLink,
-.googleButton,
-.filterButton {
-  min-height: 38px;
-  display: inline-flex;
+.buttonLink, .googleButton, .filterButton {
   gap: 8px;
-  align-items: center;
-  justify-content: center;
-  padding: 9px 14px;
-  color: var(--foreground);
-  font-size: 0.86rem;
   font-weight: 800;
+  font-size: 0.86rem;
+  align-items: center;
+  display: inline-flex;
+  padding: 8px 14px 9px;
+  justify-content: center;
+  color: var(--foreground);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--borderRadius);
-  background: var(--surface);
   transition: color var(--transition), background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition), opacity var(--transition);
 }
 
-.buttonLink.primary,
-.filterButton.activeFilter {
-  color: #001324;
+.buttonLink.primary, .filterButton.activeFilter {
   border-color: var(--main);
-  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
+  color: var(--neon_badge_font_color);
   box-shadow: 0 12px 30px rgba(0, 191, 255, 0.2);
+  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
 }
 
-.buttonLink.ghost,
-.googleButton,
-.filterButton {
-  background: rgba(0, 191, 255, 0.06);
+.buttonLink.ghost, .googleButton, .filterButton {
+  background: rgba(0, 191, 255, 0.16);
+  backdrop-filter: blur(15px) !important;
 }
 
-.buttonLink:hover,
-.googleButton:hover,
-.filterButton:hover {
-  transform: translateY(-2px);
+.buttonLink:hover, .googleButton:hover, .filterButton:hover {
   border-color: var(--main);
+  transform: translateY(-2px);
+}
+
+.buttonLink i {
+  top: 2px;
+  position: relative;
 }
 
 .reveal {

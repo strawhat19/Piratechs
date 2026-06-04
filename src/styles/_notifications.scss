@@ -9,20 +9,20 @@
 .notificationBadge {
   top: -7px;
   right: -7px;
-  min-width: 18px;
   height: 18px;
   display: grid;
-  place-items: center;
-  position: absolute;
-  color: #001324;
-  font-size: 0.66rem;
-  font-weight: 900;
   line-height: 1;
   padding: 0 5px;
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  min-width: 18px;
+  font-weight: 900;
+  font-size: 0.66rem;
+  position: absolute;
+  place-items: center;
   border-radius: var(--circle);
-  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
+  color: var(--neon_badge_font_color);
+  border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow: 0 8px 20px rgba(0, 191, 255, 0.2);
+  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
 }
 
 .notificationPanel {
