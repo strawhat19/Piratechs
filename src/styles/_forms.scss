@@ -1,0 +1,138 @@
+.authWidget {
+  position: relative;
+}
+
+.authPanel {
+  top: calc(100% + 14px);
+  right: 0;
+  width: 296px;
+  z-index: 30;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.authWidget.authOpen .authPanel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.authForm {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--borderRadius);
+  background: var(--surfaceStrong);
+  box-shadow: var(--shadow);
+}
+
+.authHeader {
+  display: grid;
+  gap: 2px;
+}
+
+.authHeader strong {
+  font-size: 0.95rem;
+}
+
+.authHeader small,
+.authForm span,
+.authStatus {
+  color: var(--foregroundMuted);
+  font-size: 0.76rem;
+}
+
+.authAvatarToggle {
+  color: white;
+  font-weight: 900;
+  background: rgba(0, 191, 255, 0.16);
+}
+
+.authAvatarLetter {
+  color: currentColor;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.authForm label {
+  display: grid;
+  gap: 5px;
+}
+
+.authForm input {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 10px;
+  color: var(--foreground);
+  outline: none;
+  border: 1px solid var(--border);
+  border-radius: var(--borderRadius);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+body[data-theme="light"] .authForm input {
+  background: #ffffff;
+}
+
+.authActions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.authUserCard {
+  display: grid;
+  gap: 10px;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+}
+
+.authUserCard > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 900;
+  border: 1px solid rgba(0, 191, 255, 0.26);
+  border-radius: var(--borderRadius);
+  background: rgba(0, 191, 255, 0.16);
+}
+
+.authUserCard div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.authUserCard small {
+  overflow: hidden;
+  color: var(--foregroundMuted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mobileAuthWidget {
+  display: grid;
+}
+
+.mobileAuthWidget > .authToggle {
+  display: none;
+}
+
+.mobileAuthWidget .authPanel {
+  width: 100%;
+  position: static;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.mobileAuthWidget .authForm {
+  box-shadow: none;
+}

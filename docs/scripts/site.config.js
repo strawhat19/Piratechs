@@ -20,8 +20,8 @@ export const siteConfig = {
     pages: {
         home: {
             eyebrow: `Piratechs`,
-            title: `Full-stack systems with a sharp front-end edge`,
-            summary: `Piratechs is evolving into a modern portfolio, product lab, and proof-of-work hub for polished interfaces, practical APIs, data workflows, and production-minded software.`
+            title: `Design & Develop Full-Stack Applications`,
+            summary: `built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG`
         },
         about: {
             eyebrow: `About Us`,

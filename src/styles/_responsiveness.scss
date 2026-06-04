@@ -1,0 +1,136 @@
+@media (max-width: 1450px) {
+  .desktopNav {
+    display: none;
+  }
+  .mobileMenuButton {
+    display: inline-grid;
+  }
+  .navActions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 1100px) {
+  .heroGrid,
+  .backendGrid,
+  .footerInner {
+    grid-template-columns: 1fr;
+  }
+
+  .heroBrand {
+    order: -1;
+  }
+
+  .projectGrid {
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  :root {
+    --space: 18px;
+    --contentInset: 18px;
+  }
+
+  // .navActions > .authWidget:not(.mobileAuthWidget) {
+  //   display: none;
+  // }
+
+  .heroSection {
+    min-height: auto;
+  }
+
+  .heroLogoPlate {
+    width: min(82vw, 280px);
+  }
+
+  .experienceGrid,
+  .detailCards,
+  .serviceGrid,
+  .galleryGrid,
+  .capabilityGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .navBar {
+    min-height: 68px;
+  }
+
+  .brandMark span {
+    display: none;
+  }
+
+  .pageSection {
+    padding: 56px var(--space);
+  }
+
+  .heroSection {
+    padding-top: 142px;
+  }
+
+  .heroCopy h1 {
+    font-size: clamp(2.15rem, 12vw, 3.6rem);
+  }
+
+  .heroActions,
+  .projectActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .buttonLink,
+  .projectActions a {
+    width: 100%;
+  }
+
+  .heroMiniStats,
+  .experienceGrid,
+  .detailCards,
+  .serviceGrid,
+  .galleryGrid,
+  .capabilityGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .projectGrid {
+    display: flex;
+  }
+
+  .projectCard {
+    width: 82vw;
+  }
+
+  .footerBrand {
+    align-items: flex-start;
+  }
+
+  .footerLinks {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .homeButton,
+  .iconButton {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brandLogo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .navBar {
+    gap: 8px;
+  }
+
+  .scrollToTop {
+    width: 42px;
+    height: 42px;
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+  }
+}

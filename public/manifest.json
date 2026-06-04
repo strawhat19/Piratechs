@@ -1,11 +1,11 @@
 {
-  "name": "Next PWA 2025",
-  "short_name": "Next PWA 2025",
-  "description": "Next PWA 2025 Template with TypeScript and SASS",
-  "start_url": "/?v=2",
+  "name": "Piratechs",
+  "short_name": "Piratechs",
+  "description": "Piratechs full-stack portfolio and digital studio PWA",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#04397b",
+  "theme_color": "#04397b",
   "icons": [
     { "src": "/icon-192x192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icon-256x256.png", "sizes": "256x256", "type": "image/png" },

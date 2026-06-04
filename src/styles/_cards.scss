@@ -1,0 +1,233 @@
+.projectGrid {
+  gap: 18px;
+  width: 100%;
+  display: grid;
+  overflow-x: auto;
+  padding: 4px 4px 18px;
+  scroll-snap-type: x proximity;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+.projectCard,
+.statCard,
+.serviceCard,
+.galleryTile,
+.skillTile,
+.pageBadge {
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow);
+  background: var(--panelGlass);
+  border: 1px solid var(--border);
+  border-radius: var(--borderRadius);
+}
+
+.projectCard::after,
+.statCard::after,
+.serviceCard::after,
+.galleryTile::after,
+.skillTile::before,
+.pageBadge::after {
+  right: -24px;
+  bottom: -28px;
+  width: 176px;
+  height: 118px;
+  content: "";
+  z-index: 0;
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.36;
+  background: linear-gradient(90deg, transparent 0 17%, var(--circuit) 17% 18%, transparent 18%), linear-gradient(90deg, transparent 0 48%, var(--circuitSoft) 48% 49%, transparent 49%), linear-gradient(0deg, transparent 0 34%, var(--circuit) 34% 35%, transparent 35%), linear-gradient(0deg, transparent 0 70%, var(--circuitSoft) 70% 71%, transparent 71%), radial-gradient(circle at 18% 35%, var(--circuit) 0 2px, transparent 3px), radial-gradient(circle at 49% 71%, var(--circuitSoft) 0 2px, transparent 3px), radial-gradient(circle at 82% 35%, var(--circuit) 0 2px, transparent 3px);
+  clip-path: polygon(0 16%, 72% 16%, 72% 0, 100% 0, 100% 100%, 20% 100%, 20% 72%, 0 72%);
+}
+
+.projectCard {
+  min-height: 330px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+  scroll-snap-align: center;
+}
+
+.projectCard::before {
+  inset: 0;
+  content: "";
+  z-index: 0;
+  position: absolute;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.18), transparent 38%);
+  opacity: 0.7;
+}
+
+.projectCard > *,
+.statCard > *,
+.serviceCard > *,
+.galleryTile > *,
+.skillTile > *,
+.pageBadge > * {
+  z-index: 1;
+  position: relative;
+}
+
+.projectTop {
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.typeBadge,
+.statusPill,
+.techList span,
+.capabilityGrid span {
+  min-height: 25px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  border: 1px solid var(--border);
+  border-radius: var(--circle);
+  background: rgba(0, 191, 255, 0.08);
+}
+
+.statusPill {
+  color: var(--piratechsTeal);
+}
+
+.projectIconCloud {
+  gap: 8px;
+  display: flex;
+  line-height: 1;
+  pointer-events: none;
+  font-size: clamp(1.18rem, 1.8vw, 1.58rem);
+}
+
+.projectIconCloud .techIcon {
+  opacity: 0.8;
+}
+
+.projectCard h3,
+.serviceCard h3 {
+  font-size: 1.28rem;
+}
+
+.projectCard p,
+.serviceCard p,
+.statCard p {
+  line-height: 1.65;
+  color: var(--foregroundMuted);
+}
+
+.techList {
+  gap: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.projectActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.statCard {
+  gap: 8px;
+  display: grid;
+  padding: 20px;
+}
+
+.statCard span {
+  font-weight: 800;
+  color: var(--main);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.statCard strong {
+  line-height: 1;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.serviceCard {
+  gap: 13px;
+  display: grid;
+  padding: 22px;
+}
+
+.serviceCard > i,
+.galleryTile > i {
+  color: var(--techColor, var(--main));
+  font-size: 2rem;
+}
+
+.skillTile {
+  gap: 8px;
+  display: grid;
+  padding: 18px;
+  min-height: 148px;
+  align-content: end;
+}
+
+.skillTile i {
+  top: 16px;
+  right: 16px;
+  opacity: 0.82;
+  font-size: 2rem;
+  position: absolute;
+  color: var(--techColor, var(--main));
+}
+
+.skillTile span {
+  color: var(--main);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.skillTile strong {
+  font-size: 1.18rem;
+}
+
+.galleryTile {
+  min-height: 170px;
+  display: grid;
+  align-content: space-between;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.16), transparent), var(--panelGlass);
+}
+
+.galleryTile span {
+  color: var(--main);
+  font-weight: 900;
+}
+
+.galleryTile strong {
+  font-size: 1.28rem;
+}
+
+.pageBadge {
+  width: min(100%, 260px);
+  aspect-ratio: 1;
+  display: grid;
+  gap: 14px;
+  place-items: center;
+  justify-self: center;
+  padding: 28px;
+  text-align: center;
+  clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
+}
+
+.pageBadge i {
+  color: var(--main);
+  font-size: clamp(3rem, 10vw, 5rem);
+}
+
+.pageBadge span {
+  font-weight: 900;
+}
