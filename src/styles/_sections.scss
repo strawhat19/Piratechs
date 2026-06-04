@@ -78,104 +78,6 @@
   background: linear-gradient(120deg, transparent 0 38%, rgba(0, 191, 255, 0.16) 38% 39%, transparent 39% 100%), linear-gradient(145deg, transparent 0 58%, rgba(19, 222, 185, 0.12) 58% 59%, transparent 59% 100%);
 }
 
-.heroCircuitOverlay {
-  inset: -8% -5%;
-  width: 110%;
-  height: 116%;
-  z-index: 2;
-  opacity: var(--heroCircuitOpacity);
-  position: absolute;
-  filter: saturate(1.16);
-  mix-blend-mode: screen;
-  transform: rotate(-1deg) scale(1.01);
-  pointer-events: none;  
-  animation: opa 5s ease-in-out infinite alternate-reverse;
-  // transition: var(--transition);
-}
-
-@keyframes opa {
-  0% {
-    opacity: 0.4;
-  }
-  20% {
-    opacity: 0.45;
-  }
-  40% {
-    opacity: 0.55;
-  }
-  60% {
-    opacity: 0.65;
-  }
-  80% {
-    opacity: 0.75;
-  }
-  100% {
-    opacity: 0.84;
-  }
-}
-
-.circuitLayer {
-  transform-origin: 50% 50%;
-}
-
-.circuitLayerBack {
-  opacity: 0.72;
-}
-
-.circuitTrace {
-  fill: none;
-  opacity: 0.54;
-  stroke-width: 1.3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke: var(--heroCircuitTrack);
-  vector-effect: non-scaling-stroke;
-}
-
-.circuitTrace.tight {
-  stroke-width: 1.22;
-  stroke: var(--heroCircuitStrong);
-}
-
-.circuitTrace.strong {
-  opacity: 0.9;
-  stroke-width: 1.85;
-  stroke: var(--heroCircuitStrong);
-}
-
-.circuitPulse {
-  fill: none;
-  opacity: 0.98;
-  stroke-width: 2.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 18 760;
-  stroke: var(--heroCircuitPulse);
-  vector-effect: non-scaling-stroke;
-  animation: circuitEnergy 10.8s linear infinite;
-}
-
-.pulseB {
-  stroke: var(--heroCircuitPulseAlt);
-  animation-delay: -4.8s;
-  animation-duration: 12.6s;
-}
-
-.pulseC {
-  animation-delay: -7.2s;
-  animation-duration: 14.2s;
-}
-
-.circuitNode {
-  opacity: 1;
-  fill: var(--heroCircuitNode);
-}
-
-body[data-theme="light"] .heroCircuitOverlay {
-  filter: saturate(1.12);
-  mix-blend-mode: multiply;
-}
-
 .gridPlane,
 .signalLine {
   z-index: 3;
@@ -298,26 +200,26 @@ body[data-theme="light"] .heroLogoPlate {
 }
 
 .heroMiniStats {
-  width: min(100%, 460px);
-  display: grid;
   gap: 8px;
+  display: grid;
+  width: min(100%, 460px);
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .heroMiniStats span {
-  display: grid;
   gap: 2px;
+  display: grid;
   padding: 12px;
-  color: var(--foregroundMuted);
   font-size: 0.74rem;
   text-align: center;
-  border: 1px solid var(--border);
   background: var(--surface);
+  color: var(--foregroundMuted);
+  border: 1px solid var(--border);
 }
 
 .heroMiniStats strong {
-  color: var(--foreground);
   font-size: 1rem;
+  color: var(--foreground);
 }
 
 .subHero {
@@ -330,22 +232,6 @@ body[data-theme="light"] .heroLogoPlate {
 
 .subHero .heroCopy h1 {
   font-size: clamp(2.4rem, 5vw, 4.7rem);
-}
-
-@keyframes circuitEnergy {
-  0% {
-    stroke-dashoffset: 560;
-  }
-
-  100% {
-    stroke-dashoffset: -120;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .circuitPulse {
-    animation: none;
-  }
 }
 
 .projectsSection,

@@ -1,15 +1,33 @@
-export default function HeroCircuitOverlay() {
+type HeroCircuitOverlayProps = {
+  animatePulses?: boolean;
+  blur?: boolean;
+  blendMode?: boolean;
+};
+
+export default function HeroCircuitOverlay({ animatePulses = false, blur = false, blendMode = false }: HeroCircuitOverlayProps) {
+  const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
+
   return (
-    <svg className={`heroCircuitOverlay`} viewBox={`0 0 1440 760`} preserveAspectRatio={`xMidYMid slice`} aria-hidden={`true`}>
-      <defs>
-        <filter id={`piratechsCircuitGlow`} x={`-20%`} y={`-40%`} width={`140%`} height={`180%`} colorInterpolationFilters={`sRGB`}>
-          <feGaussianBlur stdDeviation={`3.5`} result={`blur`} />
-          <feMerge>
-            <feMergeNode in={`blur`} />
-            <feMergeNode in={`SourceGraphic`} />
-          </feMerge>
-        </filter>
-      </defs>
+    <svg
+      className={`heroCircuitOverlay`}
+      data-animate-pulses={animatePulses ? `true` : `false`}
+      data-blur={blur ? `true` : `false`}
+      data-blend-mode={blendMode ? `true` : `false`}
+      viewBox={`0 0 1440 760`}
+      preserveAspectRatio={`xMidYMid slice`}
+      aria-hidden={`true`}
+    >
+      {blur ? (
+        <defs>
+          <filter id={`piratechsCircuitGlow`} x={`-20%`} y={`-40%`} width={`140%`} height={`180%`} colorInterpolationFilters={`sRGB`}>
+            <feGaussianBlur stdDeviation={`3.5`} result={`blur`} />
+            <feMerge>
+              <feMergeNode in={`blur`} />
+              <feMergeNode in={`SourceGraphic`} />
+            </feMerge>
+          </filter>
+        </defs>
+      ) : null}
 
       <g className={`circuitLayer circuitLayerBack`}>
         <path className={`circuitTrace`} d={`M-60 208 H164 L232 140 H364 L428 204 H566 L642 128 H812 L888 208 H1048 L1120 164 H1244 L1310 208 H1510`} />
@@ -25,7 +43,7 @@ export default function HeroCircuitOverlay() {
         <path className={`circuitTrace tight`} d={`M-50 656 H1006 H1106 L1184 578 H1296 L1372 654 H1510`} />
       </g>
 
-      <g className={`circuitLayer circuitLayerMain`} filter={`url(#piratechsCircuitGlow)`}>
+      <g className={`circuitLayer circuitLayerMain`} filter={glowFilter}>
         <path className={`circuitTrace tight`} d={`M-50 236 H184 L250 302 H380 L460 222 H662 L736 296 H900 L970 226 H1166 L1232 282 H1510`} />
         <path className={`circuitTrace strong`} d={`M-50 260 H172 L238 326 H392 L472 246 H650 L724 320 H912 L982 250 H1178 L1244 306 H1510`} />
         <path className={`circuitTrace tight`} d={`M-50 284 H160 L226 350 H404 L484 270 H638 L712 344 H924 L994 274 H1190 L1256 330 H1510`} />
@@ -43,7 +61,7 @@ export default function HeroCircuitOverlay() {
         <path className={`circuitTrace tight`} d={`M-50 232 H380 L448 184 H626 L698 232 H1054 H1156 L1216 292 H1374 L1428 238 H1510`} />
       </g>
 
-      <g className={`circuitNodes`} filter={`url(#piratechsCircuitGlow)`}>
+      <g className={`circuitNodes`} filter={glowFilter}>
         <circle className={`circuitNode nodeA`} cx={`172`} cy={`260`} r={`5`} />
         <circle className={`circuitNode nodeB`} cx={`238`} cy={`326`} r={`6`} />
         <circle className={`circuitNode nodeC`} cx={`472`} cy={`246`} r={`4`} />
