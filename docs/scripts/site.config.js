@@ -1,7 +1,7 @@
 export const siteConfig = {
     title: `Piratechs`,
+    contactEmail: `info@piratechs.com`,
     description: `Full-stack software portfolio and digital studio.`,
-    contactEmail: `hello@piratechs.com`,
     logo: {
         dark: `./public/assets/piratechs/svg/Piratechs-Icon-White.svg`,
         light: `./public/assets/piratechs/svg/Piratechs-Icon-Navy.svg`,

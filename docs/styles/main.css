@@ -272,9 +272,10 @@ body[data-theme=light] .appShell {
 
 .siteHeader {
   top: 0;
+  width: 100%;
   z-index: 10;
   color: white;
-  position: sticky;
+  position: fixed;
   background: transparent;
   transition: var(--transition);
   box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
@@ -328,8 +329,8 @@ body[data-theme=light].menuOpen .siteHeader {
 .brandText {
   color: white;
   display: block;
-  font-size: clamp(1.34rem, 1.8vw, 2rem);
-  font-weight: 900;
+  font-size: 20px;
+  font-weight: 600;
   line-height: 1;
   letter-spacing: 0;
   text-transform: none;
@@ -604,9 +605,9 @@ body[data-theme=light] .authForm input {
 
 .heroCopy h1 {
   max-width: 880px;
-  font-size: clamp(2.55rem, 5.9vw, 5.85rem);
-  line-height: 0.94;
+  line-height: 1.2;
   letter-spacing: 0;
+  font-size: clamp(2.55rem, 5.9vw, 5.85rem);
 }
 
 .heroCopy p {
