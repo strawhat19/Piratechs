@@ -1,5 +1,6 @@
 import { getApps, initializeApp, type FirebaseApp } from 'firebase/app';
 import { GoogleAuthProvider, browserLocalPersistence, getAuth, setPersistence, type Auth } from 'firebase/auth';
+import { getFirestore, type Firestore } from 'firebase/firestore';
 
 type FirebaseClientConfig = {
   appId?: string;
@@ -11,6 +12,7 @@ type FirebaseClientConfig = {
 };
 
 let firebaseApp: FirebaseApp | null = null;
+let firebaseDb: Firestore | null = null;
 let firebaseAuth: Auth | null = null;
 let googleProvider: GoogleAuthProvider | null = null;
 
@@ -42,6 +44,14 @@ export const getFirebaseAuth = () => {
   firebaseAuth = getAuth(app);
   setPersistence(firebaseAuth, browserLocalPersistence).catch(() => null);
   return firebaseAuth;
+};
+
+export const getFirebaseDb = () => {
+  if (firebaseDb != null) return firebaseDb;
+  const app = getFirebaseApp();
+  if (app == null) return null;
+  firebaseDb = getFirestore(app);
+  return firebaseDb;
 };
 
 export const getGoogleProvider = () => {

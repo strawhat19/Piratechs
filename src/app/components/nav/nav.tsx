@@ -3,34 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import AuthWidget from '@/app/components/auth/auth-widget';
 import { siteConfig } from '@/shared/config/site';
-import type { ThemeMode } from '@/shared/types/site';
+import { useGlobalContext } from '@/shared/global-context';
 
 export default function Nav() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<ThemeMode>(`dark`);
-
-  useEffect(() => {
-    const storedTheme = window.localStorage.getItem(`piratechs-theme`) as ThemeMode | null;
-    const nextTheme = storedTheme == `light` ? `light` : `dark`;
-    setTheme(nextTheme);
-    document.body.dataset.theme = nextTheme;
-  }, []);
-
-  useEffect(() => {
-    document.body.classList.toggle(`menuOpen`, menuOpen);
-    return () => document.body.classList.remove(`menuOpen`);
-  }, [menuOpen]);
-
-  const toggleTheme = () => {
-    const nextTheme: ThemeMode = theme == `dark` ? `light` : `dark`;
-    setTheme(nextTheme);
-    document.body.dataset.theme = nextTheme;
-    window.localStorage.setItem(`piratechs-theme`, nextTheme);
-  };
+  const { user, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
 
   const isActiveRoute = (href: string) => {
     if (href == `/`) return pathname == `/`;
@@ -43,7 +22,7 @@ export default function Nav() {
         <Link
           href={item.href}
           key={item.id}
-          onClick={() => setMenuOpen(false)}
+          onClick={() => setMenuExpanded(false)}
           className={`navLink ${isActiveRoute(item.href) ? `activeRoute` : ``}`}
         >
           <i className={item.icon} />
@@ -54,7 +33,7 @@ export default function Nav() {
   );
 
   return (
-    <header className={`siteHeader ${menuOpen ? `headerMenuOpen` : ``}`}>
+    <header className={`siteHeader ${menuExpanded ? `headerMenuOpen` : ``}`}>
       <div className={`navBar`}>
         <Link href={`/`} className={`homeButton`} aria-label={`Home`}>
           <i className={`fa-solid fa-house`} />
@@ -67,17 +46,22 @@ export default function Nav() {
         {renderLinks(`desktopNav`)}
         <div className={`navActions`}>
           <AuthWidget />
+          {user ? (
+            <span className={`userBadge`} title={user.email}>
+              {user.name?.[0]?.toUpperCase() ?? user.email?.[0]?.toUpperCase() ?? `P`}
+            </span>
+          ) : null}
           <button type={`button`} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
             <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
           </button>
           <button
             type={`button`}
             aria-label={`Toggle menu`}
-            aria-expanded={menuOpen}
+            aria-expanded={menuExpanded}
             className={`iconButton mobileMenuButton`}
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={() => setMenuExpanded(!menuExpanded)}
           >
-            <i className={`fa-solid ${menuOpen ? `fa-xmark` : `fa-bars`}`} />
+            <i className={`fa-solid ${menuExpanded ? `fa-xmark` : `fa-bars`}`} />
           </button>
         </div>
       </div>

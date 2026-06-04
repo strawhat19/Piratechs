@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import Nav from '@/app/components/nav/nav';
 import Footer from '@/app/components/footer/footer';
+import GlobalProvider from '@/shared/global-context';
 import { siteConfig } from '@/shared/config/site';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -31,11 +32,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang={`en`} className={plusJakartaSans.variable}>
       <body>
-        <Nav />
-        <main className={`siteMain`}>
-          {children}
-        </main>
-        <Footer />
+        <GlobalProvider>
+          <Nav />
+          <main className={`siteMain`}>
+            {children}
+          </main>
+          <Footer />
+        </GlobalProvider>
       </body>
     </html>
   );
