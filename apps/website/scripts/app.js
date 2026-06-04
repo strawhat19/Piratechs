@@ -1,74 +1,85 @@
-import { siteConfig, type Project } from './site.config.js';
-
-type PageId = keyof typeof siteConfig.pages;
-
-const pageId = (document.body.dataset.page || `home`) as PageId;
-const app = document.querySelector<HTMLElement>(`[data-router-view]`);
-const toast = document.querySelector<HTMLElement>(`[data-toast]`);
-const pageCopy = siteConfig.pages[pageId] || siteConfig.pages.home;
-
-const iconMap: Record<string, string> = {
-  api: `fa-solid fa-cloud-arrow-up`,
-  admin: `fa-solid fa-user-shield`,
-  angular: `fa-brands fa-angular`,
-  auth: `fa-solid fa-fingerprint`,
-  css: `fa-brands fa-css3-alt`,
-  'cms + commerce': `fa-solid fa-store`,
-  design: `fa-solid fa-pen-ruler`,
-  dashboards: `fa-solid fa-table-columns`,
-  'data ui': `fa-solid fa-table-cells-large`,
-  'data/api': `fa-solid fa-database`,
-  'data apps': `fa-solid fa-chart-line`,
-  'design studies': `fa-solid fa-pen-ruler`,
-  firebase: `fa-solid fa-fire-flame-curved`,
-  'front-end systems': `fa-solid fa-display`,
-  'game ui': `fa-solid fa-gamepad`,
-  github: `fa-brands fa-github`,
-  html: `fa-brands fa-html5`,
-  javascript: `fa-brands fa-js`,
-  json: `fa-solid fa-file-code`,
-  maps: `fa-solid fa-map-location-dot`,
-  mobile: `fa-solid fa-mobile-screen-button`,
-  motion: `fa-solid fa-wave-square`,
-  mysql: `fa-solid fa-database`,
-  next: `fa-solid fa-n`,
-  'next.js': `fa-solid fa-n`,
-  node: `fa-brands fa-node-js`,
-  php: `fa-brands fa-php`,
-  pwa: `fa-solid fa-mobile-screen-button`,
-  'pwa shells': `fa-solid fa-mobile-screen-button`,
-  python: `fa-brands fa-python`,
-  react: `fa-brands fa-react`,
-  'responsive ui': `fa-solid fa-display`,
-  rest: `fa-solid fa-cloud-arrow-up`,
-  sass: `fa-brands fa-sass`,
-  shopify: `fa-brands fa-shopify`,
-  sql: `fa-solid fa-database`,
-  typescript: `fa-solid fa-code`,
-  wordpress: `fa-brands fa-wordpress`,
-  'back-end + data': `fa-solid fa-database`,
-  'weather api': `fa-solid fa-cloud-sun`,
-  websockets: `fa-solid fa-network-wired`,
-  'web app': `fa-solid fa-window-restore`
+import { siteConfig } from './site.config.js';
+const app = document.querySelector(`[data-router-view]`);
+const toast = document.querySelector(`[data-toast]`);
+const pageIds = Object.keys(siteConfig.pages);
+const routePageId = () => {
+    const segment = location.pathname.split(`/`).filter(Boolean).pop() || `home`;
+    const pageSlug = segment.replace(/\.html$/, ``);
+    if (pageSlug === `website` || pageSlug === `index`)
+        return `home`;
+    return pageIds.includes(pageSlug) ? pageSlug : document.body.dataset.page || `home`;
 };
-
-const techSlug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, `-`).replace(/^-|-$/g, ``);
-const iconFor = (label: string) => iconMap[label.toLowerCase()] || `fa-solid fa-code`;
-const iconMarkup = (label: string) => `<i class="${iconFor(label)} techIcon techIcon-${techSlug(label)}" aria-hidden="true"></i>`;
-
-const renderNav = (target: Element | null) => {
-  if (!target) return;
-  target.innerHTML = siteConfig.nav.map(item => `
+let pageId = routePageId();
+let pageCopy = siteConfig.pages[pageId] || siteConfig.pages.home;
+const iconMap = {
+    api: `fa-solid fa-cloud-arrow-up`,
+    admin: `fa-solid fa-user-shield`,
+    angular: `fa-brands fa-angular`,
+    auth: `fa-solid fa-fingerprint`,
+    css: `fa-brands fa-css3-alt`,
+    'cms + commerce': `fa-solid fa-store`,
+    design: `fa-solid fa-pen-ruler`,
+    dashboards: `fa-solid fa-table-columns`,
+    'data ui': `fa-solid fa-table-cells-large`,
+    'data/api': `fa-solid fa-database`,
+    'data apps': `fa-solid fa-chart-line`,
+    'design studies': `fa-solid fa-pen-ruler`,
+    firebase: `fa-solid fa-fire-flame-curved`,
+    'front-end systems': `fa-solid fa-display`,
+    'game ui': `fa-solid fa-gamepad`,
+    github: `fa-brands fa-github`,
+    html: `fa-brands fa-html5`,
+    javascript: `fa-brands fa-js`,
+    json: `fa-solid fa-file-code`,
+    maps: `fa-solid fa-map-location-dot`,
+    mobile: `fa-solid fa-mobile-screen-button`,
+    motion: `fa-solid fa-wave-square`,
+    mysql: `fa-solid fa-database`,
+    next: `fa-solid fa-n`,
+    'next.js': `fa-solid fa-n`,
+    node: `fa-brands fa-node-js`,
+    php: `fa-brands fa-php`,
+    pwa: `fa-solid fa-mobile-screen-button`,
+    'pwa shells': `fa-solid fa-mobile-screen-button`,
+    python: `fa-brands fa-python`,
+    react: `fa-brands fa-react`,
+    'responsive ui': `fa-solid fa-display`,
+    rest: `fa-solid fa-cloud-arrow-up`,
+    sass: `fa-brands fa-sass`,
+    shopify: `fa-brands fa-shopify`,
+    sql: `fa-solid fa-database`,
+    typescript: `fa-solid fa-code`,
+    wordpress: `fa-brands fa-wordpress`,
+    'back-end + data': `fa-solid fa-database`,
+    'weather api': `fa-solid fa-cloud-sun`,
+    websockets: `fa-solid fa-network-wired`,
+    'web app': `fa-solid fa-window-restore`
+};
+const techSlug = (label) => label.toLowerCase().replace(/[^a-z0-9]+/g, `-`).replace(/^-|-$/g, ``);
+const iconFor = (label) => iconMap[label.toLowerCase()] || `fa-solid fa-code`;
+const iconMarkup = (label) => `<i class="${iconFor(label)} techIcon techIcon-${techSlug(label)}" aria-hidden="true"></i>`;
+const renderNav = (target) => {
+    if (!target)
+        return;
+    target.innerHTML = siteConfig.nav.map(item => `
     <a class="navLink ${item.id === pageId ? `activeRoute` : ``}" href="${item.href}">
       <i class="${item.icon}" aria-hidden="true"></i>
       <span>${item.label}</span>
     </a>
   `).join(``);
 };
-
-const techList = (tech: string[]) => tech.map(item => `<span>${iconMarkup(item)}${item}</span>`).join(``);
-
-const projectCard = (project: Project) => `
+const routeHref = (href) => {
+    const url = new URL(href, location.href);
+    if (url.origin !== location.origin)
+        return undefined;
+    const segment = url.pathname.split(`/`).filter(Boolean).pop() || `home`;
+    const pageSlug = segment.replace(/\.html$/, ``);
+    if (pageSlug === `website` || pageSlug === `index`)
+        return `home`;
+    return pageIds.includes(pageSlug) ? pageSlug : undefined;
+};
+const techList = (tech) => tech.map(item => `<span>${iconMarkup(item)}${item}</span>`).join(``);
+const projectCard = (project) => `
   <article class="projectCard reveal" data-project-card data-type="${project.type}" data-featured="${project.featured ? `true` : `false`}">
     <div class="projectTop">
       <span class="typeBadge">${iconMarkup(project.type)}${project.type}</span>
@@ -84,15 +95,13 @@ const projectCard = (project: Project) => `
     </div>
   </article>
 `;
-
-const sectionTitle = (eyebrow: string, title: string, summary: string) => `
+const sectionTitle = (eyebrow, title, summary) => `
   <div class="sectionTitle reveal">
     <span class="eyebrow">${eyebrow}</span>
     <h2>${title}</h2>
     <p>${summary}</p>
   </div>
 `;
-
 const authMarkup = () => `
   <form class="authForm" data-auth-form>
     <div class="authHeader">
@@ -109,10 +118,9 @@ const authMarkup = () => `
     </label>
     <button class="submitButton" type="submit">Sign In</button>
     <button class="googleButton" type="button" data-google-auth>Continue with Google</button>
-    <a href="./contact.html">Need access? Start with contact.</a>
+    <a href="./contact">Need access? Start with contact.</a>
   </form>
 `;
-
 const renderHero = () => `
   <section class="heroSection pageSection ${pageId === `home` ? `homeHero` : `subHero`}">
     <div class="heroBg" aria-hidden="true">
@@ -127,8 +135,8 @@ const renderHero = () => `
         <h1>${pageCopy.title}</h1>
         <p>${pageCopy.summary}</p>
         <div class="heroActions">
-          <a class="buttonLink primary" href="./projects.html">View Projects</a>
-          <a class="buttonLink ghost" href="./contact.html">Contact Piratechs</a>
+          <a class="buttonLink primary" href="./projects">View Projects</a>
+          <a class="buttonLink ghost" href="./contact">Contact Piratechs</a>
         </div>
       </div>
       <div class="heroBrand reveal">
@@ -144,11 +152,10 @@ const renderHero = () => `
     </div>
   </section>
 `;
-
 const renderProjects = () => {
-  const projects = [...siteConfig.projects].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-  const activeFilter = pageId === `projects` ? `All` : `Featured`;
-  return `
+    const projects = [...siteConfig.projects].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+    const activeFilter = pageId === `projects` ? `All` : `Featured`;
+    return `
     <section class="pageSection projectsSection" id="projects">
       <div class="sectionInner">
         ${sectionTitle(`Featured Projects`, `Proof-of-work cards that can scale`, `GitHub repos, live deployments, WordPress sites, data apps, design labs, and future game/mobile work all share one card system.`)}
@@ -160,7 +167,6 @@ const renderProjects = () => {
     </section>
   `;
 };
-
 const renderExperience = () => `
   <section class="pageSection experienceSection" id="about">
     <div class="sectionInner experienceGrid">
@@ -175,7 +181,6 @@ const renderExperience = () => `
     </div>
   </section>
 `;
-
 const renderBackend = () => `
   <section class="pageSection backendSection" id="features">
     <div class="sectionInner backendGrid">
@@ -188,7 +193,6 @@ const renderBackend = () => `
     </div>
   </section>
 `;
-
 const renderSkillsRefined = () => `
   <section class="pageSection skillsSection" id="skills">
     <div class="sectionInner">
@@ -205,7 +209,6 @@ const renderSkillsRefined = () => `
     </div>
   </section>
 `;
-
 const renderServices = () => `
   <section class="pageSection servicesSection" id="services">
     <div class="sectionInner">
@@ -222,7 +225,6 @@ const renderServices = () => `
     </div>
   </section>
 `;
-
 const renderStore = () => `
   <section class="pageSection storeSection" id="store">
     <div class="sectionInner">
@@ -235,7 +237,6 @@ const renderStore = () => `
     </div>
   </section>
 `;
-
 const renderGallery = () => `
   <section class="pageSection gallerySection" id="gallery">
     <div class="sectionInner">
@@ -252,7 +253,6 @@ const renderGallery = () => `
     </div>
   </section>
 `;
-
 const renderContact = () => `
   <section class="pageSection contactSection" id="contact">
     <div class="sectionInner contactBand reveal">
@@ -263,7 +263,6 @@ const renderContact = () => `
     </div>
   </section>
 `;
-
 const renderAbout = () => `
   <section class="pageSection pageDetailSection">
     <div class="sectionInner detailGrid">
@@ -280,7 +279,6 @@ const renderAbout = () => `
     </div>
   </section>
 `;
-
 const renderFeatures = () => `
   ${renderBackend()}
   ${renderSkillsRefined()}
@@ -295,28 +293,26 @@ const renderFeatures = () => `
     </div>
   </section>
 `;
-
 const renderPageDetail = () => {
-  switch (pageId) {
-    case `about`:
-      return renderAbout();
-    case `projects`:
-      return renderProjects();
-    case `services`:
-      return renderServices();
-    case `store`:
-      return renderStore();
-    case `features`:
-      return renderFeatures();
-    case `gallery`:
-      return renderGallery();
-    case `contact`:
-      return renderContact();
-    default:
-      return renderServices();
-  }
+    switch (pageId) {
+        case `about`:
+            return renderAbout();
+        case `projects`:
+            return renderProjects();
+        case `services`:
+            return renderServices();
+        case `store`:
+            return renderStore();
+        case `features`:
+            return renderFeatures();
+        case `gallery`:
+            return renderGallery();
+        case `contact`:
+            return renderContact();
+        default:
+            return renderServices();
+    }
 };
-
 const renderHomeShell = () => `
   ${renderHero()}
   ${renderProjects()}
@@ -327,16 +323,15 @@ const renderHomeShell = () => `
   ${renderGallery()}
   ${renderContact()}
 `;
-
 const renderPageShell = () => pageId === `home` ? renderHomeShell() : `
   ${renderHero()}
   ${renderPageDetail()}
 `;
-
 const renderFooter = () => {
-  const footer = document.querySelector<HTMLElement>(`[data-footer]`);
-  if (!footer) return;
-  footer.innerHTML = `
+    const footer = document.querySelector(`[data-footer]`);
+    if (!footer)
+        return;
+    footer.innerHTML = `
     <div class="footerInner">
       <div class="footerBrand">
         <img class="footerLogoDark" src="${siteConfig.logo.dark}" alt="Piratechs logo">
@@ -351,131 +346,144 @@ const renderFooter = () => {
     </div>
   `;
 };
-
-const showToast = (message: string) => {
-  if (!toast) return;
-  toast.textContent = message;
-  toast.classList.add(`showToast`);
-  window.setTimeout(() => toast.classList.remove(`showToast`), 2600);
+const showToast = (message) => {
+    if (!toast)
+        return;
+    toast.textContent = message;
+    toast.classList.add(`showToast`);
+    window.setTimeout(() => toast.classList.remove(`showToast`), 2600);
 };
-
 const bindAuthForms = () => {
-  document.querySelectorAll<HTMLFormElement>(`[data-auth-form]`).forEach(form => {
-    form.addEventListener(`submit`, event => {
-      event.preventDefault();
-      showToast(`Auth UI Ready For Future Backend`);
+    document.querySelectorAll(`[data-auth-form]`).forEach(form => {
+        form.addEventListener(`submit`, event => {
+            event.preventDefault();
+            showToast(`Auth UI Ready For Future Backend`);
+        });
     });
-  });
-  document.querySelectorAll<HTMLElement>(`[data-google-auth]`).forEach(button => {
-    button.addEventListener(`click`, () => showToast(`Google Sign-In Placeholder`));
-  });
+    document.querySelectorAll(`[data-google-auth]`).forEach(button => {
+        button.addEventListener(`click`, () => showToast(`Google Sign-In Placeholder`));
+    });
 };
-
 const bindFilters = () => {
-  const buttons = document.querySelectorAll<HTMLButtonElement>(`[data-filter]`);
-  const cards = document.querySelectorAll<HTMLElement>(`[data-project-card]`);
-
-  const applyFilter = (filter: string) => {
-    cards.forEach(card => {
-      const matches = filter === `All`
-        ? true
-        : filter === `Featured`
-          ? card.dataset.featured === `true`
-          : card.dataset.type === filter;
-      card.classList.toggle(`filteredOut`, !matches);
+    const buttons = document.querySelectorAll(`[data-filter]`);
+    const cards = document.querySelectorAll(`[data-project-card]`);
+    const applyFilter = (filter) => {
+        cards.forEach(card => {
+            const matches = filter === `All`
+                ? true
+                : filter === `Featured`
+                    ? card.dataset.featured === `true`
+                    : card.dataset.type === filter;
+            card.classList.toggle(`filteredOut`, !matches);
+        });
+    };
+    buttons.forEach(button => {
+        button.addEventListener(`click`, () => {
+            const filter = button.dataset.filter || `Featured`;
+            buttons.forEach(item => item.classList.toggle(`activeFilter`, item === button));
+            applyFilter(filter);
+        });
     });
-  };
-
-  buttons.forEach(button => {
-    button.addEventListener(`click`, () => {
-      const filter = button.dataset.filter || `Featured`;
-      buttons.forEach(item => item.classList.toggle(`activeFilter`, item === button));
-      applyFilter(filter);
-    });
-  });
-
-  const activeFilter = document.querySelector<HTMLButtonElement>(`.filterButton.activeFilter`)?.dataset.filter || `Featured`;
-  applyFilter(activeFilter);
+    const activeFilter = document.querySelector(`.filterButton.activeFilter`)?.dataset.filter || `Featured`;
+    applyFilter(activeFilter);
 };
-
 const bindMenus = () => {
-  const menuToggle = document.querySelector<HTMLButtonElement>(`[data-menu-toggle]`);
-  const mobileMenu = document.querySelector<HTMLElement>(`[data-mobile-menu]`);
-  const authToggle = document.querySelector<HTMLButtonElement>(`[data-auth-toggle]`);
-  const authWrap = document.querySelector<HTMLElement>(`[data-auth-wrap]`);
-
-  menuToggle?.addEventListener(`click`, () => {
-    const nextState = !document.body.classList.contains(`menuOpen`);
-    document.body.classList.toggle(`menuOpen`, nextState);
-    menuToggle.setAttribute(`aria-expanded`, `${nextState}`);
-    mobileMenu?.toggleAttribute(`inert`, !nextState);
-  });
-
-  authToggle?.addEventListener(`click`, () => {
-    const nextState = !authWrap?.classList.contains(`authOpen`);
-    authWrap?.classList.toggle(`authOpen`, nextState);
-    authToggle.setAttribute(`aria-expanded`, `${nextState}`);
-  });
-
-  document.addEventListener(`click`, event => {
-    if (!authWrap?.contains(event.target as Node)) {
-      authWrap?.classList.remove(`authOpen`);
-      authToggle?.setAttribute(`aria-expanded`, `false`);
-    }
-  });
-};
-
-const bindTheme = () => {
-  const storedTheme = localStorage.getItem(`piratechs-theme`);
-  const preferredTheme = storedTheme || `dark`;
-  document.body.dataset.theme = preferredTheme;
-
-  document.querySelector<HTMLButtonElement>(`[data-theme-toggle]`)?.addEventListener(`click`, () => {
-    const nextTheme = document.body.dataset.theme === `dark` ? `light` : `dark`;
-    document.body.dataset.theme = nextTheme;
-    localStorage.setItem(`piratechs-theme`, nextTheme);
-  });
-};
-
-const bindReveal = () => {
-  const items = document.querySelectorAll<HTMLElement>(`.reveal`);
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add(`isVisible`);
+    const menuToggle = document.querySelector(`[data-menu-toggle]`);
+    const mobileMenu = document.querySelector(`[data-mobile-menu]`);
+    const authToggle = document.querySelector(`[data-auth-toggle]`);
+    const authWrap = document.querySelector(`[data-auth-wrap]`);
+    menuToggle?.addEventListener(`click`, () => {
+        const nextState = !document.body.classList.contains(`menuOpen`);
+        document.body.classList.toggle(`menuOpen`, nextState);
+        menuToggle.setAttribute(`aria-expanded`, `${nextState}`);
+        mobileMenu?.toggleAttribute(`inert`, !nextState);
     });
-  }, { threshold: 0.18 });
-  items.forEach(item => observer.observe(item));
+    authToggle?.addEventListener(`click`, () => {
+        const nextState = !authWrap?.classList.contains(`authOpen`);
+        authWrap?.classList.toggle(`authOpen`, nextState);
+        authToggle.setAttribute(`aria-expanded`, `${nextState}`);
+    });
+    document.addEventListener(`click`, event => {
+        if (!authWrap?.contains(event.target)) {
+            authWrap?.classList.remove(`authOpen`);
+            authToggle?.setAttribute(`aria-expanded`, `false`);
+        }
+    });
 };
-
+const bindTheme = () => {
+    const storedTheme = localStorage.getItem(`piratechs-theme`);
+    const preferredTheme = storedTheme || `dark`;
+    document.body.dataset.theme = preferredTheme;
+    document.querySelector(`[data-theme-toggle]`)?.addEventListener(`click`, () => {
+        const nextTheme = document.body.dataset.theme === `dark` ? `light` : `dark`;
+        document.body.dataset.theme = nextTheme;
+        localStorage.setItem(`piratechs-theme`, nextTheme);
+    });
+};
+const bindReveal = () => {
+    const items = document.querySelectorAll(`.reveal`);
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting)
+                entry.target.classList.add(`isVisible`);
+        });
+    }, { threshold: 0.18 });
+    items.forEach(item => observer.observe(item));
+};
 const bindHeader = () => {
-  const header = document.querySelector<HTMLElement>(`[data-header]`);
-  const update = () => header?.classList.toggle(`headerScrolled`, window.scrollY > 12);
-  update();
-  window.addEventListener(`scroll`, update, { passive: true });
+    const header = document.querySelector(`[data-header]`);
+    const update = () => header?.classList.toggle(`headerScrolled`, window.scrollY > 12);
+    update();
+    window.addEventListener(`scroll`, update, { passive: true });
 };
-
 const registerPwa = () => {
-  if (!(`serviceWorker` in navigator)) return;
-  window.addEventListener(`load`, () => {
-    navigator.serviceWorker.register(`./sw.js`).catch(() => undefined);
-  });
+    if (!(`serviceWorker` in navigator))
+        return;
+    window.addEventListener(`load`, () => {
+        navigator.serviceWorker.register(`./sw.js`).catch(() => undefined);
+    });
 };
-
+const renderCurrentPage = (shouldScroll = false) => {
+    pageId = routePageId();
+    pageCopy = siteConfig.pages[pageId] || siteConfig.pages.home;
+    document.body.dataset.page = pageId;
+    if (app)
+        app.innerHTML = renderPageShell();
+    document.title = pageId === `home` ? `${siteConfig.title} | Full-Stack Software Portfolio` : `${pageCopy.title} | ${siteConfig.title}`;
+    renderNav(document.querySelector(`[data-nav]`));
+    renderNav(document.querySelector(`[data-mobile-nav]`));
+    renderFooter();
+    bindFilters();
+    bindReveal();
+    if (shouldScroll)
+        window.scrollTo({ top: 0, behavior: `smooth` });
+};
+const bindRoutes = () => {
+    document.addEventListener(`click`, event => {
+        const target = event.target;
+        const link = target instanceof Element ? target.closest(`a[href]`) : undefined;
+        if (!link || link.target || link.protocol === `mailto:`)
+            return;
+        const nextPageId = routeHref(link.href);
+        if (!nextPageId)
+            return;
+        event.preventDefault();
+        history.pushState({ pageId: nextPageId }, ``, link.href);
+        document.body.classList.remove(`menuOpen`);
+        document.querySelector(`[data-menu-toggle]`)?.setAttribute(`aria-expanded`, `false`);
+        renderCurrentPage(true);
+    });
+    window.addEventListener(`popstate`, () => renderCurrentPage());
+};
 const init = () => {
-  if (app) app.innerHTML = renderPageShell();
-  document.title = pageId === `home` ? `${siteConfig.title} | Full-Stack Software Portfolio` : `${pageCopy.title} | ${siteConfig.title}`;
-  renderNav(document.querySelector(`[data-nav]`));
-  renderNav(document.querySelector(`[data-mobile-nav]`));
-  document.querySelector(`[data-auth-panel]`)?.insertAdjacentHTML(`beforeend`, authMarkup());
-  document.querySelector(`[data-mobile-auth]`)?.insertAdjacentHTML(`beforeend`, authMarkup());
-  renderFooter();
-  bindTheme();
-  bindMenus();
-  bindAuthForms();
-  bindFilters();
-  bindReveal();
-  bindHeader();
-  registerPwa();
+    renderCurrentPage();
+    document.querySelector(`[data-auth-panel]`)?.insertAdjacentHTML(`beforeend`, authMarkup());
+    document.querySelector(`[data-mobile-auth]`)?.insertAdjacentHTML(`beforeend`, authMarkup());
+    bindTheme();
+    bindMenus();
+    bindRoutes();
+    bindAuthForms();
+    bindHeader();
+    registerPwa();
 };
-
 init();

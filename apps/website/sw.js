@@ -1,21 +1,21 @@
-const CACHE_NAME = `piratechs-static-v5`;
+const CACHE_NAME = `piratechs-static-v7`;
 const APP_SHELL = [
   `./`,
   `./index.html`,
-  `./about.html`,
-  `./projects.html`,
-  `./services.html`,
-  `./store.html`,
-  `./features.html`,
-  `./gallery.html`,
-  `./contact.html`,
+  `./pages/about.html`,
+  `./pages/projects.html`,
+  `./pages/services.html`,
+  `./pages/store.html`,
+  `./pages/features.html`,
+  `./pages/gallery.html`,
+  `./pages/contact.html`,
   `./styles/main.css`,
   `./scripts/site.config.js`,
   `./scripts/app.js`,
   `./manifest.webmanifest`,
-  `./public/icon-192x192.png`,
-  `./public/assets/piratechs/svg/Piratechs-Icon-White.svg`,
-  `./public/assets/piratechs/svg/Piratechs-Icon-Navy.svg`
+  `../../public/icon-192x192.png`,
+  `../../public/assets/piratechs/svg/Piratechs-Icon-White.svg`,
+  `../../public/assets/piratechs/svg/Piratechs-Icon-Navy.svg`
 ];
 
 self.addEventListener(`install`, event => {

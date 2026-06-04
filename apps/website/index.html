@@ -6,9 +6,14 @@
     <meta name="theme-color" content="#04397b">
     <meta name="description" content="Piratechs is a full-stack software portfolio focused on polished front ends, reliable back ends, and practical product systems.">
     <title>Piratechs | Full-Stack Software Portfolio</title>
+    <script>
+      const piratechsBase = document.createElement(`base`);
+      piratechsBase.href = location.pathname.includes(`/pages/`) ? `../` : `./`;
+      document.head.appendChild(piratechsBase);
+    </script>
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" href="./public/icon-32x32.png" sizes="32x32">
-    <link rel="apple-touch-icon" href="./public/icon-192x192.png">
+    <link rel="icon" href="../../public/icon-32x32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../public/icon-192x192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,9 +24,9 @@
     <div class="appShell" id="top">
       <header class="siteHeader" data-header>
         <div class="headerInner">
-          <a class="brandMark" href="./index.html" aria-label="Piratechs home">
-            <img class="brandLogo logoDark" src="./public/assets/piratechs/svg/Piratechs-Icon-White.svg" alt="Piratechs logo">
-            <img class="brandLogo logoLight" src="./public/assets/piratechs/svg/Piratechs-Icon-Navy.svg" alt="Piratechs logo">
+          <a class="brandMark" href="./" aria-label="Piratechs home">
+            <img class="brandLogo logoDark" src="../../public/assets/piratechs/svg/Piratechs-Icon-White.svg" alt="Piratechs logo">
+            <img class="brandLogo logoLight" src="../../public/assets/piratechs/svg/Piratechs-Icon-Navy.svg" alt="Piratechs logo">
             <span class="brandText">Piratechs</span>
           </a>
           <nav class="desktopNav" aria-label="Primary navigation" data-nav></nav>

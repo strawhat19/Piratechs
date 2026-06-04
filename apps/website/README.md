@@ -2,7 +2,7 @@
 
 Piratechs is a static portfolio PWA for a full-stack software engineer with a front-end focus. The first build is a GitHub Pages-ready HTML, CSS, and JavaScript site that uses the real Piratechs brand assets, a dark-mode-first navy/cyan palette, responsive navigation, a compact auth widget, featured project cards, and sections for experience, services, backend/API/data proof, gallery, and contact.
 
-This version is the foundation for the future Piratechs portfolio/app ecosystem. It is intentionally simple enough to deploy as a static site today, while keeping the structure clean enough to later rebuild the same design direction in Next.js, Angular/Nx/Ionic, and Expo.
+This version is the foundation for the future Piratechs portfolio/app ecosystem. It is intentionally simple enough to deploy as a static site today, while keeping the design direction easy to rebuild in a future Next.js app.
 
 ## Current Direction
 
@@ -15,13 +15,14 @@ This version is the foundation for the future Piratechs portfolio/app ecosystem.
 
 ## Local Preview
 
-Open this folder in VS Code and start Live Server from `index.html`.
+Open `apps/website/index.html` in VS Code and start Live Server from that file. Shared brand assets live at the Piratechs root in `public/`.
 
-## Optional Build
+## File Structure
 
-```bash
-npm install
-npm run build
-```
+This archive version is plain HTML, CSS, and JavaScript. There is no TypeScript, Sass, package install, or build step for `apps/website`.
 
-The source SCSS and TypeScript live in `src/`, while GitHub Pages reads the compiled `styles/` and `scripts/` files directly.
+- `index.html` is the home page
+- `pages/` contains the non-home pages
+- `styles/main.css` contains the compiled site CSS
+- `scripts/` contains the browser JavaScript and site config
+- `.htaccess` rewrites clean URLs like `/about` to `pages/about.html` when served through Apache
