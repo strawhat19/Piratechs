@@ -20,11 +20,15 @@ export default function HomeLanding() {
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy reveal`}>
-            <span className={`eyebrow`}>
+            <span className={`eyebrow bannerText`}>
               {page.eyebrow}
             </span>
-            <h1>{page.title}</h1>
-            <p>{page.summary}</p>
+            <h1 className={`bannerText`}>
+              {page.title}
+            </h1>
+            <p className={`bannerText`}>
+              {page.summary}
+            </p>
             <div className={`heroActions`}>
               <Link href={`/contact`} className={`buttonLink primary`}>
                 <i className={`fa-solid fa-paper-plane`} />

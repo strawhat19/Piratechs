@@ -1,14 +1,14 @@
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import './globals.scss';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
-import type { Metadata, Viewport } from 'next';
-import { Plus_Jakarta_Sans } from 'next/font/google';
 import Nav from '@/app/components/nav/nav';
-import Footer from '@/app/components/footer/footer';
-import GlobalProvider from '@/shared/global-context';
+import type { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/shared/config/site';
-import ScrollReveal from '@/app/components/effects/scroll-reveal';
+import Footer from '@/app/components/footer/footer';
+import { Plus_Jakarta_Sans } from 'next/font/google';
+import GlobalProvider from '@/shared/global-context';
 import ScrollToTop from '@/app/components/effects/scroll-to-top';
+import ScrollReveal from '@/app/components/effects/scroll-reveal';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -21,8 +21,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: siteConfig.title,
-  description: siteConfig.description,
   manifest: `/manifest.json`,
+  description: siteConfig.description,
   icons: {
     icon: `/icon-192x192.png`,
     apple: `/icon-192x192.png`,

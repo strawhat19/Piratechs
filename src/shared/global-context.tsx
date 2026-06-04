@@ -121,11 +121,14 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
   const setTheme = useCallback((nextTheme: ThemeMode) => {
     setThemeState(nextTheme);
     document.body.dataset.theme = nextTheme;
+    document.body.classList.remove(`dark`, `light`);
+    document.body.classList.add(nextTheme);
     window.localStorage.setItem(`piratechs-theme`, nextTheme);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme(theme == `dark` ? `light` : `dark`);
+    let themeString: ThemeMode = theme == `dark` ? `light` : `dark`;
+    setTheme(themeString);
   }, [setTheme, theme]);
 
   const upsertUser = useCallback(async (nextUser: AppUser) => {

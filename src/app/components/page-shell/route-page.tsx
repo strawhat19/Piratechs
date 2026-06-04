@@ -18,9 +18,17 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy reveal`}>
-            <span className={`eyebrow`}>{page.eyebrow}</span>
-            <h1>{page.title}</h1>
-            <p>{page.summary}</p>
+            <div className={`heroBannerText`}>
+              <span className={`eyebrow bannerText`}>
+                {page.eyebrow}
+              </span>
+              <h1 className={`bannerText`}>
+                {page.title}
+              </h1>
+              <p className={`bannerText`}>
+                {page.summary}
+              </p>
+            </div>
             <div className={`heroActions`}>
               <Link href={`/projects`} className={`buttonLink primary`}>
                 <i className={`fa-solid fa-diagram-project`} />

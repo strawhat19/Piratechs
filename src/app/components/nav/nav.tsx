@@ -1,14 +1,13 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
+import Logo from '../logo/logo';
 import { usePathname } from 'next/navigation';
+import { siteConfig } from '@/shared/config/site';
+import TopBar from '@/app/components/topbar/top-bar';
+import { useGlobalContext } from '@/shared/global-context';
 import AuthWidget from '@/app/components/auth/auth-widget';
 import NotificationBell from '@/app/components/notifications/notification-bell';
-import { siteConfig } from '@/shared/config/site';
-import { useGlobalContext } from '@/shared/global-context';
-import TopBar from '@/app/components/topbar/top-bar';
-import Logo from '../logo/logo';
 
 export default function Nav() {
   const pathname = usePathname();

@@ -160,3 +160,9 @@ img {
 .siteMain {
   min-height: 100dvh;
 }
+
+.dark {
+  .bannerText {
+    text-shadow: 0 0 2px black;
+  }
+}
