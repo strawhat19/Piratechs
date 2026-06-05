@@ -1,14 +1,25 @@
 'use client';
 
-import type { AppUser } from '@/shared/types/user';
+import { User } from '@/shared/models/User';
+import { DataSources, Roles } from './types/types';
 import type { ThemeMode } from '@/shared/types/app';
 import { devEnv } from './common/database/constants';
 import type { User as FirebaseUser } from 'firebase/auth';
-import { DataSources, Providers, Roles } from './types/types';
-import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { removeNullAndUndefinedProperties } from './common/scripts/globals';
+import { collection, doc, getDocs, limit, onSnapshot, query, setDoc, where } from 'firebase/firestore';
 import { firebaseEnvReady, getFirebaseAuth, getFirebaseDb, getGoogleProvider } from '@/shared/lib/firebase';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+
+export const logUsers = (users: User[] | any[], user: User | null | any) => {
+  if (devEnv) {
+    if (users?.length > 0) {
+      if (user != null) {
+        console.log(`User(s)`, { users, user });
+      }
+    }
+  }
+}
 
 type GlobalContextValue = {
   width: number;
@@ -20,19 +31,19 @@ type GlobalContextValue = {
   smallScreen: boolean;
   usersLoading: boolean;
   theme: ThemeMode;
-  user: AppUser | null;
-  users: AppUser[];
+  user: User | null;
+  users: User[];
   selected: unknown;
   menuExpanded: boolean;
-  setUser: (user: AppUser | null) => void;
-  setUsers: (users: AppUser[]) => void;
+  setUser: (user: User | null) => void;
+  setUsers: (users: User[]) => void;
   setTheme: (theme: ThemeMode) => void;
   setSelected: (selected: unknown) => void;
   setMenuExpanded: (expanded: boolean) => void;
   toggleTheme: () => void;
   onSignOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  refreshUsers: () => Promise<AppUser[]>;
+  refreshUsers: () => Promise<User[]>;
   signInUser: (email: string, password: string) => Promise<void>;
   signUpUser: (email: string, password: string, name?: string) => Promise<void>;
 };
@@ -74,41 +85,66 @@ const usersCollection = `users`;
 
 const getCurrentDate = () => new Date().toISOString();
 
-const mapFirebaseUser = (firebaseUser: FirebaseUser, number = 1): AppUser => ({
-  number,
-  signedIn: true,
-  role: defaultRole,
-  id: firebaseUser.uid,
-  uid: firebaseUser.uid,
-  source: DataSources.Firebase,
-  provider: Providers.Firebase,
-  email: firebaseUser.email ?? ``,
-  avatar: firebaseUser.photoURL ?? ``,
-  name: firebaseUser.displayName || firebaseUser.email?.split(`@`)?.[0] || `Piratechs User`,
-  firebaseUser,
+const getNextUserNumber = (currentUsers: User[]) => Math.max(0, ...currentUsers.map(currentUser => Number(currentUser.number || 0))) + 1;
+
+const getUserWriteData = (nextUser: User, now: string) => removeNullAndUndefinedProperties({
+  ...nextUser,
+  updated: now,
+  created: nextUser.created ?? now,
 });
 
-const normalizeUser = (id: string, data: Record<string, unknown>, fallbackNumber: number): AppUser => ({
+const normalizeUser = (id: string, data: Record<string, unknown>, fallbackNumber: number): User => new User({
+  ...data,
   id,
   uid: String(data.uid ?? id),
   role: String(data.role ?? defaultRole),
   name: String(data.name ?? data.email ?? `Piratechs User`),
   email: String(data.email ?? ``),
-  avatar: String(data.avatar ?? ``),
-  source: String(data.source ?? `firestore`),
+  avatar: String(data.avatar ?? data.photoURL ?? data.imageURL ?? data.image ?? ``),
+  source: String(data.source ?? DataSources.Firebase),
   number: Number(data.number ?? fallbackNumber),
-  created: data.created ? String(data.created) : undefined,
-  updated: data.updated ? String(data.updated) : undefined,
   provider: data.provider ? String(data.provider) : undefined,
   signedIn: Boolean(data.signedIn ?? false),
 });
+
+const mapFirebaseUser = (firebaseUser: FirebaseUser, number = 1, storedUser: User | null = null, displayName?: string): User => new User({
+  ...storedUser,
+  uid: firebaseUser.uid,
+  role: storedUser?.role ?? defaultRole,
+  name: displayName || firebaseUser.displayName || storedUser?.name || firebaseUser.email?.split(`@`)?.[0] || `Piratechs User`,
+  email: firebaseUser.email ?? storedUser?.email ?? ``,
+  avatar: firebaseUser.photoURL ?? storedUser?.avatar ?? ``,
+  number: storedUser?.number ?? number,
+  source: DataSources.Firebase,
+  signedIn: true,
+  photoURL: firebaseUser.photoURL ?? storedUser?.photoURL ?? ``,
+  providerId: firebaseUser.providerData?.[0]?.providerId ?? firebaseUser.providerId,
+  creationTime: firebaseUser.metadata?.creationTime ?? storedUser?.creationTime ?? ``,
+  lastSignInTime: firebaseUser.metadata?.lastSignInTime ?? storedUser?.lastSignInTime ?? ``,
+  metadata: removeNullAndUndefinedProperties({
+    creationTime: firebaseUser.metadata?.creationTime,
+    lastSignInTime: firebaseUser.metadata?.lastSignInTime,
+  }),
+  emailVerified: firebaseUser.emailVerified,
+});
+
+const getStoredUser = async (firebaseUser: FirebaseUser, currentUsers: User[]) => {
+  const cachedUser = currentUsers.find(currentUser => currentUser.uid == firebaseUser.uid);
+  if (cachedUser != null) return cachedUser;
+  const db = getFirebaseDb();
+  if (db == null) return null;
+  const usersQuery = query(collection(db, usersCollection), where(`uid`, `==`, firebaseUser.uid), limit(1));
+  const snapshot = await getDocs(usersQuery);
+  const userDoc = snapshot.docs?.[0];
+  return userDoc ? normalizeUser(userDoc.id, userDoc.data(), getNextUserNumber(currentUsers)) : null;
+};
 
 export const useGlobalContext = () => useContext(StateGlobals);
 
 export default function GlobalProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
-  const [user, setUser] = useState<AppUser | null>(null);
-  const [users, setUsers] = useState<AppUser[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
   const [isPWA, setIsPWA] = useState(false);
   const [width, setWidth] = useState(1920);
   const [height, setHeight] = useState(1080);
@@ -119,6 +155,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
   const [menuExpanded, setMenuExpanded] = useState(false);
   const [theme, setThemeState] = useState<ThemeMode>(`dark`);
   const firebaseReady = firebaseEnvReady();
+  const usersRef = useRef<User[]>([]);
 
   const setTheme = useCallback((nextTheme: ThemeMode) => {
     setThemeState(nextTheme);
@@ -133,16 +170,11 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     setTheme(themeString);
   }, [setTheme, theme]);
 
-  const upsertUser = useCallback(async (nextUser: AppUser) => {
+  const upsertUser = useCallback(async (nextUser: User) => {
     const db = getFirebaseDb();
     if (db == null) return;
     const now = getCurrentDate();
-    await setDoc(doc(db, usersCollection, nextUser.id), {
-      ...nextUser,
-      updated: now,
-      firebaseUser: null,
-      created: nextUser.created ?? now,
-    }, { merge: true });
+    await setDoc(doc(db, usersCollection, String(nextUser.id)), getUserWriteData(nextUser, now), { merge: true });
   }, []);
 
   const refreshUsers = useCallback(async () => {
@@ -154,6 +186,10 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     });
     return user ? [user, ...users.filter(currentUser => currentUser.uid != user.uid)] : users;
   }, [user, users]);
+
+  useEffect(() => {
+    usersRef.current = users;
+  }, [users]);
 
   const signInUser = useCallback(async (email: string, password: string) => {
     const auth = getFirebaseAuth();
@@ -183,14 +219,16 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       if (name && credential.user.displayName != name) {
         await updateProfile(credential.user, { displayName: name });
       }
-      const nextUser = mapFirebaseUser(credential.user, users.length + 1);
-      await upsertUser({ ...nextUser, name: name || nextUser.name });
+      const currentUsers = usersRef.current;
+      const storedUser = await getStoredUser(credential.user, currentUsers);
+      const nextUser = mapFirebaseUser(credential.user, storedUser?.number ?? getNextUserNumber(currentUsers), storedUser, name);
+      await upsertUser(nextUser);
       setAuthStatus(`Signed Up`);
     } catch (error) {
       setAuthStatus(`Sign Up Failed`);
       console.log(`Error Signing Up`, error);
     }
-  }, [upsertUser, users.length]);
+  }, [upsertUser]);
 
   const signInWithGoogle = useCallback(async () => {
     const auth = getFirebaseAuth();
@@ -201,13 +239,15 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     try {
       setAuthStatus(`Google Sign In`);
       const credential = await signInWithPopup(auth, getGoogleProvider());
-      await upsertUser(mapFirebaseUser(credential.user, users.length + 1));
+      const currentUsers = usersRef.current;
+      const storedUser = await getStoredUser(credential.user, currentUsers);
+      await upsertUser(mapFirebaseUser(credential.user, storedUser?.number ?? getNextUserNumber(currentUsers), storedUser));
       setAuthStatus(`Signed In With Google`);
     } catch (error) {
       setAuthStatus(`Google Sign In Failed`);
       console.log(`Error Signing In With Google`, error);
     }
-  }, [upsertUser, users.length]);
+  }, [upsertUser]);
 
   const onSignOut = useCallback(async () => {
     const auth = getFirebaseAuth();
@@ -265,20 +305,18 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
         setAuthStatus(`Signed Out`);
         return;
       }
-      const nextUser = mapFirebaseUser(firebaseUser, users.length + 1);
+      const currentUsers = usersRef.current;
+      const storedUser = await getStoredUser(firebaseUser, currentUsers);
+      const nextUser = mapFirebaseUser(firebaseUser, storedUser?.number ?? getNextUserNumber(currentUsers), storedUser);
       setUser(nextUser);
       setLoaded(true);
       setAuthStatus(`Signed In`);
-      await upsertUser(nextUser).then(() => {
-        if (users?.length > 0) {
-          devEnv && console.log(`Users`, { users, user });
-        }
-      }).catch(error => {
+      await upsertUser(nextUser).catch(error => {
         console.log(`Error Saving User`, error);
       });
     });
     return () => unsubscribe();
-  }, [upsertUser, users.length]);
+  }, [upsertUser]);
 
   useEffect(() => {
     const db = getFirebaseDb();
@@ -291,8 +329,10 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onSnapshot(collection(db, usersCollection), snapshot => {
       const firestoreUsers = snapshot.docs.map((userDoc, index) => normalizeUser(userDoc.id, userDoc.data(), index + 1));
       const currentUserExists = user == null || firestoreUsers.some(firestoreUser => firestoreUser.uid == user.uid);
-      setUsers(currentUserExists || user == null ? firestoreUsers : [user, ...firestoreUsers]);
+      const currentUsers = currentUserExists || user == null ? firestoreUsers : [user, ...firestoreUsers];
+      setUsers(currentUsers);
       setUsersLoading(false);
+      logUsers(currentUsers, user);
     }, error => {
       console.log(`Error Loading User(s)`, error);
       setUsers(user ? [user] : []);

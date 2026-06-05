@@ -204,7 +204,7 @@ export const config = {
   gallery: [`Dashboards`, `WordPress`, `PWA Shells`, `Data Apps`, `Design Studies`, `Game UI`],
   social: [
     { label: `GitHub`, href: `https://github.com/strawhat19`, icon: `fa-brands fa-github` },
-    { label: `LinkedIn`, href: `https://www.linkedin.com/`, icon: `fa-brands fa-linkedin` },
+    { label: `LinkedIn`, href: `https://www.linkedin.com/in/rakib-ahmed19/`, icon: `fa-brands fa-linkedin` },
     { label: `Piratechs`, href: `https://piratechs.com/`, icon: `fa-solid fa-globe` },
   ] satisfies SocialLink[],
 };
