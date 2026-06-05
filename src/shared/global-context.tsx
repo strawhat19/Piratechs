@@ -151,7 +151,6 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       const existingUser = currentUsers.some(currentUser => currentUser.uid == user.uid);
       return existingUser ? currentUsers : [user, ...currentUsers];
     });
-    devEnv && console.log(`Users`, { users, user });
     return user ? [user, ...users.filter(currentUser => currentUser.uid != user.uid)] : users;
   }, [user, users]);
 
@@ -269,7 +268,11 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       setUser(nextUser);
       setLoaded(true);
       setAuthStatus(`Signed In`);
-      await upsertUser(nextUser).catch(error => {
+      await upsertUser(nextUser).then(() => {
+        if (users?.length > 0) {
+          devEnv && console.log(`Users`, { users, user });
+        }
+      }).catch(error => {
         console.log(`Error Saving User`, error);
       });
     });

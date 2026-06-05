@@ -3,6 +3,7 @@ export const maxAuthAttempts = 5;
 export const pathPrefix = `https://`;
 
 export const defaultAuthenticateLabel = `Delete User & All Data`;
+
 export const capWords = (str: string) => str.replace(/\b\w/g, (match: string) => match.toUpperCase());
 export const userQueryFields = [`id`, `ID`, `uid`, `uuid`, `rank`, `name`, `role`, `email`, `image`, `avatar`, `phone`, `token`];
 export const decimalsString = (number: number, decimalPlaces: number = 1) => number?.toFixed(decimalPlaces)?.replace(/\.?0+$/, ``);
@@ -278,7 +279,6 @@ export const getDateObj = (newDate: any = new Date()) => {
 
 export const flattenURLs = (obj: any): string[] => {
   let result: string[] = [];
-
   function recurse(value: any) {
     if (Array.isArray(value)) {
       result.push(...value);
@@ -288,7 +288,6 @@ export const flattenURLs = (obj: any): string[] => {
       }
     }
   }
-
   recurse(obj);
   return result;
 }
@@ -329,7 +328,7 @@ export const flattenURLs = (obj: any): string[] => {
 //   }
 // }
 
-export const formatDateMain = (date: Date, specificPortion?: string) => {
+export const formatDate = (date: Date = new Date(), specificPortion?: string) => {
   let datesObject: any = {};
 
   let hours = date.getHours();

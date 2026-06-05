@@ -124,7 +124,7 @@ export const siteConfig = {
     {
       type: `PWA`,
       status: `Live`,
-      featured: true,
+      featured: false,
       id: `smasherscape`,
       title: `Smasherscape`,
       liveUrl: `https://smasherscape.vercel.app/`,
@@ -136,7 +136,7 @@ export const siteConfig = {
       type: `API`,
       id: `geodata`,
       status: `Live`,
-      featured: true,
+      featured: false,
       title: `GeoData`,
       tech: [`JavaScript`, `JSON`, `Maps`, `API`],
       liveUrl: `https://strawhat19.github.io/GeoData/`,
@@ -157,6 +157,7 @@ export const siteConfig = {
     },
     {
       status: `Live`,
+      featured: true,
       type: `Website`,
       id: `design-development`,
       title: `Design Development`,

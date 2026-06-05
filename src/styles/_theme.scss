@@ -24,6 +24,7 @@
   --white-soft: #f8fafc;
   --white-smoke: #e2e8f0;
   --silver: #aab4c3;
+  --soft_silver: #aaaaaa;
   --black: #020711;
   --blackGlass: rgba(0, 0, 0, 0.72);
   --darkGlass: rgba(0, 191, 255, 0.12);
@@ -37,7 +38,7 @@
   --border: rgba(0, 191, 255, 0.22);
   --main: var(--piratechsNeon);
   --links: var(--piratechsNeon);
-  --buttons: #0082c6;
+  --active_blue: #0082c6;
   --circuit: rgba(0, 191, 255, 0.28);
   --circuitSoft: rgba(19, 222, 185, 0.16);
   --heroCircuitTrack: var(--main);
@@ -73,10 +74,29 @@
   --tech-typescript: #3178c6;
   --tech-unity: #ffffff;
   --tech-wordpress: #21759b;
-  --main_gradient_angle: 135deg;
+
+  --deep_red_rgb: 180, 0, 0;
+  --deep_red: rgba(var(--deep_red_rgb), 1);
+
+  --yellow_neon_rgb: 255, 230, 0;
+  --yellow_neon: rgba(var(--yellow_neon_rgb), 1);
+  
+  --success_dark_rgb: 13, 159, 65;
+  --success_dark: rgba(var(--success_dark_rgb), 1);
+
+  --primary: var(--main);
+  --error: var(--deep_red);
+  --active: var(--active_blue);
+  --warning: var(--yellow_neon);
+  --success: var(--success_dark);
+  --disabled: var(--soft_silver);
+
   --shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
-  --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1);
+
+  --main_gradient_angle: 135deg;
   --main_gradient: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
+
+  --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1);
 }
 
 body[data-theme="light"] {
