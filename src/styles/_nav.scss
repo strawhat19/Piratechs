@@ -4,8 +4,9 @@
   z-index: 20;
   color: white;
   position: fixed;
+  box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
-  box-shadow: 0 8px 28px rgba(0, 9, 27, 0.22);
+  transition: background var(--transition);
   border-bottom: 1px solid rgba(0, 191, 255, 0.28);
   background: linear-gradient(90deg, rgba(4, 57, 123, 0.15), rgb(6, 68, 134, 0.25));
 }

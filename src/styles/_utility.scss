@@ -29,6 +29,11 @@
   border-color: var(--main);
 }
 
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .scrollToTop {
   opacity: 0;
   z-index: 80;

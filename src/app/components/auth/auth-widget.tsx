@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Spinner from '../loaders/spinners/spinner';
 import { useGlobalContext } from '@/shared/global-context';
 
 type AuthMode = `sign-in` | `sign-up`;
@@ -18,8 +19,8 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const email = String(formData.get(`email`) ?? ``);
     const name = String(formData.get(`name`) ?? ``);
+    const email = String(formData.get(`email`) ?? ``);
     const password = String(formData.get(`password`) ?? ``);
     try {
       if (mode == `sign-in`) {
@@ -37,13 +38,20 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
     <div className={`authWidget ${open ? `authOpen` : ``} ${mobile ? `mobileAuthWidget` : ``}`}>
       <button
         type={`button`}
+        disabled={!loaded}
         aria-expanded={open}
-        title={user?.email || `Sign In`}
-        className={`iconButton authToggle ${user ? `authAvatarToggle` : ``}`}
-        aria-label={user ? `Open profile menu` : `Open sign in form`}
         onClick={() => setOpen(!open)}
+        title={user?.email || `Sign In`}
+        aria-label={user ? `Open profile menu` : `Open sign in form`}
+        className={`iconButton authToggle ${loaded ? `` : `disabled`} ${user ? `authAvatarToggle` : ``}`}
       >
-        {user ? <span className={`authAvatarLetter`}>{userInitial}</span> : <i className={`fa-solid fa-user`} />}
+        {loaded ? (
+          user ? (
+            <span className={`authAvatarLetter`}>
+              {userInitial}
+            </span>
+          ) : <i className={`fa-solid fa-user`} />
+        ) : <Spinner size={20} />}
       </button>
       <div className={`authPanel`}>
         {user ? (

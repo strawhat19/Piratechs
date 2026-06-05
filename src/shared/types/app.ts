@@ -1,3 +1,5 @@
+import { Roles } from './types';
+
 export type PageID =
   | `home`
   | `about`
@@ -16,6 +18,7 @@ export type NavItem = {
   href: string;
   icon: string;
   label: string;
+  role?: Roles | string;
 };
 
 export type PageCopy = {

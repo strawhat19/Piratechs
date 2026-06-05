@@ -1,3 +1,4 @@
+import { Roles } from '../types/types';
 import type { NavItem, PageCopy, Project, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/app';
 
 export const config = {
@@ -9,10 +10,10 @@ export const config = {
     { id: `home`, label: `Home`, href: `/`, icon: `fa-solid fa-house` },
     { id: `about`, label: `About`, href: `/about`, icon: `fa-solid fa-anchor` },
     { id: `projects`, label: `Projects`, href: `/projects`, icon: `fa-solid fa-diagram-project` },
-    { id: `services`, label: `Services`, href: `/services`, icon: `fa-solid fa-screwdriver-wrench` },
-    { id: `store`, label: `Store`, href: `/store`, icon: `fa-solid fa-store` },
-    { id: `features`, label: `Features`, href: `/features`, icon: `fa-solid fa-list-check` },
-    { id: `gallery`, label: `Gallery`, href: `/gallery`, icon: `fa-solid fa-images` },
+    { id: `services`, label: `Services`, href: `/services`, icon: `fa-solid fa-layer-group` },
+    { id: `store`, label: `Store`, href: `/store`, icon: `fa-solid fa-store`, role: Roles.Editor },
+    { id: `features`, label: `Features`, href: `/features`, icon: `fa-solid fa-list-check`, role: Roles.Editor },
+    { id: `gallery`, label: `Gallery`, href: `/gallery`, icon: `fa-solid fa-images`, role: Roles.Editor },
     { id: `contact`, label: `Contact`, href: `/contact`, icon: `fa-solid fa-paper-plane` },
   ] satisfies NavItem[],
   topBarItems: [

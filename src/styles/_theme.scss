@@ -13,7 +13,7 @@
   --blue_navy_muted: white;
   // --blue_navy_muted: var(--light_font_muted);
   --navy-deep: #041b44;
-  --navy-dark: #00091b;
+  --navy-dark: rgba(0, 9, 27, 1);
   --piratechs: #2b4261;
   --piratechsNeon: #00bfff;
   --piratechsTeal: #13deb9;
@@ -39,6 +39,11 @@
   --main: var(--piratechsNeon);
   --links: var(--piratechsNeon);
   --active_blue: #0082c6;
+  --track: var(--navy-dark);
+  --scrollbarTrack: var(--track);
+  --scrollbarCorner: var(--track);
+  --scrollbarThumbColor: var(--main);
+  --scrollbarThumb: var(--main_gradient);
   --circuit: rgba(0, 191, 255, 0.28);
   --circuitSoft: rgba(19, 222, 185, 0.16);
   --heroCircuitTrack: var(--main);
@@ -91,7 +96,7 @@
   --success: var(--success_dark);
   --disabled: var(--soft_silver);
 
-  --shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+  --shadow: 0 2px 16px rgba(0, 9, 27, 0.25);
 
   --main_gradient_angle: 135deg;
   --main_gradient: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
@@ -120,7 +125,7 @@ body[data-theme="light"] {
   --tech-github: #181717;
   --tech-next: #000000;
   --tech-unity: #000000;
-  --shadow: 0 2px 16px rgba(4, 27, 68, 0.12);
+  --shadow: 0 2px 16px rgba(0, 9, 27, 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -140,6 +145,34 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   scroll-behavior: smooth;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbarThumbColor) var(--scrollbarTrack);
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbarTrack);
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: var(--circle);
+  background: var(--scrollbarThumb);
+  transition: filter var(--transition);
+  border: 3px solid var(--scrollbarTrack);
+  &:hover {
+    filter: brightness(1.18);
+  }
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--scrollbarCorner);
 }
 
 body {
@@ -232,10 +265,31 @@ img {
   }
 }
 
-body[data-theme="light"] {
-  .header {
-    .brandMark, .navLink, .iconButton {
-      color: var(--foreground) !important;
+
+html {
+  &:has(body[data-theme="light"]) {
+    --track: var(--white-soft);
+    .authAvatarLetter {
+      font-weight: 800;
+    }
+    .header {
+      background: linear-gradient(90deg, #ffffff26, #ffffff40);
+      .topBar {
+        .topBarItem {
+          strong, span {
+            color: var(--foreground) !important;
+          }
+        }
+        &::before {
+          background: linear-gradient(90deg, var(--white), transparent);
+        }
+        &::after {
+          background: linear-gradient(270deg, var(--white), transparent);
+        }
+      }
+      .brandMark, .navLink, .iconButton {
+        color: var(--foreground) !important;
+      }
     }
   }
 }

@@ -1,8 +1,13 @@
 import { extractRootDomain } from '@/shared/common/scripts/globals';
 
 export const faviconOverwrites: any = {
+    github: `github.com`,
     atlassian: `atlassian.com`,
+    [`github.io`]: `github.com`,
+    githubusercontent: `github.com`,
 }
+
+const fallbackFavicon = `/icon-16x16.png`;
 
 export default function URL({ 
     url, 
@@ -52,9 +57,26 @@ export default function URL({
                 }}
             >
                 {(!image && rootDomain != undefined) ? (
-                    <img className={`tagImage ${imageCircled ? `circled` : ``}`} src={favicon} alt={domainNameWithPath} width={imageSize} height={imageSize} />
+                    <img
+                        src={favicon}
+                        width={imageSize}
+                        height={imageSize}
+                        alt={domainNameWithPath}
+                        className={`tagImage ${imageCircled ? `circled` : ``}`}
+                        onError={event => {
+                            const imageElement = event.currentTarget;
+                            if (imageElement.src.endsWith(fallbackFavicon)) return;
+                            imageElement.src = fallbackFavicon;
+                        }}
+                    />
                 ) : (
-                    <img className={`tagImage ${imageCircled ? `circled` : ``}`} src={image} alt={domainNameWithPath} width={imageSize} height={imageSize} />
+                    <img
+                        src={image}
+                        width={imageSize}
+                        height={imageSize}
+                        alt={domainNameWithPath}
+                        className={`tagImage ${imageCircled ? `circled` : ``}`}
+                    />
                 )}
                 <span className={`useFont pointerEventsNone`} style={{ fontSize: `0.85rem` }}>
                     {label ?? host} 

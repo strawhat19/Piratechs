@@ -3,13 +3,13 @@
 }
 
 .authPanel {
-  top: calc(100% + 14px);
   right: 0;
-  width: 296px;
-  z-index: 30;
-  position: absolute;
   opacity: 0;
+  z-index: 30;
+  width: 296px;
+  position: absolute;
   pointer-events: none;
+  top: calc(100% + 14px);
   transform: translateY(8px);
   transition: opacity var(--transition), transform var(--transition);
 }
@@ -21,19 +21,19 @@
 }
 
 .authForm {
-  display: grid;
   gap: 10px;
   padding: 14px;
+  display: grid;
   color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--borderRadius);
-  background: var(--surfaceStrong);
   box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  background: var(--surfaceStrong);
+  border-radius: var(--borderRadius);
 }
 
 .authHeader {
-  display: grid;
   gap: 2px;
+  display: grid;
 }
 
 .authHeader strong {
@@ -43,8 +43,8 @@
 .authHeader small,
 .authForm span,
 .authStatus {
-  color: var(--foregroundMuted);
   font-size: 0.76rem;
+  color: var(--foregroundMuted);
 }
 
 .authAvatarToggle {
@@ -54,14 +54,14 @@
 }
 
 .authAvatarLetter {
+  font-size: 1rem;
+  font-weight: 600;
   color: currentColor;
-  font-size: 0.9rem;
-  font-weight: 900;
 }
 
 .authForm label {
-  display: grid;
   gap: 5px;
+  display: grid;
 }
 
 .authForm input {

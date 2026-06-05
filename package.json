@@ -1,6 +1,6 @@
 {
   "name": "piratechs",
-  "version": "0.0.0.5",
+  "version": "0.0.0.6",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -9,22 +9,27 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "sass": "^1.89.2",
-    "next": "^16.1.6",
-    "react": "^19.2.4",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@mui/icons-material": "^9.0.1",
+    "@mui/material": "^9.0.1",
+    "@mui/x-data-grid": "^9.4.0",
     "firebase": "^12.4.0",
+    "next": "^16.1.6",
     "next-pwa": "^5.6.0",
+    "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "@fortawesome/fontawesome-free": "^6.7.2"
+    "sass": "^1.89.2"
   },
   "devDependencies": {
-    "eslint": "^9",
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@types/next-pwa": "^5.6.9",
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/next-pwa": "^5.6.9",
     "@types/react-dom": "^19",
-    "@eslint/eslintrc": "^3",
-    "eslint-config-next": "^16.1.6"
+    "eslint": "^9",
+    "eslint-config-next": "^16.1.6",
+    "typescript": "^5"
   }
 }
