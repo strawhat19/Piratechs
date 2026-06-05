@@ -6,10 +6,10 @@ type HeroCircuitOverlayProps = {
 };
 
 export default function HeroCircuitOverlay({ 
-  blur = false, 
-  blendMode = false, 
+  blur = true, 
+  blendMode = true, 
   energySweep = false, 
-  animatePulses = false, 
+  animatePulses = true, 
 }: HeroCircuitOverlayProps) {
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
 

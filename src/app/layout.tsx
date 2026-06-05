@@ -34,12 +34,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+  intersectionObserver = true,
+}: {
+  children: React.ReactNode;
+  intersectionObserver?: boolean;
+}) {
   return (
     <html lang={`en`} className={plusJakartaSans.variable}>
-      <body className={`revealReady`}>
+      <body className={intersectionObserver ? `revealReady` : undefined}>
         <GlobalProvider>
-          <ScrollReveal />
+          {intersectionObserver && <ScrollReveal />}
           <Nav />
           <main className={`siteMain`}>
             {children}
