@@ -1,128 +1,175 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { siteConfig } from '@/shared/config/site';
+import { useEffect, useRef, useState } from 'react';
+
+const MARQUEE_SPEED = 15; // px per second, frame-rate independent
 
 export default function TopBar() {
-  const setCount = 12;
-  const frameRef = useRef<number | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const animationRef = useRef<Animation | null>(null);
+  const inViewRef = useRef(true);
+  const reducedMotionRef = useRef(false);
   const draggingRef = useRef(false);
   const dragStartXRef = useRef(0);
-  const dragScrollLeftRef = useRef(0);
-  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const dragStartTimeRef = useRef(0);
   const [dragging, setDragging] = useState(false);
-  const marqueeItems = Array.from({ length: setCount }).flatMap(() => siteConfig.topBarItems);
 
-  const getLoopMetrics = () => {
-    const scroller = scrollerRef.current;
-    if (scroller == null) return null;
-    const setWidth = scroller.scrollWidth / setCount;
-    const center = setWidth * Math.floor(setCount / 2);
-    return {
-      center,
-      setWidth,
-      max: center + setWidth,
-      min: center - setWidth,
-    };
-  };
-
-  const normalizeScroll = () => {
-    const scroller = scrollerRef.current;
-    const metrics = getLoopMetrics();
-    if (scroller == null || metrics == null || metrics.setWidth <= 0) return;
-    if (scroller.scrollLeft >= metrics.max) {
-      scroller.scrollLeft -= metrics.setWidth;
-    } else if (scroller.scrollLeft <= metrics.min) {
-      scroller.scrollLeft += metrics.setWidth;
-    }
-  };
+  const items = siteConfig.topBarItems;
 
   useEffect(() => {
-    const scroller = scrollerRef.current;
-    if (scroller == null) return;
+    const track = trackRef.current;
+    if (track == null || typeof track.animate !== `function`) return;
 
-    const centerScroller = () => {
-      const metrics = getLoopMetrics();
-      if (scrollerRef.current == null || metrics == null || metrics.setWidth <= 0) return;
-      scrollerRef.current.scrollLeft = metrics.center;
+    reducedMotionRef.current = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+
+    const getDuration = () => {
+      const timing = animationRef.current?.effect?.getComputedTiming();
+      return typeof timing?.duration === `number` ? timing.duration : 0;
     };
 
-    window.requestAnimationFrame(centerScroller);
+    const getCurrentTime = () => {
+      const current = animationRef.current?.currentTime;
+      return typeof current === `number` ? current : 0;
+    };
 
-    const tick = () => {
-      if (!draggingRef.current && scrollerRef.current != null) {
-        scrollerRef.current.scrollLeft += 0.42;
-        normalizeScroll();
+    const updatePlayState = () => {
+      const animation = animationRef.current;
+      if (animation == null) return;
+      const shouldPlay = inViewRef.current && !document.hidden && !draggingRef.current && !reducedMotionRef.current;
+      if (shouldPlay) {
+        animation.play();
+      } else {
+        animation.pause();
       }
-      frameRef.current = window.requestAnimationFrame(tick);
     };
 
-    frameRef.current = window.requestAnimationFrame(tick);
-    window.addEventListener(`resize`, centerScroller);
+    const buildAnimation = () => {
+      const previous = animationRef.current;
+      let progress = 0;
+      if (previous != null) {
+        const previousDuration = getDuration();
+        if (previousDuration > 0) {
+          progress = (getCurrentTime() % previousDuration) / previousDuration;
+        }
+        previous.cancel();
+      }
+
+      // Two identical copies sit back-to-back; one copy width is exactly half.
+      const setWidth = track.scrollWidth / 2;
+      if (setWidth <= 0) return;
+
+      const duration = (setWidth / MARQUEE_SPEED) * 1000;
+      const animation = track.animate(
+        [
+          { transform: `translate3d(0, 0, 0)` },
+          { transform: `translate3d(-${setWidth}px, 0, 0)` },
+        ],
+        { duration, iterations: Infinity, easing: `linear` },
+      );
+      animation.currentTime = progress * duration;
+      animationRef.current = animation;
+      updatePlayState();
+    };
+
+    buildAnimation();
+
+    const observer = new IntersectionObserver(
+      entries => {
+        inViewRef.current = entries[0]?.isIntersecting ?? true;
+        updatePlayState();
+      },
+      { threshold: 0 },
+    );
+    observer.observe(track);
+
+    const onVisibilityChange = () => updatePlayState();
+    document.addEventListener(`visibilitychange`, onVisibilityChange);
+
+    let resizeFrame = 0;
+    const onResize = () => {
+      window.cancelAnimationFrame(resizeFrame);
+      resizeFrame = window.requestAnimationFrame(buildAnimation);
+    };
+    window.addEventListener(`resize`, onResize);
 
     return () => {
-      window.removeEventListener(`resize`, centerScroller);
-      if (frameRef.current != null) {
-        window.cancelAnimationFrame(frameRef.current);
-      }
+      observer.disconnect();
+      document.removeEventListener(`visibilitychange`, onVisibilityChange);
+      window.removeEventListener(`resize`, onResize);
+      window.cancelAnimationFrame(resizeFrame);
+      animationRef.current?.cancel();
+      animationRef.current = null;
     };
   }, []);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    const scroller = scrollerRef.current;
-    if (scroller == null) return;
+    const animation = animationRef.current;
+    if (animation == null) return;
     draggingRef.current = true;
     setDragging(true);
     dragStartXRef.current = event.clientX;
-    dragScrollLeftRef.current = scroller.scrollLeft;
-    scroller.setPointerCapture(event.pointerId);
+    const current = animation.currentTime;
+    dragStartTimeRef.current = typeof current === `number` ? current : 0;
+    animation.pause();
+    event.currentTarget.setPointerCapture(event.pointerId);
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    const scroller = scrollerRef.current;
-    if (!dragging || scroller == null) return;
+    if (!draggingRef.current) return;
+    const animation = animationRef.current;
+    const track = trackRef.current;
+    if (animation == null || track == null) return;
+    const timing = animation.effect?.getComputedTiming();
+    const duration = typeof timing?.duration === `number` ? timing.duration : 0;
+    const setWidth = track.scrollWidth / 2;
+    if (duration <= 0 || setWidth <= 0) return;
     const deltaX = event.clientX - dragStartXRef.current;
-    scroller.scrollLeft = dragScrollLeftRef.current - deltaX;
-    normalizeScroll();
+    const deltaTime = (deltaX / setWidth) * duration;
+    let nextTime = dragStartTimeRef.current - deltaTime;
+    nextTime = ((nextTime % duration) + duration) % duration; // wrap into [0, duration)
+    animation.currentTime = nextTime;
   };
 
-  const onPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
-    const scroller = scrollerRef.current;
-    draggingRef.current = false;
-    setDragging(false);
-    normalizeScroll();
-    if (scroller?.hasPointerCapture(event.pointerId)) {
-      scroller.releasePointerCapture(event.pointerId);
-    }
-  };
-
-  const onPointerLeave = () => {
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!draggingRef.current) return;
     draggingRef.current = false;
     setDragging(false);
-    normalizeScroll();
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    const animation = animationRef.current;
+    if (animation != null && inViewRef.current && !document.hidden && !reducedMotionRef.current) {
+      animation.play();
+    }
   };
 
   return (
     <div className={`topBar`} aria-label={`Piratechs highlights`}>
       <div
-        ref={scrollerRef}
+        ref={trackRef}
         role={`list`}
-        tabIndex={0}
-        className={`topBarScroller ${dragging ? `isDragging` : ``}`}
-        onPointerUp={onPointerUp}
-        onPointerMove={onPointerMove}
+        className={`topBarTrack ${dragging ? `isDragging` : ``}`}
         onPointerDown={onPointerDown}
-        onPointerCancel={onPointerUp}
-        onPointerLeave={onPointerLeave}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onPointerLeave={endDrag}
       >
-        {marqueeItems.map((item, index) => (
-          <span role={`listitem`} className={`topBarItem`} key={`${item.text}-${index}`}>
-            <i className={item.icon} />
-            {item.label ? <strong>{item.label}</strong> : null}
-            <span>{item.text}</span>
-          </span>
-        ))}
+        {[0, 1].map(copy =>
+          items.map((item, index) => (
+            <span
+              role={`listitem`}
+              className={`topBarItem`}
+              aria-hidden={copy === 1 ? `true` : undefined}
+              key={`${copy}-${item.text}-${index}`}
+            >
+              <i className={item.icon} />
+              {item.label ? <strong>{item.label}</strong> : null}
+              <span>{item.text}</span>
+            </span>
+          )),
+        )}
       </div>
     </div>
   );

@@ -215,6 +215,7 @@ body[data-theme="light"] .heroLogoPlate {
   background: var(--surface);
   color: var(--foregroundMuted);
   border: 1px solid var(--border);
+  border-radius: var(--borderRadius);
 }
 
 .heroMiniStats strong {

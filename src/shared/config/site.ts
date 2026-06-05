@@ -28,7 +28,7 @@ export const siteConfig = {
   pages: {
     home: {
       eyebrow: `Piratechs`,
-      title: `Design & Develop Full-Stack Applications`,
+      title: `Design // Develop Full-Stack Applications`,
       summary: `Built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG`,
     },
     about: {

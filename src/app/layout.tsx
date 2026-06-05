@@ -2,6 +2,7 @@ import './globals.scss';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import Nav from '@/app/components/nav/nav';
+import Script from 'next/script';
 import type { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/shared/config/site';
 import Footer from '@/app/components/footer/footer';
@@ -14,6 +15,12 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-plusJakartaSans',
 });
+
+// Runs before first paint: enables the lighter "perf-lite" CSS path on HiDPI
+// displays (e.g. Retina MacBooks) or when the user prefers reduced motion, while
+// standard-DPI displays keep the full-quality effects. A manually set
+// `data-perf` on <html> is respected and never overridden.
+const PERF_MODE_SCRIPT = `(function(){try{var e=document.documentElement;if(e.dataset.perf)return;var d=window.devicePixelRatio||1;var m=window.matchMedia;var r=m&&m('(prefers-reduced-motion: reduce)').matches;if(d>1.5||r){e.dataset.perf='lite';}}catch(_){}})();`;
 
 export const viewport: Viewport = {
   themeColor: `#04397b`,
@@ -42,8 +49,11 @@ export default function RootLayout({
   intersectionObserver?: boolean;
 }) {
   return (
-    <html lang={`en`} className={plusJakartaSans.variable}>
+    <html lang={`en`} className={plusJakartaSans.variable} suppressHydrationWarning>
       <body className={intersectionObserver ? `revealReady` : undefined}>
+        <Script id={`perf-mode-init`} strategy={`beforeInteractive`}>
+          {PERF_MODE_SCRIPT}
+        </Script>
         <GlobalProvider>
           {intersectionObserver && <ScrollReveal />}
           <Nav />

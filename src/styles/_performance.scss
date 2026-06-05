@@ -1,0 +1,48 @@
+// Performance-lite mode (Phases 3-5).
+// Auto-applied by the inline script in layout.tsx when devicePixelRatio > 1.5
+// (Retina / HiDPI displays such as MacBooks) or when the user prefers reduced
+// motion. Standard-DPI displays (e.g. a 1080p Windows desktop) never match these
+// selectors, so they keep the full-quality effects untouched.
+
+// html[data-perf="lite"] {
+//   scroll-behavior: auto;
+// }
+
+// --- Phase 3: cheaper backdrop-filters (the costliest effect at 2x+ DPI) ---
+
+html[data-perf="lite"] .siteHeader {
+  backdrop-filter: blur(9px);
+}
+
+html[data-perf="lite"] .scrollToTop {
+  backdrop-filter: blur(9px);
+}
+
+// A live backdrop blur adds little to a small button but forces a separate
+// compositing pass for each one; drop it and keep the existing tint.
+// html[data-perf="lite"] .buttonLink.ghost,
+// html[data-perf="lite"] .googleButton,
+// html[data-perf="lite"] .filterButton {
+//   backdrop-filter: none !important;
+// }
+
+// --- Phase 4: tame the hero circuit overlay ---
+
+// The SVG Gaussian glow is re-rasterized at the device pixel ratio on every
+// frame the pulses move; removing it is the single biggest hero win on Retina.
+// html[data-perf="lite"] .circuitLayerMain,
+// html[data-perf="lite"] .circuitNodes {
+//   filter: none !important;
+// }
+
+// Keep a single animated pulse instead of three to cut per-frame repaint cost.
+// html[data-perf="lite"] .heroCircuitOverlay[data-animate-pulses="true"] .pulseB,
+// html[data-perf="lite"] .heroCircuitOverlay[data-animate-pulses="true"] .pulseC {
+//   animation: none;
+// }
+
+// Skip painting offscreen sections until they approach the viewport.
+html[data-perf="lite"] .pageSection:not(.heroSection) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}

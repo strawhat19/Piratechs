@@ -175,6 +175,9 @@ body.menuOpen .mobileMenu {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
+  .authPanel {
+    pointer-events: auto;
+  }
 }
 
 .mobileNav {

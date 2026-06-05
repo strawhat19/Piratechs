@@ -1,3 +1,24 @@
+@keyframes opa {
+  0% {
+    opacity: 0.4;
+  }
+  // 20% {
+  //   opacity: 0.45;
+  // }
+  // 40% {
+  //   opacity: 0.55;
+  // }
+  // 60% {
+  //   opacity: 0.65;
+  // }
+  // 80% {
+  //   opacity: 0.75;
+  // }
+  100% {
+    opacity: 0.84;
+  }
+}
+
 .heroCircuitOverlay {
   z-index: 2;
   width: 110%;
@@ -8,7 +29,7 @@
   // transition: var(--transition);
   opacity: var(--heroCircuitOpacity);
   transform: rotate(-1deg) scale(1.01);
-  // animation: opa 5s ease-in-out infinite alternate-reverse;
+  animation: opa 5s ease-in-out infinite alternate-reverse;
 }
 
 .heroCircuitOverlay[data-blur="true"] {
@@ -75,27 +96,6 @@
   --sweepRotate: -2deg;
   --sweepDuration: 11.6s;
   --sweepDelay: -8.1s;
-}
-
-@keyframes opa {
-  0% {
-    opacity: 0.4;
-  }
-  // 20% {
-  //   opacity: 0.45;
-  // }
-  // 40% {
-  //   opacity: 0.55;
-  // }
-  // 60% {
-  //   opacity: 0.65;
-  // }
-  // 80% {
-  //   opacity: 0.75;
-  // }
-  100% {
-    opacity: 0.84;
-  }
 }
 
 .circuitLayer {

@@ -28,27 +28,18 @@
   background: linear-gradient(270deg, rgba(6, 68, 134, 0.98), transparent);
 }
 
-.topBarScroller {
-  width: 100%;
+.topBarTrack {
   height: 100%;
   display: flex;
-  gap: 10px;
+  width: max-content;
   align-items: center;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0 var(--contentInset);
   cursor: grab;
   user-select: none;
-  scrollbar-width: none;
-  scroll-behavior: auto;
   touch-action: pan-y;
+  will-change: transform;
 }
 
-.topBarScroller::-webkit-scrollbar {
-  display: none;
-}
-
-.topBarScroller.isDragging {
+.topBarTrack.isDragging {
   cursor: grabbing;
 }
 
@@ -57,6 +48,7 @@
   display: inline-flex;
   gap: 8px;
   align-items: center;
+  margin-inline-end: 10px;
   color: rgba(255, 255, 255, 0.86);
   font-size: 0.78rem;
   font-weight: 700;

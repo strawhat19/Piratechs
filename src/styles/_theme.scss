@@ -29,7 +29,7 @@
   --darkGlass: rgba(0, 191, 255, 0.12);
   --panelGlass: rgba(5, 21, 49, 0.78);
   --foreground: var(--white);
-  --foregroundMuted: rgba(255, 255, 255, 0.72);
+  --foregroundMuted: rgba(255, 255, 255, 1);
   --background: var(--navy);
   --backgroundDeep: var(--navy-dark);
   --surface: rgba(4, 27, 68, 0.84);
@@ -80,7 +80,7 @@
 body[data-theme="light"] {
   --foreground: var(--blue_navy);
   // --foreground: #041b44;
-  --foregroundMuted: rgba(4, 27, 68, 0.72);
+  --foregroundMuted: var(--blue_navy);
   --background: #f8fafc;
   --backgroundDeep: #edf4fb;
   --surface: rgba(255, 255, 255, 0.9);
