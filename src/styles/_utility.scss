@@ -98,6 +98,45 @@ body.revealReady .reveal:not(.isVisible) {
   transition-delay: var(--reveal-delay, 0ms);
 }
 
+// Hero content is in view on first load, so reveal it faster (no stagger delay)
+// than scroll-triggered sections, which keep the slower timing above.
+.heroCopy.reveal.isVisible,
+.heroBrand.reveal.isVisible {
+  transition: opacity 0.3s ease, transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: 0ms;
+}
+
+// The hero is above the fold, so don't make it wait for JS hydration + the
+// IntersectionObserver to start (that delay is what made the content appear
+// seconds after the header/top bar). This animation auto-plays at first paint
+// and holds its end state (`both`), so the hero fades up immediately even before
+// JS runs. Sections further down keep using the JS-driven scroll reveal.
+body.revealReady .heroCopy.reveal,
+body.revealReady .heroBrand.reveal {
+  animation: heroRevealIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.revealReady .heroCopy.reveal {
+  --hero-from-x: -14px;
+  --hero-from-y: 0;
+}
+
+body.revealReady .heroBrand.reveal {
+  --hero-from-x: 0;
+  --hero-from-y: 16px;
+}
+
+@keyframes heroRevealIn {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--hero-from-x, 0), var(--hero-from-y, 18px), 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 body.revealReady .heroCopy.reveal:not(.isVisible) {
   --reveal-x: -14px;
   --reveal-y: 0;
@@ -137,6 +176,11 @@ body.revealReady .contactBand.reveal:not(.isVisible) {
     transform: none;
     will-change: auto;
     transition: none;
+  }
+
+  body.revealReady .heroCopy.reveal,
+  body.revealReady .heroBrand.reveal {
+    animation: none;
   }
 }
 
