@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Nav from '@/app/components/nav/nav';
 import Script from 'next/script';
 import type { Metadata, Viewport } from 'next';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 import Footer from '@/app/components/footer/footer';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import GlobalProvider from '@/shared/global-context';
@@ -27,9 +27,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: siteConfig.title,
+  title: config.title,
   manifest: `/manifest.json`,
-  description: siteConfig.description,
+  description: config.description,
   icons: {
     icon: [
       { url: `/icon-16x16.png`, sizes: `16x16`, type: `image/png` },
@@ -57,7 +57,7 @@ export default function RootLayout({
         <GlobalProvider>
           {intersectionObserver && <ScrollReveal />}
           <Nav />
-          <main className={`siteMain`}>
+          <main className={`main`}>
             {children}
           </main>
           <ScrollToTop />

@@ -222,10 +222,9 @@ img {
   @extend .gradientTextColor;
 }
 
-.siteMain {
+.main {
   min-height: 100dvh;
 }
-
 
 .dark {
   .bannerText {
@@ -234,7 +233,7 @@ img {
 }
 
 body[data-theme="light"] {
-  .siteHeader {
+  .header {
     .brandMark, .navLink, .iconButton {
       color: var(--foreground) !important;
     }

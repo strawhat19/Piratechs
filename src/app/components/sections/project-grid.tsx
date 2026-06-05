@@ -2,14 +2,14 @@
 
 import { useMemo, useState } from 'react';
 import ProjectCard from '@/app/components/projects/project-card';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 
 export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: boolean }) {
   const initialFilter = featuredOnly ? `Featured` : `All`;
   const [activeFilter, setActiveFilter] = useState(initialFilter);
 
   const projects = useMemo(() => {
-    const sortedProjects = [...siteConfig.projects].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+    const sortedProjects = [...config.projects].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
     return sortedProjects.filter(project => {
       if (activeFilter == `All`) return true;
       if (activeFilter == `Featured`) return project.featured;
@@ -20,7 +20,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
   return (
     <>
       <div className={`filterBar reveal`} aria-label={`Project filters`}>
-        {siteConfig.filters.map(filter => (
+        {config.filters.map(filter => (
           <button
             key={filter}
             type={`button`}

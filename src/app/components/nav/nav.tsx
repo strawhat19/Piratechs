@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import { usePathname } from 'next/navigation';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 import TopBar from '@/app/components/topbar/top-bar';
 import { useGlobalContext } from '@/shared/global-context';
 import AuthWidget from '@/app/components/auth/auth-widget';
@@ -20,7 +20,7 @@ export default function Nav() {
 
   const renderLinks = (className: string) => (
     <nav className={className} aria-label={`${className} navigation`}>
-      {siteConfig.nav.map(item => (
+      {config.nav.map(item => (
         <Link
           href={item.href}
           key={item.id}
@@ -35,7 +35,7 @@ export default function Nav() {
   );
 
   return (
-    <header className={`siteHeader ${menuExpanded ? `headerMenuOpen` : ``}`}>
+    <header className={`header ${menuExpanded ? `headerMenuOpen` : ``}`}>
       <TopBar />
       <div className={`navBar`}>
         <Link href={`/`} className={`homeButton`} aria-label={`Home`}>
@@ -45,7 +45,7 @@ export default function Nav() {
           <Logo className={`brandLogo`} />
           {/* <span className={`navLink ${isActiveRoute(`/`) ? `activeRoute` : ``}`} style={{ position: `relative`, left: -7 }}> */}
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
-            {siteConfig.title}
+            {config.title}
           </span>
         </Link>
         {renderLinks(`desktopNav`)}

@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import ProjectGrid from '@/app/components/sections/project-grid';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
 export default function HomeLanding() {
-  const page: any = siteConfig?.pages?.home;
+  const page: any = config?.pages?.home;
   return (
     <>
       <section className={`pageSection heroSection`}>
@@ -49,7 +49,7 @@ export default function HomeLanding() {
               <Logo className={`heroLogo`} />
             </div>
             <div className={`heroMiniStats`}>
-              {siteConfig.stats.map(stat => (
+              {config.stats.map(stat => (
                 <span key={stat.label}>
                   <strong className={`gradientTextColor`}>
                     {stat.value}
@@ -79,7 +79,7 @@ export default function HomeLanding() {
 
       <section className={`pageSection experienceSection`}>
         <div className={`sectionInner experienceGrid`}>
-          {siteConfig.stats.map(stat => (
+          {config.stats.map(stat => (
             <article key={stat.label} className={`statCard reveal`}>
               <span className={`gradientTextColor`}>
                 <i>
@@ -105,7 +105,7 @@ export default function HomeLanding() {
             <p>Python, JSON, SQL, REST, Firebase, WordPress/MySQL, Shopify thinking, auth, and responsive UI are organized as a real app foundation instead of a one-off portfolio page.</p>
           </div>
           <div className={`capabilityGrid reveal`}>
-            {siteConfig.capabilities.map(capability => {
+            {config.capabilities.map(capability => {
               const meta = getTechnologyMeta(capability);
               return (
                 <span key={capability}>
@@ -127,7 +127,7 @@ export default function HomeLanding() {
             <h2>Front-end polish backed by full-stack range</h2>
           </div>
           <div className={`skillsGrid`}>
-            {siteConfig.skills.map(skill => {
+            {config.skills.map(skill => {
               const meta = getTechnologyMeta(skill.label);
               return (
                 <article key={skill.label} className={`skillTile reveal`}>
@@ -152,7 +152,7 @@ export default function HomeLanding() {
             <h2>Useful enough for clients, sharp enough for hiring teams</h2>
           </div>
           <div className={`serviceGrid`}>
-            {siteConfig.services.map(service => (
+            {config.services.map(service => (
               <article key={service.title} className={`serviceCard reveal`}>
                 <i className={`${service.icon} gradientTextColor`} />
                 <h3><i>{service.title}</i></h3>
@@ -172,7 +172,7 @@ export default function HomeLanding() {
             <h2>Visual buckets for the next portfolio pass</h2>
           </div>
           <div className={`galleryGrid`}>
-            {siteConfig.gallery.map(item => {
+            {config.gallery.map(item => {
               const meta = getTechnologyMeta(item);
               return (
                 <article key={item} className={`galleryTile reveal`}>
@@ -197,9 +197,9 @@ export default function HomeLanding() {
               This first Next pass keeps the structure lean while setting up the app shell, pages, auth surface, PWA pieces, API route, and future Firebase growth path.
             </i>
           </p>
-          <a href={`mailto:${siteConfig.contactEmail}`} className={`buttonLink primary`}>
+          <a href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
             <i className={`fa-solid fa-paper-plane`} />
-            {siteConfig.contactEmail}
+            {config.contactEmail}
           </a>
         </div>
       </section>

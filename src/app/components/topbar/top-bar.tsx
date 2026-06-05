@@ -1,6 +1,6 @@
 'use client';
 
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 import { useEffect, useRef, useState } from 'react';
 
 const MARQUEE_SPEED = 15; // px per second, frame-rate independent
@@ -15,7 +15,7 @@ export default function TopBar() {
   const dragStartTimeRef = useRef(0);
   const [dragging, setDragging] = useState(false);
 
-  const items = siteConfig.topBarItems;
+  const items = config.topBarItems;
 
   useEffect(() => {
     const track = trackRef.current;

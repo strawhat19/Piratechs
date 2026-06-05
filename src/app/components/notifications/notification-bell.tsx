@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const notifications = siteConfig.topBarItems;
+  const notifications = config.topBarItems;
   const unreadCount = notifications.length;
 
   useEffect(() => {

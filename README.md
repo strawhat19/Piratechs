@@ -27,7 +27,7 @@ Then open `http://localhost:3000`.
 
 - `src/app` contains App Router pages, layout, route handlers, and components
 - `src/app/pages/*` contains the clean-route page targets used by `next.config.ts`
-- `src/shared/config/site.ts` holds the editable site content, routes, projects, skills, and links
+- `src/shared/config/config.ts` holds the editable app content, routes, projects, skills, and links
 - `src/shared/lib/firebase.ts` contains lazy Firebase initialization for future auth/database work
 - `src/styles` contains the global Sass partials and CSS variable theme system
 - `public` contains shared Piratechs assets and PWA icons

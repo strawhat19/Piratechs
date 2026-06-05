@@ -1,5 +1,5 @@
 import URL from '../url/url';
-import type { Project } from '@/shared/types/site';
+import type { Project } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import { capWords, extractRootDomain } from '@/shared/common/scripts/globals';
 

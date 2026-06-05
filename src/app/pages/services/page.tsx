@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 import RoutePage from '@/app/components/page-shell/route-page';
 
 export const metadata: Metadata = {
-  title: `Services // ${siteConfig.title}`,
+  title: `Services // ${config.title}`,
 };
 
 export default function ServicesPage() {

@@ -1,9 +1,9 @@
-.siteFooter {
+.footer {
   border-top: 1px solid var(--border);
   background: var(--backgroundDeep);
 }
 
-body[data-theme="light"] .siteFooter {
+body[data-theme="light"] .footer {
   background: #ffffff;
 }
 

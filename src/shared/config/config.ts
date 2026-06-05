@@ -1,6 +1,6 @@
-import type { NavItem, PageCopy, Project, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/site';
+import type { NavItem, PageCopy, Project, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/app';
 
-export const siteConfig = {
+export const config = {
   title: `Piratechs`,
   domain: `piratechs.com`,
   contactEmail: `info@piratechs.com`,

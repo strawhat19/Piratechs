@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 import RoutePage from '@/app/components/page-shell/route-page';
 
 export const metadata: Metadata = {
-  title: `Gallery // ${siteConfig.title}`,
+  title: `Gallery // ${config.title}`,
 };
 
 export default function GalleryPage() {

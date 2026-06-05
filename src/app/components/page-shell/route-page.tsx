@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { siteConfig } from '@/shared/config/site';
-import type { RouteID } from '@/shared/types/site';
+import { config } from '@/shared/config/config';
+import type { RouteID } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import ProjectGrid from '@/app/components/sections/project-grid';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
 export default function RoutePage({ pageID }: { pageID: RouteID }) {
-  const page: any = siteConfig?.pages?.[pageID];
+  const page: any = config?.pages?.[pageID];
   return (
     <>
       <section className={`pageSection heroSection subHero`}>
@@ -44,7 +44,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
             </div>
           </div>
           <div className={`pageBadge reveal`}>
-            <i className={siteConfig.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} />
+            <i className={config.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} />
             <span>{page.eyebrow}</span>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
             <ProjectGrid />
           ) : (
             <div className={`detailCards`}>
-              {siteConfig.capabilities.slice(0, 6).map(capability => {
+              {config.capabilities.slice(0, 6).map(capability => {
                 const meta = getTechnologyMeta(capability);
                 return (
                   <article key={capability} className={`serviceCard reveal`}>

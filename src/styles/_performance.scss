@@ -10,7 +10,7 @@
 
 // --- Phase 3: cheaper backdrop-filters (the costliest effect at 2x+ DPI) ---
 
-html[data-perf="lite"] .siteHeader {
+html[data-perf="lite"] .header {
   backdrop-filter: blur(9px);
 }
 

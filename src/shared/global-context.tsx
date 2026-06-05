@@ -1,9 +1,10 @@
 'use client';
 
 import type { AppUser } from '@/shared/types/user';
+import type { ThemeMode } from '@/shared/types/app';
 import { devEnv } from './common/database/constants';
-import type { ThemeMode } from '@/shared/types/site';
 import type { User as FirebaseUser } from 'firebase/auth';
+import { DataSources, Providers, Roles } from './types/types';
 import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { firebaseEnvReady, getFirebaseAuth, getFirebaseDb, getGoogleProvider } from '@/shared/lib/firebase';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
@@ -67,20 +68,20 @@ const defaultState: GlobalContextValue = {
 
 export const StateGlobals = createContext<GlobalContextValue>(defaultState);
 
-const usersCollection = `users`;
-const defaultRole = `Visitor`;
 const mobileBreakpoint = 768;
+const defaultRole = Roles.Guest;
+const usersCollection = `users`;
 
 const getCurrentDate = () => new Date().toISOString();
 
 const mapFirebaseUser = (firebaseUser: FirebaseUser, number = 1): AppUser => ({
   number,
-  role: defaultRole,
-  source: `firebase`,
-  uid: firebaseUser.uid,
-  id: firebaseUser.uid,
-  provider: `Firebase`,
   signedIn: true,
+  role: defaultRole,
+  id: firebaseUser.uid,
+  uid: firebaseUser.uid,
+  source: DataSources.Firebase,
+  provider: Providers.Firebase,
   email: firebaseUser.email ?? ``,
   avatar: firebaseUser.photoURL ?? ``,
   name: firebaseUser.displayName || firebaseUser.email?.split(`@`)?.[0] || `Piratechs User`,

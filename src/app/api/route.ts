@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { siteConfig } from '@/shared/config/site';
+import { config } from '@/shared/config/config';
 
 export function GET() {
   return NextResponse.json({
-    app: siteConfig.title,
+    app: config.title,
     status: `API Ready`,
     routes: [`/api/health`],
   });
