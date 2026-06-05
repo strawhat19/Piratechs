@@ -22,7 +22,7 @@ export default function ScrollReveal() {
           revealItem(entry.target as HTMLElement);
         }
       });
-    }, { threshold: 0.16, rootMargin: `0px 0px -8%` });
+    }, { threshold: 0.1, rootMargin: `0px 0px 0%` });
 
     const observeRevealItems = () => {
       document.querySelectorAll<HTMLElement>(`${revealSelector}:not([${observedAttr}])`).forEach((item, index) => {

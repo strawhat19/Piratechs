@@ -1,11 +1,12 @@
 .projectGrid {
   gap: 18px;
+  padding: 0;
   width: 100%;
   display: grid;
   overflow-x: auto;
-  padding: 4px 4px 18px;
+  overflow-y: hidden;
   scroll-snap-type: x proximity;
-  grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(465px, 1fr));
 }
 
 .projectCard,
@@ -37,23 +38,23 @@
 }
 
 .projectCard {
-  min-height: 330px;
-  min-width: 260px;
-  display: flex;
-  flex-direction: column;
   gap: 16px;
   padding: 18px;
+  display: flex;
+  min-width: 260px;
+  min-height: 330px;
+  flex-direction: column;
   scroll-snap-align: center;
 }
 
 .projectCard::before {
   inset: 0;
-  content: "";
   z-index: 0;
+  content: "";
+  opacity: 0.7;
   position: absolute;
   pointer-events: none;
   background: linear-gradient(135deg, rgba(0, 191, 255, 0.18), transparent 38%);
-  opacity: 0.7;
 }
 
 .projectCard > *,
@@ -73,21 +74,22 @@
   justify-content: space-between;
 }
 
-.typeBadge,
-.statusPill,
-.techList span,
-.capabilityGrid span {
-  min-height: 25px;
-  display: inline-flex;
+.typeBadge, .statusPill, .techList span, .capabilityGrid span {
   gap: 6px;
-  align-items: center;
-  justify-content: center;
+  font-size: 1rem;
+  min-height: 25px;
   padding: 4px 9px;
-  font-size: 0.72rem;
   font-weight: 800;
-  border: 1px solid var(--border);
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
   border-radius: var(--circle);
+  border: 1px solid var(--border);
   background: rgba(0, 191, 255, 0.08);
+}
+
+.typeBadge, .techList span {
+  font-size: 0.75rem;
 }
 
 .statusPill {
@@ -119,7 +121,7 @@
 }
 
 .techList {
-  gap: 7px;
+  gap: 5px;
   display: flex;
   flex-wrap: wrap;
   margin-top: auto;

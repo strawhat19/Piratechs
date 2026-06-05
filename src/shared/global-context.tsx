@@ -1,12 +1,13 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
-import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
-import { firebaseEnvReady, getFirebaseAuth, getFirebaseDb, getGoogleProvider } from '@/shared/lib/firebase';
 import type { AppUser } from '@/shared/types/user';
+import { devEnv } from './common/database/constants';
 import type { ThemeMode } from '@/shared/types/site';
 import type { User as FirebaseUser } from 'firebase/auth';
+import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { firebaseEnvReady, getFirebaseAuth, getFirebaseDb, getGoogleProvider } from '@/shared/lib/firebase';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 
 type GlobalContextValue = {
   width: number;
@@ -138,8 +139,8 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     await setDoc(doc(db, usersCollection, nextUser.id), {
       ...nextUser,
       updated: now,
-      created: nextUser.created ?? now,
       firebaseUser: null,
+      created: nextUser.created ?? now,
     }, { merge: true });
   }, []);
 
@@ -150,6 +151,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       const existingUser = currentUsers.some(currentUser => currentUser.uid == user.uid);
       return existingUser ? currentUsers : [user, ...currentUsers];
     });
+    devEnv && console.log(`Users`, { users, user });
     return user ? [user, ...users.filter(currentUser => currentUser.uid != user.uid)] : users;
   }, [user, users]);
 

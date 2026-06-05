@@ -10,12 +10,6 @@
   background: linear-gradient(90deg, rgba(4, 57, 123, 0.15), rgb(6, 68, 134, 0.25));
 }
 
-body[data-theme="light"] .siteHeader {
-  .homeButton, .brandMark, .navLink, .iconButton {
-    color: var(--foreground) !important;
-  }
-}
-
 .navBar {
   gap: 11px;
   width: 100%;
@@ -33,7 +27,7 @@ body[data-theme="light"] .siteHeader {
   color: white;
   place-items: center;
   border-radius: var(--circle);
-  background: rgba(0, 191, 255, 0.45);
+  background: var(--main_gradient);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
@@ -141,7 +135,6 @@ body[data-theme="light"] .heroLogoLight {
 }
 
 .iconButton:hover {
-  transform: translateY(-2px);
   border-color: var(--main);
   background: rgba(0, 191, 255, 0.26);
 }

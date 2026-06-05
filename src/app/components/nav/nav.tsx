@@ -43,7 +43,10 @@ export default function Nav() {
         </Link>
         <Link href={`/`} className={`brandMark`} aria-label={`Piratechs home`}>
           <Logo className={`brandLogo`} />
-          <span>{siteConfig.title}</span>
+          {/* <span className={`navLink ${isActiveRoute(`/`) ? `activeRoute` : ``}`} style={{ position: `relative`, left: -7 }}> */}
+          <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
+            {siteConfig.title}
+          </span>
         </Link>
         {renderLinks(`desktopNav`)}
         <div className={`navActions`}>

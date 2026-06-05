@@ -44,18 +44,20 @@ export default function ProjectCard({ project }: { project: Project }) {
         })}
       </div>
       <div className={`projectActions`}>
-        {project.codeUrl ? (
+        {project?.codeUrl ? (
           <a href={project.codeUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink ghost`}>
             <i className={`fa-brands fa-github`} />
             Code
           </a>
         ) : null}
-        {project.liveUrl ? (
-          <URL label={getURLLabel(project.liveUrl)} url={project.liveUrl} image={project?.urlImage} className={`buttonLink primary`} />
-          // <a href={project.liveUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink primary`}>
-          //   <i className={`fa-solid fa-arrow-up-right-from-square`} />
-          //   {project.liveUrl}
-          // </a>
+        {project?.liveUrl ? (
+          <URL 
+            imageCircled={false}
+            url={project?.liveUrl} 
+            image={project?.urlImage} 
+            className={`buttonLink primary`} 
+            label={getURLLabel(project?.liveUrl)} 
+          />
         ) : null}
       </div>
     </article>

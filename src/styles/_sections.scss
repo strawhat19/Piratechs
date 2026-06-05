@@ -4,47 +4,35 @@
 }
 
 .sectionInner {
-  width: 100%;
-  max-width: var(--maxWidth);
   margin: 0;
   z-index: 1;
+  width: 100%;
   position: relative;
-}
-
-.eyebrow {
-  width: fit-content;
-  display: inline-flex;
-  color: var(--main);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  max-width: var(--maxWidth);
 }
 
 .sectionTitle {
-  width: min(100%, 860px);
-  display: grid;
   gap: 13px;
+  display: grid;
   margin-bottom: 28px;
+  width: min(100%, 860px);
 }
 
-.sectionTitle h2,
-.contactBand h2 {
-  font-size: clamp(2rem, 5vw, 4.4rem);
+.sectionTitle h2, .contactBand h2 {
   line-height: 0.96;
+  font-size: clamp(2rem, 5vw, 4.4rem);
 }
 
-.sectionTitle p,
-.contactBand p {
-  color: var(--foregroundMuted);
+.sectionTitle p, .contactBand p {
   line-height: 1.75;
+  color: var(--foregroundMuted);
 }
 
 .heroSection {
-  min-height: clamp(640px, 84vh, 790px);
   display: grid;
-  align-items: center;
   overflow: hidden;
+  align-items: center;
+  min-height: clamp(640px, 84vh, 790px);
   padding-top: clamp(146px, 12vw, 180px);
   border-bottom: 1px solid var(--border);
 }
@@ -243,6 +231,7 @@ body[data-theme="light"] .heroLogoPlate {
 }
 
 .projectsSection {
+  padding-bottom: 28px;
   background: linear-gradient(180deg, var(--surfaceStrong), transparent);
 }
 

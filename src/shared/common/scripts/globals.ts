@@ -1,17 +1,7 @@
-// import { dev } from '../pages/_app';
-// import moment from 'moment-timezone';
-// import { User } from './models/User';
-// import { Grid } from './models/Grid';
-// import { List } from './models/List';
-// import { Item } from './models/Item';
-// import { Task } from './models/Task';
-// import { Types } from './types/types';
-// import { Board } from './models/Board';
-// import { toast } from 'react-toastify';
-
 export const maxCredits = 20_000;
 export const maxAuthAttempts = 5;
 export const pathPrefix = `https://`;
+
 export const defaultAuthenticateLabel = `Delete User & All Data`;
 export const capWords = (str: string) => str.replace(/\b\w/g, (match: string) => match.toUpperCase());
 export const userQueryFields = [`id`, `ID`, `uid`, `uuid`, `rank`, `name`, `role`, `email`, `image`, `avatar`, `phone`, `token`];
@@ -26,6 +16,15 @@ export const sortDescending = (arr: (string | number)[]): number[] => {
 export const isInStandaloneMode = () => {
   if (typeof window === `undefined`) return false;
   return window.matchMedia(`(display-mode: standalone)`).matches;
+}
+
+export const urlHostMatches = (envs: string[]) => {
+  let hostMatched = false;
+  let windowEnabled = typeof window !== `undefined`;
+  if (windowEnabled) {
+    hostMatched = envs.some(env => window?.location?.host?.includes(env));
+  }
+  return hostMatched;
 }
 
 export const isMobileDevice = () => {

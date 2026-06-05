@@ -1,13 +1,12 @@
 import Link from 'next/link';
-import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
-import ProjectGrid from '@/app/components/sections/project-grid';
 import { siteConfig } from '@/shared/config/site';
-import { getTechnologyMeta } from '@/shared/utils/tech';
 import type { RouteID } from '@/shared/types/site';
+import { getTechnologyMeta } from '@/shared/utils/tech';
+import ProjectGrid from '@/app/components/sections/project-grid';
+import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
 export default function RoutePage({ pageID }: { pageID: RouteID }) {
-  const page = siteConfig.pages[pageID];
-
+  const page: any = siteConfig?.pages?.[pageID];
   return (
     <>
       <section className={`pageSection heroSection subHero`}>
@@ -19,12 +18,16 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy reveal`}>
             <div className={`heroBannerText`}>
-              <span className={`eyebrow bannerText`}>
+              <span className={`eyebrow`}>
                 {page.eyebrow}
               </span>
-              <h1 className={`bannerText`}>
-                {page.title}
-              </h1>
+              {page?.html ? (
+                <h1 className={`bannerText`} dangerouslySetInnerHTML={{__html: page?.html}} />
+              ) : (
+                <h1 className={`bannerText`}>
+                  {page.title}
+                </h1>
+              )}
               <p className={`bannerText`}>
                 {page.summary}
               </p>
@@ -50,7 +53,9 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
       <section className={`pageSection detailSection`}>
         <div className={`sectionInner detailGrid`}>
           <div className={`sectionTitle reveal`}>
-            <span className={`eyebrow`}>{page.eyebrow} Direction</span>
+            <span className={`eyebrow`}>
+              {page.eyebrow} Direction
+            </span>
             <h2>{pageID == `projects` ? `Portfolio work stays prominent` : `A focused route ready to expand`}</h2>
             <p>{page.summary}</p>
           </div>

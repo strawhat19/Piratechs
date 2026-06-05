@@ -73,8 +73,10 @@
   --tech-typescript: #3178c6;
   --tech-unity: #ffffff;
   --tech-wordpress: #21759b;
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  --main_gradient_angle: 135deg;
+  --shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
   --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1);
+  --main_gradient: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
 }
 
 body[data-theme="light"] {
@@ -94,11 +96,11 @@ body[data-theme="light"] {
   --heroCircuitPulse: var(--main);
   --heroCircuitPulseAlt: var(--main);
   --heroCircuitNode: var(--main);
-  --heroCircuitOpacity: 0.5;
+  --heroCircuitOpacity: 0.25;
   --tech-github: #181717;
   --tech-next: #000000;
   --tech-unity: #000000;
-  --shadow: 0 24px 60px rgba(4, 27, 68, 0.12);
+  --shadow: 0 2px 16px rgba(4, 27, 68, 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -157,12 +159,64 @@ img {
   max-width: 100%;
 }
 
+.gradientBG {
+  background: var(--main_gradient);
+}
+
+.gradientColor {
+  color: var(--main_gradient);
+}
+
+.sep {
+  min-width: 1px;
+  min-height: 1px;
+  @extend .gradientBG;
+}
+
+.gradientTextColor {
+  @supports (-webkit-background-clip: text) or (background-clip: text) {
+    color: transparent;
+    text-shadow: none !important;
+    background: var(--main_gradient);
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text !important;
+  }
+}
+
+.eyebrow {
+  font-weight: 800;
+  font-size: 0.76rem;
+  width: fit-content;
+  color: var(--main);
+  display: inline-flex;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  @extend .gradientTextColor;
+}
+
+.slashes {
+  font-weight: 400;
+  padding-right: 15px;
+  letter-spacing: -15px;
+  @extend .gradientTextColor;
+}
+
 .siteMain {
   min-height: 100dvh;
 }
 
+
 .dark {
   .bannerText {
     text-shadow: 0 0 2px black;
+  }
+}
+
+body[data-theme="light"] {
+  .siteHeader {
+    .brandMark, .navLink, .iconButton {
+      color: var(--foreground) !important;
+    }
   }
 }

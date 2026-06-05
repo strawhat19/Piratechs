@@ -16,11 +16,9 @@
   .footerInner {
     grid-template-columns: 1fr;
   }
-
   .heroBrand {
     order: -1;
   }
-
   .projectGrid {
     grid-template-columns: repeat(3, minmax(260px, 1fr));
   }

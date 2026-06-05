@@ -4,7 +4,14 @@ export const faviconOverwrites: any = {
     atlassian: `atlassian.com`,
 }
 
-export default function URL({ url, label = undefined, image = undefined, className = `tagURLComponent` }: any) {
+export default function URL({ 
+    url, 
+    imageSize = 18,
+    label = undefined, 
+    image = undefined, 
+    imageCircled = false, 
+    className = `tagURLComponent`, 
+}: any) {
     let urlParts: any = extractRootDomain(url, undefined, true);
     let domainNameWithPath: any = extractRootDomain(url, true);
     let rootDomain: any = extractRootDomain(url) ?? ``;
@@ -45,11 +52,11 @@ export default function URL({ url, label = undefined, image = undefined, classNa
                 }}
             >
                 {(!image && rootDomain != undefined) ? (
-                    <img className={`tagImage`} src={favicon} alt={domainNameWithPath} width={16} height={16} />
+                    <img className={`tagImage ${imageCircled ? `circled` : ``}`} src={favicon} alt={domainNameWithPath} width={imageSize} height={imageSize} />
                 ) : (
-                    <img className={`tagImage`} src={image} alt={domainNameWithPath} width={16} height={16} />
+                    <img className={`tagImage ${imageCircled ? `circled` : ``}`} src={image} alt={domainNameWithPath} width={imageSize} height={imageSize} />
                 )}
-                <span className={`useFont pointerEventsNone`} style={{ fontSize: 10, padding: `1px 5px 0 0` }}>
+                <span className={`useFont pointerEventsNone`} style={{ fontSize: `0.85rem` }}>
                     {label ?? host} 
                     {/* <span className={`slashes`}>//</span> {path} */}
                 </span>

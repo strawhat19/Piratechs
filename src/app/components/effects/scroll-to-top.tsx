@@ -7,7 +7,7 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const updateVisibility = () => {
-      setIsVisible(window.scrollY > 100);
+      setIsVisible(window.scrollY > 50);
     };
     updateVisibility();
     window.addEventListener(`scroll`, updateVisibility, { passive: true });
@@ -25,7 +25,7 @@ export default function ScrollToTop() {
       onClick={scrollToTop}
       className={`scrollToTop ${isVisible ? `visible` : ``}`}
     >
-      <i className={`fa-solid fa-arrow-up`} />
+      <i className={`fa-solid fa-chevron-up`} />
     </button>
   );
 }

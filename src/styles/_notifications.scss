@@ -18,30 +18,31 @@
   font-size: 0.66rem;
   position: absolute;
   place-items: center;
+  background: var(--main);
   border-radius: var(--circle);
+  // background: var(--main_gradient);
   color: var(--neon_badge_font_color);
   // border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow: 0 8px 20px rgba(0, 191, 255, 0.2);
-  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
 }
 
 .notificationPanel {
-  top: calc(100% + 14px);
   right: 0;
-  width: min(340px, calc(100vw - 32px));
+  gap: 12px;
+  opacity: 0;
   z-index: 30;
   display: grid;
-  gap: 12px;
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
   padding: 14px;
+  position: absolute;
+  pointer-events: none;
+  top: calc(100% + 14px);
   color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--borderRadius);
-  background: var(--surfaceStrong);
   box-shadow: var(--shadow);
   transform: translateY(8px);
+  border: 1px solid var(--border);
+  background: var(--surfaceStrong);
+  border-radius: var(--borderRadius);
+  width: min(340px, calc(100vw - 32px));
   transition: opacity var(--transition), transform var(--transition);
 }
 
@@ -52,32 +53,32 @@
 }
 
 .notificationHeader {
-  display: flex;
   gap: 12px;
+  display: flex;
   align-items: center;
-  justify-content: space-between;
   padding-bottom: 10px;
+  justify-content: space-between;
   border-bottom: 1px solid var(--border);
 }
 
 .notificationHeader span,
 .notificationCopy {
-  display: grid;
   gap: 3px;
   min-width: 0;
+  display: grid;
 }
 
 .notificationHeader strong,
 .notificationCopy strong {
-  color: var(--foreground);
   font-size: 0.9rem;
+  color: var(--foreground);
 }
 
 .notificationHeader small,
 .notificationCopy small {
-  color: var(--foregroundMuted);
-  font-size: 0.76rem;
   line-height: 1.45;
+  font-size: 0.76rem;
+  color: var(--foregroundMuted);
 }
 
 .notificationHeader > i {

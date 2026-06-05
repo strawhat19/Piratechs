@@ -29,6 +29,7 @@ export const siteConfig = {
     home: {
       eyebrow: `Piratechs`,
       title: `Design // Develop Full-Stack Applications`,
+      html: `Design <span class="slashes">//</span> Develop Full-Stack Applications`,
       summary: `Built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG`,
     },
     about: {
@@ -81,10 +82,10 @@ export const siteConfig = {
       id: `productivf`,
       title: `ProductivF`,
       liveUrl: `https://productivf.com/`,
-      tech: [`TypeScript`, `Sass`, `Auth`, `Data UI`],
       codeUrl: `https://github.com/strawhat19/Productivf`,
-      urlImage: `https://next-13-vite-comparison.vercel.app/piratechs.svg`,
+      tech: [`Next.js`, `PWA`, `TypeScript`, `Sass`, `Auth`],
       summary: `Dashboard-style productivity app with auth, grids, records, and app-shell navigation patterns.`,
+      urlImage: `https://raw.githubusercontent.com/strawhat19/ProductIVF/refs/heads/main/public/icon-192x192.png`,
     },
     {
       featured: true,
@@ -94,6 +95,7 @@ export const siteConfig = {
       title: `Dyer & Posta`,
       liveUrl: `https://dyerposta.com/`,
       tech: [`WordPress`, `PHP`, `MySQL`, `CSS`],
+      urlImage: `https://dyerposta.com/wp-content/uploads/2021/03/cropped-Official-Logo-Icon-GreenCircle.png`,
       summary: `Elegant salon portfolio restoration with responsive layout, classic WordPress editing, and refined carousel behavior.`,
     },
     {
@@ -109,8 +111,8 @@ export const siteConfig = {
     },
     {
       type: `PWA`,
-      featured: true,
       status: `Live`,
+      featured: true,
       id: `piratechs-pwa`,
       title: `Piratechs Next PWA`,
       tech: [`Next.js`, `PWA`, `TypeScript`, `Sass`],
@@ -122,7 +124,7 @@ export const siteConfig = {
     {
       type: `PWA`,
       status: `Live`,
-      featured: false,
+      featured: true,
       id: `smasherscape`,
       title: `Smasherscape`,
       liveUrl: `https://smasherscape.vercel.app/`,
@@ -134,7 +136,7 @@ export const siteConfig = {
       type: `API`,
       id: `geodata`,
       status: `Live`,
-      featured: false,
+      featured: true,
       title: `GeoData`,
       tech: [`JavaScript`, `JSON`, `Maps`, `API`],
       liveUrl: `https://strawhat19.github.io/GeoData/`,

@@ -15,9 +15,9 @@
 
 .buttonLink.primary, .filterButton.activeFilter {
   border-color: var(--main);
+  background: var(--main_gradient);
   color: var(--neon_badge_font_color);
   box-shadow: 0 12px 30px rgba(0, 191, 255, 0.2);
-  background: linear-gradient(135deg, var(--piratechsNeon), var(--piratechsTeal));
 }
 
 .buttonLink.ghost, .googleButton, .filterButton {
@@ -27,28 +27,27 @@
 
 .buttonLink:hover, .googleButton:hover, .filterButton:hover {
   border-color: var(--main);
-  transform: translateY(-2px);
 }
 
 .scrollToTop {
-  right: max(18px, env(safe-area-inset-right));
-  bottom: max(18px, env(safe-area-inset-bottom));
+  opacity: 0;
+  z-index: 80;
   width: 48px;
   height: 48px;
-  z-index: 80;
   display: grid;
-  opacity: 0;
   position: fixed;
-  color: var(--foreground);
   place-items: center;
   pointer-events: none;
-  border: 1px solid var(--border);
-  border-radius: var(--circle);
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.22), rgba(19, 222, 185, 0.14)), var(--surface);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28), 0 0 24px rgba(0, 191, 255, 0.2);
+  color: var(--foreground);
   backdrop-filter: blur(14px);
+  border-radius: var(--circle);
+  border: 1px solid var(--border);
+  background: var(--main_gradient);
+  right: max(25px, env(safe-area-inset-right));
+  bottom: max(33px, env(safe-area-inset-bottom));
   transform: translate3d(0, 14px, 0) scale(0.94);
-  transition: opacity var(--transition), transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28), 0 0 24px rgba(0, 191, 255, 0.2);
+  transition: filter var(--transition), opacity var(--transition), transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
 }
 
 .scrollToTop.visible {
@@ -58,19 +57,14 @@
 }
 
 .scrollToTop:hover {
+  filter: brightness(1.1);
   border-color: var(--main);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.32), 0 0 34px rgba(0, 191, 255, 0.34);
-  transform: translate3d(0, -3px, 0) scale(1);
 }
 
 .scrollToTop i {
-  color: var(--main);
+  color: white;
   font-size: 1rem;
-}
-
-.buttonLink i {
-  top: 2px;
-  position: relative;
 }
 
 .reveal {
@@ -85,25 +79,23 @@ body.revealReady .reveal:not(.isVisible) {
   --reveal-y: 22px;
   --reveal-blur: 1.6px;
   opacity: 0;
-  // filter: blur(var(--reveal-blur));
-  transform: translate3d(var(--reveal-x), var(--reveal-y), 0);
   will-change: opacity, transform, filter;
+  transform: translate3d(var(--reveal-x), var(--reveal-y), 0);
 }
 
 .reveal.isVisible {
   opacity: 1;
   filter: blur(0);
   transform: translate3d(0, 0, 0);
-  transition: opacity 0.5s ease, filter 0.46s ease, transform 0.58s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
+  transition: opacity 0.5s ease, filter 0.46s ease, transform 0.58s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // Hero content is in view on first load, so reveal it faster (no stagger delay)
 // than scroll-triggered sections, which keep the slower timing above.
-.heroCopy.reveal.isVisible,
-.heroBrand.reveal.isVisible {
-  transition: opacity 0.3s ease, transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+.heroCopy.reveal.isVisible, .heroBrand.reveal.isVisible {
   transition-delay: 0ms;
+  transition: opacity 0.3s ease, transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // The hero is above the fold, so don't make it wait for JS hydration + the

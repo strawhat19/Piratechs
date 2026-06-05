@@ -8,7 +8,9 @@ export default function NotFound() {
       </div>
       <div className={`sectionInner heroGrid`}>
         <div className={`heroCopy`}>
-          <span className={`eyebrow`}>404</span>
+          <span className={`eyebrow`}>
+            404
+          </span>
           <h1>Route not found</h1>
           <p>This Piratechs route is not wired up yet, but the app shell is ready for it.</p>
           <div className={`heroActions`}>

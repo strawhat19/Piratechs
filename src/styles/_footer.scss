@@ -33,13 +33,13 @@ body[data-theme="light"] .siteFooter {
 }
 
 .footerBrand span {
+  gap: 7px;
   display: grid;
-  gap: 4px;
 }
 
 .footerBrand small {
-  color: var(--foregroundMuted);
   line-height: 1.45;
+  color: var(--foregroundMuted);
 }
 
 .footerNav, .footerLinks {

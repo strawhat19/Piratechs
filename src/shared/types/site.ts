@@ -20,6 +20,7 @@ export type NavItem = {
 
 export type PageCopy = {
   title: string;
+  html?: string;
   eyebrow: string;
   summary: string;
 };
@@ -34,12 +35,13 @@ export type Project = {
   id: string;
   type: string;
   title: string;
+  tech: string[];
   status: string;
   summary: string;
-  tech: string[];
   liveUrl?: string;
   codeUrl?: string;
   urlImage?: string;
+  mediaURL?: string;
   featured?: boolean;
 };
 
@@ -57,8 +59,8 @@ export type Skill = {
 
 export type SocialLink = {
   href: string;
-  label: string;
   icon: string;
+  label: string;
 };
 
 export type TopBarItem = {
