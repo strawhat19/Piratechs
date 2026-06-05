@@ -101,7 +101,8 @@
   --main_gradient_angle: 135deg;
   --main_gradient: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
 
-  --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1);
+  --alt_transition: cubic-bezier(0.77, 0.2, 0.05, 1);
+  --transition: 0.24s var(--alt_transition);
 }
 
 body[data-theme="light"] {

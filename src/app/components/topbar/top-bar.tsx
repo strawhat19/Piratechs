@@ -164,7 +164,7 @@ export default function TopBar() {
               aria-hidden={copy === 1 ? `true` : undefined}
               key={`${copy}-${item.text}-${index}`}
             >
-              <i className={item.icon} />
+              <i className={`${item.icon} gradientTextColor`} />
               {item.label ? <strong>{item.label}</strong> : null}
               <span>{item.text}</span>
             </span>

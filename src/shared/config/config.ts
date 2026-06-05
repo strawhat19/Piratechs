@@ -30,7 +30,7 @@ export const config = {
     home: {
       eyebrow: `Piratechs`,
       title: `Design // Develop Full-Stack Applications`,
-      html: `Design <span class="slashes">//</span> Develop Full-Stack Applications`,
+      html: `Design <span class="slashes">//</span> Develop Full<span class="slashes">-</span>Stack Applications`,
       summary: `Built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG`,
     },
     about: {

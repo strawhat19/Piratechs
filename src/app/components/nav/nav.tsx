@@ -37,7 +37,7 @@ export default function Nav() {
             onClick={() => setMenuExpanded(false)}
             className={`navLink ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
           >
-            <i className={navItem?.icon} />
+            <i className={`${navItem?.icon} gradientTextColor`} />
             <span>{navItem?.label}</span>
           </Link>
         ))}

@@ -86,7 +86,7 @@ body[data-theme="light"] .heroLogoLight {
   display: inline-flex;
   color: rgba(255, 255, 255, 0.84);
   font-size: clamp(0.9rem, 1.05vw, 1.05rem);
-  transition: color var(--transition), transform var(--transition);
+  transition: color var(--transition), transform 150ms var(--alt_transition);
 }
 
 .navLink i {
@@ -101,9 +101,9 @@ body[data-theme="light"] .heroLogoLight {
   height: 2px;
   content: "";
   position: absolute;
-  background: var(--main);
   transform: scaleX(0);
   transform-origin: left;
+  background: var(--main_gradient);
   transition: transform var(--transition);
 }
 
