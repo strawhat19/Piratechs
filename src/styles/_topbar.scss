@@ -7,34 +7,33 @@
   border-bottom: 1px solid rgba(0, 191, 255, 0.34);
 }
 
-.topBar::before,
-.topBar::after {
+.topBar::before, .topBar::after {
   top: 0;
+  z-index: 2;
+  content: "";
   width: 60px;
   height: 100%;
-  content: "";
-  z-index: 2;
   position: absolute;
   pointer-events: none;
 }
 
 .topBar::before {
   left: 0;
-  background: linear-gradient(90deg, rgba(4, 57, 123, 0.98), transparent);
+  background: linear-gradient(90deg, #002443, transparent);
 }
 
 .topBar::after {
   right: 0;
-  background: linear-gradient(270deg, rgba(6, 68, 134, 0.98), transparent);
+  background: linear-gradient(270deg, #002443, transparent);
 }
 
 .topBarTrack {
   height: 100%;
+  cursor: grab;
   display: flex;
+  user-select: none;
   width: max-content;
   align-items: center;
-  cursor: grab;
-  user-select: none;
   touch-action: pan-y;
   will-change: transform;
 }

@@ -269,21 +269,18 @@ body[data-theme="light"] .heroLogoPlate {
   background: linear-gradient(135deg, rgba(0, 191, 255, 0.08), rgba(19, 222, 185, 0.04));
 }
 
-.projectsSection::after,
-.backendSection::before,
-.skillsSection::after,
-.gallerySection::before {
-  top: 8%;
-  right: -8vw;
-  width: min(480px, 42vw);
-  height: 72%;
-  content: "";
+.projectsSection::after, .backendSection::before, .skillsSection::after, .gallerySection::before {
+  top: 0px;
   z-index: 0;
+  right: -8vw;
+  content: "";
+  height: 100%;
+  opacity: 0.26;
   position: absolute;
   pointer-events: none;
-  opacity: 0.26;
+  width: min(480px, 42vw);
+  clip-path: polygon(0% 0, 100% 0, 82% 100%, 0 100%);
   background: linear-gradient(115deg, transparent 0 22%, var(--circuit) 22% 23%, transparent 23% 100%), linear-gradient(145deg, transparent 0 48%, var(--circuitSoft) 48% 49%, transparent 49% 100%), linear-gradient(65deg, transparent 0 68%, var(--circuit) 68% 69%, transparent 69% 100%);
-  clip-path: polygon(18% 0, 100% 0, 82% 100%, 0 100%);
 }
 
 .backendSection::before,
