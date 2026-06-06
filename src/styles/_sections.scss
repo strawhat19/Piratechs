@@ -70,8 +70,8 @@
 .signalLine {
   z-index: 3;
   position: absolute;
-  border: 1px solid var(--border);
   transform: skewX(-18deg);
+  border: 1px solid var(--border);
 }
 
 .gridPlaneA {
@@ -94,7 +94,7 @@
 .signalLineB {
   height: 2px;
   border: none;
-  background: linear-gradient(90deg, transparent, var(--main), transparent);
+  background: linear-gradient(90deg, transparent, var(--piratechsNeon), var(--piratechsTeal), transparent);
 }
 
 .signalLineA {

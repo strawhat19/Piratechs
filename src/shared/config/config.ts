@@ -1,5 +1,6 @@
 import { Roles } from '../types/types';
-import type { NavItem, PageCopy, Project, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/app';
+import type { Project } from '@/shared/models/Project';
+import type { NavItem, PageCopy, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/app';
 
 export const config = {
   title: `Piratechs`,
@@ -40,7 +41,7 @@ export const config = {
     },
     projects: {
       eyebrow: `Projects`,
-      title: `Projects that prove the stack`,
+      title: `Experience Showcase`,
       summary: `A growing archive of web apps, WordPress restorations, dashboards, data tools, game-adjacent builds, and experiments with live links and source references.`,
     },
     services: {
@@ -113,7 +114,7 @@ export const config = {
     {
       type: `PWA`,
       status: `Live`,
-      featured: true,
+      featured: false,
       id: `piratechs-pwa`,
       title: `Piratechs Next PWA`,
       tech: [`Next.js`, `PWA`, `TypeScript`, `Sass`],
@@ -176,7 +177,7 @@ export const config = {
       codeUrl: `https://github.com/strawhat19/Sanctuary`,
       summary: `A forest-fire prevention game built with C# and Unity that won 2nd place in the 2020 Global Game Jam.`,
     },
-  ] satisfies Project[],
+  ] satisfies Partial<Project>[],
   services: [
     { icon: `fa-solid fa-layer-group`, title: `Front-End Systems`, text: `Responsive HTML, CSS, Sass, JavaScript, TypeScript, app shells, design systems, and polished UI states.` },
     { icon: `fa-solid fa-database`, title: `Back-End + Data`, text: `Python, JSON, SQL, REST APIs, Firebase, WordPress/MySQL, automation, and practical integration work.` },

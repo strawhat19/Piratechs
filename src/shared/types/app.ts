@@ -34,20 +34,6 @@ export type Stat = {
   value: string;
 };
 
-export type Project = {
-  id: string;
-  type: string;
-  title: string;
-  tech: string[];
-  status: string;
-  summary: string;
-  liveUrl?: string;
-  codeUrl?: string;
-  urlImage?: string;
-  mediaURL?: string;
-  featured?: boolean;
-};
-
 export type Service = {
   text: string;
   icon: string;

@@ -1,3 +1,4 @@
+import { GitUser } from './github/GitUser';
 import { colors, getRandomUnusedColor } from '../theme/theme';
 import { customDate, genID } from '../common/database/constants';
 import { DataSources, Providers, Roles, Types } from '../types/types';
@@ -34,6 +35,7 @@ export class User {
   updated: Date | string | any = customDate()?.datetime;
   created: Date | string | any = customDate()?.datetime;
 
+  github?: GitUser | any;
   phone?: string;
   imageURL?: string = ``;
   image?: string;

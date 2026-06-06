@@ -66,7 +66,7 @@ export default function Nav() {
             <NotificationBell />
           </>}
           <button type={`button`} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
-            <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
+            <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`} gradientTextColor`} />
           </button>
           <button
             type={`button`}

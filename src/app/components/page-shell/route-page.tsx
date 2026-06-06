@@ -9,11 +9,13 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
   const page: any = config?.pages?.[pageID];
   return (
     <>
-      <section className={`pageSection heroSection subHero`}>
+      <section className={`pageSection heroSection subHero subPageSection`}>
         <div className={`heroBg`}>
           <HeroCircuitOverlay />
           <span className={`gridPlane gridPlaneA`} />
+          <span className={`gridPlane gridPlaneB`} />
           <span className={`signalLine signalLineA`} />
+          <span className={`signalLine signalLineB`} />
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy reveal`}>
@@ -29,7 +31,9 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
                 </h1>
               )}
               <p className={`bannerText`}>
-                {page.summary}
+                <i>
+                  {page.summary}
+                </i>
               </p>
             </div>
             <div className={`heroActions`}>
@@ -38,26 +42,30 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
                 View Projects
               </Link>
               <Link href={`/contact`} className={`buttonLink ghost`}>
-                <i className={`fa-solid fa-paper-plane`} />
+                <i className={`fa-solid fa-paper-plane gradientTextColor`} />
                 Contact
               </Link>
             </div>
           </div>
           <div className={`pageBadge reveal`}>
-            <i className={config.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} />
+            <i className={`${config.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} gradientTextColor`} />
             <span>{page.eyebrow}</span>
           </div>
         </div>
       </section>
 
-      <section className={`pageSection detailSection`}>
+      <section className={`pageSection detailSection subPageSection`}>
         <div className={`sectionInner detailGrid`}>
           <div className={`sectionTitle reveal`}>
             <span className={`eyebrow`}>
-              {page.eyebrow} Direction
+              {pageID == `projects` ? `Our Work` : page?.eyebrow}
             </span>
-            <h2>{pageID == `projects` ? `Portfolio work stays prominent` : `A focused route ready to expand`}</h2>
-            <p>{page.summary}</p>
+            <h2>{pageID == `projects` ? `Projects` : `What We Do`}</h2>
+            <p>
+              <i>
+                {page.summary}
+              </i>
+            </p>
           </div>
           {pageID == `projects` ? (
             <ProjectGrid />

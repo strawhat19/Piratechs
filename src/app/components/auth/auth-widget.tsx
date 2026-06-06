@@ -43,15 +43,15 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
         onClick={() => setOpen(!open)}
         title={user?.email || `Sign In`}
         aria-label={user ? `Open profile menu` : `Open sign in form`}
-        className={`iconButton authToggle ${loaded ? `` : `disabled`} ${user ? `authAvatarToggle` : ``}`}
+        className={`iconButton authToggle ${user ? `authAvatarToggle` : ``}`}
       >
         {loaded ? (
           user ? (
-            <span className={`authAvatarLetter`}>
+            <span className={`authAvatarLetter gradientTextColor`}>
               {userInitial}
             </span>
           ) : <i className={`fa-solid fa-user`} />
-        ) : <Spinner size={20} />}
+        ) : <Spinner size={20} thickness={5} />}
       </button>
       <div className={`authPanel`}>
         {user ? (

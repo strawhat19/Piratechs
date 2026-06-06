@@ -1,9 +1,10 @@
 import URL from '../url/url';
-import type { Project } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+// import type { Project } from '@/shared/models/Project';
 import { capWords, extractRootDomain } from '@/shared/common/scripts/globals';
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({ project }: any) {
+  const projectUrl = project?.codeUrl || project?.liveUrl;
 
   const getURLLabel = (url: string) => {
     let rootDomainName = String(extractRootDomain(url));
@@ -16,6 +17,15 @@ export default function ProjectCard({ project }: { project: Project }) {
 
   return (
     <article className={`projectCard reveal`}>
+      {projectUrl ? (
+        <a
+          href={projectUrl}
+          target={`_blank`}
+          rel={`noreferrer`}
+          className={`projectCardLinkOverlay`}
+          aria-label={`Open ${project?.title ?? `project`} in a new tab`}
+        />
+      ) : null}
       <div className={`projectTop`}>
         <span className={`typeBadge`}>
           {project.type}
@@ -25,7 +35,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         </span>
       </div>
       <div className={`projectIconCloud`} aria-hidden={`true`}>
-        {project.tech.slice(0, 5).map(tech => {
+        {project.tech.slice(0, 5).map((tech: any) => {
           const meta = getTechnologyMeta(tech);
           return <i key={tech} className={`${meta.icon} techIcon ${meta.className}`} />;
         })}
@@ -33,7 +43,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       <h3>{project.title}</h3>
       <p>{project.summary}</p>
       <div className={`techList`}>
-        {project.tech.map(tech => {
+        {project.tech.map((tech: any) => {
           const meta = getTechnologyMeta(tech);
           return (
             <span key={tech}>

@@ -1,20 +1,47 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import ProjectCard from '@/app/components/projects/project-card';
 import { config } from '@/shared/config/config';
+import { devEnv } from '@/shared/common/database/constants';
+import ProjectCard from '@/app/components/projects/project-card';
+import { gitUser } from '@/shared/common/database/github/users/strawhat19/user';
+
+const confProjects = config?.projects;
+const confProjectsFeatured = confProjects?.filter(p => p?.featured);
+const confProjectsFeaturedNames = confProjectsFeatured?.map(cfp => cfp?.codeUrl?.split(`/`)?.pop());
+
+export const featuredNames = [
+  // `Lister`,
+  // `Traveler`,
+  `Piratechs`, 
+  // `Sanctuary`,
+  `Dyer-Posta`, 
+  `Smart-Garden`, 
+  `Discord-Bots`,
+  // `Tower-Defense`,
+  `React-Netflix-Clone`, 
+  `MyDex-Pokedex-Clone`,
+  // `Sumit-Transcription-Form`,
+  // `Piratechs-Next-PWA-Template-2025`,
+];
+export const featuredProjectNames = [ ...confProjectsFeaturedNames, ...featuredNames, ];
 
 export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: boolean }) {
   const initialFilter = featuredOnly ? `Featured` : `All`;
   const [activeFilter, setActiveFilter] = useState(initialFilter);
 
   const projects = useMemo(() => {
-    const sortedProjects = [...config.projects].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-    return sortedProjects.filter(project => {
+    const gitProjects = gitUser?.projects;
+    const gitProjectsWFeatured = gitProjects?.map(gp => ({ ...gp, featured: gp?.featured || featuredProjectNames?.includes(gp?.name) }));
+    const configProjects = gitProjectsWFeatured;
+    const sortedProjects = configProjects.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+    const projectsToShow = sortedProjects.filter(project => {
       if (activeFilter == `All`) return true;
       if (activeFilter == `Featured`) return project.featured;
       return project.type == activeFilter;
     });
+    devEnv && console.log(`Project(s)`, { allProjects: configProjects, projects: projectsToShow, user: gitUser });
+    return projectsToShow;
   }, [activeFilter]);
 
   return (
