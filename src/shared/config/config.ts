@@ -36,18 +36,20 @@ export const config = {
     },
     about: {
       eyebrow: `About`,
-      title: `Design // Develop`,
-      html: `Design <span class="slashes">//</span> Develop`,
-      summary: `A brand-first portfolio for serious software craft.`,
+      title: `We Design // We Develop`,
+      html: `We Design <span class="slashes">//</span> We Develop`,
+      summary: `A full-stack design and development studio to be a one stop shop for all your digital needs, whether they be graphics, game design, mobile applications, video production, and so much more!`,
     },
     projects: {
       eyebrow: `Projects`,
-      title: `Experience Showcase`,
+      title: `Experience // Showcase`,
+      html: `Experience <span class="slashes">//</span> Showcase`,
       summary: `A growing archive of web apps, WordPress restorations, dashboards, data tools, game-adjacent builds, and experiments with live links and source references.`,
     },
     services: {
       eyebrow: `Services`,
-      title: `From landing pages to full-stack products`,
+      title: `Awwwards Design // Enterprise Performance`,
+      html: `Awwwards Design <span class="slashes">//</span> Enterprise Performance`,
       summary: `Responsive front ends, data-driven apps, CMS builds, automation, integrations, and branded product systems with practical delivery in mind.`,
     },
     store: {
@@ -67,7 +69,8 @@ export const config = {
     },
     contact: {
       eyebrow: `Contact`,
-      title: `Let Piratechs build the next version`,
+      title: `Get In Touch // Reach Out`,
+      html: `Get In Touch <span class="slashes">//</span> Reach Out`,
       summary: `A focused contact route for portfolio reviewers, collaborators, recruiters, and future clients looking for front-end polish backed by full-stack depth.`,
     },
   } satisfies Record<string, PageCopy>,
