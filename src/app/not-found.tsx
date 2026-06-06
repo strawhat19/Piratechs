@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { config } from '@/shared/config/config';
+import TextReveal from './components/effects/text-reveal';
 import ProjectGrid from './components/sections/project-grid';
 import HeroCircuitOverlay from './components/hero/hero-circuit-overlay';
 
@@ -14,17 +15,11 @@ export default function NotFound() {
         <span className={`signalLine signalLineB`} />
       </div>
       <div className={`sectionInner heroGrid`}>
-        <div className={`heroCopy reveal`}>
-          <span className={`eyebrow`}>
-            404
-          </span>
-          <h1>Not Found</h1>
-          <p>
-            <i>
-              We could not find what you were looking for.
-            </i>
-          </p>
-          <div className={`heroActions`}>
+        <div className={`heroCopy`}>
+          <TextReveal as={`span`} className={`eyebrow`} text={`404`} />
+          <TextReveal as={`h1`} className={`bannerText`} text={`Not Found`} delay={0.1} />
+          <TextReveal as={`p`} className={`bannerText`} text={`<i>We could not find what you were looking for.</i>`} html />
+          <div className={`heroActions reveal`}>
             <Link href={`/`} className={`buttonLink primary`}>
               <i className={`fa-solid fa-house`} />
               Home

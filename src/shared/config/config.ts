@@ -36,8 +36,9 @@ export const config = {
     },
     about: {
       eyebrow: `About`,
-      title: `A brand-first portfolio for serious software craft`,
-      summary: `Built around the Piratechs identity, this site focuses on technical range, product thinking, and the UI polish that makes complex systems easier to use.`,
+      title: `Design // Develop`,
+      html: `Design <span class="slashes">//</span> Develop`,
+      summary: `A brand-first portfolio for serious software craft.`,
     },
     projects: {
       eyebrow: `Projects`,

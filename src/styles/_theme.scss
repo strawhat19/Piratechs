@@ -254,6 +254,12 @@ img {
   padding-right: 15px;
   letter-spacing: -15px;
   @extend .gradientTextColor;
+  &:has(.textRevealWord) {
+    padding-right: 0;
+    .textRevealWord {
+      padding-right: 15px;
+    }
+  }
 }
 
 .main {

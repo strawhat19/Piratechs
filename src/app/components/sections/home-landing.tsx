@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Logo from '../logo/logo';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+import TextReveal from '@/app/components/effects/text-reveal';
 import ProjectGrid from '@/app/components/sections/project-grid';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
@@ -18,21 +19,15 @@ export default function HomeLanding() {
           <span className={`signalLine signalLineB`} />
         </div>
         <div className={`sectionInner heroGrid`}>
-          <div className={`heroCopy reveal`}>
-            <span className={`eyebrow`}>
-              {page.eyebrow}
-            </span>
+          <div className={`heroCopy`}>
+            <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} />
             {page?.html ? (
-              <h1 className={`bannerText`} dangerouslySetInnerHTML={{__html: page?.html}} />
+              <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
             ) : (
-              <h1 className={`bannerText`}>
-                {page.title}
-              </h1>
+              <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
             )}
-            <p className={`bannerText`}>
-              {page.summary}
-            </p>
-            <div className={`heroActions`}>
+            <TextReveal as={`p`} className={`bannerText`} text={page.summary} />
+            <div className={`heroActions reveal`}>
               <Link href={`/contact`} className={`buttonLink primary`}>
                 <i className={`fa-solid fa-paper-plane`} />
                 Get In Touch

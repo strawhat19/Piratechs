@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { config } from '@/shared/config/config';
 import type { RouteID } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+import TextReveal from '@/app/components/effects/text-reveal';
 import ProjectGrid from '@/app/components/sections/project-grid';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
@@ -18,25 +19,17 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
           <span className={`signalLine signalLineB`} />
         </div>
         <div className={`sectionInner heroGrid`}>
-          <div className={`heroCopy reveal`}>
+          <div className={`heroCopy`}>
             <div className={`heroBannerText`}>
-              <span className={`eyebrow`}>
-                {page.eyebrow}
-              </span>
+              <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} />
               {page?.html ? (
-                <h1 className={`bannerText`} dangerouslySetInnerHTML={{__html: page?.html}} />
+                <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
               ) : (
-                <h1 className={`bannerText`}>
-                  {page.title}
-                </h1>
+                <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
               )}
-              <p className={`bannerText`}>
-                <i>
-                  {page.summary}
-                </i>
-              </p>
+              <TextReveal as={`p`} className={`bannerText`} text={`<i>${page.summary}</i>`} html />
             </div>
-            <div className={`heroActions`}>
+            <div className={`heroActions reveal`}>
               <Link href={`/projects`} className={`buttonLink primary`}>
                 <i className={`fa-solid fa-diagram-project`} />
                 View Projects

@@ -1,0 +1,30 @@
+// Hidden until the GSAP SplitText reveal is ready, so split text never flashes in
+// fully before it animates. A global <noscript> override in the root layout forces
+// visibility back on when JS is disabled, so the text still renders without JS.
+.textRevealPending {
+  visibility: hidden;
+}
+
+.textRevealWord,
+.textRevealChar {
+  will-change: transform, opacity;
+}
+
+// SplitText wraps every word/char in its own element. Gradient text is painted via
+// background-clip:text on the original node, and `background` is not inherited, so
+// the fragment wrappers would render invisible. Re-apply the gradient to them to
+// keep eyebrows, slashes, and any gradient text visible after splitting.
+.gradientTextColor .textRevealWord,
+.gradientTextColor .textRevealChar,
+.eyebrow .textRevealWord,
+.eyebrow .textRevealChar,
+.slashes .textRevealWord,
+.slashes .textRevealChar {
+  @supports (-webkit-background-clip: text) or (background-clip: text) {
+    color: transparent;
+    background: var(--main_gradient);
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text !important;
+  }
+}

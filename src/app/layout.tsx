@@ -1,8 +1,8 @@
 import './globals.scss';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-import Nav from '@/app/components/nav/nav';
 import Script from 'next/script';
+import Nav from '@/app/components/nav/nav';
 import type { Metadata, Viewport } from 'next';
 import { config } from '@/shared/config/config';
 import Footer from '@/app/components/footer/footer';
@@ -55,6 +55,9 @@ export default function RootLayout({
         <Script id={`perf-mode-init`} strategy={`beforeInteractive`}>
           {PERF_MODE_SCRIPT}
         </Script>
+        <noscript>
+          <style>{`.textRevealPending{visibility:visible !important}`}</style>
+        </noscript>
         <GlobalProvider>
           <PageTransition>
             {intersectionObserver && <ScrollReveal />}
