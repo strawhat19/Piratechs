@@ -25,7 +25,7 @@ export const config = {
     { icon: `fa-brands fa-wordpress`, label: `CMS`, text: `WordPress restorations, CMS builds, and portfolio sites` },
     { icon: `fa-brands fa-github`, label: `Projects`, text: `Live deployments and source-backed proof of work` },
     { icon: `fa-solid fa-fire-flame-curved`, label: `Firebase`, text: `Auth-ready app shell for future database features` },
-    { icon: `fa-solid fa-screwdriver-wrench`, label: `Services`, text: `Front-end polish backed by full-stack delivery` },
+    { icon: `fa-solid fa-layer-group`, label: `Services`, text: `Front-end polish backed by full-stack delivery` },
   ] satisfies TopBarItem[],
   pages: {
     home: {

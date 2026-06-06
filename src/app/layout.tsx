@@ -10,6 +10,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import GlobalProvider from '@/shared/global-context';
 import ScrollToTop from '@/app/components/effects/scroll-to-top';
 import ScrollReveal from '@/app/components/effects/scroll-reveal';
+import PageTransition from '@/app/components/effects/page-transition';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -55,13 +56,15 @@ export default function RootLayout({
           {PERF_MODE_SCRIPT}
         </Script>
         <GlobalProvider>
-          {intersectionObserver && <ScrollReveal />}
-          <Nav />
-          <main className={`main`}>
-            {children}
-          </main>
-          <ScrollToTop />
-          <Footer />
+          <PageTransition>
+            {intersectionObserver && <ScrollReveal />}
+            <Nav />
+            <main className={`main`}>
+              {children}
+            </main>
+            <ScrollToTop />
+            <Footer />
+          </PageTransition>
         </GlobalProvider>
       </body>
     </html>
