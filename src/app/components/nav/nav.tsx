@@ -11,6 +11,7 @@ import type { NavItem } from '@/shared/types/app';
 import TopBar from '@/app/components/topbar/top-bar';
 import { useGlobalContext } from '@/shared/global-context';
 import AuthWidget from '@/app/components/auth/auth-widget';
+import TextReveal from '@/app/components/effects/text-reveal';
 import NotificationBell from '@/app/components/notifications/notification-bell';
 
 export default function Nav() {
@@ -30,7 +31,7 @@ export default function Nav() {
   const renderLinks = (className: string) => {
     return (
       <nav className={className} aria-label={`${className} navigation`}>
-        {navItems.map((navItem: NavItem) => (
+        {navItems.map((navItem: NavItem, index: number) => (
           <Link
             key={navItem?.id}
             href={navItem?.href}
@@ -38,7 +39,14 @@ export default function Nav() {
             className={`navLink ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
           >
             <i className={`${navItem?.icon} gradientTextColor`} />
-            <span>{navItem?.label}</span>
+            <TextReveal
+              byLetter
+              as={`span`}
+              duration={0.42}
+              stagger={0.012}
+              text={navItem?.label}
+              delay={0.6 + index * 0.025}
+            />
           </Link>
         ))}
       </nav>
@@ -54,9 +62,15 @@ export default function Nav() {
         </Link>
         <Link href={`/`} className={`brandMark`} aria-label={`Piratechs home`}>
           <Logo className={`brandLogo`} />
-          {/* <span className={`navLink ${isActiveRoute(`/`) ? `activeRoute` : ``}`} style={{ position: `relative`, left: -7 }}> */}
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
-            {config.title}
+            <TextReveal
+              byLetter
+              as={`span`}
+              delay={0.6}
+              duration={0.48}
+              stagger={0.018}
+              text={config.title}
+            />
           </span>
         </Link>
         {renderLinks(`desktopNav`)}

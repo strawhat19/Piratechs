@@ -2,6 +2,7 @@
 
 import { config } from '@/shared/config/config';
 import { useEffect, useRef, useState } from 'react';
+import TextReveal from '@/app/components/effects/text-reveal';
 
 const MARQUEE_SPEED = 15; // px per second, frame-rate independent
 
@@ -147,14 +148,14 @@ export default function TopBar() {
   return (
     <div className={`topBar`} aria-label={`Piratechs highlights`}>
       <div
-        ref={trackRef}
         role={`list`}
-        className={`topBarTrack ${dragging ? `isDragging` : ``}`}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
+        ref={trackRef}
         onPointerUp={endDrag}
-        onPointerCancel={endDrag}
         onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
+        onPointerMove={onPointerMove}
+        onPointerDown={onPointerDown}
+        className={`topBarTrack ${dragging ? `isDragging` : ``}`}
       >
         {[0, 1].map(copy =>
           items.map((item, index) => (
@@ -165,8 +166,22 @@ export default function TopBar() {
               key={`${copy}-${item.text}-${index}`}
             >
               <i className={`${item.icon} gradientTextColor`} />
-              {item.label ? <strong>{item.label}</strong> : null}
-              <span>{item.text}</span>
+              {item.label ? (
+                <TextReveal
+                  as={`strong`}
+                  duration={0.42}
+                  stagger={0.035}
+                  text={item.label}
+                  delay={0.35 + index * 0.012}
+                />
+              ) : null}
+              <TextReveal
+                as={`span`}
+                duration={0.46}
+                stagger={0.035}
+                text={item.text}
+                delay={0.45 + index * 0.012}
+              />
             </span>
           )),
         )}
