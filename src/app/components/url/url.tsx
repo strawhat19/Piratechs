@@ -1,4 +1,5 @@
 import { extractRootDomain } from '@/shared/common/scripts/globals';
+import TextReveal from '@/app/components/effects/text-reveal';
 
 export const faviconOverwrites: any = {
     github: `github.com`,
@@ -79,7 +80,7 @@ export default function URL({
                     />
                 )}
                 <span className={`useFont pointerEventsNone`} style={{ fontSize: `0.85rem` }}>
-                    {label ?? host} 
+                    <TextReveal scroll as={`span`} text={String(label ?? host)} />
                     {/* <span className={`slashes`}>//</span> {path} */}
                 </span>
                 {/* <i className={`fas fa-external-link-alt useMainIconColor`} style={{ fontSize: 10 }} /> */}

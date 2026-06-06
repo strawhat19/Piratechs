@@ -1,5 +1,7 @@
 import URL from '../url/url';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+import TextReveal from '@/app/components/effects/text-reveal';
+import ElementReveal from '@/app/components/effects/element-reveal';
 // import type { Project } from '@/shared/models/Project';
 import { capWords, extractRootDomain } from '@/shared/common/scripts/globals';
 
@@ -27,47 +29,51 @@ export default function ProjectCard({ project }: any) {
         />
       ) : null}
       <div className={`projectTop`}>
-        <span className={`typeBadge`}>
-          {project.type}
-        </span>
-        <span className={`statusPill`}>
-          {project.status}
-        </span>
+        <ElementReveal scroll as={`span`} delay={0.02} duration={0.42} className={`typeBadge`}>
+          <TextReveal scroll as={`span`} text={project.type} />
+        </ElementReveal>
+        <ElementReveal scroll as={`span`} delay={0.05} duration={0.42} className={`statusPill`}>
+          <TextReveal scroll as={`span`} text={project.status} delay={0.03} />
+        </ElementReveal>
       </div>
-      <div className={`projectIconCloud`} aria-hidden={`true`}>
+      <ElementReveal scroll as={`div`} delay={0.06} duration={0.42} className={`projectIconCloud`} aria-hidden={`true`}>
         {project.tech.slice(0, 5).map((tech: any) => {
           const meta = getTechnologyMeta(tech);
           return <i key={tech} className={`${meta.icon} techIcon ${meta.className}`} />;
         })}
-      </div>
-      <h3>{project.title}</h3>
-      <p>{project.summary}</p>
-      <div className={`techList`}>
-        {project.tech.map((tech: any) => {
+      </ElementReveal>
+      <TextReveal scroll as={`h3`} text={project.title} delay={0.06} />
+      <TextReveal scroll as={`p`} text={project.summary} duration={0.35} />
+      <ElementReveal scroll as={`div`} delay={0.12} duration={0.44} className={`techList`}>
+        {project.tech.map((tech: any, index: number) => {
           const meta = getTechnologyMeta(tech);
           return (
             <span key={tech}>
               <i className={`${meta.icon} techIcon ${meta.className}`} />
-              {tech}
+              <TextReveal scroll as={`em`} text={tech} delay={0.02 + index * 0.015} />
             </span>
           );
         })}
-      </div>
+      </ElementReveal>
       <div className={`projectActions`}>
         {project?.codeUrl ? (
-          <a href={project.codeUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink ghost`}>
-            <i className={`fa-brands fa-github`} />
-            Code
-          </a>
+          <ElementReveal scroll as={`span`} delay={0.16} className={`projectActionReveal`}>
+            <a href={project.codeUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink ghost`}>
+              <i className={`fa-brands fa-github`} />
+              <TextReveal scroll as={`span`} text={`Code`} />
+            </a>
+          </ElementReveal>
         ) : null}
         {project?.liveUrl ? (
-          <URL 
-            imageCircled={false}
-            url={project?.liveUrl} 
-            image={project?.urlImage} 
-            className={`buttonLink primary`} 
-            label={getURLLabel(project?.liveUrl)} 
-          />
+          <ElementReveal scroll as={`span`} delay={0.2} className={`projectActionReveal`}>
+            <URL 
+              imageCircled={false}
+              url={project?.liveUrl} 
+              image={project?.urlImage} 
+              className={`buttonLink primary`} 
+              label={getURLLabel(project?.liveUrl)} 
+            />
+          </ElementReveal>
         ) : null}
       </div>
     </article>

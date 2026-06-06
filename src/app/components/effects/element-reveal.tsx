@@ -93,7 +93,7 @@ export default function ElementReveal({
           observer = null;
           run();
         }
-      }, { threshold: 0.2, rootMargin: `0px 0px -5%` });
+      }, { threshold: 0.05, rootMargin: `0px 0px -2%` });
       observer.observe(el);
     } else {
       run();
