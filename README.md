@@ -1,6 +1,6 @@
 # Piratechs
 
-Piratechs is built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG
+Piratechs is built with Next.js, TypeScript, SASS, Firebase, etc.
 
 The existing GitHub Pages version is preserved in `docs/`.
 

@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material';
 
-export default function Spinner({ ...params }: any) {
+export default function Spinner({ gradient = true, ...params }: any) {
   return (
     <div className={`spinnerComponent`} style={{ maxHeight: params?.size ?? 0 }}>
       <svg width={0} height={0}>
@@ -14,7 +14,7 @@ export default function Spinner({ ...params }: any) {
       <CircularProgress
         {...params}
         aria-label={`Loading…`}
-        sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }}
+        sx={{ 'svg circle': { stroke: gradient ? 'url(#my_gradient)' : undefined } }}
       />
     </div>
   );

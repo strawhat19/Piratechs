@@ -6,7 +6,7 @@ export const config = {
   title: `Piratechs`,
   domain: `piratechs.com`,
   contactEmail: `info@piratechs.com`,
-  description: `Built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG.`,
+  description: `Built with Next.js, TypeScript, SASS, Firebase, etc.`,
   nav: [
     { id: `home`, label: `Home`, href: `/`, icon: `fa-solid fa-house` },
     { id: `about`, label: `About`, href: `/about`, icon: `fa-solid fa-anchor` },
@@ -31,8 +31,8 @@ export const config = {
     home: {
       eyebrow: `Piratechs`,
       title: `Design // Develop Full-Stack Applications`,
+      summary: `Built with Next.js, TypeScript, SASS, Firebase, etc.`,
       html: `Design <span class="slashes">//</span> Develop Full<span class="slashes">-</span>Stack Applications`,
-      summary: `Built with Next.js App Router + API, TypeScript, SASS, Firebase, Firestore, Authentication, Cloud Functions, MUI, React, SVG`,
     },
     about: {
       eyebrow: `About`,

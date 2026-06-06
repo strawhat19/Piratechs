@@ -329,5 +329,13 @@ html {
         color: var(--foreground) !important;
       }
     }
+    .footer {
+      a {
+        i {
+          // @extend .gradientTextColor;
+          color: var(--foreground) !important;
+        }
+      }
+    }
   }
 }
