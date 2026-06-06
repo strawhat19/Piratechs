@@ -42,23 +42,17 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
           </div>
           <div className={`pageBadge reveal`}>
             <i className={`${config.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} gradientTextColor`} />
-            <span>{page.eyebrow}</span>
+            <TextReveal as={`span`} text={page.eyebrow} delay={0.3} />
           </div>
         </div>
       </section>
 
       <section className={`pageSection detailSection subPageSection`}>
         <div className={`sectionInner detailGrid`}>
-          <div className={`sectionTitle reveal`}>
-            <span className={`eyebrow`}>
-              {pageID == `projects` ? `Our Work` : page?.eyebrow}
-            </span>
-            <h2>{pageID == `projects` ? `Projects` : `What We Do`}</h2>
-            <p>
-              <i>
-                {page.summary}
-              </i>
-            </p>
+          <div className={`sectionTitle`}>
+            <TextReveal scroll as={`span`} className={`eyebrow`} text={pageID == `projects` ? `Our Work` : page?.eyebrow} />
+            <TextReveal scroll as={`h2`} text={pageID == `projects` ? `Projects` : `What We Do`} delay={0.06} />
+            <TextReveal scroll as={`p`} html text={`<i>${page.summary}</i>`} />
           </div>
           {pageID == `projects` ? (
             <ProjectGrid />
@@ -69,8 +63,8 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
                 return (
                   <article key={capability} className={`serviceCard reveal`}>
                     <i className={`${meta.icon} techIcon ${meta.className}`} />
-                    <h3>{capability}</h3>
-                    <p>This page can grow into a dedicated Piratechs section with content, API data, Firebase records, filters, and project links.</p>
+                    <TextReveal scroll as={`h3`} text={capability} />
+                    <TextReveal scroll as={`p`} text={`This page can grow into a dedicated Piratechs section with content, API data, Firebase records, filters, and project links.`} />
                   </article>
                 );
               })}

@@ -32,19 +32,17 @@ export default function NotFound() {
         </div>
         <div className={`pageBadge reveal`}>
           <i className={`fa-solid fa-ban gradientTextColor`} />
-          <span>404</span>
+          <TextReveal as={`span`} text={`404`} delay={0.3} />
         </div>
       </div>
     </section>
     
     <section className={`pageSection projectsSection`} id={`projects`}>
       <div className={`sectionInner`}>
-        <div className={`sectionTitle reveal`}>
-          <span className={`eyebrow`}>
-            Our Work
-          </span>
-          <h2>Projects</h2>
-          <p>Applications, CMS, APIs, Games, and other Design // Development.</p>
+        <div className={`sectionTitle`}>
+          <TextReveal scroll as={`span`} className={`eyebrow`} text={`Our Work`} />
+          <TextReveal scroll as={`h2`} text={`Projects`} delay={0.06} />
+          <TextReveal scroll as={`p`} text={`Applications, CMS, APIs, Games, and other Design // Development.`} />
         </div>
         <ProjectGrid featuredOnly />
       </div>
@@ -56,15 +54,9 @@ export default function NotFound() {
       <div className={`sectionInner experienceGrid`}>
         {config.stats.map(stat => (
           <article key={stat.label} className={`statCard reveal`}>
-            <span className={`gradientTextColor`}>
-              <i>
-                {stat.label}
-              </i>
-            </span>
-            <strong>{stat.value}</strong>
-            <p>
-              <i>{stat.text}</i>
-            </p>
+            <TextReveal scroll as={`span`} className={`gradientTextColor`} html text={`<i>${stat.label}</i>`} />
+            <TextReveal scroll as={`strong`} text={stat.value} delay={0.06} />
+            <TextReveal scroll as={`p`} html text={`<i>${stat.text}</i>`} />
           </article>
         ))}
       </div>

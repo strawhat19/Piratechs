@@ -20,10 +20,13 @@ type TextRevealProps = {
   delay?: number;
   duration?: number;
   stagger?: number;
+  /** Defer the reveal until the element scrolls into view (for below-the-fold content). */
+  scroll?: boolean;
 };
 
 export default function TextReveal({
   text,
+  scroll = false,
   stagger,
   duration,
   delay = 0,
@@ -51,6 +54,7 @@ export default function TextReveal({
     let cancelled = false;
     let split: SplitText | null = null;
     let timeline: gsap.core.Timeline | null = null;
+    let observer: IntersectionObserver | null = null;
 
     const run = () => {
       if (cancelled || !ref.current) return;
@@ -67,7 +71,16 @@ export default function TextReveal({
         return;
       }
 
-      timeline = gsap.timeline({ paused: true, defaults: { ease: `power3.out` } });
+      timeline = gsap.timeline({
+        paused: true,
+        defaults: { ease: `power3.out` },
+        // Revert the split once revealed so we don't leave word/char wrappers (and
+        // their will-change layers) on the page now that reveals run on lots of text.
+        onComplete: () => {
+          split?.revert();
+          split = null;
+        },
+      });
       timeline.from(targets, {
         delay,
         autoAlpha: 0,
@@ -80,19 +93,37 @@ export default function TextReveal({
       timeline.play();
     };
 
-    if (`fonts` in document) {
-      document.fonts.ready.then(run);
+    const start = () => {
+      if (`fonts` in document) {
+        document.fonts.ready.then(run);
+      } else {
+        run();
+      }
+    };
+
+    // Above-the-fold text plays immediately; below-the-fold text waits until it
+    // scrolls into view so the reveal isn't already over by the time it's seen.
+    if (scroll) {
+      observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          observer?.disconnect();
+          observer = null;
+          start();
+        }
+      }, { threshold: 0.2, rootMargin: `0px 0px -5%` });
+      observer.observe(el);
     } else {
-      run();
+      start();
     }
 
     return () => {
       cancelled = true;
+      observer?.disconnect();
       timeline?.kill();
       split?.revert();
       reveal();
     };
-  }, [text, byLetter, html, delay, duration, stagger]);
+  }, [text, byLetter, html, delay, duration, stagger, scroll]);
 
   return createElement(as, {
     ref,
