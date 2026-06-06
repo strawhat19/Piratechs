@@ -56,7 +56,7 @@ export default function RootLayout({
           {PERF_MODE_SCRIPT}
         </Script>
         <noscript>
-          <style>{`.textRevealPending{visibility:visible !important}`}</style>
+          <style>{`.textRevealPending,.elementRevealPending{visibility:visible !important}`}</style>
         </noscript>
         <GlobalProvider>
           <PageTransition>

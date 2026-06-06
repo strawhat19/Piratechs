@@ -2,7 +2,7 @@
 
 import { config } from '@/shared/config/config';
 import { useEffect, useRef, useState } from 'react';
-import TextReveal from '@/app/components/effects/text-reveal';
+import ElementReveal from '@/app/components/effects/element-reveal';
 
 const MARQUEE_SPEED = 15; // px per second, frame-rate independent
 
@@ -159,30 +159,20 @@ export default function TopBar() {
       >
         {[0, 1].map(copy =>
           items.map((item, index) => (
-            <span
+            <ElementReveal
+              as={`span`}
+              blur={false}
+              duration={0.2}
               role={`listitem`}
               className={`topBarItem`}
+              delay={0.5 + index * 0.012}
               aria-hidden={copy === 1 ? `true` : undefined}
               key={`${copy}-${item.text}-${index}`}
             >
               <i className={`${item.icon} gradientTextColor`} />
-              {item.label ? (
-                <TextReveal
-                  as={`strong`}
-                  duration={0.42}
-                  stagger={0.035}
-                  text={item.label}
-                  delay={0.35 + index * 0.012}
-                />
-              ) : null}
-              <TextReveal
-                as={`span`}
-                duration={0.46}
-                stagger={0.035}
-                text={item.text}
-                delay={0.45 + index * 0.012}
-              />
-            </span>
+              {item.label ? <strong>{item.label}</strong> : null}
+              <span>{item.text}</span>
+            </ElementReveal>
           )),
         )}
       </div>

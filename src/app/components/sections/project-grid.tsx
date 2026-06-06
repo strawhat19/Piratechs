@@ -40,7 +40,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
       if (activeFilter == `Featured`) return project.featured;
       return project.type == activeFilter;
     });
-    devEnv && console.log(`Project(s)`, { allProjects: configProjects, projects: projectsToShow, user: gitUser });
+    // devEnv && console.log(`Project(s)`, { allProjects: configProjects, projects: projectsToShow, user: gitUser });
     return projectsToShow;
   }, [activeFilter]);
 

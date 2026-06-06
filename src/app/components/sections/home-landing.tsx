@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
+import Section from './section';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
-import ProjectGrid from '@/app/components/sections/project-grid';
+import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
 export default function HomeLanding() {
@@ -27,58 +28,39 @@ export default function HomeLanding() {
               <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
             )}
             <TextReveal as={`p`} className={`bannerText`} text={page.summary} />
-            <div className={`heroActions reveal`}>
-              <Link href={`/contact`} className={`buttonLink primary`}>
-                <i className={`fa-solid fa-paper-plane`} />
-                Get In Touch
-              </Link>
-              <Link href={`/projects`} className={`buttonLink ghost`}>
-                <i className={`fa-solid fa-diagram-project gradientTextColor`} />
-                Projects
-              </Link>
+            <div className={`heroActions`}>
+              <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
+                <Link href={`/contact`} className={`buttonLink primary`}>
+                  <i className={`fa-solid fa-paper-plane`} />
+                  Get In Touch
+                </Link>
+              </ElementReveal>
+              <ElementReveal as={`span`} delay={0.28} className={`heroActionReveal`}>
+                <Link href={`/projects`} className={`buttonLink ghost`}>
+                  <i className={`fa-solid fa-diagram-project gradientTextColor`} />
+                  Projects
+                </Link>
+              </ElementReveal>
             </div>
           </div>
-          <div className={`heroBrand reveal`}>
+          <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
             <div className={`heroLogoPlate`}>
               <span className={`heroOrbit`} />
               <Logo className={`heroLogo`} />
             </div>
             <div className={`heroMiniStats`}>
-              {config.stats.map((stat, index) => (
+              {config?.stats?.map((stat, index) => (
                 <span key={stat.label}>
                   <TextReveal as={`strong`} className={`gradientTextColor`} text={stat.value} delay={0.39 + index * 0.06} />
                   <TextReveal as={`i`} text={stat.label} delay={0.42 + index * 0.06} />
                 </span>
               ))}
             </div>
-          </div>
+          </ElementReveal>
         </div>
       </section>
 
-      <section className={`pageSection projectsSection`} id={`projects`}>
-        <div className={`sectionInner`}>
-          <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Our Work`} />
-            <TextReveal scroll as={`h2`} text={`Projects`} delay={0.06} />
-            <TextReveal scroll as={`p`} text={`Applications, CMS, APIs, Games, and other Design // Development.`} />
-          </div>
-          <ProjectGrid featuredOnly />
-        </div>
-      </section>
-
-      <div className={`sep reveal`} />
-
-      <section className={`pageSection experienceSection`}>
-        <div className={`sectionInner experienceGrid`}>
-          {config.stats.map(stat => (
-            <article key={stat.label} className={`statCard reveal`}>
-              <TextReveal scroll as={`span`} className={`gradientTextColor`} html text={`<i>${stat.label}</i>`} />
-              <TextReveal scroll as={`strong`} text={stat.value} delay={0.06} />
-              <TextReveal scroll as={`p`} html text={`<i>${stat.text}</i>`} delay={0.12} />
-            </article>
-          ))}
-        </div>
-      </section>
+      <Section />
 
       <section className={`pageSection backendSection`}>
         <div className={`sectionInner backendGrid`}>

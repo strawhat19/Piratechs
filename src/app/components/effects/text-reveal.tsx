@@ -26,13 +26,13 @@ type TextRevealProps = {
 
 export default function TextReveal({
   text,
-  scroll = false,
   stagger,
   duration,
   delay = 0,
   className,
   as = `span`,
   html = false,
+  scroll = false,
   byLetter = false,
 }: TextRevealProps) {
   const ref = useRef<HTMLElement>(null);

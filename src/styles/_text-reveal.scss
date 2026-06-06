@@ -1,8 +1,17 @@
-// Hidden until the GSAP SplitText reveal is ready, so split text never flashes in
-// fully before it animates. A global <noscript> override in the root layout forces
-// visibility back on when JS is disabled, so the text still renders without JS.
-.textRevealPending {
+// Hidden until GSAP reveals are ready, so text and element reveals never flash in
+// fully before animating. A global <noscript> override in the root layout forces
+// visibility back on when JS is disabled.
+.textRevealPending,
+.elementRevealPending {
   visibility: hidden;
+}
+
+.elementReveal {
+  will-change: transform, opacity, filter;
+}
+
+.elementRevealAnimating {
+  transition: none !important;
 }
 
 .textRevealWord,

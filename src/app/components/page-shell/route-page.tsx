@@ -3,6 +3,7 @@ import { config } from '@/shared/config/config';
 import type { RouteID } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
+import ElementReveal from '@/app/components/effects/element-reveal';
 import ProjectGrid from '@/app/components/sections/project-grid';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
@@ -29,21 +30,25 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
               )}
               <TextReveal as={`p`} className={`bannerText`} text={`<i>${page.summary}</i>`} html />
             </div>
-            <div className={`heroActions reveal`}>
-              <Link href={`/projects`} className={`buttonLink primary`}>
-                <i className={`fa-solid fa-diagram-project`} />
-                View Projects
-              </Link>
-              <Link href={`/contact`} className={`buttonLink ghost`}>
-                <i className={`fa-solid fa-paper-plane gradientTextColor`} />
-                Contact
-              </Link>
+            <div className={`heroActions`}>
+              <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
+                <Link href={`/projects`} className={`buttonLink primary`}>
+                  <i className={`fa-solid fa-diagram-project`} />
+                  View Projects
+                </Link>
+              </ElementReveal>
+              <ElementReveal as={`span`} delay={0.28} className={`heroActionReveal`}>
+                <Link href={`/contact`} className={`buttonLink ghost`}>
+                  <i className={`fa-solid fa-paper-plane gradientTextColor`} />
+                  Contact
+                </Link>
+              </ElementReveal>
             </div>
           </div>
-          <div className={`pageBadge reveal`}>
+          <ElementReveal as={`div`} delay={0.28} y={16} className={`pageBadge`}>
             <i className={`${config.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} gradientTextColor`} />
             <TextReveal as={`span`} text={page.eyebrow} delay={0.3} />
-          </div>
+          </ElementReveal>
         </div>
       </section>
 
@@ -55,7 +60,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
             <TextReveal scroll as={`p`} html text={`<i>${page.summary}</i>`} />
           </div>
           {pageID == `projects` ? (
-            <ProjectGrid />
+            <ProjectGrid featuredOnly />
           ) : (
             <div className={`detailCards`}>
               {config.capabilities.slice(0, 6).map(capability => {

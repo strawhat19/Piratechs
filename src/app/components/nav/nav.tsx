@@ -11,7 +11,7 @@ import type { NavItem } from '@/shared/types/app';
 import TopBar from '@/app/components/topbar/top-bar';
 import { useGlobalContext } from '@/shared/global-context';
 import AuthWidget from '@/app/components/auth/auth-widget';
-import TextReveal from '@/app/components/effects/text-reveal';
+import ElementReveal from '@/app/components/effects/element-reveal';
 import NotificationBell from '@/app/components/notifications/notification-bell';
 
 export default function Nav() {
@@ -32,22 +32,19 @@ export default function Nav() {
     return (
       <nav className={className} aria-label={`${className} navigation`}>
         {navItems.map((navItem: NavItem, index: number) => (
-          <Link
+          <ElementReveal
+            as={Link}
+            blur={false}
+            duration={0.42}
             key={navItem?.id}
             href={navItem?.href}
+            delay={0.5 + index * 0.025}
             onClick={() => setMenuExpanded(false)}
             className={`navLink ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
           >
             <i className={`${navItem?.icon} gradientTextColor`} />
-            <TextReveal
-              byLetter
-              as={`span`}
-              duration={0.42}
-              stagger={0.012}
-              text={navItem?.label}
-              delay={0.6 + index * 0.025}
-            />
-          </Link>
+            <span>{navItem?.label}</span>
+          </ElementReveal>
         ))}
       </nav>
     )
@@ -57,32 +54,32 @@ export default function Nav() {
     <header className={`header ${menuExpanded ? `headerMenuOpen` : ``}`}>
       <TopBar />
       <div className={`navBar`}>
-        <Link href={`/`} className={`homeButton`} aria-label={`Home`}>
+        <ElementReveal as={Link} href={`/`} blur={false} delay={0.5} className={`homeButton`} aria-label={`Home`}>
           <i className={`fa-solid fa-house`} />
-        </Link>
-        <Link href={`/`} className={`brandMark`} aria-label={`Piratechs home`}>
+        </ElementReveal>
+        <ElementReveal as={Link} href={`/`} blur={false} delay={0.5} className={`brandMark`} aria-label={`Piratechs home`}>
           <Logo className={`brandLogo`} />
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
-            <TextReveal
-              byLetter
-              as={`span`}
-              delay={0.6}
-              duration={0.48}
-              stagger={0.018}
-              text={config.title}
-            />
+            {config.title}
           </span>
-        </Link>
+        </ElementReveal>
         {renderLinks(`desktopNav`)}
         <div className={`navActions`}>
-          <AuthWidget />
+          <ElementReveal as={`span`} blur={false} delay={0.5} className={`navActionReveal`}>
+            <AuthWidget />
+          </ElementReveal>
           {Boolean(user?.role && minRole(user.role, Roles.Editor)) && <>
-            <NotificationBell />
+            <ElementReveal as={`span`} blur={false} delay={0.5} className={`navActionReveal`}>
+              <NotificationBell />
+            </ElementReveal>
           </>}
-          <button type={`button`} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
-            <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`} gradientTextColor`} />
-          </button>
-          <button
+          <ElementReveal as={`button`} type={`button`} blur={false} delay={0.5} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
+            <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
+          </ElementReveal>
+          <ElementReveal
+            delay={0.5}
+            blur={false}
+            as={`button`}
             type={`button`}
             aria-label={`Toggle menu`}
             aria-expanded={menuExpanded}
@@ -90,7 +87,7 @@ export default function Nav() {
             onClick={() => setMenuExpanded(!menuExpanded)}
           >
             <i className={`fa-solid ${menuExpanded ? `fa-xmark` : `fa-bars`}`} />
-          </button>
+          </ElementReveal>
         </div>
       </div>
       <div className={`mobileMenu`}>

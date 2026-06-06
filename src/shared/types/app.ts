@@ -31,6 +31,7 @@ export type PageCopy = {
 export type Stat = {
   text: string;
   label: string;
+  html?: string;
   value: string;
 };
 

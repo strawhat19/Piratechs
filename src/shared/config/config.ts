@@ -75,11 +75,16 @@ export const config = {
     },
   } satisfies Record<string, PageCopy>,
   stats: [
-    { label: `Years of Experience`, value: `10+`, text: `Full Stack Design // Development` },
-    { label: `Technologies`, value: `100+`, text:  `PWAs, Websites, E-Commerce, Games, APIs` },
+    { 
+      value: `10+`, 
+      label: `Years of Experience`, 
+      text: `Full-Stack Design // Development`, 
+      html: `Full<span class="slashes slashesSM">-</span>Stack Design <span class="slashes slashesSM">//</span> Development`, 
+    },
+    { label: `Technologies`, value: `100+`, text:  `PWAs, Apps, E-Commerce, Games, APIs` },
     { label: `Applications`, value: `1000+`, text: `Enterprise Level with Robust Feature Sets` },
   ] satisfies Stat[],
-  filters: [`Featured`, `All`, `PWA`, `Website`, `WordPress`, `E-Commerce`, `Game`, `API`],
+  filters: [`All`, `Featured`, `PWA`, `Website`, `WordPress`, `E-Commerce`, `Game`, `API`],
   projects: [
     {
       type: `PWA`,

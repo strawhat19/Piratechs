@@ -255,10 +255,17 @@ img {
   letter-spacing: -15px;
   @extend .gradientTextColor;
   &:has(.textRevealWord) {
-    padding-right: 0;
-    .textRevealWord {
-      padding-right: 15px;
+    &:not(.slashesSM) {
+      padding-right: 0;
+      .textRevealWord {
+        padding-right: 15px;
+      }
     }
+  }
+  &.slashesSM {
+    letter-spacing: 0;
+    padding-left: 3px;
+    padding-right: 2px;
   }
 }
 

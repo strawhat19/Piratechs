@@ -47,7 +47,7 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
       >
         {loaded ? (
           user ? (
-            <span className={`authAvatarLetter gradientTextColor`}>
+            <span className={`authAvatarLetter`}>
               {userInitial}
             </span>
           ) : <i className={`fa-solid fa-user`} />
