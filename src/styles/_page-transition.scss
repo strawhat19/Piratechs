@@ -4,6 +4,7 @@
   position: fixed;
   overflow: hidden;
   pointer-events: none;
+  // background: var(--mbgrad);
   background: var(--main_gradient); // old solid brand gradient
   // background: var(--main_gradient_grid_4x20), var(--main_gradient); // grid over brand gradient (fallback)
 }

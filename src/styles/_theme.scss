@@ -123,6 +123,8 @@
       var(--piratechsNeon) 10%
     );
 
+  --mbgrad: repeating-linear-gradient(      180deg,      rgba(255, 255, 255, 0.16) 0,      rgba(255, 255, 255, 0) 12%,      rgba(4, 27, 68, 0.3) 25%    ), repeating-linear-gradient(90deg, rgba(4, 27, 68, 0.22) 0 1px, transparent 1px 5%), repeating-linear-gradient(180deg, rgba(4, 27, 68, 0.28) 0 1px, transparent 1px 25%), repeating-linear-gradient(      90deg,      var(--piratechsNeon) 0,      var(--piratechsTeal) 5%,      var(--piratechsNeon) 10%    );
+
   --alt_transition: cubic-bezier(0.77, 0.2, 0.05, 1);
   --transition: 0.24s var(--alt_transition);
 }
