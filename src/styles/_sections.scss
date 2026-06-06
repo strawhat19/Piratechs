@@ -31,10 +31,11 @@
 .heroSection {
   display: grid;
   overflow: hidden;
+  min-height: 100dvh;
   align-items: center;
-  min-height: clamp(640px, 84vh, 790px);
   padding-top: clamp(146px, 12vw, 180px);
   border-bottom: 1px solid var(--border);
+  // min-height: clamp(640px, 84vh, 790px);
 }
 
 .heroBg,
@@ -215,17 +216,17 @@ body[data-theme="light"] .heroLogoPlate {
   color: var(--foreground);
 }
 
-.subHero {
-  min-height: clamp(420px, 56vh, 560px);
-}
+// .subHero {
+//   min-height: clamp(420px, 56vh, 560px);
+// }
 
-.subHero .heroGrid {
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.34fr);
-}
+// .subHero .heroGrid {
+//   grid-template-columns: minmax(0, 1fr) minmax(220px, 0.34fr);
+// }
 
-.subHero .heroCopy h1 {
-  font-size: clamp(2.4rem, 5vw, 4.7rem);
-}
+// .subHero .heroCopy h1 {
+//   font-size: clamp(2.4rem, 5vw, 4.7rem);
+// }
 
 .projectsSection,
 .servicesSection,

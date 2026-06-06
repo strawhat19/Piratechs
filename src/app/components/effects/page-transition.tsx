@@ -27,16 +27,15 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     if (!grid) return;
     const blockWidth = window.innerWidth / cols;
     const blockHeight = window.innerHeight / rows;
-
     blocksRef.current.forEach((block, index) => {
       const row = Math.floor(index / cols);
       const col = index % cols;
       gsap.set(block, {
+        scaleX: 0,
+        width: blockWidth + 1,
         top: row * blockHeight,
         left: col * blockWidth,
-        width: blockWidth + 1,
         height: blockHeight + 1,
-        scaleX: 0,
         transformOrigin: row % 2 == 0 ? `left center` : `right center`,
       });
     });
@@ -52,7 +51,6 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     gsap.killTweensOf(blocksRef.current);
     gsap.set(grid, { autoAlpha: 1, pointerEvents: `auto` });
     createShutterBlindsGrid();
-
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
       timeline.to(blocks, {
@@ -65,7 +63,6 @@ export default function PageTransition({ children }: { children: ReactNode }) {
         },
       }, row == 0 ? 0 : `<`);
     });
-
     return timeline;
   };
 
@@ -83,7 +80,6 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     });
     gsap.killTweensOf(blocksRef.current);
     gsap.set(grid, { autoAlpha: 1, pointerEvents: `auto` });
-
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
       timeline.to(blocks, {
@@ -96,23 +92,19 @@ export default function PageTransition({ children }: { children: ReactNode }) {
         },
       }, row == 0 ? 0.05 : `<`);
     });
-
     return timeline;
   };
 
   useIsomorphicLayoutEffect(() => {
     createShutterBlindsGrid();
     window.addEventListener(`resize`, createShutterBlindsGrid);
-
     if (getReducedMotion()) {
       gsap.set(gridRef.current, { autoAlpha: 0, pointerEvents: `none`, background: `none` });
       return () => window.removeEventListener(`resize`, createShutterBlindsGrid);
     }
-
     gsap.set(blocksRef.current, { scaleX: 1 });
     gsap.set(gridRef.current, { background: `none` });
     const timeline = animateOut(() => {});
-
     return () => {
       timeline.kill();
       window.removeEventListener(`resize`, createShutterBlindsGrid);

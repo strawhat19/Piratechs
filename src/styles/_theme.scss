@@ -101,6 +101,28 @@
   --main_gradient_angle: 135deg;
   --main_gradient: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
 
+  // Static snapshot of the PageTransition shutter blinds: 4 rows x 20 columns of
+  // alternating neon/teal blocks, rebuilt with layered repeating gradients.
+  --main_gradient_grid_4x20:
+    // per-row sheen — light along each row top, shadow at each row base (mirrors .pageTransitionBlock::after)
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.16) 0,
+      rgba(255, 255, 255, 0) 12%,
+      rgba(4, 27, 68, 0.3) 25%
+    ),
+    // 20 vertical column seams that outline each block
+    repeating-linear-gradient(90deg, rgba(4, 27, 68, 0.22) 0 1px, transparent 1px 5%),
+    // 4 horizontal row seams that outline each block
+    repeating-linear-gradient(180deg, rgba(4, 27, 68, 0.28) 0 1px, transparent 1px 25%),
+    // alternating block fills — neon to teal and back across the 20 columns
+    repeating-linear-gradient(
+      90deg,
+      var(--piratechsNeon) 0,
+      var(--piratechsTeal) 5%,
+      var(--piratechsNeon) 10%
+    );
+
   --alt_transition: cubic-bezier(0.77, 0.2, 0.05, 1);
   --transition: 0.24s var(--alt_transition);
 }
