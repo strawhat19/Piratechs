@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
@@ -21,9 +22,17 @@ export default function HeroCircuitOverlay({
   animatePulses = advancedGraphics, 
   showCircuitOverlay = advancedDevice,
 }: HeroCircuitOverlayProps) {
-  const { deviceDetails } = useGlobalContext();
+  const { isPWA, platform } = useGlobalContext();
+  const [isMounted, setIsMounted] = useState(false);
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
-  return (showCircuitOverlay || (deviceDetails && (!deviceDetails?.isMobile && !deviceDetails?.isIOS))) ? (
+  const isChromeOrPwaDevice = Boolean(platform && !platform?.isMobile && !platform?.isIOS && (platform?.chrome || isPWA));
+  const shouldRenderCircuit = isMounted && (showCircuitOverlay || isChromeOrPwaDevice);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return shouldRenderCircuit ? (
     <>
       <svg
         aria-hidden={`true`}
@@ -100,5 +109,5 @@ export default function HeroCircuitOverlay({
         </span>
       ) : null}
     </>
-  ) : <></>;
+  ) : null;
 }

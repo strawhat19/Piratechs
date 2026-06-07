@@ -39,8 +39,8 @@ type GlobalContextValue = {
   users: User[];
   selected: unknown;
   menuExpanded: boolean;
-  deviceDetails?: any;
-  setDeviceDetails?: any;
+  platform?: any;
+  setPlatform?: any;
   setUser: (user: User | null) => void;
   setUsers: (users: User[]) => void;
   setTheme: (theme: ThemeMode) => void;
@@ -66,7 +66,7 @@ const defaultState: GlobalContextValue = {
   theme: `dark`,
   selected: null,
   authStatus: ``,
-  deviceDetails: {}, 
+  platform: {}, 
   smallScreen: false,
   usersLoading: false,
   menuExpanded: false,
@@ -82,7 +82,7 @@ const defaultState: GlobalContextValue = {
   signUpUser: emptyAsync,
   refreshUsers: async () => [],
   signInWithGoogle: emptyAsync,
-  setDeviceDetails: async () => null,
+  setPlatform: async () => null,
 };
 
 export const StateGlobals = createContext<GlobalContextValue>(defaultState);
@@ -162,7 +162,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
   const [usersLoading, setUsersLoading] = useState(false);
   const [menuExpanded, setMenuExpanded] = useState(false);
   const [theme, setThemeState] = useState<ThemeMode>(`dark`);
-  const [deviceDetails, setDeviceDetails] = useState({});
+  const [platform, setPlatform] = useState({});
   const firebaseReady = firebaseEnvReady();
   const usersRef = useRef<User[]>([]);
 
@@ -343,8 +343,8 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       setUsersLoading(false);
       const platformOSBrowser: any = getDeviceDetails();
       const platformOSBrowserDetails: any = { ...platformOSBrowser, chrome: platformOSBrowser?.browser == `chrome`, };
-      setDeviceDetails(platformOSBrowserDetails);
-      logUsers(currentUsers, user, { platformOSBrowserDetails });
+      setPlatform(platformOSBrowserDetails);
+      logUsers(currentUsers, user, { platform: platformOSBrowserDetails });
     }, error => {
       console.log(`Error Loading User(s)`, error);
       setUsers(user ? [user] : []);
@@ -378,7 +378,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     menuExpanded,
     signInWithGoogle,
     setMenuExpanded,
-    deviceDetails, setDeviceDetails,
+    platform, setPlatform,
   }), [
     user,
     users,
@@ -399,7 +399,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     usersLoading,
     firebaseReady,
     menuExpanded,
-    deviceDetails,
+    platform,
     signInWithGoogle,
   ]);
 

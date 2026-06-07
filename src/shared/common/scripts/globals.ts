@@ -57,14 +57,14 @@ export const getDeviceDetails = () => {
       if (userAgent && platform) {
         const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
         const isPhoneUA  = /iphone|ipod|android.*mobile|windows phone|blackberry|bb10/.test(userAgent);
-        const isIOS = /iPad|iPhone|iPod/.test(platform) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const isMobile = mobileRegex.test(userAgent) || isIOS || isPhoneUA;
+        const ios = /iPad|iPhone|iPod/.test(platform) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const mobile = mobileRegex.test(userAgent) || ios || isPhoneUA;
         const { browser, os } = getBrowserOS();
         return {
           os,
-          isIOS,
+          ios,
+          mobile,
           browser,
-          isMobile,
         };
       }
     }

@@ -155,7 +155,8 @@ export default function PageTransition({
     >
       <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect 
         ${isPWA ? `pwa` : ``} 
-        ${getDeviceDetails()?.isIOS ? `ios` : `noIos`} ${(width <= 768 || getDeviceDetails()?.isMobile) ? `mobile` : ``}
+        ${getDeviceDetails()?.ios ? `ios` : `noIos`} 
+        ${(width <= 768 || getDeviceDetails()?.mobile) ? `mobile` : ``}
       `} aria-hidden={`true`}>
         {Array.from({ length: blockCount }).map((_, index) => (
           <div
