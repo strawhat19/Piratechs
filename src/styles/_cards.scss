@@ -9,6 +9,26 @@
   grid-template-columns: repeat(auto-fit, minmax(465px, 1fr));
 }
 
+.circuit {
+  background-size: 35% !important;
+  background-repeat: no-repeat !important;
+  background-position: 95% 100% !important;
+  background: url(/assets/piratechs/gifs/Circuit.gif);
+}
+
+.statCard,
+.serviceCard,
+.galleryTile,
+.skillTile,
+.pageBadge {
+  &::before {
+    content: "";
+    inset: 0;
+    @extend .circuit;
+    position: absolute;
+  }
+}
+
 .projectCard,
 .statCard,
 .serviceCard,
