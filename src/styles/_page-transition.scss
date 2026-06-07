@@ -29,7 +29,10 @@
     background: url('/assets/piratechs/gifs/Piratech-Glitch.gif');
     background-position: center !important;
     background-repeat: no-repeat !important;
-    animation: fadeinout 1.1s ease-in-out forwards;
+    animation: fadeinout 1.12s ease-in-out forwards;
+  }
+  &.pageTransitionGifReset::after {
+    animation: none;
   }
 }
 

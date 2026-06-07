@@ -8,6 +8,7 @@ const rows = 4;
 const cols = 20;
 
 const blockCount = rows * cols;
+const gifResetClass = `pageTransitionGifReset`;
 const rowIndexes = Array.from({ length: rows }, (_, index) => index);
 
 const getReducedMotion = () => (
@@ -24,6 +25,14 @@ export default function PageTransition({
   const blocksRef = useRef<HTMLDivElement[]>([]);
 
   const getRowBlocks = (row: number) => blocksRef.current.slice(row * cols, row * cols + cols);
+
+  const restartGifAnimation = () => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    grid.classList.add(gifResetClass);
+    void grid.offsetWidth;
+    grid.classList.remove(gifResetClass);
+  };
 
   const createShutterBlindsGrid = () => {
     const grid = gridRef.current;
@@ -53,6 +62,7 @@ export default function PageTransition({
     const timeline = gsap.timeline({ onComplete });
     gsap.killTweensOf(blocksRef.current);
     gsap.set(grid, { autoAlpha: 1, pointerEvents: `auto` });
+    restartGifAnimation();
     createShutterBlindsGrid();
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
