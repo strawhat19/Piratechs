@@ -35,7 +35,6 @@
   align-items: center;
   padding-top: clamp(146px, 12vw, 180px);
   border-bottom: 1px solid var(--border);
-  // min-height: clamp(640px, 84vh, 790px);
 }
 
 .heroBg,
@@ -50,11 +49,11 @@
   z-index: 0;
   overflow: hidden;
   &::before {
-    content: "";
     z-index: 0;
+    content: "";
     opacity: 0.36;
-    transform: skewY(-6deg) translateY(-8%);
     background-size: 58px 58px;
+    transform: skewY(-6deg) translateY(-8%);
     mask-image: linear-gradient(90deg, transparent, black 18%, black 78%, transparent);
     background-image: linear-gradient(rgba(0, 191, 255, 0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 191, 255, 0.14) 1px, transparent 1px);
   }

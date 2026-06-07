@@ -1,5 +1,8 @@
-import { advancedGraphics } from '@/shared/common/scripts/globals';
+'use client';
+
+import { useGlobalContext } from '@/shared/global-context';
 import { advancedDevice } from '@/shared/common/database/constants';
+import { advancedGraphics, isMobileDevice } from '@/shared/common/scripts/globals';
 
 type HeroCircuitOverlayProps = {
   blur?: boolean;
@@ -18,9 +21,11 @@ export default function HeroCircuitOverlay({
   animatePulses = advancedGraphics, 
   showCircuitOverlay = advancedDevice,
 }: HeroCircuitOverlayProps) {
+  const { width } = useGlobalContext();
+
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
 
-  return showCircuitOverlay ? (
+  return (showCircuitOverlay || (width >= 1600 && !isMobileDevice()?.isIOS)) ? (
     <>
       <svg
         aria-hidden={`true`}
