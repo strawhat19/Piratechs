@@ -3,7 +3,7 @@
 import gsap from 'gsap';
 import { TransitionRouter } from 'next-transition-router';
 import { useGlobalContext } from '@/shared/global-context';
-import { isMobileDevice } from '@/shared/common/scripts/globals';
+import { getBrowserOS, getDeviceDetails } from '@/shared/common/scripts/globals';
 import { useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
 
 const rows = 4;
@@ -153,7 +153,10 @@ export default function PageTransition({
         return () => timeline.kill();
       }}
     >
-      <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect ${isPWA ? `pwa` : ``} ${isMobileDevice()?.isIOS ? `ios` : `noIos`} ${(width <= 768 || isMobileDevice()?.isMobile) ? `mobile` : ``}`} aria-hidden={`true`}>
+      <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect 
+        ${isPWA ? `pwa` : ``} 
+        ${getDeviceDetails()?.isIOS ? `ios` : `noIos`} ${(width <= 768 || getDeviceDetails()?.isMobile) ? `mobile` : ``}
+      `} aria-hidden={`true`}>
         {Array.from({ length: blockCount }).map((_, index) => (
           <div
             key={index}

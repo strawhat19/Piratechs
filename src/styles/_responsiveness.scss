@@ -48,10 +48,6 @@
     max-width: 250px;
   }
 
-  .wordLogoHome {
-    top: -55px;
-  }
-
   .heroSection {
     min-height: auto;
   }
@@ -184,5 +180,6 @@ html {
       right: max(20px, env(safe-area-inset-right));
       bottom: max(25px, env(safe-area-inset-bottom));
     }
+
   }
 }

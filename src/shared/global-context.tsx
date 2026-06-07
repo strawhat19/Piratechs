@@ -5,17 +5,21 @@ import { DataSources, Roles } from './types/types';
 import type { ThemeMode } from '@/shared/types/app';
 import { devEnv } from './common/database/constants';
 import type { User as FirebaseUser } from 'firebase/auth';
-import { removeNullAndUndefinedProperties } from './common/scripts/globals';
+import { getDeviceDetails, removeNullAndUndefinedProperties } from './common/scripts/globals';
 import { collection, doc, getDocs, limit, onSnapshot, query, setDoc, where } from 'firebase/firestore';
 import { firebaseEnvReady, getFirebaseAuth, getFirebaseDb, getGoogleProvider } from '@/shared/lib/firebase';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 
-export const logUsers = (users: User[] | any[], user: User | null | any) => {
+export const logUsers = (users: User[] | any[], user: User | null | any, extraData: any = {}) => {
   if (devEnv) {
     if (users?.length > 0) {
       if (user != null) {
-        console.log(`User(s)`, { users, user });
+        console.log(`User(s)`, { 
+          user, 
+          users, 
+          ...extraData,
+        });
       }
     }
   }
@@ -35,6 +39,8 @@ type GlobalContextValue = {
   users: User[];
   selected: unknown;
   menuExpanded: boolean;
+  deviceDetails?: any;
+  setDeviceDetails?: any;
   setUser: (user: User | null) => void;
   setUsers: (users: User[]) => void;
   setTheme: (theme: ThemeMode) => void;
@@ -60,6 +66,7 @@ const defaultState: GlobalContextValue = {
   theme: `dark`,
   selected: null,
   authStatus: ``,
+  deviceDetails: {}, 
   smallScreen: false,
   usersLoading: false,
   menuExpanded: false,
@@ -75,6 +82,7 @@ const defaultState: GlobalContextValue = {
   signUpUser: emptyAsync,
   refreshUsers: async () => [],
   signInWithGoogle: emptyAsync,
+  setDeviceDetails: async () => null,
 };
 
 export const StateGlobals = createContext<GlobalContextValue>(defaultState);
@@ -154,6 +162,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
   const [usersLoading, setUsersLoading] = useState(false);
   const [menuExpanded, setMenuExpanded] = useState(false);
   const [theme, setThemeState] = useState<ThemeMode>(`dark`);
+  const [deviceDetails, setDeviceDetails] = useState({});
   const firebaseReady = firebaseEnvReady();
   const usersRef = useRef<User[]>([]);
 
@@ -332,7 +341,10 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       const currentUsers = currentUserExists || user == null ? firestoreUsers : [user, ...firestoreUsers];
       setUsers(currentUsers);
       setUsersLoading(false);
-      logUsers(currentUsers, user);
+      const platformOSBrowser: any = getDeviceDetails();
+      const platformOSBrowserDetails: any = { ...platformOSBrowser, chrome: platformOSBrowser?.browser == `chrome`, };
+      setDeviceDetails(platformOSBrowserDetails);
+      logUsers(currentUsers, user, { platformOSBrowserDetails });
     }, error => {
       console.log(`Error Loading User(s)`, error);
       setUsers(user ? [user] : []);
@@ -366,6 +378,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     menuExpanded,
     signInWithGoogle,
     setMenuExpanded,
+    deviceDetails, setDeviceDetails,
   }), [
     user,
     users,
@@ -386,6 +399,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     usersLoading,
     firebaseReady,
     menuExpanded,
+    deviceDetails,
     signInWithGoogle,
   ]);
 
