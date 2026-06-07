@@ -2,6 +2,7 @@
 
 import gsap from 'gsap';
 import { TransitionRouter } from 'next-transition-router';
+import { useGlobalContext } from '@/shared/global-context';
 import { useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
 
 const rows = 4;
@@ -24,6 +25,8 @@ export default function PageTransition({
   const gridRef = useRef<HTMLDivElement>(null);
   const blocksRef = useRef<HTMLDivElement[]>([]);
 
+  const { width, isPWA } = useGlobalContext();
+
   const getRowBlocks = (row: number) => blocksRef.current.slice(row * cols, row * cols + cols);
 
   const getInitialBlockStyle = (index: number): CSSProperties => {
@@ -31,10 +34,10 @@ export default function PageTransition({
     const col = index % cols;
     return {
       transform: `scaleX(1)`,
-      width: `calc(${100 / cols}vw + 1px)`,
-      height: `calc(${100 / rows}dvh + 1px)`,
       top: `${(row * 100) / rows}dvh`,
       left: `${(col * 100) / cols}vw`,
+      width: `calc(${100 / cols}vw + 1px)`,
+      height: `calc(${100 / rows}dvh + 1px)`,
       transformOrigin: row % 2 == 0 ? `left center` : `right center`,
     };
   };
@@ -149,7 +152,7 @@ export default function PageTransition({
         return () => timeline.kill();
       }}
     >
-      <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect`} aria-hidden={`true`}>
+      <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect ${isPWA ? `pwa` : ``} ${width <= 768 ? `mobile` : ``}`} aria-hidden={`true`}>
         {Array.from({ length: blockCount }).map((_, index) => (
           <div
             key={index}

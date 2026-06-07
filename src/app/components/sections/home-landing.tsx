@@ -54,7 +54,7 @@ export default function HomeLanding() {
             </div>
             <div className={`heroMiniStats`}>
               {config?.stats?.map((stat, index) => (
-                <span key={stat.label}>
+                <span className={`heroMiniStat`} key={stat.label}>
                   <TextReveal as={`strong`} className={`gradientTextColor`} text={stat.value} delay={0.39 + index * 0.06} />
                   <TextReveal as={`i`} text={stat.label} delay={0.42 + index * 0.06} />
                 </span>

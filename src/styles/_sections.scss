@@ -148,9 +148,6 @@
 .heroLogo {
   max-width: 300px;
   max-height: 360px;
-  @media (max-width: 768px) {
-    max-width: 250px;
-  }
 }
 
 .heroLogoPlate {
@@ -192,18 +189,18 @@ body[data-theme="light"] .heroLogoPlate {
   display: grid;
   width: min(100%, 460px);
   grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.heroMiniStats span {
-  gap: 2px;
-  display: grid;
-  padding: 12px;
-  font-size: 0.74rem;
-  text-align: center;
-  background: var(--surface);
-  color: var(--foregroundMuted);
-  border: 1px solid var(--border);
-  border-radius: var(--borderRadius);
+  .heroMiniStat {
+    gap: 2px;
+    display: grid;
+    padding: 12px;
+    font-size: 0.74rem;
+    text-align: center;
+    background: #012141;
+    color: var(--foregroundMuted);
+    // background: var(--navy-deep);
+    border: 1px solid var(--border);
+    border-radius: var(--borderRadius);
+  }
 }
 
 .heroMiniStats strong {
