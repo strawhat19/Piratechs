@@ -238,6 +238,33 @@ img {
   max-width: 100%;
 }
 
+.arrow {
+  transition: transform 150ms var(--alt_transition);
+}
+
+.wordLogoHome {
+  &:hover {
+    .arrowLeftLarge {
+      transform: translateX(-15);
+    }
+    .arrowLeftMedium {
+      transform: translateX(-20);
+    }
+    .arrowLeftSmall {
+      transform: translateX(-25);
+    }
+    .arrowRightLarge {
+      transform: translateX(15);
+    }
+    .arrowRightMedium {
+      transform: translateX(20);
+    }
+    .arrowRightSmall {
+      transform: translateX(25);
+    }
+  }
+}
+
 .gradientBG {
   background: var(--main_gradient);
 }
@@ -300,6 +327,7 @@ img {
 
 .wordLogo {
   --w: 250px;
+  overflow: visible;
   max-width: var(--w);
   max-height: calc(var(--w) / 5.12);
 }
