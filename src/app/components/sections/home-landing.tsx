@@ -46,7 +46,7 @@ export default function HomeLanding() {
           <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
             <div className={`heroLogoPlate`}>
               <span className={`heroOrbit`} />
-              <Logo className={`heroLogo`} />
+              <Logo fullSword className={`heroLogo`} />
             </div>
             <div className={`heroMiniStats`}>
               {config?.stats?.map((stat, index) => (
@@ -123,7 +123,7 @@ export default function HomeLanding() {
       </section>
 
       <section className={`pageSection contactSection`}>
-        <div className={`sectionInner contactBand`}>
+        <ElementReveal as={`div`} delay={0.35} y={16} className={`sectionInner contactBand`}>
           <TextReveal scroll as={`span`} className={`eyebrow`} text={`Contact`} />
           <TextReveal scroll as={`h2`} text={`Ready for the next version`} delay={0.06} />
           <TextReveal scroll as={`p`} html text={`<i>This first Next pass keeps the structure lean while setting up the app shell, pages, auth surface, PWA pieces, API route, and future Firebase growth path.</i>`} />
@@ -131,7 +131,7 @@ export default function HomeLanding() {
             <i className={`fa-solid fa-paper-plane`} />
             {config.contactEmail}
           </a>
-        </div>
+        </ElementReveal>
       </section>
     </>
   );

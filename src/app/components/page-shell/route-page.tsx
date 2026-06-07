@@ -1,11 +1,12 @@
 import Link from 'next/link';
+import Section from '../sections/section';
 import { config } from '@/shared/config/config';
 import type { RouteID } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import ProjectGrid from '@/app/components/sections/project-grid';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
+import ProjectGrid from '../sections/project-grid';
 
 export default function RoutePage({ pageID }: { pageID: RouteID }) {
   const page: any = config?.pages?.[pageID];
@@ -52,16 +53,14 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
         </div>
       </section>
 
-      <section className={`pageSection detailSection subPageSection`}>
-        <div className={`sectionInner detailGrid`}>
-          <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={pageID == `projects` ? `Our Work` : page?.eyebrow} />
-            <TextReveal scroll as={`h2`} text={pageID == `projects` ? `Projects` : `What We Do`} delay={0.06} />
-            <TextReveal scroll as={`p`} html text={`<i>${page.summary}</i>`} />
-          </div>
-          {pageID == `projects` ? (
-            <ProjectGrid featuredOnly />
-          ) : (
+      {pageID == `projects` ? <Section /> : (
+        <section className={`pageSection detailSection subPageSection`}>
+          <div className={`sectionInner detailGrid`}>
+            <div className={`sectionTitle`}>
+              <TextReveal scroll as={`span`} className={`eyebrow`} text={page?.eyebrow} />
+              <TextReveal scroll as={`h2`} text={`What We Do`} delay={0.06} />
+              <TextReveal scroll as={`p`} html text={`<i>${page.summary}</i>`} />
+            </div>
             <div className={`detailCards`}>
               {config.capabilities.slice(0, 6).map(capability => {
                 const meta = getTechnologyMeta(capability);
@@ -74,9 +73,9 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
                 );
               })}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
     </>
   );
 }
