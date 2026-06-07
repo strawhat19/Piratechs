@@ -2,6 +2,11 @@ import { Types } from '@/shared/types/types';
 import { colors } from '@/shared/theme/theme';
 import { stringNoSpaces, urlHostMatches } from '../scripts/globals';
 
+export const advancedDeviceThreshold = 4;
+export const cores = navigator.hardwareConcurrency ?? advancedDeviceThreshold;
+export const memory = (navigator as any).deviceMemory ?? advancedDeviceThreshold;
+export const advancedDevice = memory > advancedDeviceThreshold && cores > advancedDeviceThreshold;
+
 export const development = process?.env?.NODE_ENV == `development`;
 export const devEnv = urlHostMatches([`local`, `:3000`]) || development;
 

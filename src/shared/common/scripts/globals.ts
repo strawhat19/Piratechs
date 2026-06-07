@@ -1,6 +1,7 @@
 export const maxCredits = 20_000;
 export const maxAuthAttempts = 5;
 export const pathPrefix = `https://`;
+export const advancedGraphics = true;
 
 export const defaultAuthenticateLabel = `Delete User & All Data`;
 

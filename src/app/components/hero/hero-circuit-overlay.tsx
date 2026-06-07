@@ -1,28 +1,35 @@
+import { advancedGraphics } from '@/shared/common/scripts/globals';
+import { advancedDevice } from '@/shared/common/database/constants';
+
 type HeroCircuitOverlayProps = {
   blur?: boolean;
   blendMode?: boolean;
+  breathing?: boolean;
   energySweep?: boolean;
   animatePulses?: boolean;
+  showCircuitOverlay?: boolean;
 };
 
 export default function HeroCircuitOverlay({ 
-  blur = true, 
-  blendMode = true, 
-  energySweep = false, 
-  animatePulses = true, 
+  energySweep = false,
+  blur = advancedGraphics, 
+  blendMode = advancedGraphics, 
+  breathing = advancedGraphics,
+  animatePulses = advancedGraphics, 
+  showCircuitOverlay = advancedDevice,
 }: HeroCircuitOverlayProps) {
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
 
-  return (
+  return showCircuitOverlay ? (
     <>
       <svg
         aria-hidden={`true`}
         viewBox={`0 0 1440 760`}
-        className={`heroCircuitOverlay`}
         data-blur={blur ? `true` : `false`}
         preserveAspectRatio={`xMidYMid slice`}
         data-blend-mode={blendMode ? `true` : `false`}
         data-animate-pulses={animatePulses ? `true` : `false`}
+        className={`heroCircuitOverlay ${breathing ? `breathing` : ``}`}
       >
       {blur ? (
         <defs>
@@ -90,5 +97,5 @@ export default function HeroCircuitOverlay({
         </span>
       ) : null}
     </>
-  );
+  ) : <></>;
 }

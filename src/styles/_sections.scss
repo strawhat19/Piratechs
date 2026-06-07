@@ -58,11 +58,6 @@
     mask-image: linear-gradient(90deg, transparent, black 18%, black 78%, transparent);
     background-image: linear-gradient(rgba(0, 191, 255, 0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 191, 255, 0.14) 1px, transparent 1px);
   }
-  // &::after {
-  //   content: "";
-  //   z-index: 1;
-  //   background: linear-gradient(120deg, transparent 0 38%, rgba(0, 191, 255, 0.16) 38% 39%, transparent 39% 100%), linear-gradient(145deg, transparent 0 58%, rgba(19, 222, 185, 0.12) 58% 59%, transparent 59% 100%);
-  // }
 }
 
 .gridPlane,
@@ -97,7 +92,7 @@
 }
 
 .signalLineA {
-  top: 24%;
+  top: 16%;
   right: 8%;
   width: 34vw;
 }
