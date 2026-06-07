@@ -100,6 +100,7 @@
   --shadow: 0 2px 16px rgba(0, 9, 27, 0.25);
 
   --main_gradient_angle: 135deg;
+  --main_gradient_dark: linear-gradient(var(--main_gradient_angle), var(--main), var(--navy));
   --main_gradient: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
 
   // Static snapshot of the PageTransition shutter blinds: 4 rows x 20 columns of

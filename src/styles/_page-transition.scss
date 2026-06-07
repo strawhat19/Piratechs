@@ -1,13 +1,33 @@
+@keyframes strokeDance {
+  0% {
+    stroke: #ffffff;
+    stroke-width: 3px;
+    stroke-dasharray: 215px;
+  }
+  100% {
+    stroke: #ffffff;
+    stroke-width: 0;
+    stroke-dasharray: 0;
+  }
+}
+
 @keyframes fadeinout {
   0% {
+    top: 5%;
     opacity: 0;
   }
   50% {
+    top: 0;
     opacity: 1;
   }
   100% {
+    top: 5%;
     opacity: 0;
   }
+}
+
+.strokeDance {
+  animation: strokeDance 1.12s ease-in-out forwards infinite alternate-reverse;
 }
 
 .pageTransitionShutter {
@@ -16,7 +36,8 @@
   position: fixed;
   overflow: hidden;
   pointer-events: none;
-  background: var(--main_gradient);
+  // background: var(--main_gradient);
+  background: var(--main_gradient_dark);
   // background: url('/assets/piratechs/gifs/Piratech-Glitch.gif'), var(--main_gradient);
   // background-size: 879px, cover !important;
   // background-position: center, center !important;
@@ -25,8 +46,8 @@
     content: "";
     inset: 0;
     position: absolute;
-    background-size: 879px !important;
     background: url('/assets/piratechs/gifs/Piratech-Glitch.gif');
+    background-size: 879px !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     animation: fadeinout 1.12s ease-in-out forwards;
@@ -52,14 +73,14 @@
 .pageTransitionBlock:nth-child(odd) {
   background: 
     // url('/assets/piratechs/gifs/Piratech-Glitch.gif'), 
-    linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal))
+    linear-gradient(var(--main_gradient_angle), var(--main), var(--navy))
   ;
 }
 
 .pageTransitionBlock:nth-child(even) {
   background:
     // url('/assets/piratechs/gifs/Piratech-Glitch.gif'), 
-    linear-gradient(var(--main_gradient_angle), var(--piratechsTeal), var(--piratechsNeon))
+    linear-gradient(var(--main_gradient_angle), var(--navy), var(--main))
   ;
 }
 
