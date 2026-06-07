@@ -69,8 +69,8 @@ export const config = {
     },
     contact: {
       eyebrow: `Contact`,
-      title: `Get In Touch // Reach Out`,
-      html: `Get In Touch <span class="slashes">//</span> Reach Out`,
+      title: `Get In Touch With Us // Reach Out`,
+      html: `Get In Touch With Us <span class="slashes">//</span> Reach Out`,
       summary: `A focused contact route for portfolio reviewers, collaborators, recruiters, and future clients looking for front-end polish backed by full-stack depth.`,
     },
   } satisfies Record<string, PageCopy>,

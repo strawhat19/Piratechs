@@ -39,19 +39,18 @@
   font-weight: 800;
   align-items: center;
   min-width: fit-content;
+  span {
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0;
+    font-size: clamp(1.18rem, 2vw, 1.58rem);
+  }
 }
 
 .brandLogo {
   width: 38px;
   height: 38px;
   object-fit: contain;
-}
-
-.brandMark span {
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: 0;
-  font-size: clamp(1.18rem, 2vw, 1.58rem);
 }
 
 .brandLogoLight,

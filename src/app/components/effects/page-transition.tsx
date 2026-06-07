@@ -16,7 +16,10 @@ const getReducedMotion = () => (
 
 const useIsomorphicLayoutEffect = typeof window != `undefined` ? useLayoutEffect : useEffect;
 
-export default function PageTransition({ children }: { children: ReactNode }) {
+export default function PageTransition({ 
+  children,
+  duration = 0.19, 
+}: any) {
   const gridRef = useRef<HTMLDivElement>(null);
   const blocksRef = useRef<HTMLDivElement[]>([]);
 
@@ -54,8 +57,8 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
       timeline.to(blocks, {
+        duration,
         scaleX: 1,
-        duration: 0.42,
         ease: `power3.inOut`,
         stagger: {
           each: 0.012,
@@ -83,8 +86,8 @@ export default function PageTransition({ children }: { children: ReactNode }) {
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
       timeline.to(blocks, {
+        duration,
         scaleX: 0,
-        duration: 0.46,
         ease: `power3.inOut`,
         stagger: {
           each: 0.012,
