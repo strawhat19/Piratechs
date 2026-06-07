@@ -147,28 +147,30 @@
 }
 
 .heroBrand {
-  display: grid;
   gap: 18px;
+  display: grid;
   justify-items: center;
 }
 
 .heroLogo {
   max-width: 300px;
+  max-height: 360px;
   @media (max-width: 768px) {
     max-width: 250px;
   }
 }
 
 .heroLogoPlate {
-  width: min(100%, 360px);
-  aspect-ratio: 1;
   display: grid;
-  place-items: center;
+  aspect-ratio: 1;
+  min-height: 512px;
   position: relative;
-  border: 1px solid var(--border);
-  background: radial-gradient(circle, rgba(0, 191, 255, 0.16), rgba(0, 9, 27, 0.36) 56%, rgba(0, 9, 27, 0.8));
-  clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
+  place-items: center;
+  width: min(100%, 360px);
   box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
+  background: radial-gradient(circle, rgba(0, 191, 255, 0.16), rgba(0, 9, 27, 0.36) 56%, rgba(0, 9, 27, 0.8));
 }
 
 body[data-theme="light"] .heroLogoPlate {

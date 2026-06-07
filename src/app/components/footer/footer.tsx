@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
+import Word from '../logo/word';
 import { config } from '@/shared/config/config';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
 
 export default function Footer({
   showNav = false,
+  titleGraphic = true,
 }: any) {
   return (
     <footer className={`footer`}>
@@ -14,8 +16,10 @@ export default function Footer({
           <Link href={`/`} className={`footerBrand`}>
             <Logo className={`footerLogo`} />
             <div className={`sep`} style={{ minHeight: 54 }} />
-            <span>
-              <TextReveal scroll as={`strong`} text={config.title} />
+            <span className={`footerContent`}>
+              {titleGraphic ? (
+                <Word className={`wordLogoFooter`} gradient={false} gradientSword />
+              ) : <TextReveal scroll as={`strong`} text={config.title} />}
               <div className={`sep`} />
               <TextReveal scroll as={`small`} html text={`<i>${config.description}</i>`} delay={0.06} />
             </span>

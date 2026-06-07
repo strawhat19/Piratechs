@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Section from './section';
+import Word from '../logo/word';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -45,8 +46,11 @@ export default function HomeLanding() {
           </div>
           <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
             <div className={`heroLogoPlate`}>
-              <span className={`heroOrbit`} />
+              {/* <span className={`heroOrbit`} /> */}
               <Logo fullSword className={`heroLogo`} />
+              <Link href={`/`} className={`navLink wordLogoHome`}>
+                <Word gradient={false} arrows gradientSword />
+              </Link>
             </div>
             <div className={`heroMiniStats`}>
               {config?.stats?.map((stat, index) => (

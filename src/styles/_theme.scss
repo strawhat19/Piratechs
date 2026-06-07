@@ -298,12 +298,33 @@ img {
   min-height: 100dvh;
 }
 
-.dark {
-  .bannerText {
-    text-shadow: 0 0 2px black;
-  }
+.wordLogo {
+  --w: 250px;
+  max-width: var(--w);
+  max-height: calc(var(--w) / 5.12);
 }
 
+.wordLogoHome {
+  top: -30px;
+  position: relative;
+}
+
+.wordLogoNav {
+  --w: 150px;
+}
+
+.wordLogoFooter {
+  --w: 135px;
+}
+
+.dark {
+  .logoLetter {
+    filter: drop-shadow(2px 4px 6px var(--navy));
+  }
+  .bannerText {
+    text-shadow: 0 0 2px var(--navy);
+  }
+}
 
 html {
   &:has(body[data-theme="light"]) {

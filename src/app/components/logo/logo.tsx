@@ -14,7 +14,7 @@ export default function Logo({
                     <stop offset="100%" stopColor={`var(--piratechsNeon)`} />
                 </linearGradient>
                 <clipPath id="clip0_3121_1091">
-                    <rect width="512" height="512" rx="22.5" fill={color} />
+                    <rect width={size} height={size} rx="22.5" fill={color} />
                 </clipPath>
             </defs>
             {fullSword == true ? (

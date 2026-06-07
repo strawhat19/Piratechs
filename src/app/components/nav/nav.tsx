@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import { useMemo } from 'react';
+import Word from '../logo/word';
 import { Roles } from '@/shared/types/types';
 import { usePathname } from 'next/navigation';
 import { minRole } from '@/shared/models/User';
@@ -14,7 +15,9 @@ import AuthWidget from '@/app/components/auth/auth-widget';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import NotificationBell from '@/app/components/notifications/notification-bell';
 
-export default function Nav() {
+export default function Nav({
+  titleGraphic = true,
+}: any) {
   const pathname = usePathname();
 
   const { user, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
@@ -60,7 +63,9 @@ export default function Nav() {
         <ElementReveal as={Link} href={`/`} blur={false} delay={0.5} className={`brandMark`} aria-label={`Piratechs home`}>
           <Logo className={`brandLogo`} />
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
-            {config.title}
+            {titleGraphic ? (
+              <Word className={`wordLogoNav`} gradient={false} gradientSword />
+            ) : config?.title}
           </span>
         </ElementReveal>
         {renderLinks(`desktopNav`)}
