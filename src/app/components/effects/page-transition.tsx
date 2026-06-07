@@ -2,7 +2,7 @@
 
 import gsap from 'gsap';
 import { TransitionRouter } from 'next-transition-router';
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
 
 const rows = 4;
 const cols = 20;
@@ -25,6 +25,19 @@ export default function PageTransition({
   const blocksRef = useRef<HTMLDivElement[]>([]);
 
   const getRowBlocks = (row: number) => blocksRef.current.slice(row * cols, row * cols + cols);
+
+  const getInitialBlockStyle = (index: number): CSSProperties => {
+    const row = Math.floor(index / cols);
+    const col = index % cols;
+    return {
+      transform: `scaleX(1)`,
+      width: `calc(${100 / cols}vw + 1px)`,
+      height: `calc(${100 / rows}dvh + 1px)`,
+      top: `${(row * 100) / rows}dvh`,
+      left: `${(col * 100) / cols}vw`,
+      transformOrigin: row % 2 == 0 ? `left center` : `right center`,
+    };
+  };
 
   const restartGifAnimation = () => {
     const grid = gridRef.current;
@@ -140,6 +153,7 @@ export default function PageTransition({
         {Array.from({ length: blockCount }).map((_, index) => (
           <div
             key={index}
+            style={getInitialBlockStyle(index)}
             className={`pageTransitionBlock shutterBlindBlock`}
             ref={block => {
               if (block) blocksRef.current[index] = block;
