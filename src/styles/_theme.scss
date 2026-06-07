@@ -131,9 +131,8 @@
 }
 
 body[data-theme="light"] {
-  --foreground: var(--blue_navy);
-  // --foreground: #041b44;
-  --foregroundMuted: var(--blue_navy);
+  --foreground: var(--navy);
+  --foregroundMuted: var(--navy);
   --background: #f8fafc;
   --backgroundDeep: #edf4fb;
   --surface: rgba(255, 255, 255, 0.9);

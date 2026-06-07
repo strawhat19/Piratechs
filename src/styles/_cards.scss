@@ -235,22 +235,23 @@
 }
 
 .pageBadge {
-  width: min(100%, 260px);
-  aspect-ratio: 1;
-  display: grid;
   gap: 14px;
+  display: grid;
+  padding: 28px;
+  aspect-ratio: 1;
+  text-align: center;
   place-items: center;
   justify-self: center;
-  padding: 28px;
-  text-align: center;
+  width: min(100%, 260px);
   clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
 }
 
 .pageBadge i {
   color: var(--main);
-  font-size: clamp(3rem, 10vw, 5rem);
+  font-size: clamp(3rem, 10vw, 10rem);
 }
 
 .pageBadge span {
+  font-size: 2rem;
   font-weight: 900;
 }

@@ -2,7 +2,7 @@
 
 import gsap from 'gsap';
 import { TransitionRouter } from 'next-transition-router';
-import { useEffect, useLayoutEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 
 const rows = 4;
 const cols = 20;

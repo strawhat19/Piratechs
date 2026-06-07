@@ -1,12 +1,36 @@
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .pageTransitionShutter {
   inset: 0;
   z-index: 9999;
   position: fixed;
   overflow: hidden;
   pointer-events: none;
-  // background: var(--mbgrad);
-  background: var(--main_gradient); // old solid brand gradient
-  // background: var(--main_gradient_grid_4x20), var(--main_gradient); // grid over brand gradient (fallback)
+  background: var(--main_gradient);
+  // background: url('/assets/piratechs/gifs/Piratech-Glitch.gif'), var(--main_gradient);
+  // background-size: 879px, cover !important;
+  // background-position: center, center !important;
+  // background-repeat: no-repeat, no-repeat !important;
+  &::after {
+    content: "";
+    inset: 0;
+    position: absolute;
+    background-size: 879px !important;
+    background: url('/assets/piratechs/gifs/Piratech-Glitch.gif');
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    animation: fadeinout 1.1s ease-in-out forwards;
+  }
 }
 
 .pageTransitionBlock {
@@ -16,14 +40,24 @@
   will-change: transform;
   backface-visibility: hidden;
   background: var(--main_gradient);
+  // background: url('/assets/piratechs/gifs/Piratech-Glitch.gif'), var(--main_gradient);
+  // background-size: 75px, cover !important;
+  // background-position: center, center !important;
+  // background-repeat: no-repeat, no-repeat !important;
 }
 
 .pageTransitionBlock:nth-child(odd) {
-  background: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
+  background: 
+    // url('/assets/piratechs/gifs/Piratech-Glitch.gif'), 
+    linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal))
+  ;
 }
 
 .pageTransitionBlock:nth-child(even) {
-  background: linear-gradient(var(--main_gradient_angle), var(--piratechsTeal), var(--piratechsNeon));
+  background:
+    // url('/assets/piratechs/gifs/Piratech-Glitch.gif'), 
+    linear-gradient(var(--main_gradient_angle), var(--piratechsTeal), var(--piratechsNeon))
+  ;
 }
 
 .pageTransitionBlock::after {

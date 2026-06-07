@@ -6,7 +6,7 @@ export const config = {
   title: `Piratechs`,
   domain: `piratechs.com`,
   contactEmail: `info@piratechs.com`,
-  description: `Built with Next.js, TypeScript, SASS, Firebase, etc.`,
+  description: `Built with Next.js, TypeScript, GSAP, etc.`,
   nav: [
     { id: `home`, label: `Home`, href: `/`, icon: `fa-solid fa-house` },
     { id: `about`, label: `About`, href: `/about`, icon: `fa-solid fa-anchor` },
@@ -31,13 +31,13 @@ export const config = {
     home: {
       eyebrow: `Piratechs`,
       title: `Design // Develop Full-Stack Applications`,
-      summary: `Built with Next.js, TypeScript, SASS, Firebase, etc.`,
+      summary: `Built with Next.js, TypeScript, GSAP, etc.`,
       html: `Design <span class="slashes">//</span> Develop Full<span class="slashes">-</span>Stack Applications`,
     },
     about: {
       eyebrow: `About`,
-      title: `We Design // We Develop`,
-      html: `We Design <span class="slashes">//</span> We Develop`,
+      title: `Here's a Bit About // What Anchors Us`,
+      html: `Here's a Bit About <span class="slashes">//</span> What Anchors Us`,
       summary: `A full-stack design and development studio to be a one stop shop for all your digital needs, whether they be graphics, game design, mobile applications, video production, and so much more!`,
     },
     projects: {

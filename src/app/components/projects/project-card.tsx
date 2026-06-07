@@ -43,7 +43,7 @@ export default function ProjectCard({ project }: any) {
         })}
       </ElementReveal>
       <TextReveal scroll as={`h3`} text={project.title} delay={0.06} />
-      <TextReveal scroll as={`p`} text={project.summary} duration={0.35} />
+      <TextReveal scroll as={`p`} text={project.summary} duration={0.3} />
       <ElementReveal scroll as={`div`} delay={0.12} duration={0.44} className={`techList`}>
         {project.tech.map((tech: any, index: number) => {
           const meta = getTechnologyMeta(tech);
