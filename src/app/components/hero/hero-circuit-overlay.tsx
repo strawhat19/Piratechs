@@ -26,8 +26,8 @@ export default function HeroCircuitOverlay({
   const [isMounted, setIsMounted] = useState(false);
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
   const isChromeOrPwaDevice = isMounted && Boolean(
-    !isPWA && (platform && platform?.chrome && (
-      !platform?.mobile && !platform?.ios && !platform?.os?.toLowerCase()?.includes(`mac`)
+    !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
+      !platform?.os?.toLowerCase()?.includes(`mac`)
     ) || (
       platform?.os?.toLowerCase()?.includes(`windows`)
     ))
