@@ -15,10 +15,10 @@ export default function Footer({
         <ElementReveal scroll as={`div`} delay={0.04} y={10} className={`footerBrandReveal`}>
           <Link href={`/`} className={`footerBrand`}>
             <Logo className={`footerLogo`} />
-            <div className={`sep`} style={{ minHeight: 54 }} />
+            <div className={`sep bgReversed`} style={{ minHeight: 54 }} />
             <span className={`footerContent`}>
               {titleGraphic ? (
-                <Word className={`wordLogoFooter`} gradient={false} gradientSword />
+                <Word className={`wordLogoFooter`} gradient={false} gradientSword arrows />
               ) : <TextReveal scroll as={`strong`} text={config.title} />}
               <div className={`sep`} />
               <TextReveal scroll as={`small`} html text={`<i>${config.description}</i>`} delay={0.06} />

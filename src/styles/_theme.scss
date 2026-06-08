@@ -242,40 +242,45 @@ img {
   transition: transform 150ms var(--alt_transition);
 }
 
-.wordLogoHome {
-  &:hover {
-    .arrowLeftLarge {
-      transform: translateX(-15);
-    }
-    .arrowLeftMedium {
-      transform: translateX(-20);
-    }
-    .arrowLeftSmall {
-      transform: translateX(-25);
-    }
-    .arrowRightLarge {
-      transform: translateX(15);
-    }
-    .arrowRightMedium {
-      transform: translateX(20);
-    }
-    .arrowRightSmall {
-      transform: translateX(25);
+.wordLogo, .navLink, .footerBrand {
+  &:has(.logoWordLettersArrows) {
+    &:hover {
+      .arrowLeftLarge {
+        transform: translateX(-15);
+      }
+      .arrowLeftMedium {
+        transform: translateX(-20);
+      }
+      .arrowLeftSmall {
+        transform: translateX(-25);
+      }
+      .arrowRightLarge {
+        transform: translateX(15);
+      }
+      .arrowRightMedium {
+        transform: translateX(20);
+      }
+      .arrowRightSmall {
+        transform: translateX(25);
+      }
     }
   }
-}
-
-.gradientBG {
-  background: var(--main_gradient);
 }
 
 .gradientColor {
   color: var(--main_gradient);
 }
 
+.gradientBG {
+  background: var(--main_gradient);
+  &.bgReversed {
+    background: linear-gradient(var(--main_gradient_angle), var(--piratechsTeal), var(--piratechsNeon));
+  }
+}
+
 .sep {
-  min-width: 1px;
-  min-height: 1px;
+  min-width: 1.2px;
+  min-height: 1.5px;
   @extend .gradientBG;
 }
 

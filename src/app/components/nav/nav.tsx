@@ -64,7 +64,7 @@ export default function Nav({
           <Logo className={`brandLogo`} />
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
             {titleGraphic ? (
-              <Word className={`wordLogoNav`} gradient={false} gradientSword />
+              <Word className={`wordLogoNav`} gradient={false} gradientSword arrows={false} />
             ) : config?.title}
           </span>
         </ElementReveal>
