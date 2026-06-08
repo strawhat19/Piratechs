@@ -2,39 +2,41 @@ import { DataSources, Types } from '../types/types';
 import { customDate, genID } from '../common/database/constants';
 import { capWords, countPropertiesInObject, isValid } from '../common/scripts/globals';
 
+export const defaultType: Types = Types.Project;
+
 export class Project {
   [key: string]: any;
 
   id!: string;
-  type: string = `Project`;
-  name: string = ``;
   uuid!: string;
-  title: string = `Project`;
-  status: string = `Code`;
-  summary: string = ``;
+  name: string = ``;
   number: number = 1;
   properties?: number;
   tech: string[] = [];
+  summary: string = ``;
   topics: string[] = [];
+  status: string = `Code`;
   featured?: boolean = false;
+  title: string = defaultType;
+  type: Types | string = defaultType;
   source?: string = DataSources.Database;
   created: Date | string | any = customDate()?.datetime;
   updated: Date | string | any = customDate()?.datetime;
 
-  url?: string;
-  date?: string;
-  image?: string;
   owner?: any;
   license?: any;
-  homepage?: string;
-  codeUrl?: string;
-  liveUrl?: string;
-  urlImage?: string;
-  language?: string;
-  mediaURL?: string;
   githubID?: number;
-  deployment?: string;
-  description?: string;
+  url?: string | any;
+  date?: string | any;
+  image?: string | any;
+  codeUrl?: string | any;
+  liveUrl?: string | any;
+  urlImage?: string | any;
+  language?: string | any;
+  mediaURL?: string | any;
+  homepage?: string | any;
+  deployment?: string | any;
+  description?: string | any;
 
   constructor(data: Partial<Project> = {}) {
     const projectData = data as Partial<Project> & Record<string, any>;

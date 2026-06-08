@@ -62,7 +62,7 @@ export const getIDParts = () => {
   return { uuid, date };
 }
 
-export const genID = (type: Types = Types.Data, number = 1, name: string) => {
+export const genID = (type: Types | string = Types.Data, number = 1, name: string) => {
   let { uuid, date } = getIDParts();
   let generatedUUID = uuid;
   let title = `${type} ${number} ${name}`;

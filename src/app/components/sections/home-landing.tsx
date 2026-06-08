@@ -45,13 +45,12 @@ export default function HomeLanding() {
             </div>
           </div>
           <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
-            <div className={`heroLogoPlate`}>
-              {/* <span className={`heroOrbit`} /> */}
+            <Link href={`/`} className={`heroLogoPlate`}>
               <Logo fullSword className={`heroLogo`} />
-              <Link href={`/`} className={`navLink wordLogoHome`}>
+              <div className={`wordLogoHome`}>
                 <Word gradient={false} arrows gradientSword />
-              </Link>
-            </div>
+              </div>
+            </Link>
             <div className={`heroMiniStats`}>
               {config?.stats?.map((stat, index) => (
                 <span className={`heroMiniStat`} key={stat.label}>
@@ -64,7 +63,7 @@ export default function HomeLanding() {
         </div>
       </section>
 
-      <Section />
+      {/* <Section /> */}
 
       <section className={`pageSection backendSection`}>
         <div className={`sectionInner backendGrid`}>

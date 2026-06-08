@@ -181,7 +181,8 @@ html {
       bottom: max(28px, env(safe-area-inset-bottom));
     }
     &:has(.nonPWA) {
-      bottom: max(33px, env(safe-area-inset-bottom));
+      right: max(25px, env(safe-area-inset-right));
+      bottom: max(30px, env(safe-area-inset-bottom));
     }
   }
 }

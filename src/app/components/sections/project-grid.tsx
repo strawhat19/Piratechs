@@ -52,9 +52,9 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
             key={filter}
             type={`button`}
             data-filter={filter}
+            aria-pressed={filter == activeFilter}
             onClick={() => setActiveFilter(filter)}
             className={`filterButton ${filter == activeFilter ? `activeFilter` : ``}`}
-            aria-pressed={filter == activeFilter}
           >
             {filter}
           </button>

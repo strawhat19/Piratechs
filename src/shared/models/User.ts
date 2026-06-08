@@ -30,8 +30,8 @@ export class User {
   password?: string;
   number: number = 1;
   properties?: number;
-  type: Types = Types.User;
   description?: string = ``;
+  type: Types | string = Types.User;
   updated: Date | string | any = customDate()?.datetime;
   created: Date | string | any = customDate()?.datetime;
 

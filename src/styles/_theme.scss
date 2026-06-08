@@ -239,29 +239,69 @@ img {
 }
 
 .arrow {
-  transition: transform 150ms var(--alt_transition);
+  transition: 150ms var(--alt_transition);
 }
 
-.wordLogo, .navLink, .footerBrand {
+.swordGraphic {
+  transform-origin: center;
+  // transform: scale(0.8) translateY(30px);
+}
+
+.wordLogo, .heroLogoPlate, .navLink, .footerBrand {
   &:has(.logoWordLettersArrows) {
     &:hover {
       .arrowLeftLarge {
         transform: translateX(-15);
+        &.logoArrow {
+          transform: translate(-15, 15);
+        }
+        &.skullJawsLeft {
+          transform: translateX(-5);
+          // transform-box: fill-box;
+          // transform-origin: 88% 18%;
+          // transform: translate(-6px, 8px) rotate(-18deg);
+        }
       }
       .arrowLeftMedium {
         transform: translateX(-20);
+        &.logoArrow {
+          transform: translate(-20, 20);
+        }
       }
       .arrowLeftSmall {
         transform: translateX(-25);
+        &.logoArrow {
+          transform: translate(-25, 25);
+        }
       }
       .arrowRightLarge {
         transform: translateX(15);
+        &.skullJawsRight {
+          transform: translateX(5);
+          // transform-box: fill-box;
+          // transform-origin: 12% 18%;
+          // transform: translate(6px, 8px) rotate(18deg);
+        }
+        &.logoArrow {
+          transform: translate(15, 15);
+        }
       }
       .arrowRightMedium {
         transform: translateX(20);
+        &.logoArrow {
+          transform: translate(20, 20);
+        }
       }
       .arrowRightSmall {
         transform: translateX(25);
+        &.logoArrow {
+          transform: translate(25, 25);
+        }
+      }
+      .navLink {
+        &::after {
+          transform: scaleX(1);
+        }
       }
     }
   }
