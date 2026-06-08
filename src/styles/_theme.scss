@@ -239,27 +239,64 @@ img {
 }
 
 .arrow {
-  transition: 150ms var(--alt_transition);
+  transition: 180ms ease-in-out;
+}
+
+.captainsHat {
+  transform-origin: center;
+  transition: 180ms ease-in-out;
 }
 
 .swordGraphic {
   transform-origin: center;
+  transition: 180ms ease-in-out;
   // transform: scale(0.8) translateY(30px);
+}
+
+// .swordHandle {
+//   transform: rotate(2deg);
+//   transform-origin: center;
+// }
+
+.skullJawsLeft,
+.skullJawsRight {
+  will-change: transform;
+  transform-box: fill-box;
+  transition-duration: 200ms;
+}
+
+.skullJawsLeft {
+  transform-origin: 82% 8%;
+}
+
+.skullJawsRight {
+  transform-origin: 18% 8%;
+}
+
+.logoFullSword {
+  .arrowRight {
+    &:not(.skullJawsRight) {
+      transform: translate(2, 2);
+    }
+  }
 }
 
 .wordLogo, .heroLogoPlate, .navLink, .footerBrand {
   &:has(.logoWordLettersArrows) {
     &:hover {
+      .captainsHat {
+        transform: translateY(-5px);
+      }
+      .swordGraphic {
+        transform: translateY(5px);
+      }
       .arrowLeftLarge {
         transform: translateX(-15);
         &.logoArrow {
           transform: translate(-15, 15);
         }
         &.skullJawsLeft {
-          transform: translateX(-5);
-          // transform-box: fill-box;
-          // transform-origin: 88% 18%;
-          // transform: translate(-6px, 8px) rotate(-18deg);
+          transform: translate(-5px, 3px) rotate(8deg);
         }
       }
       .arrowLeftMedium {
@@ -277,10 +314,7 @@ img {
       .arrowRightLarge {
         transform: translateX(15);
         &.skullJawsRight {
-          transform: translateX(5);
-          // transform-box: fill-box;
-          // transform-origin: 12% 18%;
-          // transform: translate(6px, 8px) rotate(18deg);
+          transform: translate(5px, 3px) rotate(-8deg);
         }
         &.logoArrow {
           transform: translate(15, 15);

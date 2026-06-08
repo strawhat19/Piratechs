@@ -1,10 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import Logo from '../logo/logo';
-import Section from './section';
 import Word from '../logo/word';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
+import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
@@ -45,7 +47,7 @@ export default function HomeLanding() {
             </div>
           </div>
           <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
-            <Link href={`/`} className={`heroLogoPlate`}>
+            <Link href={`/`} onClick={scrollToElement} className={`heroLogoPlate`}>
               <Logo fullSword className={`heroLogo`} />
               <div className={`wordLogoHome`}>
                 <Word gradient={false} arrows gradientSword />
@@ -62,6 +64,8 @@ export default function HomeLanding() {
           </ElementReveal>
         </div>
       </section>
+
+      <div id={`anchor`} className={`sep`} />
 
       {/* <Section /> */}
 

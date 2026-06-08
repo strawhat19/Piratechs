@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react';
+
 export const maxCredits = 20_000;
 export const maxAuthAttempts = 5;
 export const pathPrefix = `https://`;
@@ -19,6 +21,14 @@ export const isInStandaloneMode = () => {
   if (typeof window === `undefined`) return false;
   return window.matchMedia(`(display-mode: standalone)`).matches;
 }
+
+export const scrollToElement = (event: MouseEvent<HTMLAnchorElement>, elementQuerySelector = `#anchor`, offset = 103.8) => {
+  event.preventDefault();
+  const el = document.querySelector(elementQuerySelector);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: `smooth`, });
+};
 
 export const urlHostMatches = (envs: string[]) => {
   let hostMatched = false;

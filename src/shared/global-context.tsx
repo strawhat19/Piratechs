@@ -377,8 +377,8 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     usersLoading,
     firebaseReady,
     menuExpanded,
-    signInWithGoogle,
     setMenuExpanded,
+    signInWithGoogle,
     platform, setPlatform,
   }), [
     user,
