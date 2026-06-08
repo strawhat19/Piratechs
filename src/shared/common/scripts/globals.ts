@@ -33,8 +33,8 @@ export const getBrowserOS = () => {
   let os = `unknown`;
   let browser = `unknown`;
   if (navigator) {
-    const ua = navigator?.userAgent;
     const platform = navigator?.platform;
+    const ua = navigator?.userAgent || navigator?.vendor || (window as any)?.opera;
     if (/edg/i.test(ua)) browser = `edge`;
     else if (/opr\//i.test(ua)) browser = `opera`;
     else if (/firefox|fxios/i.test(ua)) browser = `firefox`;
@@ -52,14 +52,14 @@ export const getBrowserOS = () => {
 export const getDeviceDetails = () => {
   if (typeof window != `undefined` && window != undefined) {
     if (navigator && window && window?.navigator) {
+      const platfrm = navigator?.platform;
       const userAgent = navigator?.userAgent || navigator?.vendor || (window as any)?.opera;
-      const platform = navigator?.platform;
-      if (userAgent && platform) {
+      if (userAgent && platfrm) {
+        const { browser, os } = getBrowserOS();
         const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
         const isPhoneUA  = /iphone|ipod|android.*mobile|windows phone|blackberry|bb10/.test(userAgent);
-        const ios = /iPad|iPhone|iPod/.test(platform) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const ios = /iPad|iPhone|iPod/.test(platfrm) || (platfrm == `MacIntel` && navigator.maxTouchPoints > 1);
         const mobile = mobileRegex.test(userAgent) || ios || isPhoneUA;
-        const { browser, os } = getBrowserOS();
         return {
           os,
           ios,

@@ -294,6 +294,10 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       if (window.innerWidth > mobileBreakpoint) setMenuExpanded(false);
     };
     onResize();
+    const platformOSBrowser: any = getDeviceDetails();
+    const platformOSBrowserDetails: any = { ...platformOSBrowser, width, height };
+    setPlatform(platformOSBrowserDetails);
+    devEnv && console.log(`Platform`, platformOSBrowserDetails);
     setIsPWA(window.matchMedia(`(display-mode: standalone)`).matches);
     window.addEventListener(`resize`, onResize);
     return () => window.removeEventListener(`resize`, onResize);
@@ -341,10 +345,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
       const currentUsers = currentUserExists || user == null ? firestoreUsers : [user, ...firestoreUsers];
       setUsers(currentUsers);
       setUsersLoading(false);
-      const platformOSBrowser: any = getDeviceDetails();
-      const platformOSBrowserDetails: any = { ...platformOSBrowser, chrome: platformOSBrowser?.browser == `chrome`, };
-      setPlatform(platformOSBrowserDetails);
-      logUsers(currentUsers, user, { platform: platformOSBrowserDetails });
+      logUsers(currentUsers, user);
     }, error => {
       console.log(`Error Loading User(s)`, error);
       setUsers(user ? [user] : []);

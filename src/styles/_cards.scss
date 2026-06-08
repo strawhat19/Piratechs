@@ -22,10 +22,19 @@
 .skillTile,
 .pageBadge {
   &::before {
-    content: "";
     inset: 0;
-    @extend .circuit;
+    content: "";
     position: absolute;
+    @extend .circuit;
+  }
+}
+
+.pageBadge {
+  &::before {
+    opacity: 0.1;
+    background-size: 65% !important;
+    background-position: 50% 100% !important;
+    transform: rotate(225deg) translate(40px, 25px);
   }
 }
 
