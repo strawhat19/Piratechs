@@ -22,6 +22,14 @@ export const isInStandaloneMode = () => {
   return window.matchMedia(`(display-mode: standalone)`).matches;
 }
 
+export const getPageName = (path: string, lowerCase: boolean = true) => {
+  let pageName = `Home`;
+  if (path != `/`) {
+    pageName = capWords(path?.slice(1, path?.length));
+  }
+  return lowerCase ? pageName?.toLowerCase() : pageName;
+}
+
 export const scrollToElement = (event: MouseEvent<HTMLAnchorElement>, elementQuerySelector = `#anchor`, offset = 103.8) => {
   event.preventDefault();
   const el = document.querySelector(elementQuerySelector);

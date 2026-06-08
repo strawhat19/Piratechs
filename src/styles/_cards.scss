@@ -31,10 +31,34 @@
 
 .pageBadge {
   &::before {
-    opacity: 0.1;
-    background-size: 65% !important;
-    background-position: 50% 100% !important;
-    transform: rotate(225deg) translate(40px, 25px);
+    opacity: 1;
+    background-size: 30% !important;
+    background-position: 33% 102% !important;
+    transform: rotate(225deg)translate(40px, 25px);
+  }
+}
+
+html {
+  &:has(.projectsPage) {
+    .pageBadge {
+      &::before {
+        transform: rotate(49deg) translate(40px, 25px);
+      }
+    }
+  }
+  &:has(.servicesPage) {
+    .pageBadge {
+      &::before {
+        transform: rotate(49deg) translate(40px, 25px);
+      }
+    }
+  }
+  &:has(.contactPage) {
+    .pageBadge {
+      &::before {
+        transform: rotate(139deg) translate(40px, 25px);
+      }
+    }
   }
 }
 

@@ -1,10 +1,11 @@
 'use client';
 
 import gsap from 'gsap';
+import { usePathname } from 'next/navigation';
 import { TransitionRouter } from 'next-transition-router';
 import { useGlobalContext } from '@/shared/global-context';
-import { getBrowserOS, getDeviceDetails } from '@/shared/common/scripts/globals';
 import { useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
+import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
 
 const rows = 4;
 const cols = 20;
@@ -23,6 +24,7 @@ export default function PageTransition({
   children,
   duration = 0.19, 
 }: any) {
+  const pathname = usePathname();
   const gridRef = useRef<HTMLDivElement>(null);
   const blocksRef = useRef<HTMLDivElement[]>([]);
 
@@ -155,6 +157,7 @@ export default function PageTransition({
     >
       <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect 
         ${isPWA ? `pwa` : `nonPWA`} 
+        ${getPageName(pathname)}Page  
         ${getDeviceDetails()?.ios ? `ios` : `noIos`} 
         ${(width <= 768 || getDeviceDetails()?.mobile) ? `mobile` : ``}
       `} aria-hidden={`true`}>
