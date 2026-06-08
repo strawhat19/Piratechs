@@ -154,7 +154,7 @@ export default function PageTransition({
       }}
     >
       <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect 
-        ${isPWA ? `pwa` : ``} 
+        ${isPWA ? `pwa` : `nonPWA`} 
         ${getDeviceDetails()?.ios ? `ios` : `noIos`} 
         ${(width <= 768 || getDeviceDetails()?.mobile) ? `mobile` : ``}
       `} aria-hidden={`true`}>
