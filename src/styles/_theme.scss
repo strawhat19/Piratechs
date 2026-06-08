@@ -415,6 +415,13 @@ img {
   }
 }
 
+p {
+  .slashes {
+    padding-right: 0;
+    letter-spacing: 0;
+  }
+}
+
 .main {
   min-height: 100dvh;
 }
@@ -443,7 +450,7 @@ img {
 
 .dark {
   .logoLetter {
-    filter: drop-shadow(2px 4px 6px var(--navy));
+    filter: drop-shadow(2px 4px 8px var(--navy));
   }
   .bannerText {
     text-shadow: 0 0 2px var(--navy);

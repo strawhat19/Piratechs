@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import gsap from 'gsap';
+import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
@@ -23,8 +24,14 @@ export default function HeroCircuitOverlay({
   showCircuitOverlay = advancedDevice,
 }: HeroCircuitOverlayProps) {
   const { isPWA, platform } = useGlobalContext();
+
   const [isMounted, setIsMounted] = useState(false);
+
+  const overlayRef = useRef<SVGSVGElement | null>(null);
+  const overlayWrapRef = useRef<HTMLSpanElement | null>(null);
+
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
+
   const isChromeOrPwaDevice = isMounted && Boolean(
     !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
       !platform?.os?.toLowerCase()?.includes(`mac`)
@@ -32,15 +39,40 @@ export default function HeroCircuitOverlay({
       platform?.os?.toLowerCase()?.includes(`windows`)
     ))
   );
+
   const shouldRenderCircuit = showCircuitOverlay && isChromeOrPwaDevice;
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (!overlayWrapRef.current || !shouldRenderCircuit) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        overlayWrapRef.current,
+        {
+          clipPath: `inset(0 100% 0 0 round 22px)`,
+        },
+        {
+          delay: 1.15,
+          duration: 1.75,
+          ease: `power3.in`,
+          clipPath: `inset(0 0% 0 0 round 22px)`,
+        }
+      );
+    }, overlayWrapRef);
+
+    return () => {
+      ctx.revert();
+    }
+  }, [shouldRenderCircuit]);
+
   return shouldRenderCircuit ? (
-    <>
+    <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>
       <svg
+        ref={overlayRef}
         aria-hidden={`true`}
         viewBox={`0 0 1440 760`}
         data-blur={blur ? `true` : `false`}
@@ -114,6 +146,6 @@ export default function HeroCircuitOverlay({
           <span className={`heroCircuitEnergy heroCircuitEnergyC`} />
         </span>
       ) : null}
-    </>
+    </span>
   ) : null;
 }

@@ -45,9 +45,22 @@
   pointer-events: none;
 }
 
+.heroBgClip {
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+  pointer-events: none;
+  // clip-path: inset(0 100% 0 0 round 22px);
+}
+
 .heroBg {
   z-index: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  position: relative;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
   &::before {
     z-index: 0;
     content: "";

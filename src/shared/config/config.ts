@@ -33,6 +33,7 @@ export const config = {
       title: `Design // Develop Full-Stack Applications`,
       summary: `Full-Stack Design // Development Agency Portfolio Built with Next.js, TypeScript, GSAP, etc.`,
       html: `Design <span class="slashes">//</span> Develop<br> Full<span class="slashes">-</span>Stack<br> Applications`,
+      summaryHtml: `Full<span class="slashes">-</span>Stack Design <span class="slashes">//</span> Development Agency Portfolio Built with Next.js, TypeScript, GSAP, etc<span class="slashes">.</span>`,
     },
     about: {
       eyebrow: `About`,

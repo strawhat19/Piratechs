@@ -5,23 +5,20 @@
     stroke-dasharray: 215px;
   }
   100% {
-    stroke: #ffffff;
     stroke-width: 0;
+    stroke: #ffffff;
     stroke-dasharray: 0;
   }
 }
 
 @keyframes fadeinout {
   0% {
-    top: 5%;
     opacity: 0;
   }
   50% {
-    top: 0;
     opacity: 1;
   }
   100% {
-    top: 5%;
     opacity: 0;
   }
 }
@@ -63,16 +60,16 @@
   transform: scaleX(0);
   will-change: transform;
   backface-visibility: hidden;
-  background: var(--main_gradient);
+  background: var(--main_gradient_dark);
   // background: url('/assets/piratechs/gifs/Piratech-Glitch.gif'), var(--main_gradient);
   // background-size: 75px, cover !important;
   // background-position: center, center !important;
   // background-repeat: no-repeat, no-repeat !important;
 }
 
-.pageTransitionBlock:nth-child(odd) {
-  background: linear-gradient(var(--main_gradient_angle), var(--main), var(--navy));
-}
+// .pageTransitionBlock:nth-child(odd) {
+//   background: linear-gradient(var(--main_gradient_angle), var(--main), var(--navy));
+// }
 
 .pageTransitionBlock:nth-child(even) {
   background: linear-gradient(var(--main_gradient_angle), var(--navy), var(--main));

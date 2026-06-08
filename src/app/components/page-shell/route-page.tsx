@@ -6,7 +6,6 @@ import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
-import ProjectGrid from '../sections/project-grid';
 
 export default function RoutePage({ pageID }: { pageID: RouteID }) {
   const page: any = config?.pages?.[pageID];
@@ -34,14 +33,18 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
             <div className={`heroActions`}>
               <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
                 <Link href={`/projects`} className={`buttonLink primary`}>
-                  <i className={`fa-solid fa-diagram-project`} />
-                  View Projects
+                  <ElementReveal delay={0.23}>
+                    <i className={`fa-solid fa-diagram-project logoLetter`} />
+                  </ElementReveal>
+                  <TextReveal as={`span`} className={`logoLetter`} text={`Our Work`} delay={0.24} />
                 </Link>
               </ElementReveal>
               <ElementReveal as={`span`} delay={0.28} className={`heroActionReveal`}>
                 <Link href={`/contact`} className={`buttonLink ghost`}>
-                  <i className={`fa-solid fa-paper-plane gradientTextColor`} />
-                  Contact
+                  <ElementReveal delay={0.29}>
+                    <i className={`fa-solid fa-paper-plane gradientTextColor logoLetter`} />
+                  </ElementReveal>
+                  <TextReveal as={`span`} className={`logoLetter`} text={`Get In Touch`} delay={0.3} />
                 </Link>
               </ElementReveal>
             </div>

@@ -18,6 +18,14 @@
   }
 }
 
+.heroCircuitOverlayClip {
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0 round 22px);
+}
+
 .heroCircuitOverlay {
   inset: 0;
   z-index: 2;
@@ -25,6 +33,8 @@
   height: 107%;
   position: absolute;
   pointer-events: none;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
   opacity: var(--heroCircuitOpacity);
   &.breathing {
     animation: opa 5s ease-in-out infinite alternate-reverse;

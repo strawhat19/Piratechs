@@ -22,7 +22,7 @@ const useIsomorphicLayoutEffect = typeof window != `undefined` ? useLayoutEffect
 
 export default function PageTransition({ 
   children,
-  duration = 0.19, 
+  duration = 0.24, 
 }: any) {
   const pathname = usePathname();
   const gridRef = useRef<HTMLDivElement>(null);

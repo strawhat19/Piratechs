@@ -26,6 +26,7 @@ export type PageCopy = {
   html?: string;
   eyebrow: string;
   summary: string;
+  summaryHtml?: string;
 };
 
 export type Stat = {
