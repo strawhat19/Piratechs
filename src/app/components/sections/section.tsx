@@ -32,5 +32,7 @@ export default function Section() {
                 ))}
             </div>
         </section>
+
+        <div className={`sep reveal`} />
     </>
 }

@@ -53,7 +53,9 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
         </div>
       </section>
 
-      {pageID == `projects` ? <Section /> : (
+      <div className={`sep reveal`} />
+
+      {pageID == `projects` ? <Section /> : <>
         <section className={`pageSection detailSection subPageSection`}>
           <div className={`sectionInner detailGrid`}>
             <div className={`sectionTitle`}>
@@ -75,7 +77,8 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
             </div>
           </div>
         </section>
-      )}
+        <div className={`sep reveal`} />
+      </>}
     </>
   );
 }

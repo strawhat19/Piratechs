@@ -15,9 +15,9 @@ export default function Logo({
                     <stop offset="100%" stopColor={`var(--piratechsNeon)`} />
                 </linearGradient>
                 <linearGradient id="bladeGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={size} y2={size}>
-                    <stop offset="0%" stopColor={`white`} />
-                    <stop offset="80%" stopColor={`white`} />
-                    <stop offset="100%" stopColor={`var(--white-smoke)`} />
+                    <stop offset="0%" stopColor={`var(--foreground)`} />
+                    <stop offset="80%" stopColor={`var(--foreground)`} />
+                    <stop offset="100%" stopColor={`var(--foreground-muted)`} /> 
                 </linearGradient>
                 <clipPath id="clip0_3121_1091">
                     <rect width={size} height={size} rx="22.5" fill={color} />

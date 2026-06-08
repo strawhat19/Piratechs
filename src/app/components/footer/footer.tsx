@@ -20,7 +20,7 @@ export default function Footer({
               {titleGraphic ? (
                 <Word className={`wordLogoFooter`} gradient={false} gradientSword arrows />
               ) : <TextReveal scroll as={`strong`} text={config.title} />}
-              <div className={`sep`} />
+              <div className={`sep reveal`} />
               <TextReveal scroll as={`small`} html text={`<i>${config.description}</i>`} delay={0.06} />
             </span>
           </Link>

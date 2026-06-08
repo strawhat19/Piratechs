@@ -31,25 +31,25 @@ export const config = {
     home: {
       eyebrow: `Piratechs`,
       title: `Design // Develop Full-Stack Applications`,
-      summary: `Built with Next.js, TypeScript, GSAP, etc.`,
-      html: `Design <span class="slashes">//</span> Develop Full<span class="slashes">-</span>Stack Applications`,
+      summary: `Full-Stack Design // Development Agency Portfolio Built with Next.js, TypeScript, GSAP, etc.`,
+      html: `Design <span class="slashes">//</span> Develop<br> Full<span class="slashes">-</span>Stack<br> Applications`,
     },
     about: {
       eyebrow: `About`,
       title: `Here's a Bit About // What Anchors Us`,
-      html: `Here's a Bit About <span class="slashes">//</span> What Anchors Us`,
-      summary: `A full-stack design and development studio to be a one stop shop for all your digital needs, whether they be graphics, game design, mobile applications, video production, and so much more!`,
+      html: `Here<span class="slashes">'</span>s a Bit About <span class="slashes">//</span><br> What Anchors Us`,
+      summary: `A full-stack design // development studio, one stop shop for all your digital needs, whether they be apps, games, websites, and so much more!`,
     },
     projects: {
       eyebrow: `Projects`,
       title: `Experience // Showcase`,
-      html: `Experience <span class="slashes">//</span> Showcase`,
-      summary: `A growing archive of web apps, WordPress restorations, dashboards, data tools, game-adjacent builds, and experiments with live links and source references.`,
+      html: `Experience <span class="slashes">//</span><br> Showcase`,
+      summary: `Here are some of the projects and the work that we are proud of, as well as case studies about what made each project unique.`,
     },
     services: {
       eyebrow: `Services`,
-      title: `Awwwards Design // Enterprise Performance`,
-      html: `Awwwards Design <span class="slashes">//</span> Enterprise Performance`,
+      title: `Elegant Design // Enterprise Performance`,
+      html: `Elegant Design <span class="slashes">//</span><br> Enterprise Performance`,
       summary: `Responsive front ends, data-driven apps, CMS builds, automation, integrations, and branded product systems with practical delivery in mind.`,
     },
     store: {
@@ -69,9 +69,9 @@ export const config = {
     },
     contact: {
       eyebrow: `Contact`,
-      title: `Get In Touch With Us // Reach Out`,
-      html: `Get In Touch With Us <span class="slashes">//</span> Reach Out`,
-      summary: `A focused contact route for portfolio reviewers, collaborators, recruiters, and future clients looking for front-end polish backed by full-stack depth.`,
+      title: `Get In Touch // Reach Out`,
+      html: `Get In Touch <span class="slashes">//</span><br> Reach Out`,
+      summary: `Send us an inquiry with your questions so we can learn better about your needs, and how to assist you in growing your business.`,
     },
   } satisfies Record<string, PageCopy>,
   stats: [

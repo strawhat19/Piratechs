@@ -71,17 +71,11 @@
 }
 
 .pageTransitionBlock:nth-child(odd) {
-  background: 
-    // url('/assets/piratechs/gifs/Piratech-Glitch.gif'), 
-    linear-gradient(var(--main_gradient_angle), var(--main), var(--navy))
-  ;
+  background: linear-gradient(var(--main_gradient_angle), var(--main), var(--navy));
 }
 
 .pageTransitionBlock:nth-child(even) {
-  background:
-    // url('/assets/piratechs/gifs/Piratech-Glitch.gif'), 
-    linear-gradient(var(--main_gradient_angle), var(--navy), var(--main))
-  ;
+  background: linear-gradient(var(--main_gradient_angle), var(--navy), var(--main));
 }
 
 .pageTransitionBlock::after {

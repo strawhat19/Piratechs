@@ -118,7 +118,7 @@
   max-width: 920px;
   line-height: 1.05;
   letter-spacing: 0;
-  font-size: clamp(2.8rem, 5.7vw, 5.7rem);
+  font-size: clamp(2.8rem, 5.5dvw, 5.7rem);
 }
 
 .heroCopy p {
@@ -194,7 +194,6 @@ body[data-theme="light"] .heroLogoPlate {
     padding: 12px;
     font-size: 0.74rem;
     text-align: center;
-    background: #012141;
     color: var(--foregroundMuted);
     // background: var(--navy-deep);
     border: 1px solid var(--border);
@@ -206,18 +205,6 @@ body[data-theme="light"] .heroLogoPlate {
   font-size: 1rem;
   color: var(--foreground);
 }
-
-// .subHero {
-//   min-height: clamp(420px, 56vh, 560px);
-// }
-
-// .subHero .heroGrid {
-//   grid-template-columns: minmax(0, 1fr) minmax(220px, 0.34fr);
-// }
-
-// .subHero .heroCopy h1 {
-//   font-size: clamp(2.4rem, 5vw, 4.7rem);
-// }
 
 .projectsSection,
 .servicesSection,

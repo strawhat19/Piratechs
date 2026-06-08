@@ -72,7 +72,7 @@ export default function HomeLanding() {
       <section className={`pageSection backendSection`}>
         <div className={`sectionInner backendGrid`}>
           <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Back End // API // Data`} />
+            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Technologies`} />
             <TextReveal scroll as={`h2`} text={`Built for the parts recruiters actually inspect`} delay={0.06} />
             <TextReveal scroll as={`p`} text={`Python, JSON, SQL, REST, Firebase, WordPress/MySQL, Shopify thinking, auth, and responsive UI are organized as a real app foundation instead of a one-off portfolio page.`} />
           </div>
@@ -90,10 +90,12 @@ export default function HomeLanding() {
         </div>
       </section>
 
+      <div className={`sep reveal`} />
+
       <section className={`pageSection skillsSection`}>
         <div className={`sectionInner`}>
           <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Skills // Refined`} />
+            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Skills`} />
             <TextReveal scroll as={`h2`} text={`Front-end polish backed by full-stack range`} delay={0.06} />
           </div>
           <div className={`skillsGrid`}>
@@ -110,6 +112,8 @@ export default function HomeLanding() {
           </div>
         </div>
       </section>
+
+      <div className={`sep reveal`} />
 
       <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>
@@ -129,6 +133,8 @@ export default function HomeLanding() {
         </div>
       </section>
 
+      <div className={`sep reveal`} />
+
       <section className={`pageSection contactSection`}>
         <ElementReveal as={`div`} delay={0.35} y={16} className={`sectionInner contactBand`}>
           <TextReveal scroll as={`span`} className={`eyebrow`} text={`Contact`} />
@@ -140,6 +146,8 @@ export default function HomeLanding() {
           </a>
         </ElementReveal>
       </section>
+
+      <div className={`sep reveal`} />
     </>
   );
 }

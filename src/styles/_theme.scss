@@ -40,7 +40,7 @@
   --main: var(--piratechsNeon);
   --links: var(--piratechsNeon);
   --active_blue: #0082c6;
-  --track: var(--navy-dark);
+  --track: var(--main_gradient_dark_reversed);
   --scrollbarTrack: var(--track);
   --scrollbarCorner: var(--track);
   --scrollbarThumbColor: var(--main);
@@ -102,6 +102,7 @@
   --main_gradient_angle: 135deg;
   --main_gradient_dark: linear-gradient(var(--main_gradient_angle), var(--main), var(--navy));
   --main_gradient: linear-gradient(var(--main_gradient_angle), var(--piratechsNeon), var(--piratechsTeal));
+  --main_gradient_dark_reversed: linear-gradient(var(--main_gradient_angle), var(--navy), var(--navy-deep));
 
   // Static snapshot of the PageTransition shutter blinds: 4 rows x 20 columns of
   // alternating neon/teal blocks, rebuilt with layered repeating gradients.
@@ -173,11 +174,6 @@ body {
   scroll-behavior: smooth;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbarThumbColor) var(--scrollbarTrack);
-}
-
 *::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -189,11 +185,15 @@ body {
 
 *::-webkit-scrollbar-thumb {
   border-radius: var(--circle);
+  transition: var(--transition);
+  border: 3px solid var(--navy);
   background: var(--scrollbarThumb);
-  transition: filter var(--transition);
-  border: 3px solid var(--scrollbarTrack);
   &:hover {
-    filter: brightness(1.18);
+    background: linear-gradient(
+      135deg,
+      #00d4ff,
+      #22ffd3
+    );
   }
 }
 
@@ -239,24 +239,18 @@ img {
 }
 
 .arrow {
-  transition: 180ms ease-in-out;
+  transition: transform 180ms ease-in-out;
 }
 
 .captainsHat {
   transform-origin: center;
-  transition: 180ms ease-in-out;
+  transition: transform 180ms ease-in-out;
 }
 
 .swordGraphic {
   transform-origin: center;
-  transition: 180ms ease-in-out;
-  // transform: scale(0.8) translateY(30px);
+  transition: transform 180ms ease-in-out;
 }
-
-// .swordHandle {
-//   transform: rotate(2deg);
-//   transform-origin: center;
-// }
 
 .skullJawsLeft,
 .skullJawsRight {
@@ -281,6 +275,27 @@ img {
   }
 }
 
+.logoWordLettersArrows {
+  .arrowLeftLarge {
+    transform: translateX(-15);
+  }
+  .arrowLeftMedium {
+    transform: translateX(-20);
+  }
+  .arrowLeftSmall {
+    transform: translateX(-25);
+  }
+  .arrowRightLarge {
+    transform: translateX(15);
+  }
+  .arrowRightMedium {
+    transform: translateX(20);
+  }
+  .arrowRightSmall {
+    transform: translateX(25);
+  }
+}
+
 .wordLogo, .heroLogoPlate, .navLink, .footerBrand {
   &:has(.logoWordLettersArrows) {
     &:hover {
@@ -291,7 +306,7 @@ img {
         transform: translateY(5px);
       }
       .arrowLeftLarge {
-        transform: translateX(-15);
+        transform: translateX(-30);
         &.logoArrow {
           transform: translate(-15, 15);
         }
@@ -300,19 +315,19 @@ img {
         }
       }
       .arrowLeftMedium {
-        transform: translateX(-20);
+        transform: translateX(-35);
         &.logoArrow {
           transform: translate(-20, 20);
         }
       }
       .arrowLeftSmall {
-        transform: translateX(-25);
+        transform: translateX(-40);
         &.logoArrow {
           transform: translate(-25, 25);
         }
       }
       .arrowRightLarge {
-        transform: translateX(15);
+        transform: translateX(30);
         &.skullJawsRight {
           transform: translate(5px, 3px) rotate(-8deg);
         }
@@ -321,13 +336,13 @@ img {
         }
       }
       .arrowRightMedium {
-        transform: translateX(20);
+        transform: translateX(35);
         &.logoArrow {
           transform: translate(20, 20);
         }
       }
       .arrowRightSmall {
-        transform: translateX(25);
+        transform: translateX(40);
         &.logoArrow {
           transform: translate(25, 25);
         }
@@ -422,6 +437,8 @@ img {
 
 .wordLogoFooter {
   --w: 135px;
+  right: -10px;
+  position: relative;
 }
 
 .dark {
@@ -431,11 +448,38 @@ img {
   .bannerText {
     text-shadow: 0 0 2px var(--navy);
   }
+  .heroMiniStat {
+    background: #012141;
+  }
 }
 
 html {
   &:has(body[data-theme="light"]) {
-    --track: var(--white-soft);
+    // .pageTransitionShutter {
+    //   background: var(--main_gradient);
+    // }
+    // .pageTransitionBlock:nth-child(odd) {
+    //   background: linear-gradient(
+    //     var(--main_gradient_angle), 
+    //     var(--piratechsTeal) 10%, 
+    //     var(--piratechsNeon) 15%, 
+    //     var(--main) 25%, 
+    //     var(--navy) 50%,
+    //   );
+    // }
+    // .pageTransitionBlock:nth-child(even) {
+    //   background: linear-gradient(
+    //     var(--main_gradient_angle), 
+    //     var(--navy) 50%,
+    //     var(--main) 25%, 
+    //     var(--piratechsNeon) 15%, 
+    //     var(--piratechsTeal) 10%, 
+    //   );
+    // }
+    *::-webkit-scrollbar-thumb {
+      border: 3px solid var(--white-soft);
+    }
+    --main_gradient_dark_reversed: linear-gradient(var(--main_gradient_angle), var(--white-soft), #e1f4fc);
     .authAvatarLetter {
       font-weight: 800;
     }
@@ -456,6 +500,24 @@ html {
       }
       .brandMark, .navLink, .iconButton {
         color: var(--foreground) !important;
+      }
+    }
+    .heroMiniStat {
+      background: radial-gradient(#E1F4FC 15%, white);
+    }
+    .statCard,
+    .serviceCard,
+    .galleryTile,
+    .skillTile {
+      &::before {
+        opacity: 0.15 !important;
+      }
+    }
+    &:has(.projectsPage), &:has(.servicesPage) {
+      .pageBadge {
+        &::before {
+          opacity: 0.2 !important;
+        }
       }
     }
     .footer {
