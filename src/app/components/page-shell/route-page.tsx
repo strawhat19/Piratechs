@@ -22,7 +22,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>
             <div className={`heroBannerText`}>
-              <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} />
+              <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
               {page?.html ? (
                 <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
               ) : (

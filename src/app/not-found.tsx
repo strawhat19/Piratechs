@@ -18,7 +18,7 @@ export default function NotFound() {
       </div>
       <div className={`sectionInner heroGrid`}>
         <div className={`heroCopy`}>
-          <TextReveal as={`span`} className={`eyebrow`} text={`404`} delay={0.3} />
+          <TextReveal as={`span`} className={`eyebrow`} text={`404`} delay={0.4} />
           <TextReveal as={`h1`} className={`bannerText`} text={`Not Found`} delay={0.1} />
           <TextReveal as={`p`} className={`bannerText`} text={`<i>We could not find what you were looking for.</i>`} html />
           <div className={`heroActions`}>

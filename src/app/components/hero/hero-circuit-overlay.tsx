@@ -56,7 +56,8 @@ export default function HeroCircuitOverlay({
           clipPath: `inset(0 100% 0 0 round 22px)`,
         },
         {
-          delay: 1.22,
+          delay: 0.5,
+          // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
           clipPath: `inset(0 0% 0 0 round 22px)`,

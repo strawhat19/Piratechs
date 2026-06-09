@@ -419,6 +419,13 @@ p {
   .slashes {
     padding-right: 0;
     letter-spacing: 0;
+    &:has(.textRevealWord) {
+      &:not(.slashesSM) {
+        .textRevealWord {
+          padding-right: 0;
+        }
+      }
+    }
   }
 }
 

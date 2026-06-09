@@ -61,6 +61,7 @@ export default function TextReveal({
 
       split = new SplitText(el, {
         aria: `auto`,
+        // tag: `span`,
         wordsClass: `textRevealWord`,
         charsClass: `textRevealChar`,
         type: byLetter ? `chars` : `words`,
