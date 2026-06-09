@@ -296,7 +296,9 @@ export default function PageTransition({
                 variant={`determinate`}
                 className={`pageLoaderProgress`}
               />
-              <span className={`pageLoaderProgressText`}>{Math.round(loaderProgress)}%</span>
+              <span className={`pageLoaderProgressText`}>
+                {Math.round(loaderProgress)}%
+                </span>
             </div>
           </div>
         )}
