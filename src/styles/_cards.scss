@@ -10,6 +10,7 @@
 }
 
 .circuit {
+  z-index: -1;
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: 65% 100% !important;
@@ -19,8 +20,8 @@
 .statCard,
 .serviceCard,
 .galleryTile,
-.skillTile,
-.pageBadge {
+.pageBadge,
+.contactBand {
   &::before {
     inset: 0;
     content: "";
@@ -35,6 +36,17 @@
     background-size: 30% !important;
     background-position: 33% 102% !important;
     transform: rotate(225deg)translate(40px, 25px);
+  }
+}
+
+.contactBand {
+  &::before {
+    opacity: 0.15;
+    max-width: 305px;
+    margin-left: auto;
+    background-size: contain !important;
+    transform: rotate(180deg) translate(0px, 0px);
+    background-position: center center !important;
   }
 }
 

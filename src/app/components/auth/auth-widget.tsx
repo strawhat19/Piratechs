@@ -1,13 +1,21 @@
 'use client';
 
 import { useState } from 'react';
+import TextReveal from '../effects/text-reveal';
 import Spinner from '../loaders/spinners/spinner';
+import ElementReveal from '../effects/element-reveal';
 import { useGlobalContext } from '@/shared/global-context';
 
 type AuthMode = `sign-in` | `sign-up`;
 
-export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
-  const [open, setOpen] = useState(false);
+export default function AuthWidget({ 
+  mobile = false, 
+  defaultOpen = false, 
+  showAuthStatus = false, 
+  showAccessButton = false,
+  showButton = !defaultOpen, 
+}: any) {
+  const [open, setOpen] = useState(defaultOpen);
   const [mode, setMode] = useState<AuthMode>(`sign-in`);
   const { user, loaded, authStatus, firebaseReady, onSignOut, signInUser, signUpUser, signInWithGoogle } = useGlobalContext();
 
@@ -36,24 +44,26 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
 
   return (
     <div className={`authWidget ${open ? `authOpen` : ``} ${mobile ? `mobileAuthWidget` : ``}`}>
-      <button
-        type={`button`}
-        disabled={!loaded}
-        aria-expanded={open}
-        onClick={() => setOpen(!open)}
-        title={user?.email || `Sign In`}
-        aria-label={user ? `Open profile menu` : `Open sign in form`}
-        className={`iconButton authToggle ${user ? `authAvatarToggle` : ``}`}
-      >
-        {loaded ? (
-          user ? (
-            <span className={`authAvatarLetter`}>
-              {userInitial}
-            </span>
-          ) : <i className={`fa-solid fa-user`} />
-        ) : <Spinner size={20} thickness={5} />}
-      </button>
-      <div className={`authPanel`}>
+      {showButton && (
+        <button
+          type={`button`}
+          disabled={!loaded}
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+          title={user?.email || `Sign In`}
+          aria-label={user ? `Open profile menu` : `Open sign in form`}
+          className={`iconButton authToggle ${user ? `authAvatarToggle` : ``}`}
+        >
+          {loaded ? (
+            user ? (
+              <span className={`authAvatarLetter`}>
+                {userInitial}
+              </span>
+            ) : <i className={`fa-solid fa-user`} />
+          ) : <Spinner size={20} thickness={5} />}
+        </button>
+      )}
+      <div className={`authPanel ${user ? `wUser` : `noUser`}`}>
         {user ? (
           <div className={`authForm`}>
             <div className={`authUserCard`}>
@@ -64,10 +74,16 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
               </div>
             </div>
             <button type={`button`} className={`buttonLink primary`} onClick={onSignOut}>
-              <i className={`fa-solid fa-right-from-bracket`} />
-              Sign Out
+              <ElementReveal>
+                <i className={`fa-solid fa-right-from-bracket logoLetter`} />
+              </ElementReveal>
+              <TextReveal as={`span`} className={`logoLetter`} text={`Sign Out`} />
             </button>
-            {authStatus ? <small className={`authStatus`}>{authStatus}</small> : null}
+            {authStatus && showAuthStatus ? (
+              <small className={`authStatus`}>
+                {authStatus}
+              </small>
+            ) : null}
           </div>
         ) : (
           <form className={`authForm`} onSubmit={onSubmit}>
@@ -91,17 +107,28 @@ export default function AuthWidget({ mobile = false }: { mobile?: boolean }) {
             </label>
             <div className={`authActions`}>
               <button type={`submit`} className={`buttonLink primary`}>
-                {signInLabel}
+                <ElementReveal>
+                  <i className={`fa-solid fa-right-to-bracket logoLetter`} />
+                </ElementReveal>
+                <TextReveal as={`span`} className={`logoLetter`} text={signInLabel} />
               </button>
-              <button type={`button`} className={`buttonLink ghost`} onClick={() => setMode(mode == `sign-in` ? `sign-up` : `sign-in`)}>
-                {modeLabel}
-              </button>
+              {showAccessButton && (
+                <button type={`button`} className={`accessBtn buttonLink ghost`} onClick={() => setMode(mode == `sign-in` ? `sign-up` : `sign-in`)}>
+                  {modeLabel}
+                </button>
+              )}
             </div>
             <button type={`button`} className={`googleButton`} onClick={signInWithGoogle}>
-              <i className={`fa-brands fa-google`} />
-              Google
+              <ElementReveal>
+                <i className={`fa-brands fa-google logoLetter`} />
+              </ElementReveal>
+              <TextReveal as={`span`} className={`logoLetter`} text={`Google`} />
             </button>
-            {authStatus ? <small className={`authStatus`}>{authStatus}</small> : null}
+            {authStatus && showAuthStatus ? (
+              <small className={`authStatus`}>
+                {authStatus}
+              </small>
+            ) : null}
           </form>
         )}
       </div>

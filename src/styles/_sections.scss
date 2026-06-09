@@ -9,6 +9,12 @@
   width: 100%;
   position: relative;
   max-width: var(--maxWidth);
+  container-type: inline-size;
+  @container (max-width: 1090px) {
+    .authPanel {
+      display: none;
+    }
+  }
 }
 
 .sectionTitle {
@@ -318,12 +324,9 @@ body[data-theme="light"] .heroLogoPlate {
 .contactBand {
   gap: 16px;
   display: grid;
+  position: relative;
   padding: clamp(28px, 6vw, 56px);
   border: 1px solid var(--border);
   border-radius: var(--borderRadius);
   background: linear-gradient(135deg, var(--surfaceStrong), rgba(0, 191, 255, 0.1));
-}
-
-.contactBand .buttonLink {
-  width: fit-content;
 }

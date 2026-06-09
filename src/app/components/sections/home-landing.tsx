@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
+import AuthWidget from '../auth/auth-widget';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -20,8 +21,8 @@ export default function HomeLanding() {
             <HeroCircuitOverlay />
             <span className={`gridPlane gridPlaneA`} />
             <span className={`gridPlane gridPlaneB`} />
-            <span className={`signalLine signalLineA reveal`} />
-            <span className={`signalLine signalLineB reveal`} />
+            <span className={`signalLine signalLineA reveal revealLeft`} />
+            <span className={`signalLine signalLineB reveal revealRight`} />
           </div>
         </div>
         <div className={`sectionInner heroGrid`}>
@@ -92,10 +93,10 @@ export default function HomeLanding() {
             {config.capabilities.map(capability => {
               const meta = getTechnologyMeta(capability);
               return (
-                <span key={capability}>
+                <ElementReveal as={`span`} key={capability}>
                   <i className={`${meta.icon} techIcon ${meta.className}`} />
                   <TextReveal scroll as={`strong`} text={capability} />
-                </span>
+                </ElementReveal>
               );
             })}
           </div>
@@ -147,33 +148,31 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      <section className={`pageSection contactSection reveal`}>
+      <section className={`pageSection contactSection reveal cta`}>
         <ElementReveal as={`div`} delay={0.35} y={16} className={`sectionInner contactBand`}>
-          <TextReveal scroll as={`span`} className={`eyebrow`} text={`Start`} delay={0.4} />
-          <TextReveal scroll as={`h2`} text={`Ready for the next version?`} delay={0.06} />
-          <div className={`ctaRow flex gap16 spaceBetween`}>
-            <div className={`ctaColumn flex gap16 column`}>
-              <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
-              <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
-                <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
-                  <ElementReveal delay={0.46}>
-                    <i className={`fa-solid fa-paper-plane logoLetter`} />
+          <div className={`ctaOuterRow flex gap16 spaceBetween alignCenter`}>
+            <div className={`ctaOuterColumn flex gap16 column`}>
+              <TextReveal scroll as={`span`} className={`eyebrow`} text={`Start`} delay={0.4} />
+              <TextReveal scroll as={`h2`} text={`Ready for the next version?`} delay={0.06} />
+              <div className={`ctaRow flex gap16 spaceBetween alignCenter`}>
+                <div className={`ctaColumn flex gap16 column`}>
+                  <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
+                  <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
+                    <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
+                      <ElementReveal delay={0.46}>
+                        <i className={`fa-solid fa-paper-plane logoLetter`} />
+                      </ElementReveal>
+                      <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
+                    </Link>
                   </ElementReveal>
-                  <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
-                </Link>
+                </div>
+              </div>
+            </div>
+            <div className={`ctaOuterColumn flex gap16 column`}>
+              <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
+                <AuthWidget defaultOpen />
               </ElementReveal>
             </div>
-            {/* <div className={`ctaColumn flex gap16 column`}>
-              <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
-              <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
-                <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
-                  <ElementReveal delay={0.46}>
-                    <i className={`fa-solid fa-paper-plane logoLetter`} />
-                  </ElementReveal>
-                  <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
-                </Link>
-              </ElementReveal>
-            </div> */}
           </div>
         </ElementReveal>
       </section>

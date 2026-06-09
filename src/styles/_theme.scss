@@ -463,6 +463,11 @@ p {
   .heroMiniStat {
     background: #011e42;
   }
+  .serviceCard {
+    &::before {
+      opacity: 0.15;
+    }
+  }
 }
 
 * {

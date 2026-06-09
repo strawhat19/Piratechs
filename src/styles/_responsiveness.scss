@@ -6,20 +6,8 @@
   }
 }
 
-// @media (max-width: 1420px) {
-//   .sectionTitle {
-//     h2 {
-//       font-size: clamp(2rem, 4.5dvw, 4.4rem);
-//     }
-//   }
-// }
-
 @media (max-width: 1370px) {
-// @media (max-width: 1240px) {
-// @media (max-width: 1400px) {
-  .heroGrid,
-  .backendGrid,
-  .footerInner {
+  .heroGrid, .backendGrid {
     grid-template-columns: 1fr;
   }
   .heroBrand {
@@ -125,8 +113,7 @@
     width: 100%;
   }
 
-  .buttonLink,
-  .projectActions a {
+  .buttonLink, .projectActions a {
     width: 100%;
   }
 

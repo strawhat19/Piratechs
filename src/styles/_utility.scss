@@ -118,6 +118,16 @@ body.revealReady .reveal:not(.isVisible) {
   transform: translate3d(var(--reveal-x), var(--reveal-y), 0);
 }
 
+body.revealReady .reveal.revealLeft:not(.isVisible) {
+  --reveal-x: -32px;
+  --reveal-y: 0;
+}
+
+body.revealReady .reveal.revealRight:not(.isVisible) {
+  --reveal-x: 32px;
+  --reveal-y: 0;
+}
+
 .reveal.isVisible {
   opacity: 1;
   filter: blur(0);

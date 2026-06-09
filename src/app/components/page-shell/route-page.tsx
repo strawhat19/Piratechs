@@ -16,8 +16,8 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
           <HeroCircuitOverlay revealSlant={false} />
           <span className={`gridPlane gridPlaneA`} />
           <span className={`gridPlane gridPlaneB`} />
-          <span className={`signalLine signalLineA reveal`} />
-          <span className={`signalLine signalLineB reveal`} />
+          <span className={`signalLine signalLineA reveal revealLeft`} />
+          <span className={`signalLine signalLineB reveal revealRight`} />
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>

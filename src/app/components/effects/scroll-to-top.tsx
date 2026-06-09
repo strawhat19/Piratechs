@@ -25,7 +25,7 @@ export default function ScrollToTop() {
       onClick={scrollToTop}
       className={`scrollToTop ${isVisible ? `visible` : ``}`}
     >
-      <i className={`fa-solid fa-chevron-up`} />
+      <i className={`fa-solid fa-chevron-up logoLetter`} />
     </button>
   );
 }
