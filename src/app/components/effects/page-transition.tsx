@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 import LinearProgress from '@mui/material/LinearProgress';
 import { TransitionRouter } from 'next-transition-router';
 import { useGlobalContext } from '@/shared/global-context';
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const rows = 4;

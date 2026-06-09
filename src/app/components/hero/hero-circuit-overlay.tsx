@@ -26,7 +26,7 @@ type HeroCircuitOverlayProps = {
 };
 
 export default function HeroCircuitOverlay({ 
-  revealSlant = true,
+  revealSlant = false,
   energySweep = false,
   blur = advancedGraphics, 
   blendMode = advancedGraphics, 
@@ -42,9 +42,7 @@ export default function HeroCircuitOverlay({
   const overlayWrapRef = useRef<HTMLSpanElement | null>(null);
 
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
-  const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) 
-    ? revealSlant 
-    : revealSlant ? 45 : 0;
+  const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) ? revealSlant : ((revealSlant) ? 45 : 0);
   const revealSlantAmount = Math.max(-32, Math.min(32, numericSlant));
 
   const isChromeOrPwaDevice = isMounted && Boolean(

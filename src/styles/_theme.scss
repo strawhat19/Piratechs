@@ -295,7 +295,7 @@ img {
 .wordLogo, .heroLogoPlate, .navLink, .footerBrand {
   &:has(.logoWordLettersArrows) {
     &:hover {
-      .captainsHat {
+      .fullSwordCaptainsHat {
         transform: translateY(-5px);
       }
       .swordGraphic {
@@ -311,13 +311,13 @@ img {
         }
       }
       .arrowLeftMedium {
-        transform: translateX(-35);
+        transform: translateX(-40);
         &.logoArrow {
           transform: translate(-20, 20);
         }
       }
       .arrowLeftSmall {
-        transform: translateX(-40);
+        transform: translateX(-50);
         &.logoArrow {
           transform: translate(-25, 25);
         }
@@ -332,13 +332,13 @@ img {
         }
       }
       .arrowRightMedium {
-        transform: translateX(35);
+        transform: translateX(40);
         &.logoArrow {
           transform: translate(20, 20);
         }
       }
       .arrowRightSmall {
-        transform: translateX(40);
+        transform: translateX(50);
         &.logoArrow {
           transform: translate(25, 25);
         }
