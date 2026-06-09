@@ -7,12 +7,14 @@ import HeroCircuitOverlay from './components/hero/hero-circuit-overlay';
 export default function NotFound() {
   return <>
     <section className={`pageSection heroSection subHero`}>
-      <div className={`heroBg`}>
-        <HeroCircuitOverlay />
-        <span className={`gridPlane gridPlaneA`} />
-        <span className={`gridPlane gridPlaneB`} />
-        <span className={`signalLine signalLineA`} />
-        <span className={`signalLine signalLineB`} />
+      <div className={`heroBgClip`}>
+        <div className={`heroBg`}>
+          <HeroCircuitOverlay />
+          <span className={`gridPlane gridPlaneA`} />
+          <span className={`gridPlane gridPlaneB`} />
+          <span className={`signalLine signalLineA`} />
+          <span className={`signalLine signalLineB`} />
+        </div>
       </div>
       <div className={`sectionInner heroGrid`}>
         <div className={`heroCopy`}>
@@ -22,14 +24,18 @@ export default function NotFound() {
           <div className={`heroActions`}>
             <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
               <Link href={`/`} className={`buttonLink primary`}>
-                <i className={`fa-solid fa-house`} />
-                Home
+                <ElementReveal delay={0.23}>
+                  <i className={`fa-solid fa-house logoLetter`} />
+                </ElementReveal>
+                <TextReveal as={`span`} className={`logoLetter`} text={`Back To Home`} delay={0.24} />
               </Link>
             </ElementReveal>
             <ElementReveal as={`span`} delay={0.28} className={`heroActionReveal`}>
               <Link href={`/projects`} className={`buttonLink ghost`}>
-                <i className={`fa-solid fa-diagram-project gradientTextColor`} />
-                Projects
+                <ElementReveal delay={0.29}>
+                  <i className={`fa-solid fa-diagram-project gradientTextColor logoLetter`} />
+                </ElementReveal>
+                <TextReveal as={`span`} className={`logoLetter`} text={`Our Work`} delay={0.3} />
               </Link>
             </ElementReveal>
           </div>

@@ -39,14 +39,7 @@
 }
 
 html {
-  &:has(.projectsPage) {
-    .pageBadge {
-      &::before {
-        transform: rotate(49deg) translate(40px, 25px);
-      }
-    }
-  }
-  &:has(.servicesPage) {
+  &:has(.projectsPage), &:has(.servicesPage), &:has(.errorPage) {
     .pageBadge {
       &::before {
         transform: rotate(49deg) translate(40px, 25px);

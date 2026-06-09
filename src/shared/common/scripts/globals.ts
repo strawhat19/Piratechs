@@ -27,6 +27,9 @@ export const getPageName = (path: string, lowerCase: boolean = true) => {
   if (path != `/`) {
     pageName = capWords(path?.slice(1, path?.length));
   }
+  if (pageName == `404`) {
+    pageName = `Error`;
+  }
   return lowerCase ? pageName?.toLowerCase() : pageName;
 }
 
