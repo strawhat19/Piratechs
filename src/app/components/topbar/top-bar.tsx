@@ -1,195 +1,44 @@
 'use client';
 
 import { config } from '@/shared/config/config';
-import { useEffect, useRef, useState } from 'react';
+import Slider from '@/app/components/slider/slider';
 import ElementReveal from '@/app/components/effects/element-reveal';
 
-const MARQUEE_SPEED = 15; // px per second, frame-rate independent
+type TopBarProps = {
+  autoplay?: boolean;
+  pauseonhover?: boolean;
+};
 
-export default function TopBar() {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const animationRef = useRef<Animation | null>(null);
-  const inViewRef = useRef(true);
-  const reducedMotionRef = useRef(false);
-  const hoveringRef = useRef(false);
-  const draggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartTimeRef = useRef(0);
-  const [dragging, setDragging] = useState(false);
-
+export default function TopBar({
+  autoplay = true,
+  pauseonhover = true,
+}: TopBarProps = {}) {
   const items = config.topBarItems;
 
-  const shouldPlayAnimation = () => (
-    inViewRef.current && !document.hidden && !draggingRef.current && !hoveringRef.current && !reducedMotionRef.current
-  );
-
-  const updatePlayState = () => {
-    const animation = animationRef.current;
-    if (animation == null) return;
-    if (shouldPlayAnimation()) {
-      animation.play();
-    } else {
-      animation.pause();
-    }
-  };
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (track == null || typeof track.animate !== `function`) return;
-
-    reducedMotionRef.current = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
-
-    const getDuration = () => {
-      const timing = animationRef.current?.effect?.getComputedTiming();
-      return typeof timing?.duration === `number` ? timing.duration : 0;
-    };
-
-    const getCurrentTime = () => {
-      const current = animationRef.current?.currentTime;
-      return typeof current === `number` ? current : 0;
-    };
-
-    const buildAnimation = () => {
-      const previous = animationRef.current;
-      let progress = 0;
-      if (previous != null) {
-        const previousDuration = getDuration();
-        if (previousDuration > 0) {
-          progress = (getCurrentTime() % previousDuration) / previousDuration;
-        }
-        previous.cancel();
-      }
-
-      // Two identical copies sit back-to-back; one copy width is exactly half.
-      const setWidth = track.scrollWidth / 2;
-      if (setWidth <= 0) return;
-
-      const duration = (setWidth / MARQUEE_SPEED) * 1000;
-      const animation = track.animate(
-        [
-          { transform: `translate3d(0, 0, 0)` },
-          { transform: `translate3d(-${setWidth}px, 0, 0)` },
-        ],
-        { duration, iterations: Infinity, easing: `linear` },
-      );
-      animation.currentTime = progress * duration;
-      animationRef.current = animation;
-      updatePlayState();
-    };
-
-    buildAnimation();
-
-    const observer = new IntersectionObserver(
-      entries => {
-        inViewRef.current = entries[0]?.isIntersecting ?? true;
-        updatePlayState();
-      },
-      { threshold: 0 },
-    );
-    observer.observe(track);
-
-    const onVisibilityChange = () => updatePlayState();
-    document.addEventListener(`visibilitychange`, onVisibilityChange);
-
-    let resizeFrame = 0;
-    const onResize = () => {
-      window.cancelAnimationFrame(resizeFrame);
-      resizeFrame = window.requestAnimationFrame(buildAnimation);
-    };
-    window.addEventListener(`resize`, onResize);
-
-    return () => {
-      observer.disconnect();
-      document.removeEventListener(`visibilitychange`, onVisibilityChange);
-      window.removeEventListener(`resize`, onResize);
-      window.cancelAnimationFrame(resizeFrame);
-      animationRef.current?.cancel();
-      animationRef.current = null;
-    };
-  }, []);
-
-  const onMouseEnter = () => {
-    hoveringRef.current = true;
-    updatePlayState();
-  };
-
-  const onMouseLeave = () => {
-    hoveringRef.current = false;
-    updatePlayState();
-  };
-
-  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    const animation = animationRef.current;
-    if (animation == null) return;
-    draggingRef.current = true;
-    setDragging(true);
-    dragStartXRef.current = event.clientX;
-    const current = animation.currentTime;
-    dragStartTimeRef.current = typeof current === `number` ? current : 0;
-    animation.pause();
-    event.currentTarget.setPointerCapture(event.pointerId);
-  };
-
-  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!draggingRef.current) return;
-    const animation = animationRef.current;
-    const track = trackRef.current;
-    if (animation == null || track == null) return;
-    const timing = animation.effect?.getComputedTiming();
-    const duration = typeof timing?.duration === `number` ? timing.duration : 0;
-    const setWidth = track.scrollWidth / 2;
-    if (duration <= 0 || setWidth <= 0) return;
-    const deltaX = event.clientX - dragStartXRef.current;
-    const deltaTime = (deltaX / setWidth) * duration;
-    let nextTime = dragStartTimeRef.current - deltaTime;
-    nextTime = ((nextTime % duration) + duration) % duration; // wrap into [0, duration)
-    animation.currentTime = nextTime;
-  };
-
-  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!draggingRef.current) return;
-    draggingRef.current = false;
-    setDragging(false);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-    const animation = animationRef.current;
-    if (animation != null && shouldPlayAnimation()) {
-      animation.play();
-    }
-  };
-
   return (
-    <div className={`topBar`} aria-label={`Piratechs highlights`} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <div
-        role={`list`}
-        ref={trackRef}
-        onPointerUp={endDrag}
-        onPointerLeave={endDrag}
-        onPointerCancel={endDrag}
-        onPointerMove={onPointerMove}
-        onPointerDown={onPointerDown}
-        className={`topBarTrack ${dragging ? `isDragging` : ``}`}
-      >
-        {[0, 1].map(copy =>
-          items.map((item, index) => (
-            <ElementReveal
-              as={`span`}
-              blur={false}
-              duration={0.2}
-              role={`listitem`}
-              delay={0.5 + index * 0.012}
-              key={`${copy}-${item.text}-${index}`}
-              className={`topBarItem buttonHoverBorder`}
-              aria-hidden={copy === 1 ? `true` : undefined}
-            >
-              <i className={`${item.icon} gradientTextColor`} />
-              {item.label ? <strong>{item.label}</strong> : null}
-              <span>{item.text}</span>
-            </ElementReveal>
-          )),
-        )}
-      </div>
-    </div>
+    <Slider
+      role={`list`}
+      autoplay={autoplay}
+      className={`topBar`}
+      pauseonhover={pauseonhover}
+      trackClassName={`topBarTrack`}
+      ariaLabel={`Piratechs highlights`}
+    >
+      {items.map((item, index) => (
+        <ElementReveal
+          as={`span`}
+          blur={false}
+          duration={0.2}
+          role={`listitem`}
+          key={`${item.text}-${index}`}
+          delay={0.5 + index * 0.012}
+          className={`topBarItem buttonHoverBorder`}
+        >
+          <i className={`${item.icon} gradientTextColor`} />
+          {item.label ? <strong>{item.label}</strong> : null}
+          <span>{item.text}</span>
+        </ElementReveal>
+      ))}
+    </Slider>
   );
 }
