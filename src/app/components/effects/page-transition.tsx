@@ -36,7 +36,7 @@ export default function PageTransition({
     const row = Math.floor(index / cols);
     const col = index % cols;
     return {
-      transform: `scaleX(1)`,
+      transform: `scaleX(0)`,
       top: `${(row * 100) / rows}dvh`,
       left: `${(col * 100) / cols}vw`,
       width: `calc(${100 / cols}vw + 1px)`,
@@ -134,11 +134,14 @@ export default function PageTransition({
       gsap.set(gridRef.current, { autoAlpha: 0, pointerEvents: `none`, background: `none` });
       return () => window.removeEventListener(`resize`, createShutterBlindsGrid);
     }
-    gsap.set(blocksRef.current, { scaleX: 1 });
     gsap.set(gridRef.current, { background: `none` });
-    const timeline = animateOut(() => {});
+    let initialOutTimeline: gsap.core.Timeline | null = null;
+    const initialInTimeline = animateIn(() => {
+      initialOutTimeline = animateOut(() => {});
+    });
     return () => {
-      timeline.kill();
+      initialInTimeline.kill();
+      initialOutTimeline?.kill();
       window.removeEventListener(`resize`, createShutterBlindsGrid);
     };
   }, []);

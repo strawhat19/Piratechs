@@ -52,6 +52,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang={`en`} className={plusJakartaSans.variable} suppressHydrationWarning>
+      <head>
+        <link rel={`preload`} as={`image`} type={`image/gif`} href={`/assets/piratechs/gifs/Piratech-Glitch.gif`} />
+      </head>
       <body className={intersectionObserver ? `revealReady` : undefined}>
         <Script id={`perf-mode-init`} strategy={`beforeInteractive`}>
           {PERF_MODE_SCRIPT}
