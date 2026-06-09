@@ -6,6 +6,15 @@ import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
 
+const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
+
+const slantedClipPath = (reveal: number, slantAmount: number) => {
+  const slant = Math.sign(slantAmount) * Math.min(Math.abs(slantAmount), reveal, 100 - reveal);
+  const top = clampPercent(reveal + slant);
+  const bottom = clampPercent(reveal - slant);
+  return `polygon(0 0, ${top}% 0, ${bottom}% 100%, 0 100%)`;
+};
+
 type HeroCircuitOverlayProps = {
   blur?: boolean;
   blendMode?: boolean;
@@ -17,7 +26,7 @@ type HeroCircuitOverlayProps = {
 };
 
 export default function HeroCircuitOverlay({ 
-  revealSlant = false,
+  revealSlant = true,
   energySweep = false,
   blur = advancedGraphics, 
   blendMode = advancedGraphics, 
@@ -35,7 +44,7 @@ export default function HeroCircuitOverlay({
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
   const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) 
     ? revealSlant 
-    : revealSlant ? 90 : 0;
+    : revealSlant ? 45 : 0;
   const revealSlantAmount = Math.max(-32, Math.min(32, numericSlant));
 
   const isChromeOrPwaDevice = isMounted && Boolean(
@@ -56,24 +65,23 @@ export default function HeroCircuitOverlay({
     if (!overlayWrapRef.current || !shouldRenderCircuit) return;
 
     const ctx = gsap.context(() => {
-      const slantAbs = Math.abs(revealSlantAmount);
-
       if (revealSlantAmount) {
-        gsap.fromTo(
-          overlayWrapRef.current,
-          {
-            '--heroCircuitReveal': `${-slantAbs}%`,
-            clipPath: `polygon(0 0, calc(var(--heroCircuitReveal) + var(--heroCircuitRevealSlant)) 0, calc(var(--heroCircuitReveal) - var(--heroCircuitRevealSlant)) 100%, 0 100%)`,
-            '--heroCircuitRevealSlant': `${revealSlantAmount}%`,
+        const reveal = { value: 0 };
+
+        gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(0, revealSlantAmount) });
+        gsap.to(reveal, {
+          value: 100,
+          delay: 0.55,
+          // delay: 1.22,
+          duration: 1.75,
+          ease: `power3.in`,
+          onUpdate: () => {
+            gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(reveal.value, revealSlantAmount) });
           },
-          {
-            // delay: 0.5,
-            // delay: 1.22,
-            duration: 1.75,
-            ease: `power3.in`,
-            '--heroCircuitReveal': `${100 + slantAbs}%`,
-          }
-        );
+          onComplete: () => {
+            gsap.set(overlayWrapRef.current, { clipPath: `inset(0 0% 0 0 round 22px)` });
+          },
+        });
         return;
       }
 
