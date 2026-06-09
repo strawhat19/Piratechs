@@ -13,9 +13,11 @@ type HeroCircuitOverlayProps = {
   energySweep?: boolean;
   animatePulses?: boolean;
   showCircuitOverlay?: boolean;
+  revealSlant?: boolean | number;
 };
 
 export default function HeroCircuitOverlay({ 
+  revealSlant = false,
   energySweep = false,
   blur = advancedGraphics, 
   blendMode = advancedGraphics, 
@@ -31,6 +33,10 @@ export default function HeroCircuitOverlay({
   const overlayWrapRef = useRef<HTMLSpanElement | null>(null);
 
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
+  const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) 
+    ? revealSlant 
+    : revealSlant ? 90 : 0;
+  const revealSlantAmount = Math.max(-32, Math.min(32, numericSlant));
 
   const isChromeOrPwaDevice = isMounted && Boolean(
     !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
@@ -50,6 +56,27 @@ export default function HeroCircuitOverlay({
     if (!overlayWrapRef.current || !shouldRenderCircuit) return;
 
     const ctx = gsap.context(() => {
+      const slantAbs = Math.abs(revealSlantAmount);
+
+      if (revealSlantAmount) {
+        gsap.fromTo(
+          overlayWrapRef.current,
+          {
+            '--heroCircuitReveal': `${-slantAbs}%`,
+            clipPath: `polygon(0 0, calc(var(--heroCircuitReveal) + var(--heroCircuitRevealSlant)) 0, calc(var(--heroCircuitReveal) - var(--heroCircuitRevealSlant)) 100%, 0 100%)`,
+            '--heroCircuitRevealSlant': `${revealSlantAmount}%`,
+          },
+          {
+            // delay: 0.5,
+            // delay: 1.22,
+            duration: 1.75,
+            ease: `power3.in`,
+            '--heroCircuitReveal': `${100 + slantAbs}%`,
+          }
+        );
+        return;
+      }
+
       gsap.fromTo(
         overlayWrapRef.current,
         {
@@ -68,7 +95,7 @@ export default function HeroCircuitOverlay({
     return () => {
       ctx.revert();
     }
-  }, [shouldRenderCircuit]);
+  }, [revealSlantAmount, shouldRenderCircuit]);
 
   return shouldRenderCircuit ? (
     <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>

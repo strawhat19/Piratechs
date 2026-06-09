@@ -33,9 +33,9 @@ export default function HomeLanding() {
               <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
             )}
             {page?.summaryHtml ? (
-              <TextReveal as={`p`} className={`bannerText`} text={page.summaryHtml} html />
+              <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summaryHtml}</i>`} html />
             ) : (
-              <TextReveal as={`p`} className={`bannerText`} text={page.summary} />
+              <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summary}</i>`} html />
             )}
             <div className={`heroActions`}>
               <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>

@@ -417,8 +417,9 @@ img {
 
 p {
   .slashes {
-    padding-right: 0;
-    letter-spacing: 0;
+    padding-left: 2px;
+    padding-right: 3px;
+    letter-spacing: -1px;
     &:has(.textRevealWord) {
       &:not(.slashesSM) {
         .textRevealWord {
