@@ -12,7 +12,6 @@ export class Project {
   name: string = ``;
   number: number = 1;
   properties?: number;
-  tech: string[] = [];
   summary: string = ``;
   topics: string[] = [];
   status: string = `Code`;
@@ -66,11 +65,9 @@ export class Project {
     if (!isValid(this.source) && isValid(projectData.source)) this.source = String(projectData.source);
 
     const topics = Array.isArray(projectData.topics) ? projectData.topics.map(String) : [];
-    const tech = Array.isArray(projectData.tech) ? projectData.tech.map(String) : [];
     this.topics = Array.from(new Set([...(this.topics || []), ...topics].filter(Boolean).map(String)));
-    this.tech = Array.from(new Set([...(this.tech || []), ...tech, this.language].filter(Boolean).map(String)));
-    if (this.tech.length == 0) this.tech = [`Code`];
-    if (!isValid(projectData.type)) this.type = this.language || this.tech?.[0] || `Project`;
+    if (this.topics.length == 0) this.topics = [`Code`];
+    if (!isValid(projectData.type)) this.type = this.language || this.topics?.[0] || `Project`;
     if (!isValid(projectData.status)) this.status = this.liveUrl ? `Live` : this.status;
     if (!isValid(this.summary)) this.summary = `${this.title} project`;
 

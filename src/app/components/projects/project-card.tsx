@@ -2,7 +2,6 @@ import URL from '../url/url';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-// import type { Project } from '@/shared/models/Project';
 import { capWords, extractRootDomain } from '@/shared/common/scripts/globals';
 
 export default function ProjectCard({ project }: any) {
@@ -37,20 +36,20 @@ export default function ProjectCard({ project }: any) {
         </ElementReveal>
       </div>
       <ElementReveal scroll as={`div`} delay={0.06} duration={0.42} className={`projectIconCloud`} aria-hidden={`true`}>
-        {project.tech.slice(0, 5).map((tech: any) => {
-          const meta = getTechnologyMeta(tech);
-          return <i key={tech} className={`${meta.icon} techIcon ${meta.className}`} />;
+        {project.topics.map((tpc: any) => {
+          const meta = getTechnologyMeta(tpc);
+          return <i key={tpc} className={`${meta.icon} techIcon ${meta.className}`} />;
         })}
       </ElementReveal>
       <TextReveal scroll as={`h3`} text={project.title} delay={0.06} />
       <TextReveal scroll as={`p`} text={project.summary} duration={0.3} />
       <ElementReveal scroll as={`div`} delay={0.12} duration={0.44} className={`techList`}>
-        {project.tech.map((tech: any, index: number) => {
-          const meta = getTechnologyMeta(tech);
+        {project.topics.map((tpc: any, index: number) => {
+          const meta = getTechnologyMeta(tpc);
           return (
-            <span key={tech}>
+            <span key={tpc}>
               <i className={`${meta.icon} techIcon ${meta.className}`} />
-              <TextReveal scroll as={`em`} text={tech} delay={0.02 + index * 0.015} />
+              <TextReveal scroll as={`em`} text={tpc} delay={0.02 + index * 0.015} />
             </span>
           );
         })}

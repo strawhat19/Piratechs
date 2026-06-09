@@ -6,10 +6,6 @@ import { devEnv } from '@/shared/common/database/constants';
 import ProjectCard from '@/app/components/projects/project-card';
 import { gitUser } from '@/shared/common/database/github/users/strawhat19/user';
 
-const confProjects = config?.projects;
-const confProjectsFeatured = confProjects?.filter(p => p?.featured);
-const confProjectsFeaturedNames = confProjectsFeatured?.map(cfp => cfp?.codeUrl?.split(`/`)?.pop());
-
 export const featuredNames = [
   // `Lister`,
   // `Traveler`,
@@ -24,7 +20,6 @@ export const featuredNames = [
   // `Sumit-Transcription-Form`,
   // `Piratechs-Next-PWA-Template-2025`,
 ];
-export const featuredProjectNames = [ ...confProjectsFeaturedNames, ...featuredNames, ];
 
 export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: boolean }) {
   const initialFilter = featuredOnly ? `Featured` : `All`;
@@ -32,7 +27,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
 
   const projects = useMemo(() => {
     const gitProjects = gitUser?.projects;
-    const gitProjectsWFeatured = gitProjects?.map(gp => ({ ...gp, featured: gp?.featured || featuredProjectNames?.includes(gp?.name) }));
+    const gitProjectsWFeatured = gitProjects?.map(gp => ({ ...gp, featured: gp?.featured || featuredNames?.includes(gp?.name) }));
     const configProjects = gitProjectsWFeatured;
     const sortedProjects = configProjects.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
     const projectsToShow = sortedProjects.filter(project => {
@@ -40,7 +35,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
       if (activeFilter == `Featured`) return project.featured;
       return project.type == activeFilter;
     });
-    // devEnv && console.log(`Project(s)`, { allProjects: configProjects, projects: projectsToShow, user: gitUser });
+    devEnv && console.log(`Project(s)`, { allProjects: configProjects, projects: projectsToShow, user: gitUser });
     return projectsToShow;
   }, [activeFilter]);
 
