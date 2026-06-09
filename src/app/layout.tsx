@@ -51,7 +51,7 @@ export default function RootLayout({
   intersectionObserver?: boolean;
 }) {
   return (
-    <html lang={`en`} className={plusJakartaSans.variable} suppressHydrationWarning>
+    <html lang={`en`} data-scroll-behavior={`smooth`} className={plusJakartaSans.variable} suppressHydrationWarning>
       <head>
         <link rel={`preload`} as={`image`} type={`image/gif`} href={`/assets/piratechs/gifs/Piratech-Glitch.gif`} />
       </head>

@@ -120,11 +120,16 @@ export default function PageTransition({
       return gsap.timeline();
     }
     const grid = gridRef.current;
+    const loader = loaderRef.current;
+    if (!grid) {
+      onComplete();
+      return gsap.timeline();
+    }
     const timeline = gsap.timeline({ onComplete });
     gsap.killTweensOf(blocksRef.current);
     transitionCoveredRef.current = false;
     gsap.set(grid, { autoAlpha: 1, pointerEvents: `auto` });
-    gsap.set(loaderRef.current, { autoAlpha: 0 });
+    if (loader) gsap.set(loader, { autoAlpha: 0 });
     restartGifAnimation(grid);
     createShutterBlindsGrid(0);
     rowIndexes.forEach(row => {
@@ -156,11 +161,19 @@ export default function PageTransition({
     }
     const grid = gridRef.current;
     const loader = loaderRef.current;
+    if (!grid) {
+      if (completeInitialLoad) {
+        initialLoadCompleteRef.current = true;
+        setTransitionComplete();
+      }
+      onComplete();
+      return gsap.timeline();
+    }
     const timeline = gsap.timeline({
       onComplete: () => {
         transitionCoveredRef.current = false;
         gsap.set(grid, { autoAlpha: 0, pointerEvents: `none` });
-        gsap.set(loader, { autoAlpha: 0 });
+        if (loader) gsap.set(loader, { autoAlpha: 0 });
         if (completeInitialLoad) {
           initialLoadCompleteRef.current = true;
           setTransitionComplete();
@@ -178,7 +191,7 @@ export default function PageTransition({
         ease: `power2.out`,
       }, 0);
     } else {
-      gsap.set(loader, { autoAlpha: 0 });
+      if (loader) gsap.set(loader, { autoAlpha: 0 });
     }
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
@@ -204,12 +217,12 @@ export default function PageTransition({
       setLoaderProgress(100);
       setShowInitialLoader(false);
       transitionCoveredRef.current = false;
-      gsap.set(gridRef.current, { autoAlpha: 0, pointerEvents: `none`, background: `none` });
+      if (gridRef.current) gsap.set(gridRef.current, { autoAlpha: 0, pointerEvents: `none`, background: `none` });
       setTransitionComplete();
       return () => window.removeEventListener(`resize`, resizeShutterGrid);
     }
-    gsap.set(gridRef.current, { autoAlpha: 1, pointerEvents: `auto`, background: `none` });
-    gsap.set(loaderRef.current, { autoAlpha: 1, y: 0 });
+    if (gridRef.current) gsap.set(gridRef.current, { autoAlpha: 1, pointerEvents: `auto`, background: `none` });
+    if (loaderRef.current) gsap.set(loaderRef.current, { autoAlpha: 1, y: 0 });
     restartGifAnimation(loaderRef.current);
 
     let cancelled = false;
