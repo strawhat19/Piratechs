@@ -26,7 +26,7 @@ export default function HomeLanding() {
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>
-            <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} />
+            <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
             {page?.html ? (
               <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
             ) : (
@@ -82,7 +82,7 @@ export default function HomeLanding() {
       <section className={`pageSection backendSection`}>
         <div className={`sectionInner backendGrid`}>
           <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Technologies`} />
+            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Technologies`} delay={0.4} />
             <TextReveal scroll as={`h2`} text={`Built for the parts recruiters actually inspect`} delay={0.06} />
             <TextReveal scroll as={`p`} text={`Python, JSON, SQL, REST, Firebase, WordPress/MySQL, Shopify thinking, auth, and responsive UI are organized as a real app foundation instead of a one-off portfolio page.`} />
           </div>
@@ -105,7 +105,7 @@ export default function HomeLanding() {
       <section className={`pageSection skillsSection`}>
         <div className={`sectionInner`}>
           <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Skills`} />
+            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Skills`} delay={0.4} />
             <TextReveal scroll as={`h2`} text={`Front-end polish backed by full-stack range`} delay={0.06} />
           </div>
           <div className={`skillsGrid`}>
@@ -128,13 +128,13 @@ export default function HomeLanding() {
       <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>
           <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Services`} />
+            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Services`} delay={0.4} />
             <TextReveal scroll as={`h2`} text={`Useful enough for clients, sharp enough for hiring teams`} delay={0.06} />
           </div>
           <div className={`serviceGrid`}>
             {config.services.map(service => (
               <article key={service.title} className={`serviceCard reveal`}>
-                <i className={`${service.icon} gradientTextColor`} />
+                <i className={`${service.icon} gradientTextColor reveal`} />
                 <TextReveal scroll as={`h3`} html text={`<i>${service.title}</i>`} />
                 <TextReveal scroll as={`p`} text={service.text} />
               </article>
@@ -145,15 +145,19 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      <section className={`pageSection contactSection`}>
+      <section className={`pageSection contactSection reveal`}>
         <ElementReveal as={`div`} delay={0.35} y={16} className={`sectionInner contactBand`}>
-          <TextReveal scroll as={`span`} className={`eyebrow`} text={`Contact`} />
+          <TextReveal scroll as={`span`} className={`eyebrow`} text={`Get In Touch`} delay={0.4} />
           <TextReveal scroll as={`h2`} text={`Ready for the next version`} delay={0.06} />
           <TextReveal scroll as={`p`} html text={`<i>This first Next pass keeps the structure lean while setting up the app shell, pages, auth surface, PWA pieces, API route, and future Firebase growth path.</i>`} />
-          <a href={`mailto:${config.contactEmail}`} className={`buttonLink primary reveal`}>
-            <i className={`fa-solid fa-paper-plane`} />
-            {config.contactEmail}
-          </a>
+          <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
+            <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
+              <ElementReveal delay={0.46}>
+                <i className={`fa-solid fa-paper-plane logoLetter`} />
+              </ElementReveal>
+              <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
+            </Link>
+          </ElementReveal>
         </ElementReveal>
       </section>
 
