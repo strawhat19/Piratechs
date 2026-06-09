@@ -55,7 +55,12 @@
   backdrop-filter: blur(15px) !important;
 }
 
-.buttonLink:hover, .googleButton:hover, .filterButton:hover {
+.buttonHoverBorder {
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.buttonLink:hover, .googleButton:hover, .filterButton:hover, .buttonHoverBorder:hover {
   border-color: var(--main);
 }
 

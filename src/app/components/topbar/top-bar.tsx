@@ -164,10 +164,10 @@ export default function TopBar() {
               blur={false}
               duration={0.2}
               role={`listitem`}
-              className={`topBarItem`}
               delay={0.5 + index * 0.012}
-              aria-hidden={copy === 1 ? `true` : undefined}
               key={`${copy}-${item.text}-${index}`}
+              className={`topBarItem buttonHoverBorder`}
+              aria-hidden={copy === 1 ? `true` : undefined}
             >
               <i className={`${item.icon} gradientTextColor`} />
               {item.label ? <strong>{item.label}</strong> : null}

@@ -149,7 +149,7 @@ html {
   justify-content: space-between;
 }
 
-.typeBadge, .statusPill, .techList > span, .capabilityGrid span {
+.typeBadge, .statusPill, .projectTopics > span, .capabilityGrid span {
   gap: 6px;
   font-size: 1rem;
   min-height: 25px;
@@ -163,7 +163,7 @@ html {
   background: rgba(0, 191, 255, 0.08);
 }
 
-.typeBadge, .techList > span, .statusPill {
+.typeBadge, .projectTopics > span, .statusPill {
   font-size: 0.75rem;
 }
 
@@ -195,21 +195,26 @@ html {
   color: var(--foregroundMuted);
 }
 
-.techList {
+.projectTopics {
   gap: 5px;
   display: flex;
   flex-wrap: wrap;
-  margin-top: auto;
 }
 
-.techList em {
+.projectTopics em {
+  top: -1px;
+  position: relative;
   font-style: normal;
 }
 
+.projectDescription {
+  height: 100%;
+}
+
 .projectActions {
-  display: flex;
   gap: 8px;
   z-index: 3;
+  display: flex;
   flex-wrap: wrap;
 }
 

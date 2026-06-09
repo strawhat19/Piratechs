@@ -28,22 +28,15 @@ export default function ProjectCard({ project }: any) {
         />
       ) : null}
       <div className={`projectTop`}>
-        <ElementReveal scroll as={`span`} delay={0.02} duration={0.42} className={`typeBadge`}>
+        {/* <ElementReveal scroll as={`span`} delay={0.02} duration={0.42} className={`typeBadge`}>
           <TextReveal scroll as={`span`} text={project.type} />
-        </ElementReveal>
-        <ElementReveal scroll as={`span`} delay={0.05} duration={0.42} className={`statusPill`}>
+        </ElementReveal> */}
+        <ElementReveal style={{ marginLeft: `auto` }} scroll as={`span`} delay={0.05} duration={0.42} className={`statusPill`}>
           <TextReveal scroll as={`span`} text={project.status} delay={0.03} />
         </ElementReveal>
       </div>
-      <ElementReveal scroll as={`div`} delay={0.06} duration={0.42} className={`projectIconCloud`} aria-hidden={`true`}>
-        {project.topics.map((tpc: any) => {
-          const meta = getTechnologyMeta(tpc);
-          return <i key={tpc} className={`${meta.icon} techIcon ${meta.className}`} />;
-        })}
-      </ElementReveal>
-      <TextReveal scroll as={`h3`} text={project.title} delay={0.06} />
-      <TextReveal scroll as={`p`} text={project.summary} duration={0.3} />
-      <ElementReveal scroll as={`div`} delay={0.12} duration={0.44} className={`techList`}>
+      <TextReveal scroll as={`h3`} text={project?.title} delay={0.06} />
+      <ElementReveal scroll as={`div`} delay={0.12} duration={0.44} className={`projectTopics`}>
         {project.topics.map((tpc: any, index: number) => {
           const meta = getTechnologyMeta(tpc);
           return (
@@ -54,12 +47,13 @@ export default function ProjectCard({ project }: any) {
           );
         })}
       </ElementReveal>
-      <div className={`projectActions`}>
+      <TextReveal scroll as={`p`} className={`projectDescription`} text={project.summary} duration={0.3} />
+      <div className={`projectActions justifyEnd`}>
         {project?.codeUrl ? (
           <ElementReveal scroll as={`span`} delay={0.16} className={`projectActionReveal`}>
             <a href={project.codeUrl} target={`_blank`} rel={`noreferrer`} className={`buttonLink ghost`}>
               <i className={`fa-brands fa-github`} />
-              <TextReveal scroll as={`span`} text={`Code`} />
+              <TextReveal scroll as={`span`} text={`Github`} />
             </a>
           </ElementReveal>
         ) : null}
