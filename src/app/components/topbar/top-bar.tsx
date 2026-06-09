@@ -11,12 +11,27 @@ export default function TopBar() {
   const animationRef = useRef<Animation | null>(null);
   const inViewRef = useRef(true);
   const reducedMotionRef = useRef(false);
+  const hoveringRef = useRef(false);
   const draggingRef = useRef(false);
   const dragStartXRef = useRef(0);
   const dragStartTimeRef = useRef(0);
   const [dragging, setDragging] = useState(false);
 
   const items = config.topBarItems;
+
+  const shouldPlayAnimation = () => (
+    inViewRef.current && !document.hidden && !draggingRef.current && !hoveringRef.current && !reducedMotionRef.current
+  );
+
+  const updatePlayState = () => {
+    const animation = animationRef.current;
+    if (animation == null) return;
+    if (shouldPlayAnimation()) {
+      animation.play();
+    } else {
+      animation.pause();
+    }
+  };
 
   useEffect(() => {
     const track = trackRef.current;
@@ -32,17 +47,6 @@ export default function TopBar() {
     const getCurrentTime = () => {
       const current = animationRef.current?.currentTime;
       return typeof current === `number` ? current : 0;
-    };
-
-    const updatePlayState = () => {
-      const animation = animationRef.current;
-      if (animation == null) return;
-      const shouldPlay = inViewRef.current && !document.hidden && !draggingRef.current && !reducedMotionRef.current;
-      if (shouldPlay) {
-        animation.play();
-      } else {
-        animation.pause();
-      }
     };
 
     const buildAnimation = () => {
@@ -104,6 +108,16 @@ export default function TopBar() {
     };
   }, []);
 
+  const onMouseEnter = () => {
+    hoveringRef.current = true;
+    updatePlayState();
+  };
+
+  const onMouseLeave = () => {
+    hoveringRef.current = false;
+    updatePlayState();
+  };
+
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     const animation = animationRef.current;
     if (animation == null) return;
@@ -140,13 +154,13 @@ export default function TopBar() {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
     const animation = animationRef.current;
-    if (animation != null && inViewRef.current && !document.hidden && !reducedMotionRef.current) {
+    if (animation != null && shouldPlayAnimation()) {
       animation.play();
     }
   };
 
   return (
-    <div className={`topBar`} aria-label={`Piratechs highlights`}>
+    <div className={`topBar`} aria-label={`Piratechs highlights`} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div
         role={`list`}
         ref={trackRef}
