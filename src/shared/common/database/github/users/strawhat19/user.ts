@@ -22,7 +22,7 @@ export const gitUser_strawhat19 = {
 "uuid": "ZJcXJb1u5",
 "title": "Piratechs",
 "status": "Live",
-"summary": "Full Stack Design // Development Studio Portfolio. Piratechs is built with Next.js, TypeScript, GSAP, etc.",
+"summary": "Full-Stack Design // Development Studio Portfolio. Piratechs is built with Next.js, TypeScript, GSAP, etc.",
 "number": 1,
 "properties": 131,
 "tech": [
@@ -73,7 +73,7 @@ export const gitUser_strawhat19 = {
 "liveUrl": "https://piratechs.vercel.app/",
 "language": "TypeScript",
 "githubID": 1256675134,
-"description": "Full Stack Design // Development Studio Portfolio. Piratechs is built with Next.js, TypeScript, GSAP, etc.",
+"description": "Full-Stack Design // Development Studio Portfolio. Piratechs is built with Next.js, TypeScript, GSAP, etc.",
 "node_id": "R_kgDOSudXPg",
 "full_name": "strawhat19/Piratechs",
 "private": false,
