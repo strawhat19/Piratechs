@@ -147,9 +147,9 @@ export default function HomeLanding() {
 
       <section className={`pageSection contactSection reveal`}>
         <ElementReveal as={`div`} delay={0.35} y={16} className={`sectionInner contactBand`}>
-          <TextReveal scroll as={`span`} className={`eyebrow`} text={`Get In Touch`} delay={0.4} />
-          <TextReveal scroll as={`h2`} text={`Ready for the next version`} delay={0.06} />
-          <TextReveal scroll as={`p`} html text={`<i>This first Next pass keeps the structure lean while setting up the app shell, pages, auth surface, PWA pieces, API route, and future Firebase growth path.</i>`} />
+          <TextReveal scroll as={`span`} className={`eyebrow`} text={`Start`} delay={0.4} />
+          <TextReveal scroll as={`h2`} text={`Ready for the next version?`} delay={0.06} />
+          <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
           <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
             <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
               <ElementReveal delay={0.46}>
