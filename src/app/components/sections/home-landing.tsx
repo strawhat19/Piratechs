@@ -79,12 +79,14 @@ export default function HomeLanding() {
 
       {/* <Section /> */}
 
-      <section className={`pageSection backendSection`}>
+      <section className={`pageSection specialtiesSection`}>
         <div className={`sectionInner backendGrid`}>
           <div className={`sectionTitle`}>
-            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Technologies`} delay={0.4} />
-            <TextReveal scroll as={`h2`} text={`Built for the parts recruiters actually inspect`} delay={0.06} />
-            <TextReveal scroll as={`p`} text={`Python, JSON, SQL, REST, Firebase, WordPress/MySQL, Shopify thinking, auth, and responsive UI are organized as a real app foundation instead of a one-off portfolio page.`} />
+            <TextReveal scroll as={`span`} className={`eyebrow`} text={`Specialties`} delay={0.4} />
+            <TextReveal scroll as={`h2`} text={`Our studio <span class="slashes">//</span><br> specializes in technologies<span class="slashes">:</span>`} html delay={0.06} />
+            <TextReveal scroll as={`p`} text={`
+              Python, JSON, SQL, REST, Firebase, WordPress/MySQL, Shopify thinking, auth, and responsive UI are organized as a real app foundation instead of a one-off portfolio page.
+            `} />
           </div>
           <div className={`capabilityGrid reveal`}>
             {config.capabilities.map(capability => {
@@ -106,7 +108,7 @@ export default function HomeLanding() {
         <div className={`sectionInner`}>
           <div className={`sectionTitle`}>
             <TextReveal scroll as={`span`} className={`eyebrow`} text={`Skills`} delay={0.4} />
-            <TextReveal scroll as={`h2`} text={`Front-end polish backed by full-stack range`} delay={0.06} />
+            <TextReveal scroll as={`h2`} text={`Skills <span class="slashes">//</span> Technologies`} html delay={0.06} />
           </div>
           <div className={`skillsGrid`}>
             {config.skills.map(skill => {
@@ -149,15 +151,30 @@ export default function HomeLanding() {
         <ElementReveal as={`div`} delay={0.35} y={16} className={`sectionInner contactBand`}>
           <TextReveal scroll as={`span`} className={`eyebrow`} text={`Start`} delay={0.4} />
           <TextReveal scroll as={`h2`} text={`Ready for the next version?`} delay={0.06} />
-          <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
-          <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
-            <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
-              <ElementReveal delay={0.46}>
-                <i className={`fa-solid fa-paper-plane logoLetter`} />
+          <div className={`ctaRow flex gap16 spaceBetween`}>
+            <div className={`ctaColumn flex gap16 column`}>
+              <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
+              <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
+                <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
+                  <ElementReveal delay={0.46}>
+                    <i className={`fa-solid fa-paper-plane logoLetter`} />
+                  </ElementReveal>
+                  <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
+                </Link>
               </ElementReveal>
-              <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
-            </Link>
-          </ElementReveal>
+            </div>
+            {/* <div className={`ctaColumn flex gap16 column`}>
+              <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
+              <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
+                <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
+                  <ElementReveal delay={0.46}>
+                    <i className={`fa-solid fa-paper-plane logoLetter`} />
+                  </ElementReveal>
+                  <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
+                </Link>
+              </ElementReveal>
+            </div> */}
+          </div>
         </ElementReveal>
       </section>
 

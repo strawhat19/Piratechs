@@ -241,17 +241,16 @@ body[data-theme="light"] .heroLogoPlate {
 }
 
 .experienceGrid {
-  display: grid;
   gap: 14px;
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.backendSection {
+.specialtiesSection {
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.08), rgba(19, 222, 185, 0.04));
 }
 
-.projectsSection::after, .backendSection::before, .skillsSection::after, .gallerySection::before {
+.projectsSection::after, .specialtiesSection::before, .skillsSection::after, .gallerySection::before {
   top: 0px;
   z-index: 0;
   right: -8vw;
@@ -265,7 +264,7 @@ body[data-theme="light"] .heroLogoPlate {
   background: linear-gradient(115deg, transparent 0 22%, var(--circuit) 22% 23%, transparent 23% 100%), linear-gradient(145deg, transparent 0 48%, var(--circuitSoft) 48% 49%, transparent 49% 100%), linear-gradient(65deg, transparent 0 68%, var(--circuit) 68% 69%, transparent 69% 100%);
 }
 
-.backendSection::before,
+.specialtiesSection::before,
 .gallerySection::before {
   left: -10vw;
   right: auto;
@@ -297,32 +296,28 @@ body[data-theme="light"] .heroLogoPlate {
   border-radius: var(--borderRadius);
 }
 
-.skillsSection {
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.06), transparent), rgba(0, 9, 27, 0.16);
-}
-
 .skillsGrid {
-  display: grid;
   gap: 13px;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
 .serviceGrid,
 .galleryGrid,
 .detailCards {
-  display: grid;
   gap: 16px;
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .detailGrid {
-  display: grid;
   gap: 28px;
+  display: grid;
 }
 
 .contactBand {
-  display: grid;
   gap: 16px;
+  display: grid;
   padding: clamp(28px, 6vw, 56px);
   border: 1px solid var(--border);
   border-radius: var(--borderRadius);

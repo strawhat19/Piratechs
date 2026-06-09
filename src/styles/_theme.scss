@@ -81,6 +81,8 @@
   --tech-unity: #ffffff;
   --tech-wordpress: #21759b;
 
+  --light_teal: #ccebf9;
+
   --deep_red_rgb: 180, 0, 0;
   --deep_red: rgba(var(--deep_red_rgb), 1);
 
@@ -209,10 +211,6 @@ body {
   background: var(--scrollbarCorner);
 }
 
-body[data-theme="light"] {
-  background: radial-gradient(circle at 18% 8%, rgba(0, 191, 255, 0.16), transparent 28%), linear-gradient(135deg, #ffffff, var(--backgroundDeep) 58%, #dfeaf5 100%);
-}
-
 body.menuOpen {
   height: 100dvh;
   overflow: hidden;
@@ -223,8 +221,7 @@ a {
   text-decoration: none;
 }
 
-button,
-input {
+button, input {
   font: inherit;
 }
 
@@ -470,6 +467,10 @@ p {
 
 html {
   &:has(body[data-theme="light"]) {
+    body {
+      background: linear-gradient(135deg, var(--light_teal) 70%, var(--white-smoke));
+      // background: radial-gradient(circle at 18% 8%, rgba(0, 191, 255, 0.16), transparent 28%), linear-gradient(135deg, #ffffff, var(--backgroundDeep) 58%, #dfeaf5 100%);
+    }
     // .pageTransitionShutter {
     //   background: var(--main_gradient);
     // }
@@ -518,14 +519,14 @@ html {
       }
     }
     .heroMiniStat {
-      background: radial-gradient(#E1F4FC 15%, white);
+      background: radial-gradient(var(--light_teal) 15%, white);
     }
     .statCard,
     .serviceCard,
     .galleryTile,
     .skillTile {
       &::before {
-        opacity: 0.15 !important;
+        opacity: 0.2 !important;
       }
     }
     &:has(.projectsPage), &:has(.servicesPage) {
