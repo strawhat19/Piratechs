@@ -86,6 +86,20 @@ body[data-theme="light"] .heroLogoLight {
   color: rgba(255, 255, 255, 0.84);
   font-size: clamp(0.9rem, 1.05vw, 1.05rem);
   transition: color var(--transition), transform 150ms var(--alt_transition);
+  &::after {
+    left: 8px;
+    right: 8px;
+    bottom: 1px;
+    height: 2px;
+    z-index: -1;
+    content: "";
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: var(--main_gradient);
+    border-radius: var(--borderRadius);
+    transition: transform var(--transition);
+  }
 }
 
 .navLink i {
@@ -93,17 +107,15 @@ body[data-theme="light"] .heroLogoLight {
   font-size: 0.95rem;
 }
 
-.navLink::after {
-  left: 8px;
-  right: 8px;
-  bottom: 1px;
-  height: 2px;
-  content: "";
-  position: absolute;
-  transform: scaleX(0);
-  transform-origin: left;
-  background: var(--main_gradient);
-  transition: transform var(--transition);
+.mobileNavLink {
+  &::after {
+    right: 0;
+    bottom: 0;
+    left: 30px;
+    width: auto;
+    height: 100%;
+    transform-origin: right;
+  }
 }
 
 .navLink:hover,
@@ -129,12 +141,12 @@ body[data-theme="light"] .heroLogoLight {
 .iconButton {
   width: 38px;
   height: 38px;
-  display: inline-grid;
-  place-items: center;
-  border: 1px solid rgba(0, 191, 255, 0.26);
-  border-radius: var(--borderRadius);
   color: white;
+  place-items: center;
+  display: inline-grid;
+  border-radius: var(--borderRadius);
   background: rgba(0, 191, 255, 0.16);
+  border: 1px solid rgba(0, 191, 255, 0.26);
   transition: transform var(--transition), border-color var(--transition), background var(--transition);
 }
 
@@ -148,38 +160,39 @@ body[data-theme="light"] .heroLogoLight {
 }
 
 .mobileMenu {
-  width: min(100% - 32px, 520px);
-  right: 16px;
+  gap: 14px;
   top: 108px;
+  opacity: 0;
+  right: 16px;
   z-index: 22;
   display: grid;
-  gap: 14px;
-  position: fixed;
-  max-height: calc(100dvh - 126px);
   padding: 16px;
   overflow: auto;
+  position: fixed;
   pointer-events: none;
-  opacity: 0;
-  border: 1px solid rgba(0, 191, 255, 0.28);
-  border-radius: var(--borderRadius);
-  background: var(--surfaceStrong);
+  transform-origin: top;
   box-shadow: var(--shadow);
-  transform: translateY(-8px);
+  width: min(100% - 32px, 520px);
+  max-height: calc(100dvh - 126px);
+  background: var(--surfaceStrong);
+  border-radius: var(--borderRadius);
+  transform: scale(1, 0) translateY(-8px);
+  border: 1px solid rgba(0, 191, 255, 0.28);
   transition: opacity var(--transition), transform var(--transition);
 }
 
 body.menuOpen .mobileMenu {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: scale(1, 1) translateY(0);
   .authPanel {
     pointer-events: auto;
   }
 }
 
 .mobileNav {
-  display: grid;
   gap: 8px;
+  display: grid;
 }
 
 .mobileNav .navLink {

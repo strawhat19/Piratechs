@@ -1,4 +1,5 @@
 .flex { display: flex; }
+.flexI { display: flex !important; }
 .column { flex-direction: column; }
 .alignCenter { align-items: center; }
 .row { flex-direction: row; }

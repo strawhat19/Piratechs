@@ -14,6 +14,18 @@ import { useGlobalContext } from '@/shared/global-context';
 import AuthWidget from '@/app/components/auth/auth-widget';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import NotificationBell from '@/app/components/notifications/notification-bell';
+import { Code, Star, Edit, Person, Security, WorkspacePremium, AdminPanelSettings, ShoppingCart, Logout, Delete, KeyboardArrowDown } from '@mui/icons-material';
+
+export const roleIcons = {
+  [Roles.Guest]: <Person fontSize={`small`} className={`gradientTextColor`} />,
+  [Roles.Subscriber]: <Star fontSize={`small`} className={`gradientTextColor`} />,
+  [Roles.Customer]: <ShoppingCart style={{ fontSize: 18 }} className={`gradientTextColor`} />,
+  [Roles.Editor]: <Edit fontSize={`small`} className={`gradientTextColor`} />,
+  [Roles.Moderator]: <Security style={{ fontSize: 18 }} className={`gradientTextColor`} />,
+  [Roles.Administrator]: <AdminPanelSettings fontSize={`small`} className={`gradientTextColor`} />,
+  [Roles.Developer]: <Code fontSize={`small`} className={`gradientTextColor`} />,
+  [Roles.Owner]: <WorkspacePremium fontSize={`small`} className={`gradientTextColor`} />,
+};
 
 export default function Nav({
   titleGraphic = true,
@@ -31,7 +43,7 @@ export default function Nav({
     return pathname?.startsWith(href) || pathname?.startsWith(`/pages${href}`);
   };
 
-  const renderLinks = (className: string) => {
+  const renderLinks = (className: string, mobile: boolean = className?.includes(`mobile`)) => {
     return (
       <nav className={className} aria-label={`${className} navigation`}>
         {navItems.map((navItem: NavItem, index: number) => (
@@ -43,10 +55,12 @@ export default function Nav({
             href={navItem?.href}
             delay={0.5 + index * 0.025}
             onClick={() => setMenuExpanded(false)}
-            className={`navLink ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
+            className={`navLink ${mobile ? `mobileNavLink` : ``} ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
           >
             <i className={`${navItem?.icon} gradientTextColor`} />
-            <span>{navItem?.label}</span>
+            <span className={`logoLetter`}>
+              {navItem?.label}
+            </span>
           </ElementReveal>
         ))}
       </nav>

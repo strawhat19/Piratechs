@@ -106,9 +106,8 @@ body[data-theme="light"] .authForm input {
 
 .authUserCard {
   gap: 10px;
-  display: grid;
+  display: flex;
   align-items: center;
-  grid-template-columns: auto 1fr;
 }
 
 .authUserCard > span {

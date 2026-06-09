@@ -5,6 +5,8 @@ import TextReveal from '../effects/text-reveal';
 import Spinner from '../loaders/spinners/spinner';
 import ElementReveal from '../effects/element-reveal';
 import { useGlobalContext } from '@/shared/global-context';
+import { capWords } from '@/shared/common/scripts/globals';
+import { roleIcons } from '../nav/nav';
 
 type AuthMode = `sign-in` | `sign-up`;
 
@@ -69,8 +71,19 @@ export default function AuthWidget({
             <div className={`authUserCard`}>
               <span>{userInitial}</span>
               <div>
-                <strong>{user.name}</strong>
-                <small>{user.email || `Signed In`}</small>
+                <strong className={`gradientTextColor`}>
+                  {capWords(user?.name)}
+                </strong>
+                <small>{user?.email || `Signed In`}</small>
+              </div>
+              <div style={{ marginLeft: `auto`, textAlign: `right` }}>
+                <strong className={`gradientTextColor`}>
+                  Role
+                </strong>
+                <div className={`flexI alignCenter justifyEnd gap5`}>
+                  {(roleIcons as any)?.[user?.role]}
+                  <small>{user?.role}</small>
+                </div>
               </div>
             </div>
             <button type={`button`} className={`buttonLink primary`} onClick={onSignOut}>

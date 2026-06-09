@@ -19,6 +19,30 @@ export const getRandomArrayValue = (array: any[]) => array[getRandomArrayIndex(a
 export const arraySum = (arr: number[]): number => arr.reduce((total, val) => total + Number(val), 0);
 export const getRandomColor = (array: any[] = Object.values(colors)) => array[getRandomArrayIndex(array)];
 
+export const generateID = () => {
+  let id = Math.random().toString(36).substr(2, 9);
+  return Array.from(id).map(char => {
+    return Math.random() > 0.5 ? char.toUpperCase() : char;
+  }).join(``);
+}
+
+export const getIDParts = () => {
+  let uuid = generateID();
+  let date = customDate()?.datetime;
+  return { uuid, date };
+}
+
+export const genID = (type: Types | string = Types.Data, number = 1, name: string) => {
+  let { uuid, date } = getIDParts();
+  let generatedUUID = uuid;
+  let title = `${type} ${number} ${name}`;
+  let idTitle = `${title} ${uuid}`;
+  let id_Title = stringNoSpaces(idTitle);
+  let idString = `${title} ${stringNoSpaces(date)} ${uuid}`;
+  let id = stringNoSpaces(idString);
+  return { id, date, uuid, title, id_Title, generatedUUID };
+}
+
 export const customDate = (date: Date = new Date()) => {
   let hours = date.getHours();
   let ampm = hours >= 12 ? `PM` : `AM`;
@@ -47,28 +71,4 @@ export const customDate = (date: Date = new Date()) => {
     datetime: time + ` ` + dateSlashes(2), // 3:48 PM 5/17/26
   }
   return datesObject;
-}
-
-export const generateID = () => {
-  let id = Math.random().toString(36).substr(2, 9);
-  return Array.from(id).map(char => {
-    return Math.random() > 0.5 ? char.toUpperCase() : char;
-  }).join(``);
-}
-
-export const getIDParts = () => {
-  let uuid = generateID();
-  let date = customDate()?.datetime;
-  return { uuid, date };
-}
-
-export const genID = (type: Types | string = Types.Data, number = 1, name: string) => {
-  let { uuid, date } = getIDParts();
-  let generatedUUID = uuid;
-  let title = `${type} ${number} ${name}`;
-  let idTitle = `${title} ${uuid}`;
-  let id_Title = stringNoSpaces(idTitle);
-  let idString = `${title} ${stringNoSpaces(date)} ${uuid}`;
-  let id = stringNoSpaces(idString);
-  return { id, date, uuid, title, id_Title, generatedUUID };
 }
