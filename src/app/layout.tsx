@@ -55,12 +55,12 @@ export default function RootLayout({
       <head>
         <link rel={`preload`} as={`image`} type={`image/gif`} href={`/assets/piratechs/gifs/Piratech-Glitch.gif`} />
       </head>
-      <body className={intersectionObserver ? `revealReady` : undefined}>
+      <body className={intersectionObserver ? `revealReady pageTransitionPending` : `pageTransitionPending`}>
         <Script id={`perf-mode-init`} strategy={`beforeInteractive`}>
           {PERF_MODE_SCRIPT}
         </Script>
         <noscript>
-          <style>{`.textRevealPending,.elementRevealPending{visibility:visible !important}`}</style>
+          <style>{`.pageTransitionShutter{display:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important}body.pageTransitionPending .reveal{opacity:1!important;transform:none!important;animation:none!important}body{overflow:auto!important}`}</style>
         </noscript>
         <GlobalProvider>
           <PageTransition>

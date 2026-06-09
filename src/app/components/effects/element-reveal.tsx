@@ -2,6 +2,7 @@
 
 import gsap from 'gsap';
 import { createElement, useLayoutEffect, useRef, useState, type ElementType, type ReactNode } from 'react';
+import { isPageTransitionPending, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const pendingClass = `elementRevealPending`;
 const animatingClass = `elementRevealAnimating`;
@@ -58,6 +59,7 @@ export default function ElementReveal({
     let tween: gsap.core.Tween | null = null;
     let observer: IntersectionObserver | null = null;
     let cancelled = false;
+    let transitionReadyHandler: (() => void) | null = null;
 
     const run = () => {
       if (cancelled || !ref.current) return;
@@ -86,23 +88,34 @@ export default function ElementReveal({
       );
     };
 
+    const start = () => {
+      if (isPageTransitionPending()) {
+        if (transitionReadyHandler) return;
+        transitionReadyHandler = () => start();
+        window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
+        return;
+      }
+      run();
+    };
+
     if (scroll) {
       observer = new IntersectionObserver(entries => {
         if (entries.some(entry => entry.isIntersecting)) {
           observer?.disconnect();
           observer = null;
-          run();
+          start();
         }
       }, { threshold: 0.05, rootMargin: `0px 0px -2%` });
       observer.observe(el);
     } else {
-      run();
+      start();
     }
 
     return () => {
       cancelled = true;
       observer?.disconnect();
       tween?.kill();
+      if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
       reveal(false);
       el.classList.remove(animatingClass);
     };

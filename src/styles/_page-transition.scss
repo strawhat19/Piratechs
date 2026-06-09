@@ -23,8 +23,35 @@
   }
 }
 
+@keyframes loaderFadePulse {
+  0% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.42;
+  }
+}
+
 .strokeDance {
   animation: strokeDance 1.12s ease-in-out forwards infinite alternate-reverse;
+}
+
+body.pageTransitionPending {
+  overflow: hidden;
+  cursor: progress;
+}
+
+body.pageTransitionPending .reveal,
+body.pageTransitionPending .reveal.isVisible,
+body.pageTransitionPending .heroCopy.reveal,
+body.pageTransitionPending .heroBrand.reveal {
+  opacity: 0;
+  animation: none !important;
+  transition: none !important;
+  transform: translate3d(0, 20px, 0);
 }
 
 .pageTransitionShutter {
@@ -32,8 +59,8 @@
   z-index: 9999;
   position: fixed;
   overflow: hidden;
-  pointer-events: none;
   background: none;
+  pointer-events: auto;
   // background: var(--main_gradient);
   // background: var(--main_gradient_dark);
   // background: url('/assets/piratechs/gifs/Piratech-Glitch.gif'), var(--main_gradient);
@@ -43,12 +70,17 @@
   &::after {
     content: "";
     inset: 0;
+    z-index: 2;
     position: absolute;
+    pointer-events: none;
     background: url('/assets/piratechs/gifs/Piratech-Glitch.gif');
+    animation: fadeinout 1.12s ease-in-out forwards;
     background-size: 879px !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    animation: fadeinout 1.12s ease-in-out forwards;
+  }
+  &.initialLoaderActive::after {
+    display: none;
   }
   &.pageTransitionGifReset::after {
     animation: none;
@@ -56,9 +88,10 @@
 }
 
 .pageTransitionBlock {
+  z-index: 1;
   overflow: hidden;
   position: absolute;
-  transform: scaleX(0);
+  transform: scaleX(1);
   will-change: transform;
   backface-visibility: hidden;
   background: var(--main_gradient_dark);
@@ -88,7 +121,66 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 48%, rgba(4, 27, 68, 0.28));
 }
 
+.pageTransitionLoader {
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  position: absolute;
+  place-items: center;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.14), transparent 32%);
+}
+
+.pageTransitionLoaderInner {
+  gap: 20px;
+  width: min(460px, 72vw);
+  display: grid;
+  justify-items: center;
+}
+
+.pageTransitionGif {
+  // margin: 0 auto;
+  // min-width: 879px;
+  width: min(879px, 80dvw);
+  filter: drop-shadow(0 0 22px rgba(0, 191, 255, 0.32));
+  animation: loaderFadePulse 1.12s ease-in-out infinite;
+}
+
+.pageTransitionGifReset .pageTransitionGif {
+  animation: none;
+}
+
+.pageLoaderProgress {
+  width: 100%;
+  height: 6px !important;
+  overflow: hidden;
+  border-radius: var(--circle) !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.24);
+  .MuiLinearProgress-bar {
+    background: var(--main_gradient) !important;
+    border-radius: var(--circle);
+  }
+}
+
+.pageLoaderProgressText {
+  font-weight: 800;
+  line-height: 1;
+  font-size: 0.78rem;
+  color: var(--white);
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 14px rgba(0, 191, 255, 0.42);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  body.pageTransitionPending .reveal,
+  body.pageTransitionPending .reveal.isVisible,
+  body.pageTransitionPending .heroCopy.reveal,
+  body.pageTransitionPending .heroBrand.reveal {
+    opacity: 1;
+    transform: none;
+  }
+
   .pageTransitionShutter {
     display: none;
   }

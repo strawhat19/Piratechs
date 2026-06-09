@@ -13,7 +13,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
     <>
       <section className={`pageSection heroSection subHero subPageSection`}>
         <div className={`heroBg`}>
-          <HeroCircuitOverlay />
+          <HeroCircuitOverlay revealSlant={false} />
           <span className={`gridPlane gridPlaneA`} />
           <span className={`gridPlane gridPlaneB`} />
           <span className={`signalLine signalLineA reveal`} />

@@ -3,6 +3,7 @@
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { createElement, useLayoutEffect, useRef, type ElementType } from 'react';
+import { isPageTransitionPending, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const pendingClass = `textRevealPending`;
 
@@ -55,6 +56,7 @@ export default function TextReveal({
     let split: SplitText | null = null;
     let timeline: gsap.core.Timeline | null = null;
     let observer: IntersectionObserver | null = null;
+    let transitionReadyHandler: (() => void) | null = null;
 
     const run = () => {
       if (cancelled || !ref.current) return;
@@ -95,6 +97,12 @@ export default function TextReveal({
     };
 
     const start = () => {
+      if (isPageTransitionPending()) {
+        if (transitionReadyHandler) return;
+        transitionReadyHandler = () => start();
+        window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
+        return;
+      }
       if (`fonts` in document) {
         document.fonts.ready.then(run);
       } else {
@@ -122,6 +130,7 @@ export default function TextReveal({
       observer?.disconnect();
       timeline?.kill();
       split?.revert();
+      if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
       reveal();
     };
   }, [text, byLetter, html, delay, duration, stagger, scroll]);

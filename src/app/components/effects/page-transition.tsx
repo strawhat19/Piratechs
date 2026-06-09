@@ -2,10 +2,12 @@
 
 import gsap from 'gsap';
 import { usePathname } from 'next/navigation';
+import LinearProgress from '@mui/material/LinearProgress';
 import { TransitionRouter } from 'next-transition-router';
 import { useGlobalContext } from '@/shared/global-context';
-import { useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
+import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const rows = 4;
 const cols = 20;
@@ -13,6 +15,14 @@ const cols = 20;
 const blockCount = rows * cols;
 const gifResetClass = `pageTransitionGifReset`;
 const rowIndexes = Array.from({ length: rows }, (_, index) => index);
+const loaderDoneDelay = 360;
+const loaderMinVisibleMs = 1100;
+const loaderMaxBeforeReady = 94;
+
+type PageTransitionProps = {
+  children: ReactNode;
+  duration?: number;
+};
 
 const getReducedMotion = () => (
   typeof window != `undefined` && window.matchMedia(`(prefers-reduced-motion: reduce)`).matches
@@ -20,15 +30,37 @@ const getReducedMotion = () => (
 
 const useIsomorphicLayoutEffect = typeof window != `undefined` ? useLayoutEffect : useEffect;
 
+const wait = (ms: number) => new Promise<void>(resolve => {
+  window.setTimeout(resolve, ms);
+});
+
+const waitForWindowLoad = () => new Promise<void>(resolve => {
+  if (document.readyState == `complete`) {
+    resolve();
+    return;
+  }
+  window.addEventListener(`load`, () => resolve(), { once: true });
+});
+
+const waitForFonts = () => {
+  if (`fonts` in document) return document.fonts.ready.then(() => undefined);
+  return Promise.resolve();
+};
+
 export default function PageTransition({ 
   children,
   duration = 0.24, 
-}: any) {
+}: PageTransitionProps) {
   const pathname = usePathname();
   const gridRef = useRef<HTMLDivElement>(null);
+  const loaderRef = useRef<HTMLDivElement>(null);
   const blocksRef = useRef<HTMLDivElement[]>([]);
+  const transitionCoveredRef = useRef(true);
+  const initialLoadCompleteRef = useRef(false);
 
   const { width, isPWA } = useGlobalContext();
+  const [loaderProgress, setLoaderProgress] = useState(3);
+  const [showInitialLoader, setShowInitialLoader] = useState(true);
 
   const getRowBlocks = (row: number) => blocksRef.current.slice(row * cols, row * cols + cols);
 
@@ -36,7 +68,7 @@ export default function PageTransition({
     const row = Math.floor(index / cols);
     const col = index % cols;
     return {
-      transform: `scaleX(0)`,
+      transform: `scaleX(1)`,
       top: `${(row * 100) / rows}dvh`,
       left: `${(col * 100) / cols}vw`,
       width: `calc(${100 / cols}vw + 1px)`,
@@ -45,15 +77,25 @@ export default function PageTransition({
     };
   };
 
-  const restartGifAnimation = () => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    grid.classList.add(gifResetClass);
-    void grid.offsetWidth;
-    grid.classList.remove(gifResetClass);
+  const restartGifAnimation = (element: HTMLElement | null) => {
+    if (!element) return;
+    element.classList.add(gifResetClass);
+    void element.offsetWidth;
+    element.classList.remove(gifResetClass);
   };
 
-  const createShutterBlindsGrid = () => {
+  const setTransitionPending = () => {
+    document.body.classList.add(pageTransitionPendingClass);
+    document.body.classList.remove(pageTransitionCompleteClass);
+  };
+
+  const setTransitionComplete = () => {
+    document.body.classList.remove(pageTransitionPendingClass);
+    document.body.classList.add(pageTransitionCompleteClass);
+    window.dispatchEvent(new Event(pageTransitionReadyEvent));
+  };
+
+  const createShutterBlindsGrid = (scaleX = transitionCoveredRef.current ? 1 : 0) => {
     const grid = gridRef.current;
     if (!grid) return;
     const blockWidth = window.innerWidth / cols;
@@ -62,7 +104,7 @@ export default function PageTransition({
       const row = Math.floor(index / cols);
       const col = index % cols;
       gsap.set(block, {
-        scaleX: 0,
+        scaleX,
         width: blockWidth + 1,
         top: row * blockHeight,
         left: col * blockWidth,
@@ -80,9 +122,11 @@ export default function PageTransition({
     const grid = gridRef.current;
     const timeline = gsap.timeline({ onComplete });
     gsap.killTweensOf(blocksRef.current);
+    transitionCoveredRef.current = false;
     gsap.set(grid, { autoAlpha: 1, pointerEvents: `auto` });
-    restartGifAnimation();
-    createShutterBlindsGrid();
+    gsap.set(loaderRef.current, { autoAlpha: 0 });
+    restartGifAnimation(grid);
+    createShutterBlindsGrid(0);
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
       timeline.to(blocks, {
@@ -95,23 +139,47 @@ export default function PageTransition({
         },
       }, row == 0 ? 0 : `<`);
     });
+    timeline.call(() => {
+      transitionCoveredRef.current = true;
+    });
     return timeline;
   };
 
-  const animateOut = (onComplete: () => void) => {
+  const animateOut = (onComplete: () => void, withLoader = false, completeInitialLoad = false) => {
     if (getReducedMotion()) {
+      if (completeInitialLoad) {
+        initialLoadCompleteRef.current = true;
+        setTransitionComplete();
+      }
       onComplete();
       return gsap.timeline();
     }
     const grid = gridRef.current;
+    const loader = loaderRef.current;
     const timeline = gsap.timeline({
       onComplete: () => {
+        transitionCoveredRef.current = false;
         gsap.set(grid, { autoAlpha: 0, pointerEvents: `none` });
+        gsap.set(loader, { autoAlpha: 0 });
+        if (completeInitialLoad) {
+          initialLoadCompleteRef.current = true;
+          setTransitionComplete();
+        }
         onComplete();
       },
     });
     gsap.killTweensOf(blocksRef.current);
     gsap.set(grid, { autoAlpha: 1, pointerEvents: `auto` });
+    if (withLoader) {
+      timeline.to(loader, {
+        y: -8,
+        duration: 0.28,
+        autoAlpha: 0,
+        ease: `power2.out`,
+      }, 0);
+    } else {
+      gsap.set(loader, { autoAlpha: 0 });
+    }
     rowIndexes.forEach(row => {
       const blocks = getRowBlocks(row);
       timeline.to(blocks, {
@@ -122,27 +190,58 @@ export default function PageTransition({
           each: 0.012,
           from: row % 2 == 0 ? `end` : `start`,
         },
-      }, row == 0 ? 0.05 : `<`);
+      }, row == 0 ? (withLoader ? 0.16 : 0.05) : `<`);
     });
     return timeline;
   };
 
   useIsomorphicLayoutEffect(() => {
-    createShutterBlindsGrid();
-    window.addEventListener(`resize`, createShutterBlindsGrid);
+    setTransitionPending();
+    createShutterBlindsGrid(1);
+    const resizeShutterGrid = () => createShutterBlindsGrid();
+    window.addEventListener(`resize`, resizeShutterGrid);
     if (getReducedMotion()) {
+      setLoaderProgress(100);
+      setShowInitialLoader(false);
+      transitionCoveredRef.current = false;
       gsap.set(gridRef.current, { autoAlpha: 0, pointerEvents: `none`, background: `none` });
-      return () => window.removeEventListener(`resize`, createShutterBlindsGrid);
+      setTransitionComplete();
+      return () => window.removeEventListener(`resize`, resizeShutterGrid);
     }
-    gsap.set(gridRef.current, { background: `none` });
+    gsap.set(gridRef.current, { autoAlpha: 1, pointerEvents: `auto`, background: `none` });
+    gsap.set(loaderRef.current, { autoAlpha: 1, y: 0 });
+    restartGifAnimation(loaderRef.current);
+
+    let cancelled = false;
     let initialOutTimeline: gsap.core.Timeline | null = null;
-    const initialInTimeline = animateIn(() => {
-      initialOutTimeline = animateOut(() => {});
-    });
+    const startedAt = window.performance.now();
+    const progressInterval = window.setInterval(() => {
+      setLoaderProgress(currentProgress => (
+        Math.min(loaderMaxBeforeReady, currentProgress + Math.max(0.5, (loaderMaxBeforeReady - currentProgress) * 0.055))
+      ));
+    }, 90);
+
+    const finishInitialLoad = async () => {
+      await Promise.all([waitForWindowLoad(), waitForFonts()]);
+      const remainingVisibleMs = Math.max(0, loaderMinVisibleMs - (window.performance.now() - startedAt));
+      if (remainingVisibleMs > 0) await wait(remainingVisibleMs);
+      if (cancelled) return;
+      window.clearInterval(progressInterval);
+      setLoaderProgress(100);
+      await wait(loaderDoneDelay);
+      if (cancelled) return;
+      initialOutTimeline = animateOut(() => {
+        setShowInitialLoader(false);
+      }, true, true);
+    };
+
+    finishInitialLoad();
+
     return () => {
-      initialInTimeline.kill();
+      cancelled = true;
+      window.clearInterval(progressInterval);
       initialOutTimeline?.kill();
-      window.removeEventListener(`resize`, createShutterBlindsGrid);
+      window.removeEventListener(`resize`, resizeShutterGrid);
     };
   }, []);
 
@@ -150,15 +249,24 @@ export default function PageTransition({
     <TransitionRouter
       auto
       leave={next => {
+        if (!initialLoadCompleteRef.current) {
+          next();
+          return () => {};
+        }
         const timeline = animateIn(next);
         return () => timeline.kill();
       }}
       enter={next => {
+        if (!initialLoadCompleteRef.current) {
+          next();
+          return () => {};
+        }
         const timeline = animateOut(next);
         return () => timeline.kill();
       }}
     >
       <div ref={gridRef} className={`pageTransitionShutter shutterBlindsEffect 
+        ${showInitialLoader ? `initialLoaderActive` : ``}
         ${isPWA ? `pwa` : `nonPWA`} 
         ${getPageName(pathname)}Page  
         ${getDeviceDetails()?.ios ? `ios` : `noIos`} 
@@ -174,6 +282,24 @@ export default function PageTransition({
             }}
           />
         ))}
+        {showInitialLoader && (
+          <div ref={loaderRef} className={`pageTransitionLoader`}>
+            <div className={`pageTransitionLoaderInner`}>
+              <img
+                aria-hidden={`true`}
+                className={`pageTransitionGif`}
+                alt={`Piratechs_Distortion_GIF`}
+                src={`/assets/piratechs/gifs/Piratech-Glitch.gif`}
+              />
+              <LinearProgress
+                value={loaderProgress}
+                variant={`determinate`}
+                className={`pageLoaderProgress`}
+              />
+              <span className={`pageLoaderProgressText`}>{Math.round(loaderProgress)}%</span>
+            </div>
+          </div>
+        )}
       </div>
       {children}
     </TransitionRouter>

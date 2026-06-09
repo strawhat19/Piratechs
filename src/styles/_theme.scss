@@ -461,7 +461,13 @@ p {
     text-shadow: 0 0 2px var(--navy);
   }
   .heroMiniStat {
-    background: #012141;
+    background: #011e42;
+  }
+}
+
+* {
+  &::selection {
+    background: var(--navy-deep);
   }
 }
 
