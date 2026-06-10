@@ -13,9 +13,9 @@ type ProjectDetailSheetProps = {
 };
 
 export default function ProjectDetailSheet({
-  open = true,
-  projectID,
   onClose,
+  projectID,
+  open = true,
 }: ProjectDetailSheetProps) {
   const router = useRouter();
   const isOpen = Boolean(open && projectID);

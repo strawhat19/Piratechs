@@ -38,6 +38,7 @@ export default function BottomSheet({
       timeline.to(sheet, {
         opacity: 0,
         scale: 0.96,
+        width: `85%`,
         duration: 0.7,
         yPercent: 100,
         ease: `power3.inOut`,

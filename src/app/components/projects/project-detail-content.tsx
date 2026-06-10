@@ -34,21 +34,16 @@ export default function ProjectDetailContent({
     <div className={`projectDetailSheetInner`}>
       {project?.mediaURL ? (
         <ElementReveal as={`figure`} y={22} duration={0.58} className={`projectDetailMedia`}>
+          <ElementReveal as={`div`} y={16} delay={0.08} className={`projectDetailMeta`}>
+            <span className={`statusPill`}>
+              <TextReveal as={`span`} text={project.status} delay={0.08} />
+            </span>
+          </ElementReveal>
           <img src={project.mediaURL} alt={project.title} />
         </ElementReveal>
       ) : null}
       <div className={`projectDetailContent`}>
-        <ElementReveal as={`div`} y={16} delay={0.08} className={`projectDetailMeta`}>
-          <span className={`statusPill`}>
-            <TextReveal as={`span`} text={project.status} delay={0.08} />
-          </span>
-          {project?.type ? (
-            <span className={`typeBadge`}>
-              <TextReveal as={`span`} text={String(project.type)} delay={0.1} />
-            </span>
-          ) : null}
-        </ElementReveal>
-        <TextReveal as={`h2`} text={project.title} delay={0.12} />
+        <TextReveal as={`h2`} text={project.title} className={`projectDetailTitle`} delay={0.12} />
         <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.14} />
         {topics?.length ? (
           <ElementReveal as={`div`} y={14} delay={0.16} className={`projectTopics projectDetailTopics`}>
