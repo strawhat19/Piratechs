@@ -5,6 +5,7 @@ import Slider from '@/app/components/slider/slider';
 import ElementReveal from '@/app/components/effects/element-reveal';
 
 type TopBarProps = {
+  id?: string;
   autoplay?: boolean;
   pauseonhover?: boolean;
   direction?: `rtl` | `ltr`;
@@ -14,16 +15,17 @@ export default function TopBar({
   autoplay = true,
   direction = `rtl`,
   pauseonhover = true,
+  id = `topBarComponent`,
 }: TopBarProps = {}) {
   const items = config.topBarItems;
 
   return (
     <Slider
+      id={id}
       role={`list`}
       autoplay={autoplay}
       className={`topBar`}
       direction={direction}
-      id={`announcementsSlider`}
       pauseonhover={pauseonhover}
       trackClassName={`topBarTrack`}
       ariaLabel={`Piratechs highlights`}
