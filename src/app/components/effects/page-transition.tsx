@@ -309,7 +309,7 @@ export default function PageTransition({
                 variant={`determinate`}
                 className={`pageLoaderProgress`}
               />
-              <span className={`pageLoaderProgressText`}>
+              <span className={`pageLoaderProgressText logoLetter`}>
                 {Math.round(loaderProgress)}%
                 </span>
             </div>

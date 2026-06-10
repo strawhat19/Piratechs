@@ -2,24 +2,27 @@
 
 import { useMemo, useState } from 'react';
 import { config } from '@/shared/config/config';
+import { Project } from '@/shared/models/Project';
 import { devEnv } from '@/shared/common/database/constants';
 import ProjectCard from '@/app/components/projects/project-card';
 import { gitUser } from '@/shared/common/database/github/users/strawhat19/user';
 
-export const featuredNames = [
-  // `Lister`,
-  // `Traveler`,
-  `Piratechs`, 
-  // `Sanctuary`,
-  `Dyer-Posta`, 
-  `Smart-Garden`, 
-  `Discord-Bots`,
-  // `Tower-Defense`,
-  `React-Netflix-Clone`, 
-  `MyDex-Pokedex-Clone`,
-  // `Sumit-Transcription-Form`,
-  // `Piratechs-Next-PWA-Template-2025`,
+export const featuredProjects = [
+  // new Project({ name: `Lister` }),
+  new Project({ name: `Piratechs`, }), 
+  // new Project({ name: `Traveler` }),
+  // new Project({ name: `Sanctuary` }),
+  new Project({ name: `Dyer-Posta`, }), 
+  new Project({ name: `Smart-Garden`, }), 
+  // new Project({ name: `Discord-Bots` }),
+  // new Project({ name: `Tower-Defense` }),
+  new Project({ name: `React-Netflix-Clone` }),
+  new Project({ name: `MyDex-Pokedex-Clone` }),
+  // new Project({ name: `Sumit-Transcription-Form` }),
+  // new Project({ name: `Piratechs-Next-PWA-Template-2025` }),
 ];
+
+export const featuredProjectNames = featuredProjects?.map(fp => fp?.name);
 
 export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: boolean }) {
   const initialFilter = featuredOnly ? `Featured` : `All`;
@@ -27,7 +30,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
 
   const projects = useMemo(() => {
     const gitProjects = gitUser?.projects;
-    const gitProjectsWFeatured = gitProjects?.map(gp => ({ ...gp, featured: gp?.featured || featuredNames?.includes(gp?.name) }));
+    const gitProjectsWFeatured = gitProjects?.map(gp => ({ ...gp, featured: gp?.featured || featuredProjectNames?.includes(gp?.name) }));
     const configProjects = gitProjectsWFeatured;
     const sortedProjects = configProjects.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
     const projectsToShow = sortedProjects.filter(project => {
@@ -49,7 +52,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
             data-filter={filter}
             aria-pressed={filter == activeFilter}
             onClick={() => setActiveFilter(filter)}
-            className={`filterButton ${filter == activeFilter ? `activeFilter` : ``}`}
+            className={`filterButton logoLetter ${filter == activeFilter ? `activeFilter` : ``}`}
           >
             {filter}
           </button>
