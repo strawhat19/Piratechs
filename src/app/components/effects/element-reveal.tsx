@@ -14,6 +14,7 @@ type ElementRevealProps = {
   blur?: boolean;
   delay?: number;
   scale?: number;
+  slide?: boolean;
   scroll?: boolean;
   children: ReactNode;
   className?: string;
@@ -32,6 +33,7 @@ export default function ElementReveal({
   delay = 0.1,
   as = `span`,
   blur = false,
+  slide = false,
   scroll = false,
   duration = 0.48,
   origin = `center`,
@@ -63,29 +65,35 @@ export default function ElementReveal({
 
     const run = () => {
       if (cancelled || !ref.current) return;
-      const fromVars: gsap.TweenVars = { autoAlpha: 0, scale, x, y, transformOrigin: origin };
+      const fromVars: gsap.TweenVars = { scale, x, y, transformOrigin: origin };
+      const toVars: gsap.TweenVars = {
+        delay,
+        duration,
+        ease,
+        scale: 1,
+        x: 0,
+        y: 0,
+        onComplete: () => {
+          gsap.set(el, { clearProps: `opacity,visibility,filter,scale,x,y,transform,transformOrigin,clipPath,webkitClipPath` });
+          el.classList.remove(animatingClass);
+          setAnimating(false);
+        },
+      };
+      if (slide) {
+        fromVars.clipPath = `inset(100% 0% 0% 0%)`;
+        fromVars.webkitClipPath = `inset(100% 0% 0% 0%)`;
+        toVars.clipPath = `inset(0% 0% 0% 0%)`;
+        toVars.webkitClipPath = `inset(0% 0% 0% 0%)`;
+      } else {
+        fromVars.autoAlpha = 0;
+        toVars.autoAlpha = 1;
+      }
       if (blur) fromVars.filter = `blur(2px)`;
       el.classList.add(animatingClass);
       setAnimating(true);
       gsap.set(el, fromVars);
       reveal();
-      tween = gsap.to(
-        el,
-        {
-          autoAlpha: 1,
-          delay,
-          duration,
-          ease,
-          scale: 1,
-          x: 0,
-          y: 0,
-          onComplete: () => {
-            gsap.set(el, { clearProps: `opacity,visibility,filter,scale,x,y,transform,transformOrigin` });
-            el.classList.remove(animatingClass);
-            setAnimating(false);
-          },
-        },
-      );
+      tween = gsap.to(el, toVars);
     };
 
     const start = () => {
@@ -118,11 +126,11 @@ export default function ElementReveal({
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
       el.classList.remove(animatingClass);
     };
-  }, [x, y, blur, delay, scale, scroll, duration, origin, ease]);
+  }, [x, y, blur, slide, delay, scale, scroll, duration, origin, ease]);
 
   return createElement(as, {
     ...props,
     ref,
-    className: [`elementReveal`, className, revealed ? `` : pendingClass, animating ? animatingClass : ``].filter(Boolean).join(` `),
+    className: [`elementReveal`, slide ? `elementRevealSlide` : ``, className, revealed ? `` : pendingClass, animating ? animatingClass : ``].filter(Boolean).join(` `),
   }, children);
 }

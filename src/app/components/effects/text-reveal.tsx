@@ -21,6 +21,7 @@ type TextRevealProps = {
   delay?: number;
   duration?: number;
   stagger?: number;
+  slide?: boolean;
   /** Defer the reveal until the element scrolls into view (for below-the-fold content). */
   scroll?: boolean;
 };
@@ -33,6 +34,7 @@ export default function TextReveal({
   className,
   as = `span`,
   html = false,
+  slide = false,
   scroll = false,
   byLetter = false,
 }: TextRevealProps) {
@@ -84,13 +86,30 @@ export default function TextReveal({
           split = null;
         },
       });
-      timeline.from(targets, {
+      const revealOffset = byLetter ? 35 : 25;
+      const tweenVars: gsap.TweenVars = {
         delay,
-        autoAlpha: 0,
-        yPercent: byLetter ? 35 : 25,
         duration: duration ?? (byLetter ? 0.5 : 0.6),
         stagger: stagger ?? (byLetter ? 0.018 : 0.07),
-      });
+      };
+      if (slide) {
+        timeline.fromTo(targets, {
+          yPercent: revealOffset,
+          clipPath: `inset(100% 0% 0% 0%)`,
+          webkitClipPath: `inset(100% 0% 0% 0%)`,
+        }, {
+          ...tweenVars,
+          yPercent: 0,
+          clipPath: `inset(0% 0% 0% 0%)`,
+          webkitClipPath: `inset(0% 0% 0% 0%)`,
+        });
+      } else {
+        timeline.from(targets, {
+          ...tweenVars,
+          autoAlpha: 0,
+          yPercent: revealOffset,
+        });
+      }
 
       reveal();
       timeline.play();
@@ -132,11 +151,11 @@ export default function TextReveal({
       split?.revert();
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
     };
-  }, [text, byLetter, html, delay, duration, stagger, scroll]);
+  }, [text, byLetter, html, slide, delay, duration, stagger, scroll]);
 
   return createElement(as, {
     ref,
-    className: `${className ?? ``} ${pendingClass}`.trim(),
+    className: `${className ?? ``} ${slide ? `textRevealSlide` : ``} ${pendingClass}`.trim(),
     ...(html ? { dangerouslySetInnerHTML: { __html: text } } : { children: text }),
   });
 }

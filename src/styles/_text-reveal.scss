@@ -7,7 +7,7 @@
 }
 
 .elementReveal {
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity, filter, clip-path;
 }
 
 .elementRevealAnimating {
@@ -16,7 +16,9 @@
 
 .textRevealWord,
 .textRevealChar {
-  will-change: transform, opacity;
+  display: inline-block;
+  vertical-align: bottom;
+  will-change: transform, opacity, clip-path;
 }
 
 // SplitText wraps every word/char in its own element. Gradient text is painted via
