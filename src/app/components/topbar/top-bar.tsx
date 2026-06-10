@@ -36,8 +36,8 @@ export default function TopBar({
           blur={false}
           duration={0.2}
           role={`listitem`}
-          key={`${item.text}-${index}`}
           delay={0.5 + index * 0.012}
+          key={`${item.text}-${index}`}
           className={`topBarItem buttonHoverBorder`}
         >
           <i className={`${item.icon} gradientTextColor`} />

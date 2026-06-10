@@ -106,8 +106,18 @@ export default function Slider({
       return typeof current === `number` ? current : 0;
     };
 
+    let builtWidth = 0;
+
     const buildAnimation = () => {
+      const setWidth = track.scrollWidth / 2;
+      if (setWidth <= 0) return;
+
       const previous = animationRef.current;
+      if (previous != null && setWidth === builtWidth) {
+        updatePlayState();
+        return;
+      }
+
       let progress = 0;
       if (previous != null) {
         const previousDuration = getDuration();
@@ -117,9 +127,7 @@ export default function Slider({
         previous.cancel();
       }
 
-      const setWidth = track.scrollWidth / 2;
-      if (setWidth <= 0) return;
-
+      builtWidth = setWidth;
       const duration = (setWidth / speed) * 1000;
       const keyframes = direction == `ltr`
         ? [
@@ -139,32 +147,44 @@ export default function Slider({
       updatePlayState();
     };
 
+    let rebuildFrame = 0;
+    const scheduleRebuild = () => {
+      window.cancelAnimationFrame(rebuildFrame);
+      rebuildFrame = window.requestAnimationFrame(buildAnimation);
+    };
+
     buildAnimation();
 
-    const observer = new IntersectionObserver(
+    const intersectionObserver = new IntersectionObserver(
       entries => {
         inViewRef.current = entries?.[0]?.isIntersecting ?? true;
+        if (inViewRef.current && animationRef.current == null) {
+          scheduleRebuild();
+          return;
+        }
         updatePlayState();
       },
       { threshold: 0 },
     );
-    observer.observe(track);
+    intersectionObserver.observe(track);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== `undefined`) {
+      resizeObserver = new ResizeObserver(scheduleRebuild);
+      resizeObserver.observe(track);
+    }
 
     const onVisibilityChange = () => updatePlayState();
     document.addEventListener(`visibilitychange`, onVisibilityChange);
 
-    let resizeFrame = 0;
-    const onResize = () => {
-      window.cancelAnimationFrame(resizeFrame);
-      resizeFrame = window.requestAnimationFrame(buildAnimation);
-    };
-    window.addEventListener(`resize`, onResize);
+    window.addEventListener(`resize`, scheduleRebuild);
 
     return () => {
-      observer.disconnect();
+      intersectionObserver.disconnect();
+      resizeObserver?.disconnect();
       document.removeEventListener(`visibilitychange`, onVisibilityChange);
-      window.removeEventListener(`resize`, onResize);
-      window.cancelAnimationFrame(resizeFrame);
+      window.removeEventListener(`resize`, scheduleRebuild);
+      window.cancelAnimationFrame(rebuildFrame);
       window.cancelAnimationFrame(playStateFrameRef.current);
       animationRef.current?.cancel();
       animationRef.current = null;

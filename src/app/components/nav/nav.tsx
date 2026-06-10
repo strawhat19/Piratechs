@@ -105,7 +105,7 @@ export default function Nav({
   return (
     <header className={`header ${menuExpanded ? `headerMenuOpen` : ``}`}>
       <TopBar />
-      <TopBar id={`topBar2`} direction={`ltr`} />
+      {/* <TopBar id={`topBar2`} direction={`ltr`} /> */}
       <div className={`navBar`}>
         <ElementReveal as={Link} href={`/`} blur={false} delay={0.5} className={`homeButton`} aria-label={`Home`}>
           <i className={`fa-solid fa-house logoLetter`} />
