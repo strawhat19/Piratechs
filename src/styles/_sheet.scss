@@ -48,7 +48,6 @@ body[data-theme="light"] .bottomSheetBackdrop {
   color: var(--foreground);
   box-shadow: var(--shadow);
   transform: translateX(-50%);
-  border: 1px solid var(--border);
   background: var(--surfaceStrong);
   width: min(1120px, calc(100vw - 28px));
   height: var(--bottom-sheet-height, 65dvh);
@@ -93,7 +92,6 @@ body[data-theme="light"] .bottomSheetBackdrop {
   overflow: hidden;
   max-height: 420px;
   position: relative;
-  border-right: 1px solid var(--border);
 }
 
 .projectDetailMedia::after {

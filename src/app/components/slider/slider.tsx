@@ -16,6 +16,8 @@ type SliderProps = {
   draggingClassName?: string;
 };
 
+const dragThreshold = 6;
+
 export default function Slider({
   role,
   children,
@@ -33,6 +35,8 @@ export default function Slider({
   const dragStartXRef = useRef(0);
   const hoveringRef = useRef(false);
   const draggingRef = useRef(false);
+  const didDragRef = useRef(false);
+  const pointerActiveRef = useRef(false);
   const dragStartTimeRef = useRef(0);
   const playStateFrameRef = useRef(0);
   const reducedMotionRef = useRef(false);
@@ -203,22 +207,36 @@ export default function Slider({
   };
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (animationRef.current == null) return;
+    pointerActiveRef.current = true;
+    didDragRef.current = false;
+    dragStartXRef.current = event.clientX;
+  };
+
+  const beginDrag = (event: React.PointerEvent<HTMLDivElement>) => {
     const animation = animationRef.current;
     if (animation == null) return;
     draggingRef.current = true;
+    didDragRef.current = true;
     setDragging(true);
-    dragStartXRef.current = event.clientX;
     const current = animation.currentTime;
     dragStartTimeRef.current = typeof current === `number` ? current : 0;
+    dragStartXRef.current = event.clientX;
     tweenPlaybackRate(0, true);
-    event.currentTarget.setPointerCapture(event.pointerId);
+    if (typeof event.currentTarget.setPointerCapture === `function`) {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!draggingRef.current) return;
+    if (!pointerActiveRef.current) return;
     const animation = animationRef.current;
     const track = trackRef.current;
     if (animation == null || track == null) return;
+    if (!draggingRef.current) {
+      if (Math.abs(event.clientX - dragStartXRef.current) < dragThreshold) return;
+      beginDrag(event);
+    }
     const timing = animation.effect?.getComputedTiming();
     const duration = typeof timing?.duration === `number` ? timing.duration : 0;
     const setWidth = track.scrollWidth / 2;
@@ -231,13 +249,22 @@ export default function Slider({
   };
 
   const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!pointerActiveRef.current) return;
+    pointerActiveRef.current = false;
     if (!draggingRef.current) return;
     draggingRef.current = false;
     setDragging(false);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
     updatePlayState();
+  };
+
+  const onClickCapture = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!didDragRef.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+    didDragRef.current = false;
   };
 
   const renderCopy = (copy: number) => Children.map(children, (child, index) => {
@@ -261,6 +288,7 @@ export default function Slider({
         onPointerCancel={endDrag}
         onPointerMove={onPointerMove}
         onPointerDown={onPointerDown}
+        onClickCapture={onClickCapture}
         className={`${className}_Inner ${[trackClassName, dragging ? draggingClassName : ``].filter(Boolean).join(` `)}`}
       >
         {[0, 1].map(copy => (

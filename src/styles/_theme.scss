@@ -548,6 +548,9 @@ html {
     .authAvatarLetter {
       font-weight: 800;
     }
+    .projectDetailSheet {
+      background: linear-gradient(90deg, var(--light_teal), var(--white-smoke));
+    }
     .header {
       background: linear-gradient(90deg, #ffffff26, #ffffff40);
       .topBar {
