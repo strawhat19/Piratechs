@@ -43,7 +43,6 @@ export default function BottomSheet({
         autoAlpha: 0,
         duration: 0.36,
         ease: `power2.inOut`,
-        clipPath: `inset(100% 0% 0% 0%)`,
         backdropFilter: `blur(0px) saturate(100%)`,
         webkitBackdropFilter: `blur(0px) saturate(100%)`,
       }, 0);
@@ -65,29 +64,27 @@ export default function BottomSheet({
   useLayoutEffect(() => {
     const sheet = sheetRef.current;
     const backdrop = backdropRef.current;
-    const timeline = gsap.timeline({ defaults: { ease: `power3.out` } });
+    const timeline = gsap.timeline({ defaults: { ease: `power3.inOut` } });
     if (backdrop) {
       gsap.set(backdrop, {
         autoAlpha: 1,
-        clipPath: `inset(100% 0% 0% 0%)`,
         backdropFilter: `blur(0px) saturate(100%)`,
         webkitBackdropFilter: `blur(0px) saturate(100%)`,
       });
       timeline.to(backdrop, {
-        duration: 0.48,
-        clipPath: `inset(0% 0% 0% 0%)`,
+        duration: 0.56,
         backdropFilter: `blur(18px) saturate(145%)`,
         webkitBackdropFilter: `blur(18px) saturate(145%)`,
       }, 0);
     }
     if (sheet) {
-      gsap.set(sheet, { autoAlpha: 1, xPercent: -50, yPercent: 100, scale: 0.96, transformOrigin: `bottom center` });
+      gsap.set(sheet, { autoAlpha: 1, xPercent: -50, yPercent: 104, scale: 0.97, transformOrigin: `bottom center` });
       timeline.to(sheet, {
         scale: 1,
         yPercent: 0,
-        duration: 0.58,
-        ease: `power4.out`,
-      }, 0.06);
+        duration: 0.68,
+        ease: `power3.inOut`,
+      }, 0);
     }
     return () => {
       timeline.kill();

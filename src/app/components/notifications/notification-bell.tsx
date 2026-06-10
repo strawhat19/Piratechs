@@ -2,6 +2,7 @@
 
 import { config } from '@/shared/config/config';
 import { useEffect, useRef, useState } from 'react';
+import { closeMenuOverlaysEvent } from '@/app/components/effects/menu-blur-backdrop';
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
@@ -33,6 +34,12 @@ export default function NotificationBell() {
     document.body.classList.toggle(`notificationPanelOpen`, open);
     return () => document.body.classList.remove(`notificationPanelOpen`);
   }, [open]);
+
+  useEffect(() => {
+    const closeNotificationPanel = () => setOpen(false);
+    window.addEventListener(closeMenuOverlaysEvent, closeNotificationPanel);
+    return () => window.removeEventListener(closeMenuOverlaysEvent, closeNotificationPanel);
+  }, []);
 
   return (
     <div ref={wrapRef} className={`notificationWidget ${open ? `notificationOpen` : ``}`}>

@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { roleIcons } from '../nav/nav';
 import TextReveal from '../effects/text-reveal';
 import Spinner from '../loaders/spinners/spinner';
 import ElementReveal from '../effects/element-reveal';
 import { useGlobalContext } from '@/shared/global-context';
 import { capWords } from '@/shared/common/scripts/globals';
+import { closeMenuOverlaysEvent } from '@/app/components/effects/menu-blur-backdrop';
 
 type AuthMode = `sign-in` | `sign-up`;
 
@@ -24,6 +25,12 @@ export default function AuthWidget({
   const signInLabel = mode == `sign-in` ? `Sign In` : `Sign Up`;
   const modeLabel = mode == `sign-in` ? `Need Access?` : `Have Access?`;
   const userInitial = user?.name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? `P`;
+
+  useEffect(() => {
+    const closeAuthPanel = () => setOpen(false);
+    window.addEventListener(closeMenuOverlaysEvent, closeAuthPanel);
+    return () => window.removeEventListener(closeMenuOverlaysEvent, closeAuthPanel);
+  }, []);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
