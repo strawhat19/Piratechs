@@ -38,6 +38,7 @@ export default function Slider({
   const reducedMotionRef = useRef(false);
   const animationRef = useRef<Animation | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [dragging, setDragging] = useState(false);
 
@@ -166,7 +167,7 @@ export default function Slider({
       },
       { threshold: 0 },
     );
-    intersectionObserver.observe(track);
+    intersectionObserver.observe(containerRef.current ?? track);
 
     let resizeObserver: ResizeObserver | null = null;
     if (typeof ResizeObserver !== `undefined`) {
@@ -251,7 +252,7 @@ export default function Slider({
   });
 
   return (
-    <div id={id} className={className} aria-label={ariaLabel} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <div ref={containerRef} id={id} className={className} aria-label={ariaLabel} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div
         role={role}
         ref={trackRef}
