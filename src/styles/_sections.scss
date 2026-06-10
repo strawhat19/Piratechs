@@ -231,12 +231,11 @@ body[data-theme="light"] .heroLogoPlate {
 
 .projectsSection {
   padding-bottom: 28px;
-  background: linear-gradient(180deg, var(--surfaceStrong), transparent);
 }
 
 .filterBar {
-  display: flex;
   gap: 9px;
+  display: flex;
   flex-wrap: wrap;
   margin-bottom: 18px;
 }

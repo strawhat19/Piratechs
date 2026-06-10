@@ -2,9 +2,8 @@ import ProjectGrid from './project-grid';
 import TextReveal from '../effects/text-reveal';
 import { config } from '@/shared/config/config';
 
-export default function Section() {
-    return <>
-        <section className={`pageSection projectsSection`} id={`projects`}>
+export const prjctsSec = () => (
+    <section className={`pageSection projectsSection`} id={`projects`}>
             <div className={`sectionInner`}>
                 <div className={`sectionTitle`}>
                     <TextReveal scroll as={`span`} className={`eyebrow`} text={`Our Work`} />
@@ -14,25 +13,40 @@ export default function Section() {
                 <ProjectGrid featuredOnly />
             </div>
         </section>
+)
 
-        <div className={`sep reveal`} />
+export const statsSec = () => (
+    <section className={`pageSection experienceSection`}>
+        <div className={`sectionInner experienceGrid`}>
+            {config?.stats?.map(stat => (
+                <article key={stat.label} className={`statCard reveal`}>
+                    <TextReveal scroll as={`span`} className={`gradientTextColor`} html text={`<i>${stat.label}</i>`} />
+                    <TextReveal scroll as={`strong`} text={stat.value} delay={0.06} />
+                    {stat?.html ? (
+                        <TextReveal scroll as={`p`} text={`<i>${stat?.html}</i>`} html />
+                    ) : (
+                        <TextReveal scroll as={`p`} text={`<i>${stat?.text}</i>`} html />
+                    )}
+                </article>
+            ))}
+        </div>
+    </section>
+)
 
-        <section className={`pageSection experienceSection`}>
-            <div className={`sectionInner experienceGrid`}>
-                {config?.stats?.map(stat => (
-                    <article key={stat.label} className={`statCard reveal`}>
-                        <TextReveal scroll as={`span`} className={`gradientTextColor`} html text={`<i>${stat.label}</i>`} />
-                        <TextReveal scroll as={`strong`} text={stat.value} delay={0.06} />
-                        {stat?.html ? (
-                            <TextReveal scroll as={`p`} text={`<i>${stat?.html}</i>`} html />
-                        ) : (
-                            <TextReveal scroll as={`p`} text={`<i>${stat?.text}</i>`} html />
-                        )}
-                    </article>
-                ))}
-            </div>
-        </section>
-
-        <div className={`sep reveal`} />
+export default function Section({
+    inversed = false,
+}: any) {
+    return <>
+        {inversed ? <>
+            {statsSec()}
+            <div className={`sep reveal`} />
+            {prjctsSec()}
+            <div className={`sep reveal`} />
+        </> : <>
+            {prjctsSec()}
+            <div className={`sep reveal`} />
+            {statsSec()}
+            <div className={`sep reveal`} />
+        </>}
     </>
 }

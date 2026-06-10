@@ -459,9 +459,26 @@ p {
   position: relative;
 }
 
+.dropShadow {
+  filter: var(--logoLetterDropShadow);
+}
+
+.dropShadowi {
+  filter: var(--logoLetterDropShadow) !important;
+}
+
+a, button, span {
+  &.primary, &.activeFilter {
+    &.logoLetter, .logoLetter {
+      // text-shadow: 0 0 2px var(--navy);
+      text-shadow: 2px 4px 8px var(--navy);
+    }
+  }
+}
+
 .dark {
   .logoLetter {
-    filter: var(--logoLetterDropShadow);
+    @extend .dropShadow;
   }
   .bannerText {
     text-shadow: 0 0 2px var(--navy);
@@ -488,6 +505,10 @@ html {
       background: linear-gradient(135deg, var(--light_teal) 70%, var(--white-smoke));
       // background: radial-gradient(circle at 18% 8%, rgba(0, 191, 255, 0.16), transparent 28%), linear-gradient(135deg, #ffffff, var(--backgroundDeep) 58%, #dfeaf5 100%);
     }
+    .imgOverlay {
+      backdrop-filter: blur(18px);
+      background: linear-gradient(180deg, rgba(var(--piratechsNeon_rgb), .15), rgba(var(--piratechsTeal_rgb), .15)) !important;
+    }
     // .pageTransitionShutter {
     //   background: var(--main_gradient);
     // }
@@ -509,6 +530,18 @@ html {
     //     var(--piratechsTeal) 10%, 
     //   );
     // }
+    .projectCard {
+      color: var(--white) !important;
+      h3, em, p, button, span {
+        color: var(--white) !important;
+      }
+      .ghost {
+        i {
+          color: var(--white);
+          // @extend .gradientTextColor;
+        }
+      }
+    }
     *::-webkit-scrollbar-thumb {
       border: 3px solid var(--white-soft);
     }

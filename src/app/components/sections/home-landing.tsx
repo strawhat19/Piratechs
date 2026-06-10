@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
+import Section from './section';
 import AuthWidget from '../auth/auth-widget';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
@@ -78,8 +79,6 @@ export default function HomeLanding() {
 
       <div id={`anchor`} className={`sep`} />
 
-      {/* <Section /> */}
-
       <section className={`pageSection specialtiesSection`}>
         <div className={`sectionInner backendGrid`}>
           <div className={`sectionTitle`}>
@@ -104,6 +103,8 @@ export default function HomeLanding() {
       </section>
 
       <div className={`sep reveal`} />
+
+      <Section inversed />
 
       <section className={`pageSection skillsSection`}>
         <div className={`sectionInner`}>

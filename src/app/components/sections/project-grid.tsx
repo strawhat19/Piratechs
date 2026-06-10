@@ -1,10 +1,10 @@
 'use client';
 
+import Slider from '../slider/slider';
 import { useMemo, useState } from 'react';
 import { config } from '@/shared/config/config';
 import ProjectCard from '@/app/components/projects/project-card';
 import { getProjects } from '@/app/components/projects/project-data';
-import Slider from '../slider/slider';
 
 export default function ProjectGrid({
   showImages = true,
