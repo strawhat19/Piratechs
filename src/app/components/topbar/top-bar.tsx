@@ -23,6 +23,7 @@ export default function TopBar({
       autoplay={autoplay}
       className={`topBar`}
       direction={direction}
+      id={`announcementsSlider`}
       pauseonhover={pauseonhover}
       trackClassName={`topBarTrack`}
       ariaLabel={`Piratechs highlights`}

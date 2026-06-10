@@ -23,6 +23,7 @@
                     flex-direction: row;
                     .projectCard {
                         min-width: 780px;
+                        user-select: none;
                     }
                 }
             }

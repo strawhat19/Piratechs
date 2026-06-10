@@ -40,13 +40,11 @@ export default function ProjectGrid({
       </div>
       <div className={`projectGrid fullBleed`} aria-live={`polite`}>
         <Slider 
-          autoplay
-          role={`list`}
           direction={`ltr`}
           id={`projectsSliderTop`}
           className={`projectsSlider`}
-          ariaLabel={`Piratechs Projects Top`}
-          trackClassName={`projectsSliderTrack`}
+          // ariaLabel={`Piratechs Projects Top`}
+          // trackClassName={`projectsSliderTrack`}
         >
           {projects?.slice(0, Math.ceil(projects.length / 2)).map(project => (
             <ProjectCard
@@ -57,12 +55,10 @@ export default function ProjectGrid({
           ))}
         </Slider>
         <Slider 
-          autoplay
-          role={`list`}
           id={`projectsSliderBottom`}
           className={`projectsSlider`}
-          trackClassName={`projectsSliderTrack`}
-          ariaLabel={`Piratechs Projects Bottom`}
+          // trackClassName={`projectsSliderTrack`}
+          // ariaLabel={`Piratechs Projects Bottom`}
         >
           {projects?.slice(Math.ceil(projects.length / 2)).map(project => (
             <ProjectCard
