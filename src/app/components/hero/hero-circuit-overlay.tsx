@@ -45,7 +45,7 @@ export default function HeroCircuitOverlay({
   const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) ? revealSlant : ((revealSlant) ? 45 : 0);
   const revealSlantAmount = Math.max(-32, Math.min(32, numericSlant));
 
-  const isChromeOrPwaDevice = isMounted && Boolean(
+  const isChromeOrAdvancedDevice = isMounted && Boolean(
     !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
       !platform?.os?.toLowerCase()?.includes(`mac`)
     ) || (
@@ -53,7 +53,7 @@ export default function HeroCircuitOverlay({
     ))
   );
 
-  const shouldRenderCircuit = showCircuitOverlay && isChromeOrPwaDevice;
+  const shouldRenderCircuit = showCircuitOverlay && isChromeOrAdvancedDevice;
 
   useEffect(() => {
     setIsMounted(true);

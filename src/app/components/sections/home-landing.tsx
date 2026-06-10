@@ -4,9 +4,11 @@ import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
 import Section from './section';
+import { useEffect, useState } from 'react';
 import AuthWidget from '../auth/auth-widget';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+import { useGlobalContext } from '@/shared/global-context';
 import TextReveal from '@/app/components/effects/text-reveal';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
@@ -14,6 +16,23 @@ import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
 export default function HomeLanding() {
   const page: any = config?.pages?.home;
+
+  const { isPWA, platform } = useGlobalContext();
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const isChromeOrAdvancedDevice = isMounted && Boolean(
+    !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
+      !platform?.os?.toLowerCase()?.includes(`mac`)
+    ) || (
+      platform?.os?.toLowerCase()?.includes(`windows`)
+    ))
+  );
+
   return (
     <>
       <section className={`pageSection heroSection`}>
@@ -104,7 +123,7 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      <Section inversed />
+      {isChromeOrAdvancedDevice && <Section inversed />}
 
       <section className={`pageSection skillsSection`}>
         <div className={`sectionInner`}>
