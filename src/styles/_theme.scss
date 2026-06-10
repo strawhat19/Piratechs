@@ -18,8 +18,10 @@
   --navy-deep: #041b44;
   --navy-dark: rgba(0, 9, 27, 1);
   --piratechs: #2b4261;
-  --piratechsNeon: #00bfff;
-  --piratechsTeal: #13deb9;
+  --piratechsNeon_rgb: 0, 191, 255;
+  --piratechsTeal_rgb: 19, 222, 185;
+  --piratechsNeon: rgba(var(--piratechsNeon_rgb), 1);
+  --piratechsTeal: rgba(var(--piratechsTeal_rgb), 1);
   --neon_badge_font_color: var(--blue_navy_muted);
   --navBar: #064486;
   --navBarDeep: #04397b;

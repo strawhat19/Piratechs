@@ -2,7 +2,7 @@ import URL from '../url/url';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import { capWords, extractRootDomain } from '@/shared/common/scripts/globals';
+import { capWords, extractRootDomain, isValid } from '@/shared/common/scripts/globals';
 
 export default function ProjectCard({ project }: any) {
   const projectUrl = project?.codeUrl || project?.liveUrl;
@@ -18,7 +18,15 @@ export default function ProjectCard({ project }: any) {
 
   return (
     <article className={`projectCard reveal`}>
-      {projectUrl ? (
+      {projectUrl ? <>
+        {project?.mediaURL && project?.mediaURL != `` && isValid(project?.mediaURL) && (
+          <div className={`projectCardBG`}>
+            <figure className={`projectCardBGWrap`}>
+              <div className={`imgOverlay`} />
+              <img className={`projectMedia reveal`} src={project?.mediaURL} alt={project?.title} />
+            </figure>
+          </div>
+        )}
         <a
           href={projectUrl}
           target={`_blank`}
@@ -26,7 +34,7 @@ export default function ProjectCard({ project }: any) {
           className={`projectCardLinkOverlay`}
           aria-label={`Open ${project?.title ?? `project`} in a new tab`}
         />
-      ) : null}
+      </> : null}
       <div className={`projectTop`}>
         {/* <ElementReveal scroll as={`span`} delay={0.02} duration={0.42} className={`typeBadge`}>
           <TextReveal scroll as={`span`} text={project.type} />
@@ -64,7 +72,10 @@ export default function ProjectCard({ project }: any) {
               url={project?.liveUrl} 
               image={project?.urlImage} 
               className={`buttonLink primary`} 
-              label={getURLLabel(project?.liveUrl)} 
+              label={
+                project?.title
+                // getURLLabel(project?.liveUrl)
+              } 
             />
           </ElementReveal>
         ) : null}

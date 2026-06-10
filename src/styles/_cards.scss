@@ -109,6 +109,27 @@ html {
   flex-direction: column;
   scroll-snap-align: center;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+  .projectCardBG {
+    inset: 0;
+    z-index: 1;
+    position: absolute;
+    .projectCardBGWrap {
+      height: 100%;
+      position: relative;
+      .imgOverlay {
+        inset: 0;
+        z-index: 1;
+        position: absolute;
+        background: linear-gradient(180deg, rgba(var(--navy_rgb), 0.8), #051a3b);
+        // background: linear-gradient(180deg, rgba(var(--piratechsNeon_rgb), 0.85), rgba(var(--piratechsTeal_rgb), 0.85), rgba(var(--navy_rgb), 0.8), #041838);
+      }
+      .projectMedia {
+        height: 100%;
+        object-fit: cover;
+        --reveal-delay: 32ms;
+      }
+    }
+  }
 }
 
 .projectCard:hover,

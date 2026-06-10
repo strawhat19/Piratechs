@@ -3,26 +3,19 @@
 import { useMemo, useState } from 'react';
 import { config } from '@/shared/config/config';
 import { Project } from '@/shared/models/Project';
-import { devEnv } from '@/shared/common/database/constants';
 import ProjectCard from '@/app/components/projects/project-card';
+import { devEnv, getRandomImage } from '@/shared/common/database/constants';
 import { gitUser } from '@/shared/common/database/github/users/strawhat19/user';
 
-export const featuredProjects = [
-  // new Project({ name: `Lister` }),
-  new Project({ name: `Piratechs`, }), 
-  // new Project({ name: `Traveler` }),
-  // new Project({ name: `Sanctuary` }),
-  new Project({ name: `Dyer-Posta`, }), 
-  new Project({ name: `Smart-Garden`, }), 
-  // new Project({ name: `Discord-Bots` }),
-  // new Project({ name: `Tower-Defense` }),
-  new Project({ name: `React-Netflix-Clone` }),
-  new Project({ name: `MyDex-Pokedex-Clone` }),
-  // new Project({ name: `Sumit-Transcription-Form` }),
-  // new Project({ name: `Piratechs-Next-PWA-Template-2025` }),
-];
+export const featuredProjects = {
+  [`Piratechs` ]: { name: `Piratechs`, urlImage: `/icon-192x192_Circle.png` }, 
+  [`Smart-Garden` ]: { name: `Smart-Garden`, urlImage: `https://smart-garden-zeta.vercel.app/assets/SmartGardenIcon.svg` }, 
+  [`React-Netflix-Clone`]: { name: `React-Netflix-Clone`, urlImage: `https://react-netflix-clone-piratechs.vercel.app/favicon.ico` },
+  [`MyDex-Pokedex-Clone`]: { name: `MyDex-Pokedex-Clone`, },
+  [`Dyer-Posta` ]: { name: `Dyer-Posta`, title: `Dyer & Posta`, urlImage: `https://dyerposta.com/wp-content/uploads/2021/03/cropped-Official-Logo-Icon-GreenCircle.png` }, 
+} satisfies { [key: string]: Partial<Project> };
 
-export const featuredProjectNames = featuredProjects?.map(fp => fp?.name);
+export const featuredProjectNames = Object.keys(featuredProjects);
 
 export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: boolean }) {
   const initialFilter = featuredOnly ? `Featured` : `All`;
@@ -30,7 +23,16 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
 
   const projects = useMemo(() => {
     const gitProjects = gitUser?.projects;
-    const gitProjectsWFeatured = gitProjects?.map(gp => ({ ...gp, featured: gp?.featured || featuredProjectNames?.includes(gp?.name) }));
+    const gitProjectsWFeatured = gitProjects?.map(gp => {
+      let featuredProjectOverrides = (featuredProjects as any)?.[gp?.name as any] ?? {};
+      let modifiedProject = { 
+        ...gp, 
+        featured: gp?.featured || featuredProjectNames?.includes(gp?.name), 
+        ...featuredProjectOverrides,
+        ...(featuredProjectOverrides?.mediaURL ? {} : { mediaURL: getRandomImage() }),
+      };
+      return modifiedProject;
+    });
     const configProjects = gitProjectsWFeatured;
     const sortedProjects = configProjects.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
     const projectsToShow = sortedProjects.filter(project => {
@@ -38,7 +40,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
       if (activeFilter == `Featured`) return project.featured;
       return project.type == activeFilter;
     });
-    devEnv && console.log(`Project(s)`, { allProjects: configProjects, projects: projectsToShow, user: gitUser });
+    devEnv && console.log(`Project(s)`, { featuredProjects, allProjects: configProjects, projects: projectsToShow, user: gitUser });
     return projectsToShow;
   }, [activeFilter]);
 
