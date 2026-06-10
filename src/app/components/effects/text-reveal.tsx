@@ -131,7 +131,6 @@ export default function TextReveal({
       timeline?.kill();
       split?.revert();
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
-      reveal();
     };
   }, [text, byLetter, html, delay, duration, stagger, scroll]);
 

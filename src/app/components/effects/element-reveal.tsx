@@ -116,7 +116,6 @@ export default function ElementReveal({
       observer?.disconnect();
       tween?.kill();
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
-      reveal(false);
       el.classList.remove(animatingClass);
     };
   }, [x, y, blur, delay, scale, scroll, duration, origin, ease]);

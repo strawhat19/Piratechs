@@ -55,10 +55,12 @@ export default function PageTransition({
   const gridRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
   const blocksRef = useRef<HTMLDivElement[]>([]);
+  const authLoadedResolversRef = useRef<Array<() => void>>([]);
   const transitionCoveredRef = useRef(true);
   const initialLoadCompleteRef = useRef(false);
+  const authLoadedRef = useRef(false);
 
-  const { width, isPWA } = useGlobalContext();
+  const { width, isPWA, loaded } = useGlobalContext();
   const [loaderProgress, setLoaderProgress] = useState(3);
   const [showInitialLoader, setShowInitialLoader] = useState(true);
 
@@ -83,6 +85,14 @@ export default function PageTransition({
     void element.offsetWidth;
     element.classList.remove(gifResetClass);
   };
+
+  const waitForAuthLoaded = () => new Promise<void>(resolve => {
+    if (authLoadedRef.current) {
+      resolve();
+      return;
+    }
+    authLoadedResolversRef.current.push(resolve);
+  });
 
   const setTransitionPending = () => {
     document.body.classList.add(pageTransitionPendingClass);
@@ -208,7 +218,14 @@ export default function PageTransition({
     return timeline;
   };
 
+  useEffect(() => {
+    if (!loaded) return;
+    authLoadedRef.current = true;
+    authLoadedResolversRef.current.splice(0).forEach(resolve => resolve());
+  }, [loaded]);
+
   useIsomorphicLayoutEffect(() => {
+    authLoadedRef.current = loaded;
     setTransitionPending();
     createShutterBlindsGrid(1);
     const resizeShutterGrid = () => createShutterBlindsGrid();
@@ -235,7 +252,7 @@ export default function PageTransition({
     }, 90);
 
     const finishInitialLoad = async () => {
-      await Promise.all([waitForWindowLoad(), waitForFonts()]);
+      await Promise.all([waitForWindowLoad(), waitForFonts(), waitForAuthLoaded()]);
       const remainingVisibleMs = Math.max(0, loaderMinVisibleMs - (window.performance.now() - startedAt));
       if (remainingVisibleMs > 0) await wait(remainingVisibleMs);
       if (cancelled) return;

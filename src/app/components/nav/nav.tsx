@@ -64,8 +64,11 @@ export default function Nav({
   const { user, loaded, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
 
   const navItems = useMemo(() => {
-    return config.nav.filter(navItem => !navItem?.role || Boolean(user?.role && minRole(user.role, navItem.role)));
-  }, [user?.role]);
+    return config.nav.filter((navItem) => {
+      if (!navItem?.role) return true;
+      return Boolean(loaded && user?.role && minRole(user.role, navItem.role));
+    });
+  }, [loaded, user?.role]);
 
   const isActiveRoute = (href: string) => {
     if (href == `/`) return pathname == `/`;
@@ -75,23 +78,26 @@ export default function Nav({
   const renderLinks = (className: string, mobile: boolean = className?.includes(`mobile`)) => {
     return (
       <nav className={className} aria-label={`${className} navigation`}>
-        {navItems.map((navItem: NavItem, index: number) => (
-          <ElementReveal
-            as={Link}
-            blur={false}
-            duration={0.42}
-            key={navItem?.id}
-            href={navItem?.href}
-            delay={0.5 + index * 0.025}
-            onClick={() => setMenuExpanded(false)}
-            className={`navLink ${mobile ? `mobileNavLink` : ``} ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
-          >
-            <i className={`${navItem?.icon} gradientTextColor`} />
-            <span className={`logoLetter`}>
-              {navItem?.label}
-            </span>
-          </ElementReveal>
-        ))}
+        {navItems.map((navItem: NavItem) => {
+          const navDelayIndex = config.nav.findIndex(item => item?.id == navItem?.id);
+          return (
+            <ElementReveal
+              as={Link}
+              blur={false}
+              duration={0.42}
+              key={navItem?.id}
+              href={navItem?.href}
+              delay={0.5 + Math.max(navDelayIndex, 0) * 0.025}
+              onClick={() => setMenuExpanded(false)}
+              className={`navLink ${mobile ? `mobileNavLink` : ``} ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
+            >
+              <i className={`${navItem?.icon} gradientTextColor`} />
+              <span className={`logoLetter`}>
+                {navItem?.label}
+              </span>
+            </ElementReveal>
+          );
+        })}
       </nav>
     )
   };
