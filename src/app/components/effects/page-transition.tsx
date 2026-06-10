@@ -1,6 +1,8 @@
 'use client';
 
 import gsap from 'gsap';
+import Word from '../logo/word';
+import ElementReveal from './element-reveal';
 import { usePathname } from 'next/navigation';
 import Spinner from '../loaders/spinners/spinner';
 import { TransitionRouter } from 'next-transition-router';
@@ -8,7 +10,6 @@ import { useGlobalContext } from '@/shared/global-context';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
-import Word from '../logo/word';
 
 const rows = 4;
 const cols = 50;
