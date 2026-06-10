@@ -85,15 +85,12 @@ export default function ProjectDetailContent({
               <URL
                 imageCircled={false}
                 url={project.liveUrl}
+                label={project.title}
                 image={project.urlImage}
                 className={`buttonLink primary`}
-                label={project.title}
               />
             </ElementReveal>
           ) : null}
-          <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.24} />
-          <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.25} />
-          <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.26} />
         </div>
       </div>
     </div>

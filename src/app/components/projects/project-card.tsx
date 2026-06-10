@@ -5,7 +5,13 @@ import { getTechnologyMeta } from '@/shared/utils/tech';
 import { isValid } from '@/shared/common/scripts/globals';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import { getProjectNameParam, getProjectQueryHref } from '@/app/components/projects/project-data';
+import {
+  projectQueryEvent,
+  getProjectNameParam,
+  getProjectQueryHref,
+  projectSheetOpenEvent,
+  projectSheetRouteSync,
+} from '@/app/components/projects/project-data';
 
 export default function ProjectCard({
   project,
@@ -35,20 +41,21 @@ export default function ProjectCard({
           </div>
         )}
         <a
-          href={projectHref}
           className={`projectCardLinkOverlay`}
           aria-label={`Open ${project?.title ?? `project`} details`}
           onClick={(event) => {
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
             event.preventDefault();
+            window.dispatchEvent(new CustomEvent(projectSheetOpenEvent, { detail: { projectID: projectName } }));
+            if (!projectSheetRouteSync) return;
             const url = new window.URL(window.location.href);
             if (url.searchParams.get(`project`) == projectName) {
-              window.dispatchEvent(new CustomEvent(`piratechs:project-query-change`));
+              window.dispatchEvent(new CustomEvent(projectQueryEvent));
               return;
             }
             url.searchParams.set(`project`, projectName);
             window.history.pushState({ project: projectName }, ``, `${url.pathname}${url.search}${url.hash}`);
-            window.dispatchEvent(new CustomEvent(`piratechs:project-query-change`));
+            window.dispatchEvent(new CustomEvent(projectQueryEvent));
           }}
         />
       </>

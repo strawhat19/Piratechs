@@ -324,7 +324,7 @@ export default function PageTransition({
               <LinearProgress
                 value={loaderProgress}
                 variant={`determinate`}
-                className={`pageLoaderProgress`}
+                className={`pageLoaderProgress logoLetter`}
               />
               <span className={`pageLoaderProgressText logoLetter`}>
                 {Math.round(loaderProgress)}%
