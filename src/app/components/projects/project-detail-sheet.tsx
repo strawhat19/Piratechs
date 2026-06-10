@@ -3,8 +3,8 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import BottomSheet from '@/app/components/sheet/bottom-sheet';
-import ProjectDetailContent from '@/app/components/projects/project-detail-content';
 import { findProjectByID } from '@/app/components/projects/project-data';
+import ProjectDetailContent from '@/app/components/projects/project-detail-content';
 
 type ProjectDetailSheetProps = {
   projectID: string;

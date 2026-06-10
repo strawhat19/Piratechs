@@ -91,6 +91,9 @@ export default function ProjectDetailContent({
               />
             </ElementReveal>
           ) : null}
+          <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.24} />
+          <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.25} />
+          <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.26} />
         </div>
       </div>
     </div>

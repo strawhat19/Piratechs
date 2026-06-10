@@ -31,17 +31,17 @@ body[data-theme="light"] .bottomSheetBackdrop {
   bottom: 0;
   z-index: 1;
   opacity: 0;
-  width: min(1120px, calc(100vw - 28px));
-  height: var(--bottom-sheet-height, 65dvh);
   display: grid;
   overflow: hidden;
   position: absolute;
   pointer-events: auto;
   color: var(--foreground);
   box-shadow: var(--shadow);
-  background: var(--surfaceStrong);
-  border: 1px solid var(--border);
   transform: translateX(-50%);
+  border: 1px solid var(--border);
+  background: var(--surfaceStrong);
+  width: min(1120px, calc(100vw - 28px));
+  height: var(--bottom-sheet-height, 65dvh);
   border-radius: var(--borderRadius) var(--borderRadius) 0 0;
 }
 
