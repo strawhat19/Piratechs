@@ -5,20 +5,14 @@ import { getTechnologyMeta } from '@/shared/utils/tech';
 import { isValid } from '@/shared/common/scripts/globals';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import {
-  projectQueryEvent,
-  getProjectNameParam,
-  getProjectQueryHref,
-  projectSheetOpenEvent,
-  projectSheetRouteSync,
-} from '@/app/components/projects/project-data';
+import { projectQueryEvent, getProjectNameParam, projectSheetOpenEvent, projectSheetRouteSync } from '@/app/components/projects/project-data';
 
 export default function ProjectCard({
   project,
   showImages = true,
 }: any) {
   const projectName = getProjectNameParam(project);
-  const projectHref = getProjectQueryHref(project);
+  // const projectHref = getProjectQueryHref(project);
 
   // const getURLLabel = (url: string) => {
   //   let rootDomainName = String(extractRootDomain(url));

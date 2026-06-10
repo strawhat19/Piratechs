@@ -4,8 +4,18 @@ body.bottomSheetOpen {
 
 .bottomSheetLayer {
   inset: 0;
+  opacity: 0;
   z-index: 60;
   position: fixed;
+  pointer-events: none;
+}
+
+.bottomSheetLayerOpen {
+  opacity: 1;
+}
+
+.bottomSheetLayer:not(.bottomSheetLayerOpen) .bottomSheet,
+.bottomSheetLayer:not(.bottomSheetLayerOpen) .bottomSheetBackdrop {
   pointer-events: none;
 }
 

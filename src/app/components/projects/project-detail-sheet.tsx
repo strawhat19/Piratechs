@@ -7,22 +7,25 @@ import { findProjectByID } from '@/app/components/projects/project-data';
 import ProjectDetailContent from '@/app/components/projects/project-detail-content';
 
 type ProjectDetailSheetProps = {
-  projectID: string;
+  open?: boolean;
   onClose?: () => void;
+  projectID?: string | null;
 };
 
 export default function ProjectDetailSheet({
+  open = true,
   projectID,
   onClose,
 }: ProjectDetailSheetProps) {
   const router = useRouter();
-  const project = findProjectByID(projectID);
+  const isOpen = Boolean(open && projectID);
+  const project = projectID ? findProjectByID(projectID) : null;
   const navigateToProjects = useCallback(() => router.push(`/projects`), [router]);
   const closeSheet = onClose ?? navigateToProjects;
 
   return (
-    <BottomSheet label={`${project?.title ?? `Project`} Details`} className={`projectDetailSheet`} onClose={closeSheet}>
-      <ProjectDetailContent projectID={projectID} showCaseStudyLink />
+    <BottomSheet open={isOpen} label={`${project?.title ?? `Project`} Details`} className={`projectDetailSheet`} onClose={closeSheet}>
+      {projectID ? <ProjectDetailContent projectID={projectID} showCaseStudyLink /> : null}
     </BottomSheet>
   );
 }

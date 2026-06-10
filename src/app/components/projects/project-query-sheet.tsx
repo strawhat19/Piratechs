@@ -47,7 +47,7 @@ export default function ProjectQuerySheet() {
     setActiveProject(null);
   };
 
-  return activeProject ? (
-    <ProjectDetailSheet key={activeProject} projectID={activeProject} onClose={closeProjectSheet} />
-  ) : null;
+  return (
+    <ProjectDetailSheet open={Boolean(activeProject)} projectID={activeProject} onClose={closeProjectSheet} />
+  );
 }

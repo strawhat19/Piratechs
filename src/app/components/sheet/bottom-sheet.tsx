@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { useCallback, useEffect, useLayoutEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 
 type BottomSheetProps = {
+  open?: boolean;
   children: ReactNode;
   label?: string;
   height?: string;
@@ -14,6 +15,7 @@ type BottomSheetProps = {
 };
 
 export default function BottomSheet({
+  open = true,
   children,
   onClose,
   className,
@@ -27,7 +29,7 @@ export default function BottomSheet({
   const backdropRef = useRef<HTMLButtonElement>(null);
 
   const closeSheet = useCallback(() => {
-    if (closingRef.current) return;
+    if (!open || closingRef.current) return;
     closingRef.current = true;
     const sheet = sheetRef.current;
     const backdrop = backdropRef.current;
@@ -50,9 +52,10 @@ export default function BottomSheet({
         webkitBackdropFilter: `blur(0px) saturate(100%)`,
       }, 0);
     }
-  }, [onClose]);
+  }, [open, onClose]);
 
   useEffect(() => {
+    if (!open) return;
     document.body.classList.add(`bottomSheetOpen`);
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key == `Escape`) closeSheet();
@@ -62,12 +65,29 @@ export default function BottomSheet({
       document.body.classList.remove(`bottomSheetOpen`);
       document.removeEventListener(`keydown`, onKeyDown);
     };
-  }, [closeSheet]);
+  }, [open, closeSheet]);
 
   useLayoutEffect(() => {
     const sheet = sheetRef.current;
     const backdrop = backdropRef.current;
     const timeline = gsap.timeline({ defaults: { ease: `power3.inOut` } });
+    if (!open) {
+      closingRef.current = false;
+      if (backdrop) {
+        gsap.set(backdrop, {
+          autoAlpha: 0,
+          backdropFilter: `blur(0px) saturate(100%)`,
+          webkitBackdropFilter: `blur(0px) saturate(100%)`,
+        });
+      }
+      if (sheet) {
+        gsap.set(sheet, { autoAlpha: 0, xPercent: -50, yPercent: 104, scale: 0.97, transformOrigin: `bottom center`, width: `85%` });
+      }
+      return () => {
+        timeline.kill();
+      };
+    }
+    closingRef.current = false;
     if (backdrop) {
       gsap.set(backdrop, {
         autoAlpha: 1,
@@ -93,10 +113,10 @@ export default function BottomSheet({
     return () => {
       timeline.kill();
     };
-  }, []);
+  }, [open]);
 
   return (
-    <div className={`bottomSheetLayer`} aria-label={label} role={`dialog`} aria-modal={`true`}>
+    <div className={`bottomSheetLayer ${open ? `bottomSheetLayerOpen` : ``}`} aria-label={label} role={`dialog`} aria-modal={open} aria-hidden={!open}>
       <button
         type={`button`}
         ref={backdropRef}
