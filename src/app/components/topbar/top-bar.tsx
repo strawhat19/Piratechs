@@ -7,10 +7,12 @@ import ElementReveal from '@/app/components/effects/element-reveal';
 type TopBarProps = {
   autoplay?: boolean;
   pauseonhover?: boolean;
+  direction?: `rtl` | `ltr`;
 };
 
 export default function TopBar({
   autoplay = true,
+  direction = `rtl`,
   pauseonhover = true,
 }: TopBarProps = {}) {
   const items = config.topBarItems;
@@ -20,6 +22,7 @@ export default function TopBar({
       role={`list`}
       autoplay={autoplay}
       className={`topBar`}
+      direction={direction}
       pauseonhover={pauseonhover}
       trackClassName={`topBarTrack`}
       ariaLabel={`Piratechs highlights`}

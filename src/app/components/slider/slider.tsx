@@ -9,8 +9,9 @@ type SliderProps = {
   className?: string;
   ariaLabel?: string;
   autoplay?: boolean;
-  trackClassName?: string;
   pauseonhover?: boolean;
+  trackClassName?: string;
+  direction?: `rtl` | `ltr`;
   draggingClassName?: string;
 };
 
@@ -20,20 +21,22 @@ export default function Slider({
   className,
   ariaLabel,
   speed = 15,
-  autoplay = true,
   trackClassName,
+  autoplay = true,
+  direction = `rtl`,
   pauseonhover = true,
   draggingClassName = `isDragging`,
 }: SliderProps) {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const animationRef = useRef<Animation | null>(null);
   const inViewRef = useRef(true);
+  const dragStartXRef = useRef(0);
   const hoveringRef = useRef(false);
   const draggingRef = useRef(false);
+  const dragStartTimeRef = useRef(0);
   const playStateFrameRef = useRef(0);
   const reducedMotionRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartTimeRef = useRef(0);
+  const animationRef = useRef<Animation | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
   const [dragging, setDragging] = useState(false);
 
   const shouldPlayAnimation = () => (
@@ -116,11 +119,17 @@ export default function Slider({
       if (setWidth <= 0) return;
 
       const duration = (setWidth / speed) * 1000;
-      const animation = track.animate(
-        [
+      const keyframes = direction == `ltr`
+        ? [
+          { transform: `translate3d(-${setWidth}px, 0, 0)` },
+          { transform: `translate3d(0, 0, 0)` },
+        ]
+        : [
           { transform: `translate3d(0, 0, 0)` },
           { transform: `translate3d(-${setWidth}px, 0, 0)` },
-        ],
+        ];
+      const animation = track.animate(
+        keyframes,
         { duration, iterations: Infinity, easing: `linear` },
       );
       animation.currentTime = progress * duration;
@@ -158,7 +167,7 @@ export default function Slider({
       animationRef.current?.cancel();
       animationRef.current = null;
     };
-  }, [autoplay, pauseonhover, speed]);
+  }, [autoplay, direction, pauseonhover, speed]);
 
   const onMouseEnter = () => {
     hoveringRef.current = true;
@@ -193,7 +202,7 @@ export default function Slider({
     if (duration <= 0 || setWidth <= 0) return;
     const deltaX = event.clientX - dragStartXRef.current;
     const deltaTime = (deltaX / setWidth) * duration;
-    let nextTime = dragStartTimeRef.current - deltaTime;
+    let nextTime = direction == `ltr` ? dragStartTimeRef.current + deltaTime : dragStartTimeRef.current - deltaTime;
     nextTime = ((nextTime % duration) + duration) % duration;
     animation.currentTime = nextTime;
   };
