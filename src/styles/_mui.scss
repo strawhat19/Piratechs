@@ -1,0 +1,16 @@
+.roleIconGradientWrap {
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.roleIconGradientDefs {
+  width: 0;
+  height: 0;
+  position: absolute;
+  overflow: hidden;
+}
+
+.roleIconGradient {
+  flex: 0 0 auto;
+}

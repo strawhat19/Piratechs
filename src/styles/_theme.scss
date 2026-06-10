@@ -186,7 +186,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-  width: 12px;
+  width: 7px;
   height: 12px;
 }
 
@@ -356,6 +356,13 @@ img {
   background: var(--main_gradient);
   &.bgReversed {
     background: linear-gradient(var(--main_gradient_angle), var(--piratechsTeal), var(--piratechsNeon));
+  }
+}
+
+.gradientBGi {
+  background: var(--main_gradient) !important;
+  &.bgReversed {
+    background: linear-gradient(var(--main_gradient_angle), var(--piratechsTeal), var(--piratechsNeon)) !important;
   }
 }
 

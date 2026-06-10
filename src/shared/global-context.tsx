@@ -144,7 +144,9 @@ const getStoredUser = async (firebaseUser: FirebaseUser, currentUsers: User[]) =
   const usersQuery = query(collection(db, usersCollection), where(`uid`, `==`, firebaseUser.uid), limit(1));
   const snapshot = await getDocs(usersQuery);
   const userDoc = snapshot.docs?.[0];
-  return userDoc ? normalizeUser(userDoc.id, userDoc.data(), getNextUserNumber(currentUsers)) : null;
+  const userFromDB = userDoc ? normalizeUser(userDoc.id, userDoc.data(), getNextUserNumber(currentUsers)) : null;
+  console.log({userFromDB});
+  return userFromDB;
 };
 
 export const useGlobalContext = () => useContext(StateGlobals);

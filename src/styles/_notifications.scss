@@ -35,21 +35,22 @@
   padding: 14px;
   position: absolute;
   pointer-events: none;
+  transform-origin: top;
   top: calc(100% + 14px);
   color: var(--foreground);
   box-shadow: var(--shadow);
-  transform: translateY(8px);
   border: 1px solid var(--border);
   background: var(--surfaceStrong);
   border-radius: var(--borderRadius);
   width: min(340px, calc(100vw - 32px));
+  transform: scale(1, 0) translateY(8px);
   transition: opacity var(--transition), transform var(--transition);
 }
 
 .notificationOpen .notificationPanel {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: scale(1, 1) translateY(0);
 }
 
 .notificationHeader {
@@ -86,11 +87,14 @@
 }
 
 .notificationList {
-  display: grid;
   gap: 9px;
-  max-height: min(420px, 58vh);
+  display: grid;
   overflow: auto;
   padding-right: 2px;
+  max-height: min(420px, 58vh);
+  &.overflowingNotificationList {
+    padding-right: 10px;
+  }
 }
 
 .notificationItem {

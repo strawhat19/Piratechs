@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Logo from '../logo/logo';
-import { useMemo } from 'react';
 import Word from '../logo/word';
 import { Roles } from '@/shared/types/types';
 import { usePathname } from 'next/navigation';
@@ -10,21 +9,51 @@ import { minRole } from '@/shared/models/User';
 import { config } from '@/shared/config/config';
 import type { NavItem } from '@/shared/types/app';
 import TopBar from '@/app/components/topbar/top-bar';
-import { useGlobalContext } from '@/shared/global-context';
+import { useMemo, type ComponentType } from 'react';
+import type { SvgIconProps } from '@mui/material/SvgIcon';
 import AuthWidget from '@/app/components/auth/auth-widget';
+import { useGlobalContext } from '@/shared/global-context';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import NotificationBell from '@/app/components/notifications/notification-bell';
-import { Code, Star, Edit, Person, Security, WorkspacePremium, AdminPanelSettings, ShoppingCart, Logout, Delete, KeyboardArrowDown } from '@mui/icons-material';
+import { Code, Star, Edit, Person, Security, WorkspacePremium, AdminPanelSettings, ShoppingCart } from '@mui/icons-material';
+
+type RoleGradientIconProps = SvgIconProps & {
+  icon: ComponentType<SvgIconProps>;
+  gradientID: string;
+};
+
+const RoleGradientIcon = ({
+  icon: Icon,
+  gradientID,
+  className,
+  ...props
+}: RoleGradientIconProps) => (
+  <span className={`roleIconGradientWrap`}>
+    <svg aria-hidden={`true`} focusable={`false`} className={`roleIconGradientDefs`}>
+      <defs>
+        <linearGradient id={gradientID} x1={`0%`} y1={`0%`} x2={`100%`} y2={`100%`}>
+          <stop offset={`0%`} stopColor={`var(--piratechsNeon)`} />
+          <stop offset={`100%`} stopColor={`var(--piratechsTeal)`} />
+        </linearGradient>
+      </defs>
+    </svg>
+    <Icon
+      {...props}
+      className={[`roleIconGradient`, className].filter(Boolean).join(` `)}
+      sx={{ '& path': { fill: `url(#${gradientID})` } }}
+    />
+  </span>
+);
 
 export const roleIcons = {
-  [Roles.Guest]: <Person fontSize={`small`} className={`gradientTextColor`} />,
-  [Roles.Subscriber]: <Star fontSize={`small`} className={`gradientTextColor`} />,
-  [Roles.Customer]: <ShoppingCart style={{ fontSize: 18 }} className={`gradientTextColor`} />,
-  [Roles.Editor]: <Edit fontSize={`small`} className={`gradientTextColor`} />,
-  [Roles.Moderator]: <Security style={{ fontSize: 18 }} className={`gradientTextColor`} />,
-  [Roles.Administrator]: <AdminPanelSettings fontSize={`small`} className={`gradientTextColor`} />,
-  [Roles.Developer]: <Code fontSize={`small`} className={`gradientTextColor`} />,
-  [Roles.Owner]: <WorkspacePremium fontSize={`small`} className={`gradientTextColor`} />,
+  [Roles.Guest]: <RoleGradientIcon icon={Person} gradientID={`roleIconGradientGuest`} fontSize={`small`} />,
+  [Roles.Subscriber]: <RoleGradientIcon icon={Star} gradientID={`roleIconGradientSubscriber`} fontSize={`small`} />,
+  [Roles.Customer]: <RoleGradientIcon icon={ShoppingCart} gradientID={`roleIconGradientCustomer`} style={{ fontSize: 18 }} />,
+  [Roles.Editor]: <RoleGradientIcon icon={Edit} gradientID={`roleIconGradientEditor`} fontSize={`small`} />,
+  [Roles.Moderator]: <RoleGradientIcon icon={Security} gradientID={`roleIconGradientModerator`} style={{ fontSize: 18 }} />,
+  [Roles.Administrator]: <RoleGradientIcon icon={AdminPanelSettings} gradientID={`roleIconGradientAdministrator`} fontSize={`small`} />,
+  [Roles.Developer]: <RoleGradientIcon icon={Code} gradientID={`roleIconGradientDeveloper`} fontSize={`small`} />,
+  [Roles.Owner]: <RoleGradientIcon icon={WorkspacePremium} gradientID={`roleIconGradientOwner`} fontSize={`small`} />,
 };
 
 export default function Nav({
@@ -32,7 +61,7 @@ export default function Nav({
 }: any) {
   const pathname = usePathname();
 
-  const { user, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
+  const { user, loaded, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
 
   const navItems = useMemo(() => {
     return config.nav.filter(navItem => !navItem?.role || Boolean(user?.role && minRole(user.role, navItem.role)));
@@ -84,17 +113,17 @@ export default function Nav({
         </ElementReveal>
         {renderLinks(`desktopNav`)}
         <div className={`navActions`}>
+          <ElementReveal as={`button`} type={`button`} blur={false} delay={0.5} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
+            <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
+          </ElementReveal>
           <ElementReveal as={`span`} blur={false} delay={0.5} className={`navActionReveal`}>
             <AuthWidget />
           </ElementReveal>
-          {Boolean(user?.role && minRole(user.role, Roles.Editor)) && <>
+          {loaded && user && Boolean(user?.role && minRole(user.role, Roles.Editor)) && <>
             <ElementReveal as={`span`} blur={false} delay={0.5} className={`navActionReveal`}>
               <NotificationBell />
             </ElementReveal>
           </>}
-          <ElementReveal as={`button`} type={`button`} blur={false} delay={0.5} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
-            <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
-          </ElementReveal>
           <ElementReveal
             delay={0.5}
             blur={false}

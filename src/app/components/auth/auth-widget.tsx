@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { roleIcons } from '../nav/nav';
 import TextReveal from '../effects/text-reveal';
 import Spinner from '../loaders/spinners/spinner';
 import ElementReveal from '../effects/element-reveal';
 import { useGlobalContext } from '@/shared/global-context';
 import { capWords } from '@/shared/common/scripts/globals';
-import { roleIcons } from '../nav/nav';
 
 type AuthMode = `sign-in` | `sign-up`;
 
@@ -102,7 +102,9 @@ export default function AuthWidget({
           <form className={`authForm`} onSubmit={onSubmit}>
             <div className={`authHeader`}>
               <strong>{signInLabel}</strong>
-              <small>{firebaseReady ? (loaded ? `Firebase Ready` : `Loading`) : `Connect Firebase Env`}</small>
+              {showAuthStatus && (
+                <small>{firebaseReady ? (loaded ? `Firebase Ready` : `Loading`) : `Connect Firebase Env`}</small>
+              )}
             </div>
             {mode == `sign-up` ? (
               <label>

@@ -172,7 +172,7 @@ body[data-theme="light"] .heroLogoLight {
   pointer-events: none;
   transform-origin: top;
   box-shadow: var(--shadow);
-  width: min(100% - 32px, 520px);
+  width: min(100% - 32px, 300px);
   max-height: calc(100dvh - 126px);
   background: var(--surfaceStrong);
   border-radius: var(--borderRadius);

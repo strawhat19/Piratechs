@@ -9,15 +9,16 @@
   width: 269px;
   position: absolute;
   pointer-events: none;
+  transform-origin: top;
   top: calc(100% + 14px);
-  transform: translateY(8px);
+  transform: scale(1, 0) translateY(8px);
   transition: opacity var(--transition), transform var(--transition);
 }
 
 .authWidget.authOpen .authPanel {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: scale(1, 1) translateY(0);
 }
 
 .cta {

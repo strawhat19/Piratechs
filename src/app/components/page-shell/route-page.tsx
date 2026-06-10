@@ -77,7 +77,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
                   <article key={capability} className={`serviceCard reveal`}>
                     <i className={`${meta.icon} techIcon ${meta.className}`} />
                     <TextReveal scroll as={`h3`} text={capability} />
-                    <TextReveal scroll as={`p`} text={`This page can grow into a dedicated Piratechs section with content, API data, Firebase records, filters, and project links.`} />
+                    <TextReveal scroll as={`p`} text={`This page can grow into a dedicated section with content, filters, and links.`} />
                   </article>
                 );
               })}
