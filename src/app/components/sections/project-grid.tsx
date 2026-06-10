@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { config } from '@/shared/config/config';
 import { Project } from '@/shared/models/Project';
 import ProjectCard from '@/app/components/projects/project-card';
-import { devEnv, getRandomImage } from '@/shared/common/database/constants';
+import { devEnv, publicImageURLs } from '@/shared/common/database/constants';
 import { gitUser } from '@/shared/common/database/github/users/strawhat19/user';
 
 export const featuredProjects = {
@@ -17,19 +17,31 @@ export const featuredProjects = {
 
 export const featuredProjectNames = Object.keys(featuredProjects);
 
-export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: boolean }) {
+const fallbackProjectImages = Object.values(publicImageURLs?.horizontal ?? {}) as string[];
+
+const getProjectImage = (project: Project | any, index: number) => {
+  if (!fallbackProjectImages?.length) return publicImageURLs?.horizontal?.night;
+  const imageKey = String(project?.id ?? project?.name ?? index);
+  const imageIndex = Array.from(imageKey).reduce((total, char) => total + char.charCodeAt(0), 0) % fallbackProjectImages.length;
+  return fallbackProjectImages?.[imageIndex] ?? publicImageURLs?.horizontal?.night;
+};
+
+export default function ProjectGrid({ 
+  showImages = true, 
+  featuredOnly = false, 
+}: any) {
   const initialFilter = featuredOnly ? `Featured` : `All`;
   const [activeFilter, setActiveFilter] = useState(initialFilter);
 
   const projects = useMemo(() => {
     const gitProjects = gitUser?.projects;
-    const gitProjectsWFeatured = gitProjects?.map(gp => {
+    const gitProjectsWFeatured = gitProjects?.map((gp, index) => {
       let featuredProjectOverrides = (featuredProjects as any)?.[gp?.name as any] ?? {};
       let modifiedProject = { 
         ...gp, 
         featured: gp?.featured || featuredProjectNames?.includes(gp?.name), 
         ...featuredProjectOverrides,
-        ...(featuredProjectOverrides?.mediaURL ? {} : { mediaURL: getRandomImage() }),
+        ...(featuredProjectOverrides?.mediaURL ? {} : { mediaURL: getProjectImage(gp, index) }),
       };
       return modifiedProject;
     });
@@ -62,7 +74,7 @@ export default function ProjectGrid({ featuredOnly = false }: { featuredOnly?: b
       </div>
       <div className={`projectGrid`} aria-live={`polite`}>
         {projects.map(project => (
-          <ProjectCard key={project.id} project={project} />
+          <ProjectCard key={project.id} project={project} showImages={showImages} />
         ))}
       </div>
     </>

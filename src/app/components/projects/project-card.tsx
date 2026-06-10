@@ -1,29 +1,32 @@
 import URL from '../url/url';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+import { isValid } from '@/shared/common/scripts/globals';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import { capWords, extractRootDomain, isValid } from '@/shared/common/scripts/globals';
 
-export default function ProjectCard({ project }: any) {
+export default function ProjectCard({ 
+  project, 
+  showImages = true, 
+}: any) {
   const projectUrl = project?.codeUrl || project?.liveUrl;
 
-  const getURLLabel = (url: string) => {
-    let rootDomainName = String(extractRootDomain(url));
-    if (rootDomainName && rootDomainName?.length >= 25) {
-      rootDomainName = rootDomainName?.split(`.`)[0];
-    }
-    let urlLabel = capWords(rootDomainName);
-    return urlLabel;
-  }
+  // const getURLLabel = (url: string) => {
+  //   let rootDomainName = String(extractRootDomain(url));
+  //   if (rootDomainName && rootDomainName?.length >= 25) {
+  //     rootDomainName = rootDomainName?.split(`.`)[0];
+  //   }
+  //   let urlLabel = capWords(rootDomainName);
+  //   return urlLabel;
+  // }
 
   return (
     <article className={`projectCard reveal`}>
       {projectUrl ? <>
-        {project?.mediaURL && project?.mediaURL != `` && isValid(project?.mediaURL) && (
+        {showImages && project?.mediaURL && project?.mediaURL != `` && isValid(project?.mediaURL) && (
           <div className={`projectCardBG`}>
             <figure className={`projectCardBGWrap`}>
               <div className={`imgOverlay`} />
-              <img className={`projectMedia reveal`} src={project?.mediaURL} alt={project?.title} />
+              <img className={`projectMedia`} src={project?.mediaURL} alt={project?.title} />
             </figure>
           </div>
         )}

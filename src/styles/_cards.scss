@@ -113,6 +113,7 @@ html {
     inset: 0;
     z-index: 1;
     position: absolute;
+    height: calc(100% + 1px);
     .projectCardBGWrap {
       height: 100%;
       position: relative;
