@@ -467,15 +467,6 @@ p {
   filter: var(--logoLetterDropShadow) !important;
 }
 
-a, button, span {
-  &.primary, &.activeFilter {
-    &.logoLetter, .logoLetter {
-      // text-shadow: 0 0 2px var(--navy);
-      text-shadow: 2px 4px 8px var(--navy);
-    }
-  }
-}
-
 .dark {
   .logoLetter {
     @extend .dropShadow;
@@ -504,6 +495,14 @@ html {
     body {
       background: linear-gradient(135deg, var(--light_teal) 70%, var(--white-smoke));
       // background: radial-gradient(circle at 18% 8%, rgba(0, 191, 255, 0.16), transparent 28%), linear-gradient(135deg, #ffffff, var(--backgroundDeep) 58%, #dfeaf5 100%);
+    }
+    a, button, span {
+      &.primary, &.activeFilter {
+        &.logoLetter, .logoLetter {
+          // text-shadow: 0 0 2px var(--navy);
+          text-shadow: 2px 4px 8px var(--navy);
+        }
+      }
     }
     .imgOverlay {
       backdrop-filter: blur(18px);
