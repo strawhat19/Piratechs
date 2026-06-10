@@ -1,20 +1,21 @@
-body::before {
-  content: "";
-  inset: 0;
-  opacity: 0;
-  z-index: 19;
-  position: fixed;
-  pointer-events: none;
-  backdrop-filter: blur(0);
-  background: rgba(var(--navy_rgb), 0.35);
-  transition: opacity 0.34s ease, backdrop-filter 0.34s ease, -webkit-backdrop-filter 0.34s ease;
-}
-
-body.menuOpen::before,
-body.authPanelOpen::before,
-body.notificationPanelOpen::before {
-  opacity: 1;
-  backdrop-filter: blur(18px);
+body {
+  &::before {
+    content: "";
+    inset: 0;
+    opacity: 0;
+    z-index: 19;
+    position: fixed;
+    pointer-events: none;
+    backdrop-filter: blur(0);
+    background: rgba(var(--navy_rgb), 0.35);
+    transition: opacity 0.34s ease, backdrop-filter 0.34s ease, -webkit-backdrop-filter 0.34s ease;
+  }
+  &.menuOpen, &.notificationPanelOpen, &:has(.navActionReveal .authOpen) {
+    &::before {
+      opacity: 1;
+      backdrop-filter: blur(18px);
+    }
+  }
 }
 
 body[data-theme="light"]::before {
