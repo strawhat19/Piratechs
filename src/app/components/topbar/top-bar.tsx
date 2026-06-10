@@ -7,6 +7,7 @@ import ElementReveal from '@/app/components/effects/element-reveal';
 type TopBarProps = {
   id?: string;
   autoplay?: boolean;
+  fadeSides?: boolean;
   pauseonhover?: boolean;
   direction?: `rtl` | `ltr`;
 };
@@ -14,6 +15,7 @@ type TopBarProps = {
 export default function TopBar({
   autoplay = true,
   direction = `rtl`,
+  fadeSides = true,
   pauseonhover = true,
   id = `topBarComponent`,
 }: TopBarProps = {}) {
@@ -24,11 +26,11 @@ export default function TopBar({
       id={id}
       role={`list`}
       autoplay={autoplay}
-      className={`topBar`}
       direction={direction}
       pauseonhover={pauseonhover}
       trackClassName={`topBarTrack`}
       ariaLabel={`Piratechs highlights`}
+      className={`topBar ${fadeSides ? `fadeSides` : ``}`}
     >
       {items.map((item, index) => (
         <ElementReveal

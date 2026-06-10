@@ -453,6 +453,11 @@ p {
   --w: 150px;
 }
 
+.loaderWord {
+  --w: 185px;
+  margin: 0 10px;
+}
+
 .wordLogoFooter {
   --w: 135px;
   right: -10px;
@@ -559,11 +564,13 @@ html {
             color: var(--foreground) !important;
           }
         }
-        &::before {
-          background: linear-gradient(90deg, var(--white), transparent);
-        }
-        &::after {
-          background: linear-gradient(270deg, var(--white), transparent);
+        &.fadeSides {
+          &::before {
+            background: linear-gradient(90deg, var(--white), transparent);
+          }
+          &::after {
+            background: linear-gradient(270deg, var(--white), transparent);
+          }
         }
       }
       .brandMark, .navLink, .iconButton {

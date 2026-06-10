@@ -5,26 +5,25 @@
   position: relative;
   border-top: 1px solid rgba(0, 191, 255, 0.18);
   border-bottom: 1px solid rgba(0, 191, 255, 0.34);
-}
-
-.topBar::before, .topBar::after {
-  top: 0;
-  z-index: 2;
-  content: "";
-  width: 60px;
-  height: 100%;
-  position: absolute;
-  pointer-events: none;
-}
-
-.topBar::before {
-  left: 0;
-  background: linear-gradient(90deg, #002443, transparent);
-}
-
-.topBar::after {
-  right: 0;
-  background: linear-gradient(270deg, #002443, transparent);
+  &.fadeSides {
+    &::before, &::after {
+      top: 0;
+      z-index: 2;
+      content: "";
+      width: 60px;
+      height: 100%;
+      position: absolute;
+      pointer-events: none;
+    }
+    &::before {
+      left: 0;
+      background: linear-gradient(90deg, #002443, transparent);
+    }
+    &::after {
+      right: 0;
+      background: linear-gradient(270deg, #002443, transparent);
+    }
+  }
 }
 
 .topBarTrack {

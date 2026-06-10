@@ -2,17 +2,19 @@
 
 import gsap from 'gsap';
 import { usePathname } from 'next/navigation';
+import Spinner from '../loaders/spinners/spinner';
 import LinearProgress from '@mui/material/LinearProgress';
 import { TransitionRouter } from 'next-transition-router';
 import { useGlobalContext } from '@/shared/global-context';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
+import Word from '../logo/word';
 
 const rows = 4;
-const cols = 20;
+const cols = 50;
+const slantExtraCols = 3;
 
-const blockCount = rows * cols;
 const gifResetClass = `pageTransitionGifReset`;
 const rowIndexes = Array.from({ length: rows }, (_, index) => index);
 const loaderDoneDelay = 360;
@@ -22,6 +24,7 @@ const loaderMaxBeforeReady = 94;
 type PageTransitionProps = {
   children: ReactNode;
   duration?: number;
+  slanted?: boolean;
 };
 
 const getReducedMotion = () => (
@@ -49,6 +52,7 @@ const waitForFonts = () => {
 
 export default function PageTransition({ 
   children,
+  slanted = true,
   duration = 0.24, 
 }: PageTransitionProps) {
   const pathname = usePathname();
@@ -64,17 +68,21 @@ export default function PageTransition({
   const [loaderProgress, setLoaderProgress] = useState(3);
   const [showInitialLoader, setShowInitialLoader] = useState(true);
 
-  const getRowBlocks = (row: number) => blocksRef.current.slice(row * cols, row * cols + cols);
+  const colOffset = slanted ? slantExtraCols : 0;
+  const renderCols = cols + colOffset * 2;
+  const renderBlockCount = rows * renderCols;
+
+  const getRowBlocks = (row: number) => blocksRef.current.slice(row * renderCols, row * renderCols + renderCols);
 
   const getInitialBlockStyle = (index: number): CSSProperties => {
-    const row = Math.floor(index / cols);
-    const col = index % cols;
+    const row = Math.floor(index / renderCols);
+    const col = (index % renderCols) - colOffset;
     return {
-      transform: `scaleX(1)`,
       top: `${(row * 100) / rows}dvh`,
       left: `${(col * 100) / cols}vw`,
       width: `calc(${100 / cols}vw + 1px)`,
       height: `calc(${100 / rows}dvh + 1px)`,
+      transform: slanted ? `skew(-15deg) scaleX(0)` : `scaleX(1)`,
       transformOrigin: row % 2 == 0 ? `left center` : `right center`,
     };
   };
@@ -110,16 +118,17 @@ export default function PageTransition({
     if (!grid) return;
     const blockWidth = window.innerWidth / cols;
     const blockHeight = window.innerHeight / rows;
-    blocksRef.current.forEach((block, index) => {
-      const row = Math.floor(index / cols);
-      const col = index % cols;
-      gsap.set(block, {
+    blocksRef.current.forEach((pageTransitionBlock, index) => {
+      const row = Math.floor(index / renderCols);
+      const col = (index % renderCols) - colOffset;
+      gsap.set(pageTransitionBlock, {
         scaleX,
         width: blockWidth + 1,
         top: row * blockHeight,
         left: col * blockWidth,
         height: blockHeight + 1,
         transformOrigin: row % 2 == 0 ? `left center` : `right center`,
+        ...(slanted ? { transform: `skew(-15deg) scaleX(${scaleX})` } : { transform: `scaleX(${scaleX})` }),
       });
     });
   };
@@ -196,8 +205,8 @@ export default function PageTransition({
     if (withLoader) {
       timeline.to(loader, {
         y: -8,
-        duration: 0.28,
         autoAlpha: 0,
+        duration: 0.28,
         ease: `power2.out`,
       }, 0);
     } else {
@@ -227,7 +236,8 @@ export default function PageTransition({
   useIsomorphicLayoutEffect(() => {
     authLoadedRef.current = loaded;
     setTransitionPending();
-    createShutterBlindsGrid(1);
+    createShutterBlindsGrid(0);
+    animateIn(() => {});
     const resizeShutterGrid = () => createShutterBlindsGrid();
     window.addEventListener(`resize`, resizeShutterGrid);
     if (getReducedMotion()) {
@@ -299,10 +309,11 @@ export default function PageTransition({
         ${showInitialLoader ? `initialLoaderActive` : ``}
         ${isPWA ? `pwa` : `nonPWA`} 
         ${getPageName(pathname)}Page  
+        ${slanted ? `slanted` : `straightened`} 
         ${getDeviceDetails()?.ios ? `ios` : `noIos`} 
         ${(width <= 768 || getDeviceDetails()?.mobile) ? `mobile` : ``}
       `} aria-hidden={`true`}>
-        {Array.from({ length: blockCount }).map((_, index) => (
+        {Array.from({ length: renderBlockCount }).map((_, index) => (
           <div
             key={index}
             style={getInitialBlockStyle(index)}
@@ -314,6 +325,11 @@ export default function PageTransition({
         ))}
         {showInitialLoader && (
           <div ref={loaderRef} className={`pageTransitionLoader`}>
+            <div className={`pageLoaderSpinnerWrapper`}>
+              <div className={`pageLoaderSpinnerContainer`}>
+                <Spinner size={`65%`} thickness={0.2} className={`pageLoaderSpinner dropShadow`} />
+              </div>
+            </div>
             <div className={`pageTransitionLoaderInner`}>
               <img
                 aria-hidden={`true`}
@@ -326,9 +342,17 @@ export default function PageTransition({
                 variant={`determinate`}
                 className={`pageLoaderProgress dropShadow`}
               />
-              <span className={`pageLoaderProgressText dropShadow`}>
-                {Math.round(loaderProgress)}%
+              <span className={`pageLoaderProgressText column`}>
+                {/* <Spinner size={30} thickness={4} className={`dropShadow`} /> */}
+                <Word className={`loaderWord`} gradient={false} gradientSword arrows shadows />
+                <span className={`dropShadow`}>
+                  {Math.round(loaderProgress)}%
                 </span>
+                {/* <span className={`dropShadow`}>
+                  Loading <Word className={`loaderWord`} gradient={false} gradientSword arrows /> ... {Math.round(loaderProgress)}%
+                </span> */}
+                {/* <Spinner size={30} thickness={4} value={loaderProgress} variant={`determinate`} className={`dropShadow`} /> */}
+              </span>
             </div>
           </div>
         )}

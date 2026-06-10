@@ -61,6 +61,14 @@ body.pageTransitionPending .heroBrand.reveal {
   overflow: hidden;
   background: none;
   pointer-events: auto;
+  // &.slanted {
+  //   &:has(.pageTransitionLoader) {
+  //     transform: skew(-15deg);
+  //     .pageTransitionLoader {
+  //       transform: skew(15deg);
+  //     }
+  //   }
+  // }
   // background: var(--main_gradient);
   // background: var(--main_gradient_dark);
   // background: url('/assets/piratechs/gifs/Piratech-Glitch.gif'), var(--main_gradient);
@@ -93,6 +101,7 @@ body.pageTransitionPending .heroBrand.reveal {
   position: absolute;
   transform: scaleX(1);
   will-change: transform;
+  // background: var(--navy);
   backface-visibility: hidden;
   background: var(--main_gradient_dark);
   // background: url('/assets/piratechs/gifs/Piratech-Glitch.gif'), var(--main_gradient);
@@ -101,25 +110,21 @@ body.pageTransitionPending .heroBrand.reveal {
   // background-repeat: no-repeat, no-repeat !important;
 }
 
-// .pageTransitionBlock:nth-child(odd) {
-//   background: linear-gradient(var(--main_gradient_angle), var(--main), var(--navy));
-// }
-
 .pageTransitionBlock:nth-child(even) {
   background: linear-gradient(var(--main_gradient_angle), var(--navy), var(--main));
 }
 
-.pageTransitionBlock::after {
-  inset: 0;
-  content: "";
-  width: 100%;
-  height: 100%;
-  opacity: 0.2;
-  display: block;
-  position: absolute;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 48%, rgba(4, 27, 68, 0.28));
-}
+// .pageTransitionBlock::after {
+//   inset: 0;
+//   content: "";
+//   width: 100%;
+//   height: 100%;
+//   opacity: 0.2;
+//   display: block;
+//   position: absolute;
+//   pointer-events: none;
+//   background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 48%, rgba(4, 27, 68, 0.28));
+// }
 
 .pageTransitionLoader {
   inset: 0;
@@ -128,14 +133,15 @@ body.pageTransitionPending .heroBrand.reveal {
   position: absolute;
   place-items: center;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.14), transparent 32%);
+   background: var(--main_gradient_dark);
+  // background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.14), transparent 32%);
 }
 
 .pageTransitionLoaderInner {
   gap: 20px;
-  width: min(879px, 86vw);
   display: grid;
   justify-items: center;
+  width: min(879px, 86vw);
 }
 
 .pageTransitionGif {
@@ -152,22 +158,38 @@ body.pageTransitionPending .heroBrand.reveal {
 .pageLoaderProgress {
   width: 100%;
   max-width: 460px;
-  height: 6px !important;
   overflow: hidden;
+  height: 4px !important;
+  background: transparent !important;
   border-radius: var(--circle) !important;
-  background: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 0 0 20px rgba(0, 191, 255, 0.24);
+  // box-shadow: 0 0 20px rgba(0, 191, 255, 0.24);
+  // background: rgba(255, 255, 255, 0.16) !important;
   .MuiLinearProgress-bar {
-    background: var(--main_gradient) !important;
     border-radius: var(--circle);
+    background: var(--main_gradient) !important;
+  }
+}
+
+.pageLoaderSpinnerWrapper {
+  inset: 0;
+  position: absolute;
+  .pageLoaderSpinnerContainer {
+    width: 100%;
+    text-align: center;
+    .pageLoaderSpinner {
+      margin: 0 auto;
+    }
   }
 }
 
 .pageLoaderProgressText {
+  display: flex;
   line-height: 1;
+  grid-gap: 15px;
   font-weight: 800;
   font-size: 1.5rem;
   color: var(--white);
+  align-items: center;
   letter-spacing: 0.08em;
   text-shadow: 0 0 14px rgba(0, 191, 255, 0.42);
 }
