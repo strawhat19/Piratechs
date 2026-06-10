@@ -42,13 +42,15 @@ export default function Footer({
             <i className={`fas fa-copyright gradientTextColor`} style={{ margin: `0 3px`, color: `var(--main)` }} />
             <TextReveal scroll as={`span`} text={String(new Date()?.getFullYear())} delay={0.04} />
           </ElementReveal>
-          {config.social.map((item, index) => (
-            <ElementReveal scroll as={`span`} key={item.label} delay={0.14 + index * 0.035} className={`footerIconReveal`}>
-              <a href={item.href} target={`_blank`} rel={`noreferrer`} aria-label={item.label} className={`iconButton`}>
-                <i className={item.icon} style={{ color: `white` }} />
-              </a>
-            </ElementReveal>
-          ))}
+          <div className={`footerSocials`}>
+            {config.social.map((item, index) => (
+              <ElementReveal scroll as={`span`} key={item.label} delay={0.14 + index * 0.035} className={`footerIconReveal`}>
+                <a href={item.href} target={`_blank`} rel={`noreferrer`} aria-label={item.label} className={`iconButton`}>
+                  <i className={item.icon} style={{ color: `white` }} />
+                </a>
+              </ElementReveal>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

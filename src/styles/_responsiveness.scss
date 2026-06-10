@@ -42,8 +42,8 @@
     }
   }
 
-  .wordLogo {
-    --w: 200px;
+  .wordLogoHomeGraphic {
+    --w: 185px;
   }
 
   .wordLogoNav {
@@ -133,6 +133,11 @@
     width: 82vw;
   }
 
+  .footerInner {
+    display: flex;
+    flex-direction: column;
+  }
+
   .footerBrand {
     align-items: flex-start;
   }
@@ -176,6 +181,23 @@
   .heroMiniStats {
     justify-content: center;
     grid-template-columns: max-content;
+  }
+}
+
+@media (max-width: 375px) {
+  .footerBrand {
+    align-items: center;
+  }
+  .footerContent {
+    .sep, small {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 340px) {
+  .footerLinks {
+    flex-direction: column;
   }
 }
 

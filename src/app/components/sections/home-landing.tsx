@@ -22,7 +22,9 @@ export default function HomeLanding() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    setTimeout(() => {
+      setIsMounted(true);
+    }, 1000)
   }, []);
 
   const isChromeOrAdvancedDevice = isMounted && Boolean(
@@ -81,7 +83,7 @@ export default function HomeLanding() {
             <Link href={`/`} onClick={scrollToElement} className={`heroLogoPlate`}>
               <Logo fullSword className={`heroLogo`} />
               <div className={`wordLogoHome`}>
-                <Word gradient={false} arrows gradientSword />
+                <Word className={`wordLogoHomeGraphic`} gradient={false} arrows gradientSword />
               </div>
             </Link>
             <div className={`heroMiniStats`}>

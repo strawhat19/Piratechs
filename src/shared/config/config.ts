@@ -6,7 +6,7 @@ export const config = {
   title: `Piratechs`,
   domain: `piratechs.com`,
   contactEmail: `info@piratechs.com`,
-  description: `Built with Next.js, TypeScript, GSAP, etc.`,
+  description: `Built with Next.js, TypeScript, and GSAP`,
   nav: [
     { id: `home`, label: `Home`, href: `/`, icon: `fa-solid fa-house` },
     { id: `about`, label: `About`, href: `/about`, icon: `fa-solid fa-anchor` },
@@ -31,7 +31,7 @@ export const config = {
     home: {
       eyebrow: `Piratechs`,
       title: `Design // Develop Full-Stack Applications`,
-      summary: `Full-Stack Design // Development Agency Portfolio Built with Next.js, TypeScript, GSAP, etc.`,
+      summary: `Full-Stack Design // Development Agency Portfolio Built with Next.js, TypeScript, and GSAP`,
       html: `Design <span class="slashes">//</span> Develop<br> Full<span class="slashes">-</span>Stack<br> Applications`,
       // summaryHtml: `Full<span class="slashes">-</span>Stack Design <span class="slashes">//</span> Development Agency Portfolio Built with Next.js, TypeScript, GSAP, etc<span class="slashes">.</span>`,
     },
