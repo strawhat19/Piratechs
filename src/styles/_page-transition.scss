@@ -175,9 +175,10 @@ body.pageTransitionPending .heroBrand.reveal {
   position: absolute;
   .pageLoaderSpinnerContainer {
     width: 100%;
+    height: 100%;
     text-align: center;
     .pageLoaderSpinner {
-      margin: 0 auto;
+      margin: 10px auto 0;
     }
   }
 }

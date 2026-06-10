@@ -327,7 +327,7 @@ export default function PageTransition({
           <div ref={loaderRef} className={`pageTransitionLoader`}>
             <div className={`pageLoaderSpinnerWrapper`}>
               <div className={`pageLoaderSpinnerContainer`}>
-                <Spinner size={`65%`} thickness={0.2} className={`pageLoaderSpinner dropShadow`} />
+                <Spinner size={`50%`} thickness={0.2} className={`pageLoaderSpinner dropShadow`} />
               </div>
             </div>
             <div className={`pageTransitionLoaderInner`}>
