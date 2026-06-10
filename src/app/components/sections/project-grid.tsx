@@ -8,10 +8,11 @@ import { devEnv, publicImageURLs } from '@/shared/common/database/constants';
 import { gitUser } from '@/shared/common/database/github/users/strawhat19/user';
 
 export const featuredProjects = {
+  [`MyDex-Pokedex-Clone`]: { name: `MyDex-Pokedex-Clone`, },
   [`Piratechs` ]: { name: `Piratechs`, urlImage: `/icon-192x192_Circle.png` }, 
   [`Smart-Garden` ]: { name: `Smart-Garden`, urlImage: `https://smart-garden-zeta.vercel.app/assets/SmartGardenIcon.svg` }, 
   [`React-Netflix-Clone`]: { name: `React-Netflix-Clone`, urlImage: `https://react-netflix-clone-piratechs.vercel.app/favicon.ico` },
-  [`MyDex-Pokedex-Clone`]: { name: `MyDex-Pokedex-Clone`, },
+  [`CreativeWorkshop`]: { name: `CreativeWorkshop`, title: `Creative Workshop`, urlImage: `https://creative-workshop.vercel.app/assets/images/CatIcon.png` },
   [`Dyer-Posta` ]: { name: `Dyer-Posta`, title: `Dyer & Posta`, urlImage: `https://dyerposta.com/wp-content/uploads/2021/03/cropped-Official-Logo-Icon-GreenCircle.png` }, 
 } satisfies { [key: string]: Partial<Project> };
 
