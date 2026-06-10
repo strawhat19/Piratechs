@@ -25,7 +25,7 @@ export default function ProjectDetailSheet({
 
   return (
     <BottomSheet open={isOpen} label={`${project?.title ?? `Project`} Details`} className={`projectDetailSheet`} onClose={closeSheet}>
-      {projectID ? <ProjectDetailContent projectID={projectID} showCaseStudyLink /> : null}
+      {projectID ? <ProjectDetailContent projectID={projectID} /> : null}
     </BottomSheet>
   );
 }

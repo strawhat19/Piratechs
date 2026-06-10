@@ -1,0 +1,31 @@
+.sectionInner {
+    &:has(.projectsSlider) {
+        *::-webkit-scrollbar {
+            display: none !important;
+        }
+        *::-webkit-scrollbar-track {
+            display: none !important;
+        }
+        *::-webkit-scrollbar-thumb {
+            display: none !important;
+        }
+        *::-webkit-scrollbar-corner {
+            display: none !important;
+        }
+        .projectGrid {
+            display: flex;
+            grid-gap: 15px;
+            flex-direction: column;
+            .projectsSlider {
+                .projectsSlider_Inner {
+                    display: flex;
+                    grid-gap: 15px;
+                    flex-direction: row;
+                    .projectCard {
+                        min-width: 780px;
+                    }
+                }
+            }
+        }
+    }
+}

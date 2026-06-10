@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { config } from '@/shared/config/config';
 import ProjectCard from '@/app/components/projects/project-card';
 import { getProjects } from '@/app/components/projects/project-data';
+import Slider from '../slider/slider';
 
 export default function ProjectGrid({
   showImages = true,
@@ -37,14 +38,40 @@ export default function ProjectGrid({
           </button>
         ))}
       </div>
-      <div className={`projectGrid`} aria-live={`polite`}>
-        {projects.map(project => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            showImages={showImages}
-          />
-        ))}
+      <div className={`projectGrid fullBleed`} aria-live={`polite`}>
+        <Slider 
+          autoplay
+          role={`list`}
+          direction={`ltr`}
+          id={`projectsSliderTop`}
+          className={`projectsSlider`}
+          ariaLabel={`Piratechs Projects Top`}
+          trackClassName={`projectsSliderTrack`}
+        >
+          {projects?.slice(0, Math.ceil(projects.length / 2)).map(project => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              showImages={showImages}
+            />
+          ))}
+        </Slider>
+        <Slider 
+          autoplay
+          role={`list`}
+          id={`projectsSliderBottom`}
+          className={`projectsSlider`}
+          trackClassName={`projectsSliderTrack`}
+          ariaLabel={`Piratechs Projects Bottom`}
+        >
+          {projects?.slice(Math.ceil(projects.length / 2)).map(project => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              showImages={showImages}
+            />
+          ))}
+        </Slider>
       </div>
     </>
   );

@@ -44,7 +44,6 @@ export default function ProjectDetailContent({
       ) : null}
       <div className={`projectDetailContent`}>
         <TextReveal as={`h2`} text={project.title} className={`projectDetailTitle`} delay={0.12} />
-        <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.14} />
         {topics?.length ? (
           <ElementReveal as={`div`} y={14} delay={0.16} className={`projectTopics projectDetailTopics`}>
             {topics.map((topic: string, index: number) => {
@@ -58,6 +57,7 @@ export default function ProjectDetailContent({
             })}
           </ElementReveal>
         ) : null}
+        <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.14} />
         <div className={`projectActions projectDetailActions`}>
           {showCaseStudyLink ? (
             <ElementReveal as={`span`} delay={0.18} className={`projectActionReveal`}>

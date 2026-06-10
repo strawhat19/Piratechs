@@ -3,12 +3,13 @@
 import { Children, Fragment, cloneElement, isValidElement, useEffect, useRef, useState, type AriaRole, type ReactElement, type ReactNode } from 'react';
 
 type SliderProps = {
-  role?: AriaRole;
+  id?: string;
   speed?: number;
-  children: ReactNode;
+  role?: AriaRole;
   className?: string;
   ariaLabel?: string;
   autoplay?: boolean;
+  children: ReactNode;
   pauseonhover?: boolean;
   trackClassName?: string;
   direction?: `rtl` | `ltr`;
@@ -25,6 +26,7 @@ export default function Slider({
   autoplay = true,
   direction = `rtl`,
   pauseonhover = true,
+  id = `sliderComponent`,
   draggingClassName = `isDragging`,
 }: SliderProps) {
   const inViewRef = useRef(true);
@@ -229,7 +231,7 @@ export default function Slider({
   });
 
   return (
-    <div className={className} aria-label={ariaLabel} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <div id={id} className={className} aria-label={ariaLabel} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div
         role={role}
         ref={trackRef}
@@ -238,7 +240,7 @@ export default function Slider({
         onPointerCancel={endDrag}
         onPointerMove={onPointerMove}
         onPointerDown={onPointerDown}
-        className={[trackClassName, dragging ? draggingClassName : ``].filter(Boolean).join(` `)}
+        className={`${className}_Inner ${[trackClassName, dragging ? draggingClassName : ``].filter(Boolean).join(` `)}`}
       >
         {[0, 1].map(copy => (
           <Fragment key={copy}>{renderCopy(copy)}</Fragment>

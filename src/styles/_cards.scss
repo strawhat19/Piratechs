@@ -239,6 +239,8 @@ html {
   z-index: 3;
   display: flex;
   flex-wrap: wrap;
+  margin-left: auto;
+  max-width: fit-content;
 }
 
 .projectActionReveal {

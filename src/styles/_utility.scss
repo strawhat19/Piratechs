@@ -70,6 +70,11 @@
   pointer-events: none;
 }
 
+.fullBleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
 .scrollToTop {
   opacity: 0;
   z-index: 18;
