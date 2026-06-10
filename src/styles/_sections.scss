@@ -99,6 +99,86 @@
   background: rgba(19, 222, 185, 0.05);
 }
 
+// --- Hero background reveal sequence ----------------------------------------
+// 1. The skewed grid (.heroBg::before) clip-wipes up into view first.
+// 2. Once it lands, .gridPlaneA clips in from the right and .gridPlaneB from
+//    the left. Held during the page-transition loader and started only once it
+//    lifts (pending class removed), mirroring the hero content reveal. Gated on
+//    `revealReady` so that without JS the accents simply render in place.
+
+@keyframes heroGridSlideUp {
+  from {
+    clip-path: inset(100% 0 0 0);
+    transform: skewY(-6deg) translateY(calc(-8% + 30px));
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: skewY(-6deg) translateY(-8%);
+  }
+}
+
+@keyframes gridPlaneClipInRight {
+  from {
+    clip-path: inset(0 0 0 100%);
+    transform: skewX(-18deg) translateX(44px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: skewX(-18deg) translateX(0);
+  }
+}
+
+@keyframes gridPlaneClipInLeft {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: skewX(-18deg) translateX(-44px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: skewX(-18deg) translateX(0);
+  }
+}
+
+body.revealReady .heroBg::before {
+  animation: heroGridSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
+}
+
+body.revealReady .gridPlaneA {
+  animation: gridPlaneClipInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+}
+
+body.revealReady .gridPlaneB {
+  animation: gridPlaneClipInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.05s both;
+}
+
+// Hold each accent in its pre-reveal state until the loader lifts.
+body.pageTransitionPending .heroBg::before {
+  animation: none !important;
+  clip-path: inset(100% 0 0 0);
+}
+
+body.pageTransitionPending .gridPlaneA {
+  animation: none !important;
+  clip-path: inset(0 0 0 100%);
+}
+
+body.pageTransitionPending .gridPlaneB {
+  animation: none !important;
+  clip-path: inset(0 100% 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.revealReady .heroBg::before,
+  body.revealReady .gridPlaneA,
+  body.revealReady .gridPlaneB,
+  body.pageTransitionPending .heroBg::before,
+  body.pageTransitionPending .gridPlaneA,
+  body.pageTransitionPending .gridPlaneB {
+    animation: none !important;
+    clip-path: none !important;
+  }
+}
+
 .signalLineA,
 .signalLineB {
   height: 2px;
