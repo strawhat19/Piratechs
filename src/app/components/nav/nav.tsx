@@ -103,7 +103,7 @@ export default function Nav({
   };
 
   return (
-    <header className={`header ${menuExpanded ? `headerMenuOpen` : ``}`}>
+    <header className={`header reveal ${menuExpanded ? `headerMenuOpen` : ``}`}>
       <TopBar />
       {/* <TopBar id={`topBar2`} direction={`ltr`} /> */}
       <div className={`navBar`}>

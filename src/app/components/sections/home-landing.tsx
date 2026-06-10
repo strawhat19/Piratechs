@@ -41,8 +41,12 @@ export default function HomeLanding() {
         <div className={`heroBgClip`}>
           <div className={`heroBg`}>
             <HeroCircuitOverlay />
-            <span className={`gridPlane gridPlaneA`} />
-            <span className={`gridPlane gridPlaneB`} />
+            {/* <ElementReveal> */}
+              <span className={`gridPlane gridPlaneA`} />
+            {/* </ElementReveal> */}
+            {/* <ElementReveal> */}
+              <span className={`gridPlane gridPlaneB`} />
+            {/* </ElementReveal> */}
             <span className={`signalLine signalLineA reveal revealLeft`} />
             <span className={`signalLine signalLineB reveal revealRight`} />
           </div>
