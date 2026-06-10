@@ -3,7 +3,6 @@
 import gsap from 'gsap';
 import { usePathname } from 'next/navigation';
 import Spinner from '../loaders/spinners/spinner';
-import LinearProgress from '@mui/material/LinearProgress';
 import { TransitionRouter } from 'next-transition-router';
 import { useGlobalContext } from '@/shared/global-context';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
@@ -20,6 +19,13 @@ const rowIndexes = Array.from({ length: rows }, (_, index) => index);
 const loaderDoneDelay = 360;
 const loaderMinVisibleMs = 1100;
 const loaderMaxBeforeReady = 94;
+const authMaxWaitMs = 2000;
+
+type LoaderRampWindow = Window & {
+  __plProgress?: number;
+  __plTimer?: number;
+  __plDone?: boolean;
+};
 
 type PageTransitionProps = {
   children: ReactNode;
@@ -37,13 +43,7 @@ const wait = (ms: number) => new Promise<void>(resolve => {
   window.setTimeout(resolve, ms);
 });
 
-const waitForWindowLoad = () => new Promise<void>(resolve => {
-  if (document.readyState == `complete`) {
-    resolve();
-    return;
-  }
-  window.addEventListener(`load`, () => resolve(), { once: true });
-});
+const withTimeout = (promise: Promise<void>, ms: number) => Promise.race([promise, wait(ms)]);
 
 const waitForFonts = () => {
   if (`fonts` in document) return document.fonts.ready.then(() => undefined);
@@ -235,6 +235,13 @@ export default function PageTransition({
 
   useIsomorphicLayoutEffect(() => {
     authLoadedRef.current = loaded;
+    const rampWindow = window as LoaderRampWindow;
+    rampWindow.__plDone = true;
+    if (rampWindow.__plTimer) {
+      window.clearInterval(rampWindow.__plTimer);
+      rampWindow.__plTimer = undefined;
+    }
+    if (typeof rampWindow.__plProgress == `number`) setLoaderProgress(rampWindow.__plProgress);
     setTransitionPending();
     createShutterBlindsGrid(0);
     animateIn(() => {});
@@ -262,7 +269,7 @@ export default function PageTransition({
     }, 90);
 
     const finishInitialLoad = async () => {
-      await Promise.all([waitForWindowLoad(), waitForFonts(), waitForAuthLoaded()]);
+      await Promise.all([waitForFonts(), withTimeout(waitForAuthLoaded(), authMaxWaitMs)]);
       const remainingVisibleMs = Math.max(0, loaderMinVisibleMs - (window.performance.now() - startedAt));
       if (remainingVisibleMs > 0) await wait(remainingVisibleMs);
       if (cancelled) return;
@@ -337,16 +344,19 @@ export default function PageTransition({
                 alt={`Piratechs_Distortion_GIF`}
                 src={`/assets/piratechs/gifs/Piratech-Glitch.gif`}
               />
-              <LinearProgress
-                value={loaderProgress}
-                variant={`determinate`}
-                className={`pageLoaderProgress dropShadow`}
-              />
+              <div className={`pageLoaderProgress dropShadow`}>
+                <div
+                  data-pl-fill={`true`}
+                  suppressHydrationWarning
+                  className={`pageLoaderProgressFill`}
+                  style={{ width: `${loaderProgress}%` }}
+                />
+              </div>
               <span className={`pageLoaderProgressText column`}>
                 {/* <Spinner size={30} thickness={4} className={`dropShadow`} /> */}
                 <Word className={`loaderWord`} gradient={false} gradientSword arrows shadows />
-                <span className={`dropShadow`}>
-                  {Math.round(loaderProgress)}%
+                <span className={`dropShadow`} data-pl-pct={`true`} suppressHydrationWarning>
+                  {`${Math.round(loaderProgress)}%`}
                 </span>
                 {/* <span className={`dropShadow`}>
                   Loading <Word className={`loaderWord`} gradient={false} gradientSword arrows /> ... {Math.round(loaderProgress)}%
