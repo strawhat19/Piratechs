@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { roleIcons } from '../nav/nav';
 import TextReveal from '../effects/text-reveal';
 import Spinner from '../loaders/spinners/spinner';
@@ -24,6 +24,12 @@ export default function AuthWidget({
   const signInLabel = mode == `sign-in` ? `Sign In` : `Sign Up`;
   const modeLabel = mode == `sign-in` ? `Need Access?` : `Have Access?`;
   const userInitial = user?.name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? `P`;
+
+  useEffect(() => {
+    if (mobile) return;
+    document.body.classList.toggle(`authPanelOpen`, open);
+    return () => document.body.classList.remove(`authPanelOpen`);
+  }, [mobile, open]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

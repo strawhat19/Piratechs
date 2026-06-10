@@ -9,7 +9,8 @@
   --logoLetterDropShadow: drop-shadow(2px 4px 8px var(--navy));
   // --font: "Montserrat";
   --font: var(--font-plusJakartaSans), "Plus Jakarta Sans", Helvetica, Arial, sans-serif;
-  --navy: #04397b;
+  --navy_rgb: 4, 57, 123;
+  --navy: rgba(var(--navy_rgb), 1);
   --light_font_muted: #001324;
   --blue_navy: #214d87;
   --blue_navy_muted: white;

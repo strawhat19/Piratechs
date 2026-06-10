@@ -29,6 +29,11 @@ export default function NotificationBell() {
     };
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle(`notificationPanelOpen`, open);
+    return () => document.body.classList.remove(`notificationPanelOpen`);
+  }, [open]);
+
   return (
     <div ref={wrapRef} className={`notificationWidget ${open ? `notificationOpen` : ``}`}>
       <button
