@@ -11,6 +11,7 @@ import GlobalProvider from '@/shared/global-context';
 import ScrollToTop from '@/app/components/effects/scroll-to-top';
 import ScrollReveal from '@/app/components/effects/scroll-reveal';
 import PageTransition from '@/app/components/effects/page-transition';
+import ProjectQuerySheet from '@/app/components/projects/project-query-sheet';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -69,6 +70,7 @@ export default function RootLayout({
             <main className={`main`}>
               {children}
             </main>
+            <ProjectQuerySheet />
             <ScrollToTop />
             <Footer />
           </PageTransition>

@@ -1,14 +1,18 @@
-import URL from '../url/url';
+'use client';
+
+import URLComponent from '../url/url';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import { isValid } from '@/shared/common/scripts/globals';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
+import { getProjectNameParam, getProjectQueryHref } from '@/app/components/projects/project-data';
 
-export default function ProjectCard({ 
-  project, 
-  showImages = true, 
+export default function ProjectCard({
+  project,
+  showImages = true,
 }: any) {
-  const projectUrl = project?.codeUrl || project?.liveUrl;
+  const projectName = getProjectNameParam(project);
+  const projectHref = getProjectQueryHref(project);
 
   // const getURLLabel = (url: string) => {
   //   let rootDomainName = String(extractRootDomain(url));
@@ -21,7 +25,7 @@ export default function ProjectCard({
 
   return (
     <article className={`projectCard reveal`}>
-      {projectUrl ? <>
+      <>
         {showImages && project?.mediaURL && project?.mediaURL != `` && isValid(project?.mediaURL) && (
           <div className={`projectCardBG`}>
             <figure className={`projectCardBGWrap`}>
@@ -31,13 +35,23 @@ export default function ProjectCard({
           </div>
         )}
         <a
-          href={projectUrl}
-          target={`_blank`}
-          rel={`noreferrer`}
+          href={projectHref}
           className={`projectCardLinkOverlay`}
-          aria-label={`Open ${project?.title ?? `project`} in a new tab`}
+          aria-label={`Open ${project?.title ?? `project`} details`}
+          onClick={(event) => {
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            const url = new window.URL(window.location.href);
+            if (url.searchParams.get(`project`) == projectName) {
+              window.dispatchEvent(new CustomEvent(`piratechs:project-query-change`));
+              return;
+            }
+            url.searchParams.set(`project`, projectName);
+            window.history.pushState({ project: projectName }, ``, `${url.pathname}${url.search}${url.hash}`);
+            window.dispatchEvent(new CustomEvent(`piratechs:project-query-change`));
+          }}
         />
-      </> : null}
+      </>
       <div className={`projectTop`}>
         {/* <ElementReveal scroll as={`span`} delay={0.02} duration={0.42} className={`typeBadge`}>
           <TextReveal scroll as={`span`} text={project.type} />
@@ -70,15 +84,15 @@ export default function ProjectCard({
         ) : null}
         {project?.liveUrl ? (
           <ElementReveal scroll as={`span`} delay={0.2} className={`projectActionReveal`}>
-            <URL 
+            <URLComponent
               imageCircled={false}
-              url={project?.liveUrl} 
-              image={project?.urlImage} 
-              className={`buttonLink primary`} 
+              url={project?.liveUrl}
+              image={project?.urlImage}
+              className={`buttonLink primary`}
               label={
                 project?.title
                 // getURLLabel(project?.liveUrl)
-              } 
+              }
             />
           </ElementReveal>
         ) : null}
