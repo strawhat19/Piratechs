@@ -13,8 +13,8 @@
     transform: translateY(-50%);
 }
 
-.ceaHeadshot {
-    z-index: -2;
+.ceoHeadshot {
+    z-index: -3;
     object-fit: cover;
     position: relative;
     border-radius: 100%;
@@ -33,10 +33,10 @@
 
 @keyframes strokeAnimation {
     0% {
-        stroke-width: 15px;
+        stroke-width: 0px;
     }
     100% {
-        stroke-width: 35px;
+        stroke-width: 20px;
     }
 }
 
@@ -81,9 +81,7 @@
     overflow: visible;
     path {
         transform-origin: center;
-        // fill: var(--navy-deep);
-        // stroke: var(--navy-deep);
-        animation: rotate 5s linear infinite, strokeAnimation 3s ease-in-out infinite alternate;
+        animation: rotate 7s linear infinite reverse, strokeAnimation 3s ease-in-out infinite alternate;
     }
 }
 
@@ -117,8 +115,9 @@
     // fill: var(--piratechsNeon);
 }
 
-.ceaHeadshotWrapperOverlay {
+.ceoHeadshotWrapperOverlay {
     inset: 0;
+    z-index: -2;
     position: absolute;
     border-radius: 100%;
     background: linear-gradient(var(--main_gradient_angle), rgba(var(--piratechsNeon_rgb), 0.45), rgba(var(--piratechsTeal_rgb), 0.45));

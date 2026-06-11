@@ -41,9 +41,9 @@ export default function AvatarAnimation({
     return <>
         <ElementReveal as={`div`} className={`${className} avatarAnimationContainer`}>
             <Avatar size={size}>
-                <figure className={`ceaHeadshotWrapper`}>
-                    <div className={`ceaHeadshotWrapperOverlay`} />
-                    <img className={`ceaHeadshot`} style={{ maxWidth: size, maxHeight: size }} alt={`Rakib`} src={`/assets/teams/developers/rakib/Rakib_Headshot.jpeg`} />
+                <figure className={`ceoHeadshotWrapper`}>
+                    <div className={`ceoHeadshotWrapperOverlay`} />
+                    <img className={`ceoHeadshot`} style={{ maxWidth: size, maxHeight: size }} alt={`Rakib`} src={`/assets/teams/developers/rakib/Rakib_Headshot.jpeg`} />
                 </figure>
                 {text ? (
                     <span className={`avatarArcTextWrap`} style={{ width: size * 1.28, height: size * 1.28 }} aria-hidden={`true`}>

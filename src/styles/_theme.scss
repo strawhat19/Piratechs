@@ -32,6 +32,8 @@
   --silver: #aab4c3;
   --soft_silver: #aaaaaa;
   --black: #020711;
+  --miniStat_rgb: 1, 30, 66;
+  --miniStat: rgba(var(--miniStat_rgb), 1);
   --blackGlass: rgba(0, 0, 0, 0.72);
   --darkGlass: rgba(0, 191, 255, 0.12);
   --panelGlass: rgba(5, 21, 49, 0.78);
@@ -493,7 +495,7 @@ p {
     text-shadow: 0 0 2px var(--navy);
   }
   .heroMiniStat {
-    background: #011e42;
+    background: var(--miniStat);
   }
   .serviceCard, .statCard {
     &::before {
