@@ -50,7 +50,6 @@ export default function BottomSheet({
         duration: 0.69,
         ease: `power2.inOut`,
         backdropFilter: `blur(0px) saturate(100%)`,
-        webkitBackdropFilter: `blur(0px) saturate(100%)`,
       }, 0);
     }
   }, [open, onClose]);
@@ -78,7 +77,6 @@ export default function BottomSheet({
         gsap.set(backdrop, {
           autoAlpha: 0,
           backdropFilter: `blur(0px) saturate(100%)`,
-          webkitBackdropFilter: `blur(0px) saturate(100%)`,
         });
       }
       if (sheet) {
@@ -93,12 +91,10 @@ export default function BottomSheet({
       gsap.set(backdrop, {
         autoAlpha: 1,
         backdropFilter: `blur(0px) saturate(100%)`,
-        webkitBackdropFilter: `blur(0px) saturate(100%)`,
       });
       timeline.to(backdrop, {
         duration: 0.69,
         backdropFilter: `blur(18px) saturate(145%)`,
-        webkitBackdropFilter: `blur(18px) saturate(145%)`,
       }, 0);
     }
     if (sheet) {
