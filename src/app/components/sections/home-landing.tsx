@@ -10,6 +10,7 @@ import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import { useGlobalContext } from '@/shared/global-context';
 import TextReveal from '@/app/components/effects/text-reveal';
+import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
@@ -41,6 +42,7 @@ export default function HomeLanding() {
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>
+            <AvatarAnimation size={135} />
             <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
             {page?.html ? (
               <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />

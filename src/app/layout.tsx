@@ -74,7 +74,7 @@ export default function RootLayout({
         <noscript>
           <style>{`.pageTransitionShutter{display:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important}body.pageTransitionPending .reveal{opacity:1!important;transform:none!important;animation:none!important}body.pageTransitionPending .heroBg::before,body.pageTransitionPending .gridPlane,body.pageTransitionPending .signalLine{opacity:1!important;transform:none!important;animation:none!important;clip-path:none!important}body{overflow:auto!important}`}</style>
         </noscript>
-        <GlobalProvider smoothScroll>
+        <GlobalProvider>
           <PageTransition>
             {intersectionObserver && <ScrollReveal />}
             <Nav />

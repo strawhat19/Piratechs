@@ -1,0 +1,86 @@
+.avatarContainer {
+    position: relative;
+}
+
+.avatarOverlayContainer {
+    position: absolute;
+}
+
+.ceoHeadshotContainer {
+    top: 48%;
+    right: 13%;
+    position: absolute;
+    transform: translateY(-50%);
+}
+
+.ceaHeadshot {
+    z-index: -2;
+    object-fit: cover;
+    position: relative;
+    border-radius: 100%;
+    aspect-ratio: 1 / 1;
+    object-position: center top;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes strokeAnimation {
+    0% {
+        stroke-width: 15px;
+    }
+    100% {
+        stroke-width: 35px;
+    }
+}
+
+.pictureWaves {
+    z-index: -1;
+    display: none;
+    display: flex;
+    position: relative;
+    // overflow: hidden;
+    border-radius: 100%;
+    align-items: center;
+    background-size: 55%;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    // background-size: cover !important;
+    // background: url(/assets/teams/developers/rakib/Rakib_Headshot.jpeg);
+    &::after {
+        top: 0;
+        left: 0;
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-size: contain;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        animation: rotate 55s linear infinite reverse;
+    }
+}
+
+.blackWaves {
+    overflow: visible;
+    path {
+        transform-origin: center;
+        // fill: var(--navy-deep);
+        // stroke: var(--navy-deep);
+        animation: rotate 5s linear infinite, strokeAnimation 3s ease-in-out infinite alternate;
+    }
+}
+
+.ceaHeadshotWrapperOverlay {
+    inset: 0;
+    position: absolute;
+    border-radius: 100%;
+    background: linear-gradient(var(--main_gradient_angle), rgba(var(--piratechsNeon_rgb), 0.45), rgba(var(--piratechsTeal_rgb), 0.45));
+}

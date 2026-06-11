@@ -362,6 +362,7 @@ body.pageTransitionPending .signalLineB {
 .heroCopy {
   gap: 22px;
   display: grid;
+  position: relative;
 }
 
 .heroCopy h1 {
