@@ -301,7 +301,7 @@ img {
 
 .wordLogo, .heroLogoPlate, .navLink, .footerBrand {
   &:has(.logoWordLettersArrows) {
-    &:hover {
+    &:hover, &.logoHoverAnimation {
       .fullSwordCaptainsHat {
         transform: translateY(-5px);
       }

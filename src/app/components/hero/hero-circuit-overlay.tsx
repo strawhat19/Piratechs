@@ -11,6 +11,7 @@ const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 const accentsReadyClass = `heroCircuitAccentsReady`;
 const accentsPendingClass = `heroCircuitAccentsPending`;
 const initialLoadDelayBonus = 1.22;
+export const heroCircuitRevealCompleteEvent = `piratechs:hero-circuit-reveal-complete`;
 
 const getInitialLoadDelayBonus = () => (
   typeof document != `undefined` && !document.body.classList.contains(pageTransitionCompleteClass) ? initialLoadDelayBonus : 0
@@ -120,8 +121,10 @@ export default function HeroCircuitOverlay({
     const delayBonus = defaultDelayBonus ?? initialDelayBonusRef.current;
 
     const completeCircuitReveal = () => {
-      if (!shouldDelayGridPlanes) return;
       const heroBg = overlayWrapRef.current?.closest(`.heroBg`);
+      const revealCompleteEvent = new Event(heroCircuitRevealCompleteEvent, { cancelable: true });
+      const releaseGridPlanes = window.dispatchEvent(revealCompleteEvent);
+      if (!shouldDelayGridPlanes || !releaseGridPlanes) return;
       heroBg?.classList.remove(accentsPendingClass);
       heroBg?.classList.add(accentsReadyClass);
     };

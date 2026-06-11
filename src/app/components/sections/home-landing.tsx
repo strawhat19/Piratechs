@@ -1,8 +1,10 @@
 'use client';
 
+import gsap from 'gsap';
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
+import { useLayoutEffect, useRef } from 'react';
 // import Section from './section';
 import AuthWidget from '../auth/auth-widget';
 // import { useEffect, useState } from 'react';
@@ -13,12 +15,115 @@ import TextReveal from '@/app/components/effects/text-reveal';
 import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
+import HeroCircuitOverlay, { heroCircuitRevealCompleteEvent } from '@/app/components/hero/hero-circuit-overlay';
+import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
+
+const logoHoverAnimationClass = `logoHoverAnimation`;
 
 export default function HomeLanding() {
   const page: any = config?.pages?.home;
+  const heroSectionRef = useRef<HTMLElement | null>(null);
 
   const { width, slantedSignalLines } = useGlobalContext();
+
+  useLayoutEffect(() => {
+    const heroSection = heroSectionRef.current;
+    const heroBg = heroSection?.querySelector<HTMLElement>(`.heroBg`);
+    const heroLogoPlate = heroSection?.querySelector<HTMLElement>(`.heroLogoPlate`);
+    const finalSignalLine = heroSection?.querySelector<HTMLElement>(`.signalLineA`);
+    const firstGridPlane = heroSection?.querySelector<HTMLElement>(`.gridPlaneB`);
+    const avatarAnimation = heroSection?.querySelector<HTMLElement>(`.homeAvatarAccent`);
+    if (!heroBg || !heroLogoPlate || !finalSignalLine || !firstGridPlane || !avatarAnimation) return;
+
+    const prefersReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+    if (prefersReducedMotion) {
+      heroLogoPlate.classList.remove(logoHoverAnimationClass);
+      gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
+      return;
+    }
+
+    let accentsComplete = false;
+    let logoAnimationStarted = false;
+    let laughingTimeline: gsap.core.Timeline | null = null;
+    let shuttersComplete = document.body.classList.contains(pageTransitionCompleteClass);
+    const logoAnimationPause = { progress: 0 };
+
+    gsap.set(avatarAnimation, {
+      clipPath: `circle(0% at 100% 50%)`,
+      webkitClipPath: `circle(0% at 100% 50%)`,
+    });
+
+    const giggleLogo = (delay = 0, repetitions = 1) => {
+      laughingTimeline?.kill();
+      heroLogoPlate.classList.remove(logoHoverAnimationClass);
+      laughingTimeline = gsap.timeline({ delay, repeat: Math.max(0, repetitions - 1), repeatDelay: 0.08 });
+      laughingTimeline
+        .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 1, duration: 0.18, ease: `power2.out` })
+        .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 0, duration: 0.14, ease: `power2.inOut` });
+    };
+
+    const startLogoAnimation = () => {
+      if (!shuttersComplete || logoAnimationStarted) return;
+      logoAnimationStarted = true;
+      giggleLogo(0.18);
+    };
+
+    const releaseGridAccents = () => {
+      heroBg.classList.remove(`heroCircuitAccentsPending`);
+      heroBg.classList.add(`heroCircuitAccentsReady`);
+    };
+
+    const revealAvatar = (event?: Event) => {
+      if (event?.type == heroCircuitRevealCompleteEvent) event.preventDefault();
+      if (accentsComplete) return;
+      accentsComplete = true;
+      gsap.to(avatarAnimation, {
+        duration: 0.72,
+        ease: `power3.out`,
+        clipPath: `circle(50% at 50% 50%)`,
+        webkitClipPath: `circle(50% at 50% 50%)`,
+        onComplete: () => {
+          gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
+          releaseGridAccents();
+        },
+      });
+    };
+
+    const revealAvatarFallback = (event: AnimationEvent) => {
+      if (event.animationName.startsWith(`gridPlaneClipInLeft`)) revealAvatar();
+    };
+
+    const finishWithDoubleGiggle = (event: AnimationEvent) => {
+      if (shuttersComplete && event.animationName.startsWith(`signalLineSlashInLeft`)) giggleLogo(0, 2);
+    };
+
+    const shuttersCompleteHandler = () => {
+      shuttersComplete = true;
+      startLogoAnimation();
+    };
+
+    window.addEventListener(heroCircuitRevealCompleteEvent, revealAvatar);
+    firstGridPlane.addEventListener(`animationstart`, revealAvatarFallback);
+    finalSignalLine.addEventListener(`animationend`, finishWithDoubleGiggle);
+    if (shuttersComplete) {
+      startLogoAnimation();
+    } else {
+      window.addEventListener(pageTransitionReadyEvent, shuttersCompleteHandler, { once: true });
+    }
+
+    return () => {
+      laughingTimeline?.kill();
+      heroLogoPlate.classList.remove(logoHoverAnimationClass);
+      window.removeEventListener(heroCircuitRevealCompleteEvent, revealAvatar);
+      firstGridPlane.removeEventListener(`animationstart`, revealAvatarFallback);
+      finalSignalLine.removeEventListener(`animationend`, finishWithDoubleGiggle);
+      window.removeEventListener(pageTransitionReadyEvent, shuttersCompleteHandler);
+      gsap.killTweensOf([logoAnimationPause, avatarAnimation]);
+      gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
+    };
+  }, []);
 
   // const [isMounted, setIsMounted] = useState(false);
 
@@ -30,7 +135,7 @@ export default function HomeLanding() {
 
   return (
     <>
-      <section className={`pageSection heroSection`}>
+      <section ref={heroSectionRef} className={`pageSection heroSection`}>
         <div className={`heroBgClip`}>
           <div className={`heroBg`}>
             <HeroCircuitOverlay />
@@ -44,7 +149,8 @@ export default function HomeLanding() {
           <div className={`heroCopy`}>
             <AvatarAnimation 
               size={135} 
-              className={`ceoHeadshotContainer`} 
+              reveal={false}
+              className={`ceoHeadshotContainer homeAvatarAccent`}
               text={`Rakib Ahmed // Developer // Designer // Atlanta // Georgia // USA //`} 
             />
             <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />

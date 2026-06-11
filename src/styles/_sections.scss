@@ -221,11 +221,11 @@ body.revealReady .heroBg::before {
 }
 
 body.revealReady .gridPlaneA {
-  animation: gridPlaneClipInRight 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneADelay, 1.3s) both;
+  animation: gridPlaneClipInRight 0.62s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneADelay, 1.3s) both;
 }
 
 body.revealReady .gridPlaneB {
-  animation: gridPlaneClipInLeft 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneBDelay, 0.72s) both;
+  animation: gridPlaneClipInLeft 0.62s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneBDelay, 0.72s) both;
 }
 
 body.revealReady .signalLineB {
