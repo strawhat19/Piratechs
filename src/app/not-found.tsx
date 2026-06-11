@@ -12,8 +12,8 @@ export default function NotFound() {
           <HeroCircuitOverlay />
           <span className={`gridPlane gridPlaneA`} />
           <span className={`gridPlane gridPlaneB`} />
-          <span className={`signalLine signalLineA reveal revealLeft`} />
-          <span className={`signalLine signalLineB reveal revealRight`} />
+          <span className={`signalLine signalLineA`} />
+          <span className={`signalLine signalLineB`} />
         </div>
       </div>
       <div className={`sectionInner heroGrid`}>

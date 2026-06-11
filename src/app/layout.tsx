@@ -71,7 +71,7 @@ export default function RootLayout({
           {LOADER_RAMP_SCRIPT}
         </Script>
         <noscript>
-          <style>{`.pageTransitionShutter{display:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important}body.pageTransitionPending .reveal{opacity:1!important;transform:none!important;animation:none!important}body.pageTransitionPending .heroBg::before,body.pageTransitionPending .gridPlane{animation:none!important;clip-path:none!important}body{overflow:auto!important}`}</style>
+          <style>{`.pageTransitionShutter{display:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important}body.pageTransitionPending .reveal{opacity:1!important;transform:none!important;animation:none!important}body.pageTransitionPending .heroBg::before,body.pageTransitionPending .gridPlane,body.pageTransitionPending .signalLine{animation:none!important;clip-path:none!important}body{overflow:auto!important}`}</style>
         </noscript>
         <GlobalProvider>
           <PageTransition>

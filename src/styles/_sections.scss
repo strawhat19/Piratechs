@@ -101,10 +101,11 @@
 
 // --- Hero background reveal sequence ----------------------------------------
 // 1. The skewed grid (.heroBg::before) clip-wipes up into view first.
-// 2. Once it lands, .gridPlaneA clips in from the right and .gridPlaneB from
-//    the left. Held during the page-transition loader and started only once it
-//    lifts (pending class removed), mirroring the hero content reveal. Gated on
-//    `revealReady` so that without JS the accents simply render in place.
+// 2. Once it lands, the accents reveal in sequence: gridPlaneB, gridPlaneA,
+//    signalLineB, then signalLineA. Held during the page-transition loader and
+//    started only once it lifts (pending class removed), mirroring the hero
+//    content reveal. Gated on `revealReady` so that without JS the accents
+//    simply render in place.
 
 @keyframes heroGridSlideUp {
   from {
@@ -139,16 +140,52 @@
   }
 }
 
+@keyframes signalLineSlashInLeft {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    transform: skewX(-18deg) translateX(-32px);
+  }
+  85% {
+    clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: skewX(-18deg) translateX(0);
+  }
+}
+
+@keyframes signalLineSlashInRight {
+  0% {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+    transform: skewX(-18deg) translateX(32px);
+  }
+  85% {
+    clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: skewX(-18deg) translateX(0);
+  }
+}
+
 body.revealReady .heroBg::before {
   animation: heroGridSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
 }
 
 body.revealReady .gridPlaneA {
-  animation: gridPlaneClipInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+  animation: gridPlaneClipInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.7s both;
 }
 
 body.revealReady .gridPlaneB {
-  animation: gridPlaneClipInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.05s both;
+  animation: gridPlaneClipInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+}
+
+body.revealReady .signalLineB {
+  animation: signalLineSlashInRight 0.55s cubic-bezier(0.22, 1, 0.36, 1) 2.5s both;
+}
+
+body.revealReady .signalLineA {
+  animation: signalLineSlashInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) 3.05s both;
 }
 
 // Hold each accent in its pre-reveal state until the loader lifts.
@@ -167,13 +204,29 @@ body.pageTransitionPending .gridPlaneB {
   clip-path: inset(0 100% 0 0);
 }
 
+body.pageTransitionPending .signalLineA {
+  animation: none !important;
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  transform: skewX(-18deg) translateX(-32px);
+}
+
+body.pageTransitionPending .signalLineB {
+  animation: none !important;
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  transform: skewX(-18deg) translateX(32px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   body.revealReady .heroBg::before,
   body.revealReady .gridPlaneA,
   body.revealReady .gridPlaneB,
+  body.revealReady .signalLineA,
+  body.revealReady .signalLineB,
   body.pageTransitionPending .heroBg::before,
   body.pageTransitionPending .gridPlaneA,
-  body.pageTransitionPending .gridPlaneB {
+  body.pageTransitionPending .gridPlaneB,
+  body.pageTransitionPending .signalLineA,
+  body.pageTransitionPending .signalLineB {
     animation: none !important;
     clip-path: none !important;
   }

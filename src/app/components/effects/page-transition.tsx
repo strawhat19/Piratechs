@@ -8,7 +8,7 @@ import { TransitionRouter } from 'next-transition-router';
 import { useGlobalContext } from '@/shared/global-context';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
+import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent, pageTransitionRevealEvent, pageTransitionRevealingClass } from '@/app/components/effects/page-transition-events';
 
 const rows = 4;
 const cols = 50;
@@ -108,11 +108,18 @@ export default function PageTransition({
 
   const setTransitionPending = () => {
     document.body.classList.add(pageTransitionPendingClass);
+    document.body.classList.remove(pageTransitionRevealingClass);
     document.body.classList.remove(pageTransitionCompleteClass);
+  };
+
+  const setTransitionRevealing = () => {
+    document.body.classList.add(pageTransitionRevealingClass);
+    window.dispatchEvent(new Event(pageTransitionRevealEvent));
   };
 
   const setTransitionComplete = () => {
     document.body.classList.remove(pageTransitionPendingClass);
+    document.body.classList.remove(pageTransitionRevealingClass);
     document.body.classList.add(pageTransitionCompleteClass);
     window.dispatchEvent(new Event(pageTransitionReadyEvent));
   };
@@ -176,6 +183,7 @@ export default function PageTransition({
   };
 
   const animateOut = (onComplete: () => void, withLoader = false, completeInitialLoad = false) => {
+    if (completeInitialLoad) setTransitionRevealing();
     if (getReducedMotion()) {
       if (completeInitialLoad) {
         initialLoadCompleteRef.current = true;

@@ -47,8 +47,8 @@ export default function HomeLanding() {
             {/* <ElementReveal> */}
               <span className={`gridPlane gridPlaneB`} />
             {/* </ElementReveal> */}
-            <span className={`signalLine signalLineA reveal revealLeft`} />
-            <span className={`signalLine signalLineB reveal revealRight`} />
+            <span className={`signalLine signalLineA`} />
+            <span className={`signalLine signalLineB`} />
           </div>
         </div>
         <div className={`sectionInner heroGrid`}>

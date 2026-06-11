@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
+import { isPageTransitionPending, isPageTransitionRevealing, pageTransitionRevealEvent } from '@/app/components/effects/page-transition-events';
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 
@@ -37,6 +38,7 @@ export default function HeroCircuitOverlay({
   const { isPWA, platform } = useGlobalContext();
 
   const [isMounted, setIsMounted] = useState(false);
+  const [canReveal, setCanReveal] = useState(() => !isPageTransitionPending() || isPageTransitionRevealing());
 
   const overlayRef = useRef<SVGSVGElement | null>(null);
   const overlayWrapRef = useRef<HTMLSpanElement | null>(null);
@@ -60,7 +62,19 @@ export default function HeroCircuitOverlay({
   }, []);
 
   useEffect(() => {
-    if (!overlayWrapRef.current || !shouldRenderCircuit) return;
+    if (!shouldRenderCircuit) return;
+    if (!isPageTransitionPending() || isPageTransitionRevealing()) {
+      setCanReveal(true);
+      return;
+    }
+
+    const transitionRevealHandler = () => setCanReveal(true);
+    window.addEventListener(pageTransitionRevealEvent, transitionRevealHandler, { once: true });
+    return () => window.removeEventListener(pageTransitionRevealEvent, transitionRevealHandler);
+  }, [shouldRenderCircuit]);
+
+  useEffect(() => {
+    if (!overlayWrapRef.current || !shouldRenderCircuit || !canReveal) return;
 
     const ctx = gsap.context(() => {
       if (revealSlantAmount) {
@@ -100,8 +114,8 @@ export default function HeroCircuitOverlay({
 
     return () => {
       ctx.revert();
-    }
-  }, [revealSlantAmount, shouldRenderCircuit]);
+    };
+  }, [canReveal, revealSlantAmount, shouldRenderCircuit]);
 
   return shouldRenderCircuit ? (
     <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>
