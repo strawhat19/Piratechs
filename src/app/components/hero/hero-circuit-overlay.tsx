@@ -1,13 +1,15 @@
 'use client';
 
 import gsap from 'gsap';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
 import { isPageTransitionPending, isPageTransitionRevealing, pageTransitionRevealEvent } from '@/app/components/effects/page-transition-events';
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
+const accentsReadyClass = `heroCircuitAccentsReady`;
+const accentsPendingClass = `heroCircuitAccentsPending`;
 
 const slantedClipPath = (reveal: number, slantAmount: number) => {
   const slant = Math.sign(slantAmount) * Math.min(Math.abs(slantAmount), reveal, 100 - reveal);
@@ -25,6 +27,7 @@ type HeroCircuitOverlayProps = {
   revealAfterSlashes?: boolean;
   showCircuitOverlay?: boolean;
   revealSlant?: boolean | number;
+  revealGridPlanesAfterCircuit?: boolean;
 };
 
 export default function HeroCircuitOverlay({ 
@@ -36,6 +39,7 @@ export default function HeroCircuitOverlay({
   breathing = advancedGraphics,
   animatePulses = advancedGraphics, 
   showCircuitOverlay = advancedDevice,
+  revealGridPlanesAfterCircuit = true,
 }: HeroCircuitOverlayProps) {
   const { isPWA, platform } = useGlobalContext();
 
@@ -59,10 +63,24 @@ export default function HeroCircuitOverlay({
   );
 
   const shouldRenderCircuit = showCircuitOverlay && isChromeOrAdvancedDevice;
+  const shouldDelayGridPlanes = revealGridPlanesAfterCircuit && !revealAfterSlashes;
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useLayoutEffect(() => {
+    const heroBg = overlayWrapRef.current?.closest(`.heroBg`);
+    if (!heroBg || !shouldRenderCircuit || !shouldDelayGridPlanes) return;
+    if (window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) return;
+
+    heroBg.classList.add(accentsPendingClass);
+    heroBg.classList.remove(accentsReadyClass);
+    return () => {
+      heroBg.classList.remove(accentsReadyClass);
+      heroBg.classList.remove(accentsPendingClass);
+    };
+  }, [shouldDelayGridPlanes, shouldRenderCircuit]);
 
   useEffect(() => {
     if (!shouldRenderCircuit) return;
@@ -94,7 +112,7 @@ export default function HeroCircuitOverlay({
     }
 
     const slashCompleteHandler = (event: Event) => {
-      if ((event as AnimationEvent).animationName == `signalLineSlashInLeft`) setSlashesComplete(true);
+      if ((event as AnimationEvent).animationName.startsWith(`signalLineSlashInLeft`)) setSlashesComplete(true);
     };
     finalSlash.addEventListener(`animationend`, slashCompleteHandler);
     return () => finalSlash.removeEventListener(`animationend`, slashCompleteHandler);
@@ -102,6 +120,13 @@ export default function HeroCircuitOverlay({
 
   useEffect(() => {
     if (!overlayWrapRef.current || !shouldRenderCircuit || !canReveal || !slashesComplete) return;
+
+    const completeCircuitReveal = () => {
+      if (!shouldDelayGridPlanes) return;
+      const heroBg = overlayWrapRef.current?.closest(`.heroBg`);
+      heroBg?.classList.remove(accentsPendingClass);
+      heroBg?.classList.add(accentsReadyClass);
+    };
 
     const ctx = gsap.context(() => {
       if (revealSlantAmount) {
@@ -119,6 +144,7 @@ export default function HeroCircuitOverlay({
           },
           onComplete: () => {
             gsap.set(overlayWrapRef.current, { clipPath: `inset(0 0% 0 0 round 22px)` });
+            completeCircuitReveal();
           },
         });
         return;
@@ -134,6 +160,7 @@ export default function HeroCircuitOverlay({
           // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
+          onComplete: completeCircuitReveal,
           clipPath: `inset(0 0% 0 0 round 22px)`,
         }
       );
@@ -142,7 +169,7 @@ export default function HeroCircuitOverlay({
     return () => {
       ctx.revert();
     };
-  }, [canReveal, revealAfterSlashes, revealSlantAmount, shouldRenderCircuit, slashesComplete]);
+  }, [canReveal, revealAfterSlashes, revealSlantAmount, shouldDelayGridPlanes, shouldRenderCircuit, slashesComplete]);
 
   return shouldRenderCircuit ? (
     <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>

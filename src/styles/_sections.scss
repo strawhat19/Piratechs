@@ -221,24 +221,61 @@ body.revealReady .heroBg::before {
 }
 
 body.revealReady .gridPlaneA {
-  animation: gridPlaneClipInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.7s both;
+  animation: gridPlaneClipInRight 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneADelay, 1.3s) both;
 }
 
 body.revealReady .gridPlaneB {
-  animation: gridPlaneClipInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+  animation: gridPlaneClipInLeft 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneBDelay, 0.72s) both;
 }
 
 body.revealReady .signalLineB {
-  animation: signalLineSlashInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.5s both;
+  animation: signalLineSlashInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineBDelay, 1.88s) both;
   &.slanted {
-    animation: signalLineSlashInRightRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.5s both;
+    animation: signalLineSlashInRightRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineBDelay, 1.88s) both;
   }
 }
 
 body.revealReady .signalLineA {
-  animation: signalLineSlashInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.8s both;
+  animation: signalLineSlashInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineADelay, 2.1s) both;
   &.slanted {
-    animation: signalLineSlashInLeftRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.8s both;
+    animation: signalLineSlashInLeftRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineADelay, 2.1s) both;
+  }
+}
+
+.heroBg.heroCircuitAccentsReady {
+  --gridPlaneBDelay: 0s;
+  --gridPlaneADelay: 0.58s;
+  --signalLineBDelay: 1.16s;
+  --signalLineADelay: 1.38s;
+}
+
+.heroBg.heroCircuitAccentsPending .gridPlaneA {
+  animation: none !important;
+  clip-path: inset(0 0 0 100%);
+}
+
+.heroBg.heroCircuitAccentsPending .gridPlaneB {
+  animation: none !important;
+  clip-path: inset(0 100% 0 0);
+}
+
+.heroBg.heroCircuitAccentsPending .signalLineA {
+  opacity: 0;
+  animation: none !important;
+  transform: skewX(-28deg) translateX(-64px);
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  &.slanted {
+    transform: rotate(-72deg) skewX(-28deg) translateX(-64px);
+  }
+}
+
+.heroBg.heroCircuitAccentsPending .signalLineB {
+  opacity: 0;
+  animation: none !important;
+  transform: skewX(-28deg) translateX(64px);
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  &.slanted {
+    transform: rotate(72deg) skewX(-28deg) translateX(64px);
   }
 }
 
