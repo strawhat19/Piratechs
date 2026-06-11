@@ -42,7 +42,7 @@ export default function HomeLanding() {
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>
-            <AvatarAnimation size={135} />
+            <AvatarAnimation size={135} text={`CEO / Rakib Ahmed // Designer // Developer // UX //`} />
             <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
             {page?.html ? (
               <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />

@@ -7,7 +7,7 @@
 }
 
 .ceoHeadshotContainer {
-    top: 48%;
+    top: 50%;
     right: 13%;
     position: absolute;
     transform: translateY(-50%);
@@ -37,6 +37,15 @@
     }
     100% {
         stroke-width: 35px;
+    }
+}
+
+@keyframes avatarArcTextRotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }
 
@@ -78,9 +87,45 @@
     }
 }
 
+.avatarArcTextWrap {
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    position: absolute;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+.avatarArcTextSvg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+    transform-origin: center;
+    animation: avatarArcTextRotate var(--avatarArcRotationSpeed, 5s) linear infinite reverse;
+    &.clockwise {
+        animation-direction: normal;
+    }
+}
+
+.avatarArcText {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    fill: var(--foreground);
+    text-transform: uppercase;
+    // fill: var(--piratechsNeon);
+}
+
 .ceaHeadshotWrapperOverlay {
     inset: 0;
     position: absolute;
     border-radius: 100%;
     background: linear-gradient(var(--main_gradient_angle), rgba(var(--piratechsNeon_rgb), 0.45), rgba(var(--piratechsTeal_rgb), 0.45));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .avatarArcTextSvg {
+        animation: none;
+    }
 }
