@@ -6,7 +6,6 @@
   --contentInset: clamp(18px, 4vw, 64px);
   --borderRadius: 6px;
   --circle: 999px;
-  --logoLetterDropShadow: drop-shadow(2px 4px 8px var(--navy));
   // --font: "Montserrat";
   --font: var(--font-plusJakartaSans), "Plus Jakarta Sans", Helvetica, Arial, sans-serif;
   --navy_rgb: 4, 57, 123;
@@ -14,6 +13,8 @@
   --light_font_muted: #001324;
   --blue_navy: #214d87;
   --blue_navy_muted: white;
+  --logoLetterDropShadow: drop-shadow(2px 4px 8px var(--navy));
+  --logoLetterDropShadowLight: drop-shadow(1px 2px 4px rgba(var(--navy_rgb), 0.5));
   // --blue_navy_muted: var(--light_font_muted);
   --navy-deep: #041b44;
   --navy-dark: rgba(0, 9, 27, 1);
@@ -454,7 +455,7 @@ p {
 }
 
 .loaderWord {
-  --w: 185px;
+  --w: 225px;
   margin: 0 10px;
 }
 
@@ -465,7 +466,8 @@ p {
 }
 
 .dropShadow {
-  filter: var(--logoLetterDropShadow);
+  // filter: var(--logoLetterDropShadow);
+  filter: var(--logoLetterDropShadowLight);
 }
 
 .dropShadowi {

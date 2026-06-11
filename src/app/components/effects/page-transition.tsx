@@ -2,7 +2,6 @@
 
 import gsap from 'gsap';
 import Word from '../logo/word';
-import ElementReveal from './element-reveal';
 import { usePathname } from 'next/navigation';
 import Spinner from '../loaders/spinners/spinner';
 import { TransitionRouter } from 'next-transition-router';
@@ -10,10 +9,11 @@ import { useGlobalContext } from '@/shared/global-context';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
+import ElementReveal from './element-reveal';
 
 const rows = 4;
 const cols = 50;
-const slantExtraCols = 3;
+const slantExtraCols = 8;
 
 const gifResetClass = `pageTransitionGifReset`;
 const rowIndexes = Array.from({ length: rows }, (_, index) => index);
@@ -75,16 +75,18 @@ export default function PageTransition({
 
   const getRowBlocks = (row: number) => blocksRef.current.slice(row * renderCols, row * renderCols + renderCols);
 
+  const slantAngle = -15;
+
   const getInitialBlockStyle = (index: number): CSSProperties => {
     const row = Math.floor(index / renderCols);
     const col = (index % renderCols) - colOffset;
     return {
       top: `${(row * 100) / rows}dvh`,
-      left: `${(col * 100) / cols}vw`,
       width: `calc(${100 / cols}vw + 1px)`,
       height: `calc(${100 / rows}dvh + 1px)`,
-      transform: slanted ? `skew(-15deg) scaleX(0)` : `scaleX(1)`,
       transformOrigin: row % 2 == 0 ? `left center` : `right center`,
+      transform: slanted ? `skewX(${slantAngle}deg) scaleX(0)` : `scaleX(1)`,
+      left: `calc(${(col * 100) / cols}vw - ${slanted ? `var(--slant-row-offset, 0px)` : `0px`})`,
     };
   };
 
@@ -119,17 +121,19 @@ export default function PageTransition({
     if (!grid) return;
     const blockWidth = window.innerWidth / cols;
     const blockHeight = window.innerHeight / rows;
+    const skewOffset = Math.tan(Math.abs(slantAngle) * Math.PI / 180) * blockHeight;
     blocksRef.current.forEach((pageTransitionBlock, index) => {
       const row = Math.floor(index / renderCols);
       const col = (index % renderCols) - colOffset;
+      const rowOffset = slanted ? row * skewOffset : 0;
       gsap.set(pageTransitionBlock, {
         scaleX,
-        width: blockWidth + 1,
+        width: blockWidth + 2,
         top: row * blockHeight,
-        left: col * blockWidth,
-        height: blockHeight + 1,
+        height: blockHeight + 2,
+        skewX: slanted ? slantAngle : 0,
+        left: col * blockWidth - rowOffset,
         transformOrigin: row % 2 == 0 ? `left center` : `right center`,
-        ...(slanted ? { transform: `skew(-15deg) scaleX(${scaleX})` } : { transform: `scaleX(${scaleX})` }),
       });
     });
   };

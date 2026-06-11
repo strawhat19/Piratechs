@@ -8,6 +8,7 @@ import { getProjects } from '@/app/components/projects/project-data';
 
 export default function ProjectGrid({
   showImages = true,
+  showFilters = false,
   featuredOnly = false,
 }: any) {
   const initialFilter = featuredOnly ? `Featured` : `All`;
@@ -24,27 +25,29 @@ export default function ProjectGrid({
 
   return (
     <>
-      <div className={`filterBar reveal`} aria-label={`Project filters`}>
-        {config.filters.map(filter => (
-          <button
-            key={filter}
-            type={`button`}
-            data-filter={filter}
-            aria-pressed={filter == activeFilter}
-            onClick={() => setActiveFilter(filter)}
-            className={`filterButton logoLetter ${filter == activeFilter ? `activeFilter` : ``}`}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
+      {showFilters && (
+        <div className={`filterBar reveal`} aria-label={`Project filters`}>
+          {config.filters.map(filter => (
+            <button
+              key={filter}
+              type={`button`}
+              data-filter={filter}
+              aria-pressed={filter == activeFilter}
+              onClick={() => setActiveFilter(filter)}
+              className={`filterButton logoLetter ${filter == activeFilter ? `activeFilter` : ``}`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+      )}
       <div className={`projectGrid fullBleed`} aria-live={`polite`}>
         <Slider 
+          speed={35}
           direction={`ltr`}
+          pauseonhover={false}
           id={`projectsSliderTop`}
           className={`projectsSlider`}
-          // ariaLabel={`Piratechs Projects Top`}
-          // trackClassName={`projectsSliderTrack`}
         >
           {projects?.slice(0, Math.ceil(projects.length / 2)).map(project => (
             <ProjectCard
@@ -55,10 +58,10 @@ export default function ProjectGrid({
           ))}
         </Slider>
         <Slider 
+          speed={35}
+          pauseonhover={false}
           id={`projectsSliderBottom`}
           className={`projectsSlider`}
-          // trackClassName={`projectsSliderTrack`}
-          // ariaLabel={`Piratechs Projects Bottom`}
         >
           {projects?.slice(Math.ceil(projects.length / 2)).map(project => (
             <ProjectCard

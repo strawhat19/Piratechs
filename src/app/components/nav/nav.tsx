@@ -61,7 +61,7 @@ export default function Nav({
 }: any) {
   const pathname = usePathname();
 
-  const { user, loaded, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
+  const { user, width, loaded, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
 
   const navItems = useMemo(() => {
     return config.nav.filter((navItem) => {
@@ -103,8 +103,9 @@ export default function Nav({
   };
 
   return (
-    <header className={`header reveal ${menuExpanded ? `headerMenuOpen` : ``}`}>
-      <TopBar />
+    // <header className={`header ${width <= 768 ? `` : `reveal`} ${menuExpanded ? `headerMenuOpen` : ``}`}>
+    <ElementReveal slide as={`header`} className={`header ${menuExpanded ? `headerMenuOpen` : ``}`}>
+      <TopBar pauseonhover={false} />
       {/* <TopBar id={`topBar2`} direction={`ltr`} /> */}
       <div className={`navBar`}>
         <ElementReveal as={Link} href={`/`} blur={false} delay={0.5} className={`homeButton`} aria-label={`Home`}>
@@ -149,6 +150,7 @@ export default function Nav({
         {renderLinks(`mobileNav`)}
         <AuthWidget mobile />
       </div>
-    </header>
+    {/* </header> */}
+    </ElementReveal>
   );
 }
