@@ -142,29 +142,77 @@
 
 @keyframes signalLineSlashInLeft {
   0% {
+    opacity: 0;
+    transform: skewX(-28deg) translateX(-64px);
     clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-    transform: skewX(-18deg) translateX(-32px);
   }
-  85% {
-    clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+  18% {
+    opacity: 1;
+  }
+  72% {
+    clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
   }
   100% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
     transform: skewX(-18deg) translateX(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@keyframes signalLineSlashInLeftRotate {
+  0% {
+    opacity: 0;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    transform: rotate(-72deg) skewX(-28deg) translateX(-64px);
+  }
+  18% {
+    opacity: 1;
+  }
+  72% {
+    clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
+  }
+  100% {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: rotate(-72deg) skewX(-18deg) translateX(0);
+  }
+}
+
+@keyframes signalLineSlashInRightRotate {
+  0% {
+    opacity: 0;
+    transform: rotate(72deg) skewX(-28deg) translateX(64px);
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  }
+  18% {
+    opacity: 1;
+  }
+  72% {
+    clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: rotate(72deg) skewX(-18deg) translateX(0);
   }
 }
 
 @keyframes signalLineSlashInRight {
   0% {
+    opacity: 0;
+    transform: skewX(-28deg) translateX(64px);
     clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
-    transform: skewX(-18deg) translateX(32px);
   }
-  85% {
-    clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+  18% {
+    opacity: 1;
+  }
+  72% {
+    clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
   }
   100% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
     transform: skewX(-18deg) translateX(0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
 }
 
@@ -181,11 +229,17 @@ body.revealReady .gridPlaneB {
 }
 
 body.revealReady .signalLineB {
-  animation: signalLineSlashInRight 0.55s cubic-bezier(0.22, 1, 0.36, 1) 2.5s both;
+  animation: signalLineSlashInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.5s both;
+  &.slanted {
+    animation: signalLineSlashInRightRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.5s both;
+  }
 }
 
 body.revealReady .signalLineA {
-  animation: signalLineSlashInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) 3.05s both;
+  animation: signalLineSlashInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.8s both;
+  &.slanted {
+    animation: signalLineSlashInLeftRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.8s both;
+  }
 }
 
 // Hold each accent in its pre-reveal state until the loader lifts.
@@ -205,15 +259,17 @@ body.pageTransitionPending .gridPlaneB {
 }
 
 body.pageTransitionPending .signalLineA {
+  opacity: 0;
   animation: none !important;
+  transform: skewX(-28deg) translateX(-64px);
   clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-  transform: skewX(-18deg) translateX(-32px);
 }
 
 body.pageTransitionPending .signalLineB {
+  opacity: 0;
   animation: none !important;
+  transform: skewX(-28deg) translateX(64px);
   clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
-  transform: skewX(-18deg) translateX(32px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -228,12 +284,12 @@ body.pageTransitionPending .signalLineB {
   body.pageTransitionPending .signalLineA,
   body.pageTransitionPending .signalLineB {
     animation: none !important;
+    opacity: 1 !important;
     clip-path: none !important;
   }
 }
 
-.signalLineA,
-.signalLineB {
+.signalLineA, .signalLineB {
   height: 2px;
   border: none;
   background: linear-gradient(90deg, transparent, var(--piratechsNeon), var(--piratechsTeal), transparent);
@@ -243,24 +299,32 @@ body.pageTransitionPending .signalLineB {
   top: 16%;
   right: 8%;
   width: 34vw;
+  &.slanted {
+    top: 35%;
+    right: 25%;
+  }
 }
 
 .signalLineB {
   left: 6%;
   bottom: 19%;
   width: 28vw;
+  &.slanted {
+    left: -5%;
+    bottom: 25%;
+  }
 }
 
 .heroGrid {
   display: grid;
+  align-items: center;
   gap: clamp(36px, 6vw, 82px);
   grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.7fr);
-  align-items: center;
 }
 
 .heroCopy {
-  display: grid;
   gap: 22px;
+  display: grid;
 }
 
 .heroCopy h1 {

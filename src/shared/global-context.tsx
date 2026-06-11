@@ -41,11 +41,13 @@ type GlobalContextValue = {
   menuExpanded: boolean;
   platform?: any;
   setPlatform?: any;
+  slantedSignalLines?: boolean;
   setUser: (user: User | null) => void;
   setUsers: (users: User[]) => void;
   setTheme: (theme: ThemeMode) => void;
   setSelected: (selected: unknown) => void;
   setMenuExpanded: (expanded: boolean) => void;
+  setSlantedSignalLines: (slantedSgnalLines: boolean) => void;
   toggleTheme: () => void;
   onSignOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -57,16 +59,16 @@ type GlobalContextValue = {
 const emptyAsync = async () => undefined;
 
 const defaultState: GlobalContextValue = {
-  width: 1920,
-  height: 1080,
-  loaded: false,
-  isPWA: false,
   user: null,
   users: [],
+  width: 1920,
+  height: 1080,
+  platform: {}, 
+  isPWA: false,
+  loaded: false,
   theme: `dark`,
   selected: null,
   authStatus: ``,
-  platform: {}, 
   smallScreen: false,
   usersLoading: false,
   menuExpanded: false,
@@ -74,15 +76,17 @@ const defaultState: GlobalContextValue = {
   setUser: () => null,
   setUsers: () => null,
   setTheme: () => null,
-  setSelected: () => null,
-  toggleTheme: () => null,
-  setMenuExpanded: () => null,
   onSignOut: emptyAsync,
   signInUser: emptyAsync,
   signUpUser: emptyAsync,
+  setSelected: () => null,
+  toggleTheme: () => null,
+  slantedSignalLines: false,
+  setMenuExpanded: () => null,
   refreshUsers: async () => [],
   signInWithGoogle: emptyAsync,
   setPlatform: async () => null,
+  setSlantedSignalLines: () => null,
 };
 
 export const StateGlobals = createContext<GlobalContextValue>(defaultState);
@@ -163,6 +167,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
   const [smallScreen, setSmallScreen] = useState(false);
   const [usersLoading, setUsersLoading] = useState(false);
   const [menuExpanded, setMenuExpanded] = useState(false);
+  const [slantedSignalLines, setSlantedSignalLines] = useState(false);
   const [theme, setThemeState] = useState<ThemeMode>(`dark`);
   const [platform, setPlatform] = useState({});
   const firebaseReady = firebaseEnvReady();
@@ -360,19 +365,19 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     user,
     users,
     width,
+    isPWA,
     theme,
     height,
-    isPWA,
     loaded,
-    selected,
     setUser,
     setUsers,
+    selected,
     setTheme,
     onSignOut,
     authStatus,
-    toggleTheme,
     signInUser,
     signUpUser,
+    toggleTheme,
     smallScreen,
     setSelected,
     refreshUsers,
@@ -382,28 +387,30 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     setMenuExpanded,
     signInWithGoogle,
     platform, setPlatform,
+    slantedSignalLines, setSlantedSignalLines,
   }), [
     user,
     users,
     width,
     theme,
-    height,
     isPWA,
+    height,
     loaded,
     selected,
+    platform,
     setTheme,
     onSignOut,
     authStatus,
-    toggleTheme,
     signInUser,
     signUpUser,
+    toggleTheme,
     smallScreen,
     refreshUsers,
     usersLoading,
-    firebaseReady,
     menuExpanded,
-    platform,
+    firebaseReady,
     signInWithGoogle,
+    slantedSignalLines,
   ]);
 
   return (

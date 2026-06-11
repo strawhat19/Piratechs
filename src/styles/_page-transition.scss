@@ -153,6 +153,7 @@ body.pageTransitionPending .heroBrand.reveal {
 .pageTransitionLoaderInner {
   gap: 20px;
   display: grid;
+  transform: scale(0.85);
   justify-items: center;
   width: min(879px, 86vw);
 }
@@ -160,8 +161,8 @@ body.pageTransitionPending .heroBrand.reveal {
 .pageTransitionGif {
   width: 100%;
   max-width: 879px;
-  filter: drop-shadow(0 0 22px rgba(0, 191, 255, 0.32));
   animation: loaderFadePulse 1.12s ease-in-out infinite;
+  filter: drop-shadow(0 0 22px rgba(0, 191, 255, 0.32));
 }
 
 .pageTransitionGifReset .pageTransitionGif {
@@ -172,7 +173,7 @@ body.pageTransitionPending .heroBrand.reveal {
   width: 100%;
   overflow: hidden;
   max-width: 897px;
-  height: 4px !important;
+  height: 6px !important;
   background: transparent !important;
   border-radius: var(--circle) !important;
   // box-shadow: 0 0 20px rgba(0, 191, 255, 0.24);

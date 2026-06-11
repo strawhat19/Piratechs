@@ -22,6 +22,7 @@ type HeroCircuitOverlayProps = {
   breathing?: boolean;
   energySweep?: boolean;
   animatePulses?: boolean;
+  revealAfterSlashes?: boolean;
   showCircuitOverlay?: boolean;
   revealSlant?: boolean | number;
 };
@@ -30,6 +31,7 @@ export default function HeroCircuitOverlay({
   revealSlant = false,
   energySweep = false,
   blur = advancedGraphics, 
+  revealAfterSlashes = false,
   blendMode = advancedGraphics, 
   breathing = advancedGraphics,
   animatePulses = advancedGraphics, 
@@ -39,6 +41,7 @@ export default function HeroCircuitOverlay({
 
   const [isMounted, setIsMounted] = useState(false);
   const [canReveal, setCanReveal] = useState(() => !isPageTransitionPending() || isPageTransitionRevealing());
+  const [slashesComplete, setSlashesComplete] = useState(() => !revealAfterSlashes);
 
   const overlayRef = useRef<SVGSVGElement | null>(null);
   const overlayWrapRef = useRef<HTMLSpanElement | null>(null);
@@ -74,7 +77,31 @@ export default function HeroCircuitOverlay({
   }, [shouldRenderCircuit]);
 
   useEffect(() => {
-    if (!overlayWrapRef.current || !shouldRenderCircuit || !canReveal) return;
+    if (!revealAfterSlashes) {
+      setSlashesComplete(true);
+      return;
+    }
+    if (!shouldRenderCircuit) return;
+    if (window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) {
+      setSlashesComplete(true);
+      return;
+    }
+
+    const finalSlash = overlayWrapRef.current?.closest(`.heroBg`)?.querySelector(`.signalLineA`);
+    if (!finalSlash) {
+      setSlashesComplete(true);
+      return;
+    }
+
+    const slashCompleteHandler = (event: Event) => {
+      if ((event as AnimationEvent).animationName == `signalLineSlashInLeft`) setSlashesComplete(true);
+    };
+    finalSlash.addEventListener(`animationend`, slashCompleteHandler);
+    return () => finalSlash.removeEventListener(`animationend`, slashCompleteHandler);
+  }, [revealAfterSlashes, shouldRenderCircuit]);
+
+  useEffect(() => {
+    if (!overlayWrapRef.current || !shouldRenderCircuit || !canReveal || !slashesComplete) return;
 
     const ctx = gsap.context(() => {
       if (revealSlantAmount) {
@@ -83,7 +110,7 @@ export default function HeroCircuitOverlay({
         gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(0, revealSlantAmount) });
         gsap.to(reveal, {
           value: 100,
-          delay: 0.55,
+          delay: revealAfterSlashes ? 0 : 0.55,
           // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
@@ -103,7 +130,7 @@ export default function HeroCircuitOverlay({
           clipPath: `inset(0 100% 0 0 round 22px)`,
         },
         {
-          delay: 0.5,
+          delay: revealAfterSlashes ? 0 : 0.5,
           // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
@@ -115,7 +142,7 @@ export default function HeroCircuitOverlay({
     return () => {
       ctx.revert();
     };
-  }, [canReveal, revealSlantAmount, shouldRenderCircuit]);
+  }, [canReveal, revealAfterSlashes, revealSlantAmount, shouldRenderCircuit, slashesComplete]);
 
   return shouldRenderCircuit ? (
     <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>

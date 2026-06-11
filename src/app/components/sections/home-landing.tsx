@@ -17,7 +17,7 @@ import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 export default function HomeLanding() {
   const page: any = config?.pages?.home;
 
-  const { isPWA, platform } = useGlobalContext();
+  const { isPWA, platform, slantedSignalLines } = useGlobalContext();
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -47,8 +47,8 @@ export default function HomeLanding() {
             {/* <ElementReveal> */}
               <span className={`gridPlane gridPlaneB`} />
             {/* </ElementReveal> */}
-            <span className={`signalLine signalLineA`} />
-            <span className={`signalLine signalLineB`} />
+            <span className={`signalLine signalLineA ${slantedSignalLines ? `slanted` : ``}`} />
+            <span className={`signalLine signalLineB ${slantedSignalLines ? `slanted` : ``}`} />
           </div>
         </div>
         <div className={`sectionInner heroGrid`}>
