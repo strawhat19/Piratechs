@@ -15,7 +15,8 @@ export default function ScrollToTop() {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: `smooth` });
+    const behavior = document.documentElement.classList.contains(`smoothScrollEnabled`) ? `auto` : `smooth`;
+    window.scrollTo({ top: 0, behavior });
   };
 
   return (

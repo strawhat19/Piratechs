@@ -180,6 +180,11 @@ html, body {
   scroll-behavior: smooth;
 }
 
+html.smoothScrollEnabled,
+html.smoothScrollEnabled body {
+  scroll-behavior: auto;
+}
+
 body {
   min-height: 100dvh;
   color: var(--foreground);

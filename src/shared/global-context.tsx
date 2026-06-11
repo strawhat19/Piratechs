@@ -30,6 +30,7 @@ type GlobalContextValue = {
   height: number;
   loaded: boolean;
   isPWA: boolean;
+  smoothScroll: boolean;
   authStatus: string;
   firebaseReady: boolean;
   smallScreen: boolean;
@@ -67,6 +68,7 @@ const defaultState: GlobalContextValue = {
   platform: {}, 
   isPWA: false,
   loaded: false,
+  smoothScroll: false,
   theme: `dark`,
   selected: null,
   authStatus: ``,
@@ -157,7 +159,7 @@ const getStoredUser = async (firebaseUser: FirebaseUser, currentUsers: User[]) =
 
 export const useGlobalContext = () => useContext(StateGlobals);
 
-export default function GlobalProvider({ children }: { children: ReactNode }) {
+export default function GlobalProvider({ children, smoothScroll = false }: { children: ReactNode; smoothScroll?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
@@ -379,6 +381,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     theme,
     height,
     loaded,
+    smoothScroll,
     setUser,
     setUsers,
     selected,
@@ -407,6 +410,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     isPWA,
     height,
     loaded,
+    smoothScroll,
     selected,
     platform,
     setTheme,

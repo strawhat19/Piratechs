@@ -38,7 +38,8 @@ export const scrollToElement = (event: MouseEvent<HTMLAnchorElement>, elementQue
   const el = document.querySelector(elementQuerySelector);
   if (!el) return;
   const top = el.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top, behavior: `smooth`, });
+  const behavior = document.documentElement.classList.contains(`smoothScrollEnabled`) ? `auto` : `smooth`;
+  window.scrollTo({ top, behavior });
 };
 
 export const urlHostMatches = (envs: string[]) => {

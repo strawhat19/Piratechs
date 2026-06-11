@@ -10,6 +10,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import GlobalProvider from '@/shared/global-context';
 import ScrollToTop from '@/app/components/effects/scroll-to-top';
 import ScrollReveal from '@/app/components/effects/scroll-reveal';
+import SmoothScroll from '@/app/components/effects/smooth-scroll';
 import PageTransition from '@/app/components/effects/page-transition';
 import ProjectQuerySheet from '@/app/components/projects/project-query-sheet';
 import MenuBlurBackdrop from '@/app/components/effects/menu-blur-backdrop';
@@ -73,17 +74,19 @@ export default function RootLayout({
         <noscript>
           <style>{`.pageTransitionShutter{display:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important}body.pageTransitionPending .reveal{opacity:1!important;transform:none!important;animation:none!important}body.pageTransitionPending .heroBg::before,body.pageTransitionPending .gridPlane,body.pageTransitionPending .signalLine{opacity:1!important;transform:none!important;animation:none!important;clip-path:none!important}body{overflow:auto!important}`}</style>
         </noscript>
-        <GlobalProvider>
+        <GlobalProvider smoothScroll>
           <PageTransition>
             {intersectionObserver && <ScrollReveal />}
             <Nav />
             <MenuBlurBackdrop />
-            <main className={`main`}>
-              {children}
-            </main>
+            <SmoothScroll>
+              <main className={`main`}>
+                {children}
+              </main>
+              <Footer />
+            </SmoothScroll>
             <ProjectQuerySheet />
             <ScrollToTop />
-            <Footer />
           </PageTransition>
         </GlobalProvider>
       </body>
