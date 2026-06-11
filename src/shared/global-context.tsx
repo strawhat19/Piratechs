@@ -42,6 +42,7 @@ type GlobalContextValue = {
   platform?: any;
   setPlatform?: any;
   slantedSignalLines?: boolean;
+  isChromeOrAdvancedDevice?: any;
   setUser: (user: User | null) => void;
   setUsers: (users: User[]) => void;
   setTheme: (theme: ThemeMode) => void;
@@ -87,6 +88,7 @@ const defaultState: GlobalContextValue = {
   signInWithGoogle: emptyAsync,
   setPlatform: async () => null,
   setSlantedSignalLines: () => null,
+  isChromeOrAdvancedDevice: () => null,
 };
 
 export const StateGlobals = createContext<GlobalContextValue>(defaultState);
@@ -169,7 +171,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
   const [menuExpanded, setMenuExpanded] = useState(false);
   const [slantedSignalLines, setSlantedSignalLines] = useState(false);
   const [theme, setThemeState] = useState<ThemeMode>(`dark`);
-  const [platform, setPlatform] = useState({});
+  const [platform, setPlatform] = useState<any>({});
   const firebaseReady = firebaseEnvReady();
   const usersRef = useRef<User[]>([]);
 
@@ -361,6 +363,14 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     return () => unsubscribe();
   }, [user]);
 
+  const isChromeOrAdvancedDevice = Boolean(
+    !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
+      !platform?.os?.toLowerCase()?.includes(`mac`)
+    ) || (
+      platform?.os?.toLowerCase()?.includes(`windows`)
+    ))
+  );
+
   const state = useMemo<GlobalContextValue>(() => ({
     user,
     users,
@@ -387,6 +397,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     setMenuExpanded,
     signInWithGoogle,
     platform, setPlatform,
+    isChromeOrAdvancedDevice,
     slantedSignalLines, setSlantedSignalLines,
   }), [
     user,
@@ -411,6 +422,7 @@ export default function GlobalProvider({ children }: { children: ReactNode }) {
     firebaseReady,
     signInWithGoogle,
     slantedSignalLines,
+    isChromeOrAdvancedDevice,
   ]);
 
   return (

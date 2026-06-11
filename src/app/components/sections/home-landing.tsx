@@ -4,8 +4,8 @@ import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
 import Section from './section';
-import { useEffect, useState } from 'react';
 import AuthWidget from '../auth/auth-widget';
+// import { useEffect, useState } from 'react';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import { useGlobalContext } from '@/shared/global-context';
@@ -17,23 +17,15 @@ import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 export default function HomeLanding() {
   const page: any = config?.pages?.home;
 
-  const { isPWA, platform, slantedSignalLines } = useGlobalContext();
+  const { slantedSignalLines } = useGlobalContext();
 
-  const [isMounted, setIsMounted] = useState(false);
+  // const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsMounted(true);
-    }, 1000)
-  }, []);
-
-  const isChromeOrAdvancedDevice = isMounted && Boolean(
-    !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
-      !platform?.os?.toLowerCase()?.includes(`mac`)
-    ) || (
-      platform?.os?.toLowerCase()?.includes(`windows`)
-    ))
-  );
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsMounted(true);
+  //   }, 1000)
+  // }, []);
 
   return (
     <>
@@ -41,12 +33,8 @@ export default function HomeLanding() {
         <div className={`heroBgClip`}>
           <div className={`heroBg`}>
             <HeroCircuitOverlay />
-            {/* <ElementReveal> */}
-              <span className={`gridPlane gridPlaneA`} />
-            {/* </ElementReveal> */}
-            {/* <ElementReveal> */}
-              <span className={`gridPlane gridPlaneB`} />
-            {/* </ElementReveal> */}
+            <span className={`gridPlane gridPlaneA`} />
+            <span className={`gridPlane gridPlaneB`} />
             <span className={`signalLine signalLineA ${slantedSignalLines ? `slanted` : ``}`} />
             <span className={`signalLine signalLineB ${slantedSignalLines ? `slanted` : ``}`} />
           </div>
@@ -129,7 +117,9 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      {isChromeOrAdvancedDevice && <Section inversed />}
+      <Section className={`homeProjects`} inversed />
+      {/* {(isMounted && isChromeOrAdvancedDevice) && (
+      )} */}
 
       <section className={`pageSection skillsSection`}>
         <div className={`sectionInner`}>

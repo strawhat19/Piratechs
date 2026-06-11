@@ -1,10 +1,10 @@
 'use client';
 
 import gsap from 'gsap';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { isPageTransitionPending, isPageTransitionRevealing, pageTransitionRevealEvent } from '@/app/components/effects/page-transition-events';
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
@@ -41,7 +41,7 @@ export default function HeroCircuitOverlay({
   showCircuitOverlay = advancedDevice,
   revealGridPlanesAfterCircuit = true,
 }: HeroCircuitOverlayProps) {
-  const { isPWA, platform } = useGlobalContext();
+  const { isChromeOrAdvancedDevice } = useGlobalContext();
 
   const [isMounted, setIsMounted] = useState(false);
   const [canReveal, setCanReveal] = useState(() => !isPageTransitionPending() || isPageTransitionRevealing());
@@ -54,14 +54,6 @@ export default function HeroCircuitOverlay({
   const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) ? revealSlant : ((revealSlant) ? 45 : 0);
   const revealSlantAmount = Math.max(-32, Math.min(32, numericSlant));
 
-  const isChromeOrAdvancedDevice = isMounted && Boolean(
-    !isPWA && (platform && platform?.chrome && !platform?.mobile && !platform?.ios && (
-      !platform?.os?.toLowerCase()?.includes(`mac`)
-    ) || (
-      platform?.os?.toLowerCase()?.includes(`windows`)
-    ))
-  );
-
   const shouldRenderCircuit = showCircuitOverlay && isChromeOrAdvancedDevice;
   const shouldDelayGridPlanes = revealGridPlanesAfterCircuit && !revealAfterSlashes;
 
@@ -73,7 +65,6 @@ export default function HeroCircuitOverlay({
     const heroBg = overlayWrapRef.current?.closest(`.heroBg`);
     if (!heroBg || !shouldRenderCircuit || !shouldDelayGridPlanes) return;
     if (window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) return;
-
     heroBg.classList.add(accentsPendingClass);
     heroBg.classList.remove(accentsReadyClass);
     return () => {
@@ -88,7 +79,6 @@ export default function HeroCircuitOverlay({
       setCanReveal(true);
       return;
     }
-
     const transitionRevealHandler = () => setCanReveal(true);
     window.addEventListener(pageTransitionRevealEvent, transitionRevealHandler, { once: true });
     return () => window.removeEventListener(pageTransitionRevealEvent, transitionRevealHandler);
@@ -104,13 +94,11 @@ export default function HeroCircuitOverlay({
       setSlashesComplete(true);
       return;
     }
-
     const finalSlash = overlayWrapRef.current?.closest(`.heroBg`)?.querySelector(`.signalLineA`);
     if (!finalSlash) {
       setSlashesComplete(true);
       return;
     }
-
     const slashCompleteHandler = (event: Event) => {
       if ((event as AnimationEvent).animationName.startsWith(`signalLineSlashInLeft`)) setSlashesComplete(true);
     };
@@ -131,14 +119,13 @@ export default function HeroCircuitOverlay({
     const ctx = gsap.context(() => {
       if (revealSlantAmount) {
         const reveal = { value: 0 };
-
         gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(0, revealSlantAmount) });
         gsap.to(reveal, {
           value: 100,
-          delay: revealAfterSlashes ? 0 : 0.55,
           // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
+          delay: revealAfterSlashes ? 0 : 0.55,
           onUpdate: () => {
             gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(reveal.value, revealSlantAmount) });
           },
@@ -156,11 +143,11 @@ export default function HeroCircuitOverlay({
           clipPath: `inset(0 100% 0 0 round 22px)`,
         },
         {
-          delay: revealAfterSlashes ? 0 : 0.5,
           // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
           onComplete: completeCircuitReveal,
+          delay: revealAfterSlashes ? 0 : 0.5,
           clipPath: `inset(0 0% 0 0 round 22px)`,
         }
       );
