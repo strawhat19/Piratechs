@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
-import Section from './section';
+// import Section from './section';
 import AuthWidget from '../auth/auth-widget';
 // import { useEffect, useState } from 'react';
 import { config } from '@/shared/config/config';
@@ -117,8 +117,8 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      <Section className={`homeProjects`} inversed />
       {/* {(isMounted && isChromeOrAdvancedDevice) && (
+        <Section className={`homeProjects`} inversed />
       )} */}
 
       <section className={`pageSection skillsSection`}>
