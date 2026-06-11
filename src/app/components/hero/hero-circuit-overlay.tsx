@@ -5,11 +5,16 @@ import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { isPageTransitionPending, isPageTransitionRevealing, pageTransitionRevealEvent } from '@/app/components/effects/page-transition-events';
+import { isPageTransitionPending, isPageTransitionRevealing, pageTransitionCompleteClass, pageTransitionRevealEvent } from '@/app/components/effects/page-transition-events';
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
 const accentsReadyClass = `heroCircuitAccentsReady`;
 const accentsPendingClass = `heroCircuitAccentsPending`;
+const initialLoadDelayBonus = 1.22;
+
+const getInitialLoadDelayBonus = () => (
+  typeof document != `undefined` && !document.body.classList.contains(pageTransitionCompleteClass) ? initialLoadDelayBonus : 0
+);
 
 const slantedClipPath = (reveal: number, slantAmount: number) => {
   const slant = Math.sign(slantAmount) * Math.min(Math.abs(slantAmount), reveal, 100 - reveal);
@@ -24,6 +29,7 @@ type HeroCircuitOverlayProps = {
   breathing?: boolean;
   energySweep?: boolean;
   animatePulses?: boolean;
+  defaultDelayBonus?: number;
   revealAfterSlashes?: boolean;
   showCircuitOverlay?: boolean;
   revealSlant?: boolean | number;
@@ -33,6 +39,7 @@ type HeroCircuitOverlayProps = {
 export default function HeroCircuitOverlay({ 
   revealSlant = false,
   energySweep = false,
+  defaultDelayBonus,
   blur = advancedGraphics, 
   revealAfterSlashes = false,
   blendMode = advancedGraphics, 
@@ -49,6 +56,7 @@ export default function HeroCircuitOverlay({
 
   const overlayRef = useRef<SVGSVGElement | null>(null);
   const overlayWrapRef = useRef<HTMLSpanElement | null>(null);
+  const initialDelayBonusRef = useRef<number | null>(null);
 
   const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
   const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) ? revealSlant : ((revealSlant) ? 45 : 0);
@@ -108,6 +116,8 @@ export default function HeroCircuitOverlay({
 
   useEffect(() => {
     if (!overlayWrapRef.current || !shouldRenderCircuit || !canReveal || !slashesComplete) return;
+    initialDelayBonusRef.current ??= getInitialLoadDelayBonus();
+    const delayBonus = defaultDelayBonus ?? initialDelayBonusRef.current;
 
     const completeCircuitReveal = () => {
       if (!shouldDelayGridPlanes) return;
@@ -122,10 +132,9 @@ export default function HeroCircuitOverlay({
         gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(0, revealSlantAmount) });
         gsap.to(reveal, {
           value: 100,
-          // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
-          delay: revealAfterSlashes ? 0 : 0.55,
+          delay: revealAfterSlashes ? delayBonus : (0.55 + delayBonus),
           onUpdate: () => {
             gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(reveal.value, revealSlantAmount) });
           },
@@ -143,12 +152,11 @@ export default function HeroCircuitOverlay({
           clipPath: `inset(0 100% 0 0 round 22px)`,
         },
         {
-          // delay: 1.22,
           duration: 1.75,
           ease: `power3.in`,
           onComplete: completeCircuitReveal,
-          delay: revealAfterSlashes ? 0 : 0.5,
           clipPath: `inset(0 0% 0 0 round 22px)`,
+          delay: revealAfterSlashes ? delayBonus : (0.5 + delayBonus),
         }
       );
     }, overlayWrapRef);
@@ -156,7 +164,7 @@ export default function HeroCircuitOverlay({
     return () => {
       ctx.revert();
     };
-  }, [canReveal, revealAfterSlashes, revealSlantAmount, shouldDelayGridPlanes, shouldRenderCircuit, slashesComplete]);
+  }, [canReveal, defaultDelayBonus, revealAfterSlashes, revealSlantAmount, shouldDelayGridPlanes, shouldRenderCircuit, slashesComplete]);
 
   return shouldRenderCircuit ? (
     <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>
@@ -181,7 +189,6 @@ export default function HeroCircuitOverlay({
           </filter>
         </defs>
       ) : null}
-
       <g className={`circuitLayer circuitLayerBack`}>
         <path className={`circuitTrace`} d={`M-60 208 H164 L232 140 H364 L428 204 H566 L642 128 H812 L888 208 H1048 L1120 164 H1244 L1310 208 H1510`} />
         <path className={`circuitTrace tight`} d={`M-60 232 H152 L220 164 H352 L416 228 H554 L630 152 H800 L876 232 H1036 L1108 188 H1256 L1322 232 H1510`} />
@@ -195,7 +202,6 @@ export default function HeroCircuitOverlay({
         <path className={`circuitTrace`} d={`M-50 632 H980 H1094 L1172 554 H1308 L1384 630 H1510`} />
         <path className={`circuitTrace tight`} d={`M-50 656 H1006 H1106 L1184 578 H1296 L1372 654 H1510`} />
       </g>
-
       <g className={`circuitLayer circuitLayerMain`} filter={glowFilter}>
         <path className={`circuitTrace tight`} d={`M-50 236 H184 L250 302 H380 L460 222 H662 L736 296 H900 L970 226 H1166 L1232 282 H1510`} />
         <path className={`circuitTrace strong`} d={`M-50 260 H172 L238 326 H392 L472 246 H650 L724 320 H912 L982 250 H1178 L1244 306 H1510`} />
@@ -213,7 +219,6 @@ export default function HeroCircuitOverlay({
         <path className={`circuitTrace strong`} d={`M-50 214 H368 L436 166 H638 L710 214 H1038 H1168 L1228 274 H1362 L1416 220 H1510`} />
         <path className={`circuitTrace tight`} d={`M-50 232 H380 L448 184 H626 L698 232 H1054 H1156 L1216 292 H1374 L1428 238 H1510`} />
       </g>
-
       <g className={`circuitNodes`} filter={glowFilter}>
         <circle className={`circuitNode nodeA`} cx={`172`} cy={`260`} r={`5`} />
         <circle className={`circuitNode nodeB`} cx={`238`} cy={`326`} r={`6`} />
@@ -227,7 +232,6 @@ export default function HeroCircuitOverlay({
         <circle className={`circuitNode nodeJ`} cx={`892`} cy={`588`} r={`5`} />
       </g>
       </svg>
-
       {energySweep ? (
         <span className={`heroCircuitEnergyLayer`} aria-hidden={`true`}>
           <span className={`heroCircuitEnergy heroCircuitEnergyA`} />
