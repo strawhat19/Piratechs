@@ -34,6 +34,7 @@ export type Stat = {
   label: string;
   html?: string;
   value: string;
+  title?: string;
 };
 
 export type Service = {

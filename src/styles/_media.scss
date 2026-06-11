@@ -8,7 +8,7 @@
 
 .ceoHeadshotContainer {
     top: 50%;
-    right: 13%;
+    left: 595px;
     position: absolute;
     transform: translateY(-50%);
 }
@@ -109,8 +109,8 @@
 }
 
 .avatarArcText {
-    font-size: 30px;
-    font-weight: 800;
+    font-size: 21px;
+    font-weight: 600;
     letter-spacing: 4px;
     fill: var(--foreground);
     text-transform: uppercase;

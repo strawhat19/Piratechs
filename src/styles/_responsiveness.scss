@@ -1,4 +1,7 @@
 @media (max-width: 1450px) {
+  .ceoHeadshotContainer {
+    left: 500px !important;
+  }
   .sectionTitle {
     h2 {
       font-size: clamp(2rem, 4.5dvw, 4.4rem);
@@ -73,6 +76,11 @@
 }
 
 @media (max-width: 768px) {
+  .ceoHeadshotContainer {
+    top: -5%;
+    transform: scale(0.85);
+    left: 205px !important;
+  }
   .pageTransitionShutter {
     &::after {
       background-size: 500px !important;
@@ -174,13 +182,6 @@
     height: 42px;
     right: max(14px, env(safe-area-inset-right));
     bottom: max(14px, env(safe-area-inset-bottom));
-  }
-}
-
-@media (max-width: 490px) {
-  .heroMiniStats {
-    justify-content: center;
-    grid-template-columns: max-content;
   }
 }
 

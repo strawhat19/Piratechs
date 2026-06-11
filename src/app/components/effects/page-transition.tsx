@@ -370,7 +370,7 @@ export default function PageTransition({
               </div>
               <span className={`pageLoaderProgressText column`}>
                 {/* <Spinner size={30} thickness={4} className={`dropShadow`} /> */}
-                <Word className={`loaderWord`} gradient={false} gradientSword arrows shadows />
+                <Word className={`loaderWord`} gradient={false} gradientSword arrows={false} shadows />
                 <span className={`loaderProgress dropShadow`} data-pl-pct={`true`} suppressHydrationWarning>
                   {`${Math.round(loaderProgress)}%`}
                 </span>

@@ -79,6 +79,7 @@ export const config = {
   stats: [
     { 
       value: `10+`, 
+      title: `Years`,
       label: `Years of Experience`, 
       text: `Full-Stack Design // Development`, 
       html: `Full<span class="slashes slashesSM">-</span>Stack Design <span class="slashes slashesSM">//</span> Development`, 

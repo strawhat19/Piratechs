@@ -31,7 +31,7 @@ export default function AvatarAnimation({
     bottomIn = false,
     bottomOut = false,
     rotationSpeed = 20,
-    textDirection = false,
+    textDirection = true,
     textOrientation = false,
     className = `avatarAnimationComponent`,
 }: AvatarAnimationProps) {
@@ -39,7 +39,7 @@ export default function AvatarAnimation({
     const arcPosition = bottomIn ? `bottomIn` : bottomOut ? `bottomOut` : textOrientation ? `topIn` : `topOut`;
 
     return <>
-        <ElementReveal as={`div`} className={`${className} avatarAnimationContainer ceoHeadshotContainer`}>
+        <ElementReveal as={`div`} className={`${className} avatarAnimationContainer`}>
             <Avatar size={size}>
                 <figure className={`ceaHeadshotWrapper`}>
                     <div className={`ceaHeadshotWrapperOverlay`} />

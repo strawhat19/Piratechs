@@ -18,7 +18,7 @@ import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 export default function HomeLanding() {
   const page: any = config?.pages?.home;
 
-  const { slantedSignalLines } = useGlobalContext();
+  const { width, slantedSignalLines } = useGlobalContext();
 
   // const [isMounted, setIsMounted] = useState(false);
 
@@ -42,7 +42,11 @@ export default function HomeLanding() {
         </div>
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>
-            <AvatarAnimation size={135} text={`CEO / Rakib Ahmed // Designer // Developer // UX //`} />
+            <AvatarAnimation 
+              size={135} 
+              className={`ceoHeadshotContainer`} 
+              text={`Rakib Ahmed // Developer // Designer // Atlanta // Georgia // USA //`} 
+            />
             <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
             {page?.html ? (
               <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
@@ -84,7 +88,7 @@ export default function HomeLanding() {
               {config?.stats?.map((stat, index) => (
                 <span className={`heroMiniStat`} key={stat.label}>
                   <TextReveal as={`strong`} className={`gradientTextColor`} text={stat.value} delay={0.39 + index * 0.06} />
-                  <TextReveal as={`i`} text={stat.label} delay={0.42 + index * 0.06} />
+                  <TextReveal as={`i`} text={width <= 768 ? (stat?.title ?? stat?.label) : stat?.label} delay={0.42 + index * 0.06} />
                 </span>
               ))}
             </div>
@@ -92,7 +96,7 @@ export default function HomeLanding() {
         </div>
       </section>
 
-      <div id={`anchor`} className={`sep`} />
+      <div id={`anchor`} className={`sep reveal`} />
 
       <section className={`pageSection specialtiesSection`}>
         <div className={`sectionInner backendGrid`}>
