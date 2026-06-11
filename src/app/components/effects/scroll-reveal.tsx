@@ -9,6 +9,7 @@ export default function ScrollReveal() {
     const observedAttr = `data-reveal-observed`;
     const visibleAttr = `data-reveal-visible`;
     const reducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+    
     let started = false;
     let mutationObserver: MutationObserver | null = null;
 
@@ -25,7 +26,7 @@ export default function ScrollReveal() {
           revealItem(entry.target as HTMLElement);
         }
       });
-    }, { threshold: 0.1, rootMargin: `0px 0px 0%` });
+    }, { threshold: 0.01, rootMargin: `0px 0px 0%` });
 
     const observeRevealItems = () => {
       document.querySelectorAll<HTMLElement>(`${revealSelector}:not([${observedAttr}])`).forEach((item, index) => {

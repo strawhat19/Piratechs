@@ -171,7 +171,7 @@ body.pageTransitionPending .heroBrand.reveal {
 .pageLoaderProgress {
   width: 100%;
   overflow: hidden;
-  max-width: 40dvw;
+  max-width: 897px;
   height: 4px !important;
   background: transparent !important;
   border-radius: var(--circle) !important;
@@ -194,7 +194,7 @@ body.pageTransitionPending .heroBrand.reveal {
     height: 100%;
     text-align: center;
     position: relative;
-    transform: scale(1.25);
+    transform: scale(1.15);
     .pageLoaderSpinner {
       top: 25%;
       left: 25%;

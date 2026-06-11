@@ -9,7 +9,6 @@ import { useGlobalContext } from '@/shared/global-context';
 import { getDeviceDetails, getPageName } from '@/shared/common/scripts/globals';
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
-import ElementReveal from './element-reveal';
 
 const rows = 4;
 const cols = 50;
@@ -29,9 +28,10 @@ type LoaderRampWindow = Window & {
 };
 
 type PageTransitionProps = {
-  children: ReactNode;
   duration?: number;
   slanted?: boolean;
+  children: ReactNode;
+  showSpinner?: boolean;
 };
 
 const getReducedMotion = () => (
@@ -54,7 +54,8 @@ const waitForFonts = () => {
 export default function PageTransition({ 
   children,
   slanted = true,
-  duration = 0.24, 
+  duration = 0.24,
+  showSpinner = false, 
 }: PageTransitionProps) {
   const pathname = usePathname();
   const gridRef = useRef<HTMLDivElement>(null);
@@ -337,11 +338,13 @@ export default function PageTransition({
         ))}
         {showInitialLoader && (
           <div ref={loaderRef} className={`pageTransitionLoader`}>
-            <div className={`pageLoaderSpinnerWrapper`}>
-              <div className={`pageLoaderSpinnerContainer`}>
-                <Spinner size={`50%`} thickness={0.2} className={`pageLoaderSpinner dropShadow`} />
+            {showSpinner && (
+              <div className={`pageLoaderSpinnerWrapper`}>
+                <div className={`pageLoaderSpinnerContainer`}>
+                  <Spinner size={`50%`} thickness={0.2} className={`pageLoaderSpinner dropShadow`} />
+                </div>
               </div>
-            </div>
+            )}
             <div className={`pageTransitionLoaderInner`}>
               <img
                 aria-hidden={`true`}
@@ -360,7 +363,7 @@ export default function PageTransition({
               <span className={`pageLoaderProgressText column`}>
                 {/* <Spinner size={30} thickness={4} className={`dropShadow`} /> */}
                 <Word className={`loaderWord`} gradient={false} gradientSword arrows shadows />
-                <span className={`dropShadow`} data-pl-pct={`true`} suppressHydrationWarning>
+                <span className={`loaderProgress dropShadow`} data-pl-pct={`true`} suppressHydrationWarning>
                   {`${Math.round(loaderProgress)}%`}
                 </span>
                 {/* <span className={`dropShadow`}>
