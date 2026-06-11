@@ -33,17 +33,18 @@ export default function HomeLanding() {
     const finalSignalLine = heroSection?.querySelector<HTMLElement>(`.signalLineA`);
     const firstGridPlane = heroSection?.querySelector<HTMLElement>(`.gridPlaneB`);
     const avatarAnimation = heroSection?.querySelector<HTMLElement>(`.homeAvatarAccent`);
+    const avatarArcText = avatarAnimation?.querySelector<HTMLElement>(`.avatarArcTextWrap`);
     if (!heroBg || !heroLogoPlate || !finalSignalLine || !firstGridPlane || !avatarAnimation) return;
 
     const prefersReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
     if (prefersReducedMotion) {
       heroLogoPlate.classList.remove(logoHoverAnimationClass);
       gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
+      if (avatarArcText) gsap.set(avatarArcText, { clearProps: `clipPath,webkitClipPath` });
       return;
     }
 
     let accentsComplete = false;
-    let logoAnimationStarted = false;
     let laughingTimeline: gsap.core.Timeline | null = null;
     let shuttersComplete = document.body.classList.contains(pageTransitionCompleteClass);
     const logoAnimationPause = { progress: 0 };
@@ -52,27 +53,33 @@ export default function HomeLanding() {
       clipPath: `circle(0% at 100% 50%)`,
       webkitClipPath: `circle(0% at 100% 50%)`,
     });
-
-    const giggleLogo = (delay = 0, repetitions = 1) => {
-      laughingTimeline?.kill();
-      heroLogoPlate.classList.remove(logoHoverAnimationClass);
-      laughingTimeline = gsap.timeline({ delay, repeat: Math.max(0, repetitions - 1), repeatDelay: 0.08 });
-      laughingTimeline
-        .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 1, duration: 0.18, ease: `power2.out` })
-        .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 0, duration: 0.14, ease: `power2.inOut` });
-    };
-
-    const startLogoAnimation = () => {
-      if (!shuttersComplete || logoAnimationStarted) return;
-      logoAnimationStarted = true;
-      giggleLogo(0.18);
-    };
+    if (avatarArcText) {
+      gsap.set(avatarArcText, {
+        clipPath: `circle(0% at 50% 50%)`,
+        webkitClipPath: `circle(0% at 50% 50%)`,
+      });
+    }
 
     const releaseGridAccents = () => {
       heroBg.classList.remove(`heroCircuitAccentsPending`);
       heroBg.classList.add(`heroCircuitAccentsReady`);
+    };
+
+    const revealAvatarText = () => {
+      if (!avatarArcText) {
+        releaseGridAccents();
+        return;
+      }
+      gsap.to(avatarArcText, {
+        duration: 0.34,
+        ease: `power3.out`,
+        clipPath: `circle(75% at 50% 50%)`,
+        webkitClipPath: `circle(75% at 50% 50%)`,
+        onComplete: () => {
+          gsap.set(avatarArcText, { clearProps: `clipPath,webkitClipPath` });
+          releaseGridAccents();
+        },
+      });
     };
 
     const revealAvatar = (event?: Event) => {
@@ -86,7 +93,7 @@ export default function HomeLanding() {
         webkitClipPath: `circle(50% at 50% 50%)`,
         onComplete: () => {
           gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
-          releaseGridAccents();
+          revealAvatarText();
         },
       });
     };
@@ -95,21 +102,34 @@ export default function HomeLanding() {
       if (event.animationName.startsWith(`gridPlaneClipInLeft`)) revealAvatar();
     };
 
-    const finishWithDoubleGiggle = (event: AnimationEvent) => {
-      if (shuttersComplete && event.animationName.startsWith(`signalLineSlashInLeft`)) giggleLogo(0, 2);
+    const finishWithTripleGiggle = (event: AnimationEvent) => {
+      if (!shuttersComplete || !event.animationName.startsWith(`signalLineSlashInLeft`)) return;
+      laughingTimeline?.kill();
+      heroLogoPlate.classList.remove(logoHoverAnimationClass);
+      laughingTimeline = gsap.timeline();
+      laughingTimeline
+        .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 1, duration: 0.18, ease: `power2.out` })
+        .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 0, duration: 0.14, ease: `power2.inOut` })
+        .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 1, duration: 0.18, ease: `power2.out` })
+        .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 0, duration: 0.14, ease: `power2.inOut` })
+        .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 1, duration: 0.3, ease: `power2.out` })
+        .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
+        .to(logoAnimationPause, { progress: 0, duration: 0.24, ease: `power2.inOut` });
     };
 
     const shuttersCompleteHandler = () => {
       shuttersComplete = true;
-      startLogoAnimation();
     };
 
     window.addEventListener(heroCircuitRevealCompleteEvent, revealAvatar);
     firstGridPlane.addEventListener(`animationstart`, revealAvatarFallback);
-    finalSignalLine.addEventListener(`animationend`, finishWithDoubleGiggle);
-    if (shuttersComplete) {
-      startLogoAnimation();
-    } else {
+    finalSignalLine.addEventListener(`animationend`, finishWithTripleGiggle);
+    if (!shuttersComplete) {
       window.addEventListener(pageTransitionReadyEvent, shuttersCompleteHandler, { once: true });
     }
 
@@ -118,10 +138,11 @@ export default function HomeLanding() {
       heroLogoPlate.classList.remove(logoHoverAnimationClass);
       window.removeEventListener(heroCircuitRevealCompleteEvent, revealAvatar);
       firstGridPlane.removeEventListener(`animationstart`, revealAvatarFallback);
-      finalSignalLine.removeEventListener(`animationend`, finishWithDoubleGiggle);
+      finalSignalLine.removeEventListener(`animationend`, finishWithTripleGiggle);
       window.removeEventListener(pageTransitionReadyEvent, shuttersCompleteHandler);
-      gsap.killTweensOf([logoAnimationPause, avatarAnimation]);
+      gsap.killTweensOf([logoAnimationPause, avatarAnimation, avatarArcText]);
       gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
+      if (avatarArcText) gsap.set(avatarArcText, { clearProps: `clipPath,webkitClipPath` });
     };
   }, []);
 
