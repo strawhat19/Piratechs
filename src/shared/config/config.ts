@@ -1,12 +1,11 @@
 import { Roles } from '../types/types';
-import type { Project } from '@/shared/models/Project';
 import type { NavItem, PageCopy, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/app';
 
 export const config = {
   title: `Piratechs`,
   domain: `piratechs.com`,
   contactEmail: `info@piratechs.com`,
-  description: `Built with Next.js, TypeScript, and GSAP`,
+  description: `Built with Next, TypeScript, and GSAP`,
   nav: [
     { id: `home`, label: `Home`, href: `/`, icon: `fa-solid fa-house` },
     { id: `about`, label: `About`, href: `/about`, icon: `fa-solid fa-anchor` },
@@ -18,7 +17,7 @@ export const config = {
     { id: `contact`, label: `Contact`, href: `/contact`, icon: `fa-solid fa-paper-plane` },
   ] satisfies NavItem[],
   topBarItems: [
-    { icon: `fa-solid fa-code`, label: `Stack`, text: `TypeScript + Sass + Next.js` },
+    { icon: `fa-solid fa-code`, label: `Stack`, text: `TypeScript + Sass + Next` },
     { icon: `fa-solid fa-database`, label: `Data`, text: `Python, JSON, SQL, and REST APIs` },
     { icon: `fa-solid fa-briefcase`, label: `Experience`, text: `4+ years software engineering at Mitsubishi Electric` },
     { icon: `fa-solid fa-mobile-screen-button`, label: `PWA`, text: `Responsive web and installable app direction` },
@@ -31,9 +30,9 @@ export const config = {
     home: {
       eyebrow: `Piratechs`,
       title: `Design // Develop Full-Stack Applications`,
-      summary: `Full-Stack Design // Development Agency Portfolio Built with Next.js, TypeScript, and GSAP`,
+      summary: `Full-Stack Design // Development Agency Portfolio Built with Next, TypeScript, and GSAP`,
       html: `Design <span class="slashes">//</span> Develop<br> Full<span class="slashes">-</span>Stack<br> Applications`,
-      // summaryHtml: `Full<span class="slashes">-</span>Stack Design <span class="slashes">//</span> Development Agency Portfolio Built with Next.js, TypeScript, GSAP, etc<span class="slashes">.</span>`,
+      // summaryHtml: `Full<span class="slashes">-</span>Stack Design <span class="slashes">//</span> Development Agency Portfolio Built with Next, TypeScript, GSAP, etc<span class="slashes">.</span>`,
     },
     about: {
       eyebrow: `About`,
@@ -100,7 +99,7 @@ export const config = {
     { label: `JavaScript`, group: `Logic`, icon: `fa-brands fa-js` },
     { label: `TypeScript`, group: `Logic`, icon: `fa-solid fa-code` },
     { label: `React`, group: `UI`, icon: `fa-brands fa-react` },
-    { label: `Next.js`, group: `UI`, icon: `fa-solid fa-n` },
+    { label: `Next`, group: `UI`, icon: `fa-solid fa-n` },
     { label: `Angular`, group: `UI`, icon: `fa-brands fa-angular` },
     { label: `Node`, group: `Runtime`, icon: `fa-brands fa-node-js` },
     { label: `Python`, group: `Backend`, icon: `fa-brands fa-python` },

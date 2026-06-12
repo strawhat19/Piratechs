@@ -1,28 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import HeroBg from '../hero/hero-bg';
 import Section from '../sections/section';
 import { config } from '@/shared/config/config';
 import type { RouteID } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
-import { useGlobalContext } from '@/shared/global-context';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import HeroCircuitOverlay from '@/app/components/hero/hero-circuit-overlay';
 
 export default function RoutePage({ pageID }: { pageID: RouteID }) {
   const page: any = config?.pages?.[pageID];
-  const { slantedSignalLines } = useGlobalContext();
   return (
     <>
       <section className={`pageSection heroSection subHero subPageSection`}>
-        <div className={`heroBg`}>
-          <HeroCircuitOverlay />
-          <span className={`gridPlane gridPlaneA`} />
-          <span className={`gridPlane gridPlaneB`} />
-          <span className={`signalLine signalLineA ${slantedSignalLines ? `slanted` : ``}`} />
-          <span className={`signalLine signalLineB ${slantedSignalLines ? `slanted` : ``}`} />
-        </div>
+        <HeroBg />
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>
             <div className={`heroBannerText`}>

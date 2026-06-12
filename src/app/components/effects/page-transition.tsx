@@ -70,7 +70,7 @@ export default function PageTransition({
   const [loaderProgress, setLoaderProgress] = useState(3);
   const [showInitialLoader, setShowInitialLoader] = useState(true);
 
-  const colOffset = slanted ? slantExtraCols : 0;
+  const colOffset = slanted ? (width <= 768 ? Math.ceil(slantExtraCols * 2) : slantExtraCols) : 0;
   const renderCols = cols + colOffset * 2;
   const renderBlockCount = rows * renderCols;
 

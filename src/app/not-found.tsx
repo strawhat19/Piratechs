@@ -1,25 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import HeroBg from './components/hero/hero-bg';
 import Section from './components/sections/section';
 import TextReveal from './components/effects/text-reveal';
-import { useGlobalContext } from '@/shared/global-context';
 import ElementReveal from './components/effects/element-reveal';
-import HeroCircuitOverlay from './components/hero/hero-circuit-overlay';
 
 export default function NotFound() {
-  const { slantedSignalLines } = useGlobalContext();
   return <>
     <section className={`pageSection heroSection subHero`}>
-      <div className={`heroBgClip`}>
-        <div className={`heroBg`}>
-          <HeroCircuitOverlay />
-          <span className={`gridPlane gridPlaneA`} />
-          <span className={`gridPlane gridPlaneB`} />
-          <span className={`signalLine signalLineA ${slantedSignalLines ? `slanted` : ``}`} />
-          <span className={`signalLine signalLineB ${slantedSignalLines ? `slanted` : ``}`} />
-        </div>
-      </div>
+      <HeroBg />
       <div className={`sectionInner heroGrid`}>
         <div className={`heroCopy`}>
           <TextReveal as={`span`} className={`eyebrow`} text={`404`} delay={0.4} />

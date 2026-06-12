@@ -15,7 +15,7 @@ import TextReveal from '@/app/components/effects/text-reveal';
 import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import HeroCircuitOverlay, { heroCircuitRevealCompleteEvent } from '@/app/components/hero/hero-circuit-overlay';
+import HeroBg, { heroCircuitRevealCompleteEvent } from '../hero/hero-bg';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
@@ -24,7 +24,7 @@ export default function HomeLanding() {
   const page: any = config?.pages?.home;
   const heroSectionRef = useRef<HTMLElement | null>(null);
 
-  const { width, slantedSignalLines } = useGlobalContext();
+  const { width } = useGlobalContext();
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -165,15 +165,7 @@ export default function HomeLanding() {
   return (
     <>
       <section ref={heroSectionRef} className={`pageSection heroSection`}>
-        <div className={`heroBgClip`}>
-          <div className={`heroBg`}>
-            <HeroCircuitOverlay />
-            <span className={`gridPlane gridPlaneA`} />
-            <span className={`gridPlane gridPlaneB`} />
-            <span className={`signalLine signalLineA ${slantedSignalLines ? `slanted` : ``}`} />
-            <span className={`signalLine signalLineB ${slantedSignalLines ? `slanted` : ``}`} />
-          </div>
-        </div>
+        <HeroBg />
         <div className={`sectionInner heroGrid`}>
           <div className={`heroCopy`}>
             <AvatarAnimation 

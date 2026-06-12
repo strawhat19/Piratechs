@@ -1,6 +1,6 @@
 # Piratechs
 
-Piratechs is built with Next.js, TypeScript, GSAP, etc.
+Piratechs is built with Next, TypeScript, GSAP, etc.
 
 The existing GitHub Pages version is preserved in `docs/`.
 
