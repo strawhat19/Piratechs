@@ -12,6 +12,7 @@ export default function ScrollReveal() {
     
     let started = false;
     let mutationObserver: MutationObserver | null = null;
+    const pendingRevealItems = new Set<HTMLElement>();
 
     const revealItem = (item: HTMLElement) => {
       if (item.dataset.revealVisible == `true`) return;
@@ -22,11 +23,26 @@ export default function ScrollReveal() {
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          revealItem(entry.target as HTMLElement);
+        const item = entry.target as HTMLElement;
+        if (!entry.isIntersecting) {
+          pendingRevealItems.delete(item);
+          return;
         }
+        if (isPageTransitionPending()) {
+          pendingRevealItems.add(item);
+          return;
+        }
+        revealItem(item);
       });
     }, { threshold: 0.01, rootMargin: `0px 0px 0%` });
+
+    const revealPendingItems = () => {
+      pendingRevealItems.forEach(item => {
+        const bounds = item.getBoundingClientRect();
+        if (bounds.bottom > 0 && bounds.top < window.innerHeight) revealItem(item);
+      });
+      pendingRevealItems.clear();
+    };
 
     const observeRevealItems = () => {
       document.querySelectorAll<HTMLElement>(`${revealSelector}:not([${observedAttr}])`).forEach((item, index) => {
@@ -55,9 +71,11 @@ export default function ScrollReveal() {
     } else {
       window.addEventListener(pageTransitionReadyEvent, startRevealObserver, { once: true });
     }
+    window.addEventListener(pageTransitionReadyEvent, revealPendingItems);
 
     return () => {
       window.removeEventListener(pageTransitionReadyEvent, startRevealObserver);
+      window.removeEventListener(pageTransitionReadyEvent, revealPendingItems);
       observer.disconnect();
       mutationObserver?.disconnect();
     };

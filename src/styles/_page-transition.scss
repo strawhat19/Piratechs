@@ -52,8 +52,13 @@
   animation: strokeDance 1.12s ease-in-out forwards infinite alternate-reverse;
 }
 
+html.pageTransitionPending,
 body.pageTransitionPending {
-  overflow: hidden;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+body.pageTransitionPending {
   cursor: progress;
 }
 

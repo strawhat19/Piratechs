@@ -107,20 +107,24 @@ export default function PageTransition({
   });
 
   const setTransitionPending = () => {
-    document.body.classList.add(pageTransitionPendingClass);
-    document.body.classList.remove(pageTransitionRevealingClass);
-    document.body.classList.remove(pageTransitionCompleteClass);
+    [document.documentElement, document.body].forEach(element => {
+      element.classList.add(pageTransitionPendingClass);
+      element.classList.remove(pageTransitionRevealingClass);
+      element.classList.remove(pageTransitionCompleteClass);
+    });
   };
 
   const setTransitionRevealing = () => {
-    document.body.classList.add(pageTransitionRevealingClass);
+    [document.documentElement, document.body].forEach(element => element.classList.add(pageTransitionRevealingClass));
     window.dispatchEvent(new Event(pageTransitionRevealEvent));
   };
 
   const setTransitionComplete = () => {
-    document.body.classList.remove(pageTransitionPendingClass);
-    document.body.classList.remove(pageTransitionRevealingClass);
-    document.body.classList.add(pageTransitionCompleteClass);
+    [document.documentElement, document.body].forEach(element => {
+      element.classList.remove(pageTransitionPendingClass);
+      element.classList.remove(pageTransitionRevealingClass);
+      element.classList.add(pageTransitionCompleteClass);
+    });
     window.dispatchEvent(new Event(pageTransitionReadyEvent));
   };
 
@@ -147,6 +151,7 @@ export default function PageTransition({
   };
 
   const animateIn = (onComplete: () => void) => {
+    setTransitionPending();
     if (getReducedMotion()) {
       onComplete();
       return gsap.timeline();
@@ -183,22 +188,18 @@ export default function PageTransition({
   };
 
   const animateOut = (onComplete: () => void, withLoader = false, completeInitialLoad = false) => {
-    if (completeInitialLoad) setTransitionRevealing();
+    setTransitionRevealing();
     if (getReducedMotion()) {
-      if (completeInitialLoad) {
-        initialLoadCompleteRef.current = true;
-        setTransitionComplete();
-      }
+      if (completeInitialLoad) initialLoadCompleteRef.current = true;
+      setTransitionComplete();
       onComplete();
       return gsap.timeline();
     }
     const grid = gridRef.current;
     const loader = loaderRef.current;
     if (!grid) {
-      if (completeInitialLoad) {
-        initialLoadCompleteRef.current = true;
-        setTransitionComplete();
-      }
+      if (completeInitialLoad) initialLoadCompleteRef.current = true;
+      setTransitionComplete();
       onComplete();
       return gsap.timeline();
     }
@@ -207,10 +208,8 @@ export default function PageTransition({
         transitionCoveredRef.current = false;
         gsap.set(grid, { autoAlpha: 0, pointerEvents: `none` });
         if (loader) gsap.set(loader, { autoAlpha: 0 });
-        if (completeInitialLoad) {
-          initialLoadCompleteRef.current = true;
-          setTransitionComplete();
-        }
+        if (completeInitialLoad) initialLoadCompleteRef.current = true;
+        setTransitionComplete();
         onComplete();
       },
     });

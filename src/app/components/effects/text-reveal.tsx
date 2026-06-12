@@ -134,6 +134,20 @@ export default function TextReveal({
     if (scroll) {
       observer = new IntersectionObserver(entries => {
         if (entries.some(entry => entry.isIntersecting)) {
+          if (isPageTransitionPending()) {
+            if (transitionReadyHandler) return;
+            transitionReadyHandler = () => {
+              transitionReadyHandler = null;
+              if (cancelled || !ref.current) return;
+              const bounds = ref.current.getBoundingClientRect();
+              if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+              observer?.disconnect();
+              observer = null;
+              start();
+            };
+            window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
+            return;
+          }
           observer?.disconnect();
           observer = null;
           start();
