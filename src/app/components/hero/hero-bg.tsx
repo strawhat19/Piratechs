@@ -11,7 +11,7 @@ const accentsReadyClass = `heroCircuitAccentsReady`;
 const accentsPendingClass = `heroCircuitAccentsPending`;
 
 const defaultGridsStagger = 0.33;
-const defaultSignalLinesStagger = 1;
+const defaultSignalLinesStagger = 0.44;
 
 export type HeroBgMilestoneHandler = (releaseAccents: () => void) => void;
 
