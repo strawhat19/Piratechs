@@ -159,7 +159,7 @@ const getStoredUser = async (firebaseUser: FirebaseUser, currentUsers: User[]) =
 
 export const useGlobalContext = () => useContext(StateGlobals);
 
-export default function GlobalProvider({ children, smoothScroll = false }: { children: ReactNode; smoothScroll?: boolean }) {
+export default function GlobalProvider({ children, smoothScroll = true }: { children: ReactNode; smoothScroll?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);

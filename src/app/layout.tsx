@@ -12,8 +12,8 @@ import ScrollToTop from '@/app/components/effects/scroll-to-top';
 import ScrollReveal from '@/app/components/effects/scroll-reveal';
 import SmoothScroll from '@/app/components/effects/smooth-scroll';
 import PageTransition from '@/app/components/effects/page-transition';
-import ProjectQuerySheet from '@/app/components/projects/project-query-sheet';
 import MenuBlurBackdrop from '@/app/components/effects/menu-blur-backdrop';
+import ProjectQuerySheet from '@/app/components/projects/project-query-sheet';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],

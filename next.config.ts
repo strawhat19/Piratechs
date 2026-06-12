@@ -40,11 +40,22 @@ const nextConfig: NextConfig = {
       }))
     )),
   ],
+  images: {
+    remotePatterns: [
+      {
+        pathname: `/**`,
+        protocol: `https`,
+        hostname: `raw.githubusercontent.com`,
+      },
+    ],
+  },
   allowedDevOrigins: [
     `local-origin.dev`,
     `*.local-origin.dev`,
     `http://localhost:3000`,
-    `http://127.0.0.1:3000`
+    `http://127.0.0.1:3000`,
+    `raw.githubusercontent.com`,
+    `*.raw.githubusercontent.com`,
   ],
 };
 

@@ -1,10 +1,10 @@
 'use client';
 
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { usePathname } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { useGlobalContext } from '@/shared/global-context';
 
 type SmoothScrollProps = {

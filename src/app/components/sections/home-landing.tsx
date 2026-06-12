@@ -4,11 +4,11 @@ import gsap from 'gsap';
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
-import { useLayoutEffect, useRef } from 'react';
 // import Section from './section';
+import { ScrollTrigger } from 'gsap/all';
 import AuthWidget from '../auth/auth-widget';
-// import { useEffect, useState } from 'react';
 import { config } from '@/shared/config/config';
+import { useLayoutEffect, useRef } from 'react';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import { useGlobalContext } from '@/shared/global-context';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -27,14 +27,19 @@ export default function HomeLanding() {
   const { width, slantedSignalLines } = useGlobalContext();
 
   useLayoutEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
     const heroSection = heroSectionRef.current;
+
     const heroBg = heroSection?.querySelector<HTMLElement>(`.heroBg`);
-    const heroLogoPlate = heroSection?.querySelector<HTMLElement>(`.heroLogoPlate`);
-    const finalSignalLine = heroSection?.querySelector<HTMLElement>(`.signalLineA`);
+    const heroBgClip = heroSection?.querySelector<HTMLElement>(`.heroBgClip`);
     const firstGridPlane = heroSection?.querySelector<HTMLElement>(`.gridPlaneB`);
+    const finalSignalLine = heroSection?.querySelector<HTMLElement>(`.signalLineA`);
+    const heroLogoPlate = heroSection?.querySelector<HTMLElement>(`.heroLogoPlate`);
     const avatarAnimation = heroSection?.querySelector<HTMLElement>(`.homeAvatarAccent`);
     const avatarArcText = avatarAnimation?.querySelector<HTMLElement>(`.avatarArcTextWrap`);
-    if (!heroBg || !heroLogoPlate || !finalSignalLine || !firstGridPlane || !avatarAnimation) return;
+
+    if (!heroBg || !heroLogoPlate || !finalSignalLine || !firstGridPlane || !avatarAnimation || !heroBgClip) return;
 
     const prefersReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
     if (prefersReducedMotion) {
@@ -59,6 +64,17 @@ export default function HomeLanding() {
         webkitClipPath: `circle(0% at 50% 50%)`,
       });
     }
+
+    gsap.to(heroBgClip, {
+      scale: 1.18,
+      ease: `none`,
+      scrollTrigger: {
+        scrub: true,
+        start: `top top`,
+        end: window.innerHeight,
+        trigger: document.documentElement,
+      },
+    });
 
     const releaseGridAccents = () => {
       heroBg.classList.remove(`heroCircuitAccentsPending`);
@@ -145,14 +161,6 @@ export default function HomeLanding() {
       if (avatarArcText) gsap.set(avatarArcText, { clearProps: `clipPath,webkitClipPath` });
     };
   }, []);
-
-  // const [isMounted, setIsMounted] = useState(false);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsMounted(true);
-  //   }, 1000)
-  // }, []);
 
   return (
     <>
