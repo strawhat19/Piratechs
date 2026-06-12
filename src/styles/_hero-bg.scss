@@ -1,3 +1,31 @@
+@keyframes downAndOut {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  30% {
+    top: 150px;
+    left: -150px;
+    transform: scale(1.1);
+  }
+  100% {
+    top: 150px;
+    left: -500px;
+    transform: scale(1.35);
+  }
+}
+
+.heroEndWrapper {
+  position: relative;
+  // @media (prefers-reduced-motion: no-preference) {
+  //   @supports (animation-timeline: scroll()) {
+  //     animation: downAndOut linear both;
+  //     animation-timeline: scroll(root);
+  //     animation-range: 0 100dvh;
+  //   }
+  // }
+}
+
 @keyframes heroGridSlideUp {
   from {
     clip-path: inset(100% 0 0 0);

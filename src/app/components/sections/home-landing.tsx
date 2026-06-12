@@ -15,6 +15,7 @@ import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
+import HeroContent from '../hero/hero-content';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
@@ -107,16 +108,12 @@ export default function HomeLanding() {
       });
     };
 
-    const finishWithTripleGiggle = () => {
+    const finishWithSkullLaugh = () => {
       if (!shuttersComplete) return;
       laughingTimeline?.kill();
       heroLogoPlate.classList.remove(logoHoverAnimationClass);
       laughingTimeline = gsap.timeline();
       laughingTimeline
-        .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 1, duration: 0.18, ease: `power2.out` })
-        .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 0, duration: 0.14, ease: `power2.inOut` })
         .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
         .to(logoAnimationPause, { progress: 1, duration: 0.18, ease: `power2.out` })
         .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
@@ -134,7 +131,7 @@ export default function HomeLanding() {
     heroBgAnimationHandlersRef.current = {
       gridPlaneRevealStart: revealAvatar,
       circuitRevealComplete: revealAvatar,
-      signalLineRevealComplete: finishWithTripleGiggle,
+      signalLineRevealComplete: finishWithSkullLaugh,
     };
     if (!shuttersComplete) {
       window.addEventListener(pageTransitionReadyEvent, shuttersCompleteHandler, { once: true });
@@ -159,61 +156,65 @@ export default function HomeLanding() {
           onCircuitRevealComplete={circuitRevealComplete}
           onSignalLineRevealComplete={signalLineRevealComplete}
         />
-        <div className={`heroContent sectionInner heroGrid`}>
-          <div className={`heroStart heroCopy`}>
-            <AvatarAnimation 
-              size={135} 
-              reveal={false}
-              className={`ceoHeadshotContainer homeAvatarAccent`}
-              text={`Rakib Ahmed // Developer // Designer // Atlanta // Georgia // USA //`} 
-            />
-            <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
-            {page?.html ? (
-              <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
-            ) : (
-              <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
-            )}
-            {page?.summaryHtml ? (
-              <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summaryHtml}</i>`} html />
-            ) : (
-              <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summary}</i>`} html />
-            )}
-            <div className={`heroActions`}>
-              <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
-                <Link href={`/contact`} className={`buttonLink primary`}>
-                  <ElementReveal delay={0.23}>
-                    <i className={`fa-solid fa-paper-plane logoLetter`} />
-                  </ElementReveal>
-                  <TextReveal as={`span`} className={`logoLetter`} text={`Get In Touch`} delay={0.24} />
-                </Link>
-              </ElementReveal>
-              <ElementReveal as={`span`} delay={0.28} className={`heroActionReveal`}>
-                <Link href={`/projects`} className={`buttonLink ghost`}>
-                  <ElementReveal delay={0.29}>
-                    <i className={`fa-solid fa-diagram-project gradientTextColor logoLetter`} />
-                  </ElementReveal>
-                  <TextReveal as={`span`} className={`logoLetter`} text={`Our Work`} delay={0.3} />
-                </Link>
-              </ElementReveal>
-            </div>
-          </div>
-          <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
-            <Link href={`/`} onClick={scrollToElement} className={`heroLogoPlate`}>
-              <Logo fullSword className={`heroLogo`} />
-              <div className={`wordLogoHome`}>
-                <Word className={`wordLogoHomeGraphic`} gradient={false} arrows gradientSword />
+        <HeroContent
+          start={
+            <>
+              <AvatarAnimation
+                size={135}
+                reveal={false}
+                className={`ceoHeadshotContainer homeAvatarAccent`}
+                text={`Rakib Ahmed // Developer // Designer // Atlanta // Georgia // USA //`}
+              />
+              <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
+              {page?.html ? (
+                <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
+              ) : (
+                <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
+              )}
+              {page?.summaryHtml ? (
+                <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summaryHtml}</i>`} html />
+              ) : (
+                <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summary}</i>`} html />
+              )}
+              <div className={`heroActions`}>
+                <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
+                  <Link href={`/contact`} className={`buttonLink primary`}>
+                    <ElementReveal delay={0.23}>
+                      <i className={`fa-solid fa-paper-plane logoLetter`} />
+                    </ElementReveal>
+                    <TextReveal as={`span`} className={`logoLetter`} text={`Get In Touch`} delay={0.24} />
+                  </Link>
+                </ElementReveal>
+                <ElementReveal as={`span`} delay={0.28} className={`heroActionReveal`}>
+                  <Link href={`/projects`} className={`buttonLink ghost`}>
+                    <ElementReveal delay={0.29}>
+                      <i className={`fa-solid fa-diagram-project gradientTextColor logoLetter`} />
+                    </ElementReveal>
+                    <TextReveal as={`span`} className={`logoLetter`} text={`Our Work`} delay={0.3} />
+                  </Link>
+                </ElementReveal>
               </div>
-            </Link>
-            <div className={`heroMiniStats`}>
-              {config?.stats?.map((stat, index) => (
-                <span className={`heroMiniStat`} key={stat.label}>
-                  <TextReveal as={`strong`} className={`gradientTextColor`} text={stat.value} delay={0.39 + index * 0.06} />
-                  <TextReveal as={`i`} text={width <= 768 ? (stat?.title ?? stat?.label) : stat?.label} delay={0.42 + index * 0.06} />
-                </span>
-              ))}
-            </div>
-          </ElementReveal>
-        </div>
+            </>
+          }
+          end={
+            <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
+              <Link href={`/`} onClick={scrollToElement} className={`heroLogoPlate`}>
+                <Logo fullSword className={`heroLogo`} />
+                <div className={`wordLogoHome`}>
+                  <Word className={`wordLogoHomeGraphic`} gradient={false} arrows gradientSword />
+                </div>
+              </Link>
+              <div className={`heroMiniStats`}>
+                {config?.stats?.map((stat, index) => (
+                  <span className={`heroMiniStat`} key={stat.label}>
+                    <TextReveal as={`strong`} className={`gradientTextColor`} text={stat.value} delay={0.39 + index * 0.06} />
+                    <TextReveal as={`i`} text={width <= 768 ? (stat?.title ?? stat?.label) : stat?.label} delay={0.42 + index * 0.06} />
+                  </span>
+                ))}
+              </div>
+            </ElementReveal>
+          }
+        />
       </section>
 
       <div id={`anchor`} className={`sep reveal`} />
