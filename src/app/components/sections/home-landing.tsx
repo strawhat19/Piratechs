@@ -198,12 +198,12 @@ export default function HomeLanding() {
           }
           end={
             <ElementReveal as={`div`} delay={0.26} y={16} className={`heroBrand`}>
-              <Link href={`/`} onClick={scrollToElement} className={`heroLogoPlate`}>
+              <div onClick={scrollToElement} className={`heroLogoPlate`}>
                 <Logo fullSword className={`heroLogo`} />
                 <div className={`wordLogoHome`}>
                   <Word className={`wordLogoHomeGraphic`} gradient={false} arrows gradientSword />
                 </div>
-              </Link>
+              </div>
               <div className={`heroMiniStats`}>
                 {config?.stats?.map((stat, index) => (
                   <span className={`heroMiniStat`} key={stat.label}>

@@ -1,6 +1,7 @@
 'use client';
 
 import gsap from 'gsap';
+import type { CSSProperties } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroCircuitOverlay from './hero-circuit-overlay';
 import { useGlobalContext } from '@/shared/global-context';
@@ -9,20 +10,36 @@ import { useCallback, useLayoutEffect, useRef } from 'react';
 const accentsReadyClass = `heroCircuitAccentsReady`;
 const accentsPendingClass = `heroCircuitAccentsPending`;
 
+const defaultGridsStagger = 0.33;
+const defaultSignalLinesStagger = 1;
+
 export type HeroBgMilestoneHandler = (releaseAccents: () => void) => void;
 
+type HeroBgStyle = CSSProperties & {
+  '--gridsStagger': string;
+  '--signalLinesStagger': string;
+};
+
 type HeroBgProps = {
+  gridsStagger?: number;
+  signalLinesStagger?: number;
   onGridPlaneRevealStart?: HeroBgMilestoneHandler;
   onCircuitRevealComplete?: HeroBgMilestoneHandler;
   onSignalLineRevealComplete?: () => void;
 };
 
 export default function HeroBg({
+  gridsStagger = defaultGridsStagger,
+  signalLinesStagger = defaultSignalLinesStagger,
   onGridPlaneRevealStart,
   onCircuitRevealComplete,
   onSignalLineRevealComplete,
 }: HeroBgProps) {
   const { slantedSignalLines } = useGlobalContext();
+  const heroBgStyle: HeroBgStyle = {
+    '--gridsStagger': `${gridsStagger}s`,
+    '--signalLinesStagger': `${signalLinesStagger}s`,
+  };
   
   const heroBgRef = useRef<HTMLDivElement | null>(null);
   const heroBgClipRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +110,7 @@ export default function HeroBg({
 
   return (
     <div ref={heroBgClipRef} className={`heroBgClip`}>
-      <div ref={heroBgRef} className={`heroBg`}>
+      <div ref={heroBgRef} style={heroBgStyle} className={`heroBg`}>
         <HeroCircuitOverlay onRevealComplete={circuitRevealComplete} onGridPlaneRevealPending={holdAccents} />
         <span className={`gridPlane gridPlaneA`} />
         <span ref={gridPlaneBRef} className={`gridPlane gridPlaneB`} />

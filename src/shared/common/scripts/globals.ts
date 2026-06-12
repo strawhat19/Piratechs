@@ -33,7 +33,7 @@ export const getPageName = (path: string, lowerCase: boolean = true) => {
   return lowerCase ? pageName?.toLowerCase() : pageName;
 }
 
-export const scrollToElement = (event: MouseEvent<HTMLAnchorElement>, elementQuerySelector = `#anchor`, offset = 103.8) => {
+export const scrollToElement = (event: MouseEvent<any>, elementQuerySelector = `#anchor`, offset = 103.8) => {
   event.preventDefault();
   const el = document.querySelector(elementQuerySelector);
   if (!el) return;

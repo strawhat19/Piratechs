@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import type { ReactNode } from 'react';
 import { useLayoutEffect, useRef } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { scrollToElement } from '@/shared/common/scripts/globals';
 
 type HeroContentProps = {
   end: ReactNode;
@@ -65,7 +66,7 @@ export default function HeroContent({ end, start }: HeroContentProps) {
       <div ref={heroStartRef} className={`heroStart heroCopy`}>
         {start}
       </div>
-      <div ref={heroEndWrapperRef} className={`heroEndWrapper`}>
+      <div ref={heroEndWrapperRef} onClick={scrollToElement} className={`heroEndWrapper cursorPointer`}>
         {end}
       </div>
     </div>

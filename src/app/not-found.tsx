@@ -45,6 +45,8 @@ export default function NotFound() {
         }
       />
     </section>
+
+    <div id={`anchor`} className={`sep reveal`} />
     
     <Section />
   </>;

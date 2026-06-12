@@ -61,7 +61,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
         />
       </section>
 
-      <div className={`sep reveal`} />
+      <div id={`anchor`} className={`sep reveal`} />
 
       {pageID == `projects` ? <Section /> : <>
         <section className={`pageSection detailSection subPageSection`}>
@@ -85,7 +85,9 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
             </div>
           </div>
         </section>
+
         <div className={`sep reveal`} />
+        
       </>}
     </>
   );

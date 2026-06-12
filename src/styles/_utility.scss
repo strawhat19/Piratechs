@@ -1,3 +1,7 @@
+.cursorPointer {
+  cursor: pointer;
+}
+
 .flex { display: flex; }
 .flexI { display: flex !important; }
 .column { flex-direction: column; }
@@ -57,7 +61,7 @@
 }
 
 .buttonHoverBorder {
-  cursor: pointer;
+  @extend .cursorPointer;
   transition: border-color var(--transition);
 }
 

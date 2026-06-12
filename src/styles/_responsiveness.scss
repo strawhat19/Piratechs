@@ -76,11 +76,20 @@
 }
 
 @media (max-width: 768px) {
+  .loaderWord {
+    --w: 250px;
+  }
+
+  .loaderProgress {
+    font-size: 1.33rem;
+  }
+
   .ceoHeadshotContainer {
     top: -5%;
     transform: scale(0.85);
     left: 205px !important;
   }
+
   .pageTransitionShutter {
     &::after {
       background-size: 500px !important;
