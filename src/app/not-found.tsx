@@ -10,8 +10,8 @@ export default function NotFound() {
   return <>
     <section className={`pageSection heroSection subHero`}>
       <HeroBg />
-      <div className={`sectionInner heroGrid`}>
-        <div className={`heroCopy`}>
+      <div className={`heroContent sectionInner heroGrid`}>
+        <div className={`heroStart heroCopy`}>
           <TextReveal as={`span`} className={`eyebrow`} text={`404`} delay={0.4} />
           <TextReveal as={`h1`} className={`bannerText`} text={`Not Found`} delay={0.1} />
           <TextReveal as={`p`} className={`bannerText`} text={`<i>We could not find what you were looking for.</i>`} html />
@@ -34,7 +34,7 @@ export default function NotFound() {
             </ElementReveal>
           </div>
         </div>
-        <ElementReveal as={`div`} delay={0.28} y={16} className={`pageBadge`}>
+        <ElementReveal className={`heroEnd pageBadge`} as={`div`} delay={0.28} y={16}>
           <i className={`fa-solid fa-ban gradientTextColor`} />
           <TextReveal as={`span`} text={`404`} delay={0.3} />
         </ElementReveal>

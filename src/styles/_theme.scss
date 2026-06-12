@@ -487,6 +487,14 @@ p {
   filter: var(--logoLetterDropShadow) !important;
 }
 
+footer {
+  small {
+    i {
+      padding-right: 3px;
+    }
+  }
+}
+
 .dark {
   .logoLetter {
     @extend .dropShadow;

@@ -8,10 +8,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { isPageTransitionPending, isPageTransitionRevealing, pageTransitionCompleteClass, pageTransitionRevealEvent } from '@/app/components/effects/page-transition-events';
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
-const accentsReadyClass = `heroCircuitAccentsReady`;
-const accentsPendingClass = `heroCircuitAccentsPending`;
 const initialLoadDelayBonus = 1.22;
-export const heroCircuitRevealCompleteEvent = `piratechs:hero-circuit-reveal-complete`;
 
 const getInitialLoadDelayBonus = () => (
   typeof document != `undefined` && !document.body.classList.contains(pageTransitionCompleteClass) ? initialLoadDelayBonus : 0
@@ -35,6 +32,8 @@ type HeroCircuitOverlayProps = {
   showCircuitOverlay?: boolean;
   revealSlant?: boolean | number;
   revealGridPlanesAfterCircuit?: boolean;
+  onRevealComplete?: () => void;
+  onGridPlaneRevealPending?: () => void;
 };
 
 export default function HeroCircuitOverlay({ 
@@ -48,6 +47,8 @@ export default function HeroCircuitOverlay({
   animatePulses = advancedGraphics, 
   showCircuitOverlay = advancedDevice,
   revealGridPlanesAfterCircuit = true,
+  onRevealComplete,
+  onGridPlaneRevealPending,
 }: HeroCircuitOverlayProps) {
   const { isChromeOrAdvancedDevice } = useGlobalContext();
 
@@ -71,16 +72,10 @@ export default function HeroCircuitOverlay({
   }, []);
 
   useLayoutEffect(() => {
-    const heroBg = overlayWrapRef.current?.closest(`.heroBg`);
-    if (!heroBg || !shouldRenderCircuit || !shouldDelayGridPlanes) return;
+    if (!shouldRenderCircuit || !shouldDelayGridPlanes) return;
     if (window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) return;
-    heroBg.classList.add(accentsPendingClass);
-    heroBg.classList.remove(accentsReadyClass);
-    return () => {
-      heroBg.classList.remove(accentsReadyClass);
-      heroBg.classList.remove(accentsPendingClass);
-    };
-  }, [shouldDelayGridPlanes, shouldRenderCircuit]);
+    onGridPlaneRevealPending?.();
+  }, [onGridPlaneRevealPending, shouldDelayGridPlanes, shouldRenderCircuit]);
 
   useEffect(() => {
     if (!shouldRenderCircuit) return;
@@ -121,12 +116,7 @@ export default function HeroCircuitOverlay({
     const delayBonus = defaultDelayBonus ?? initialDelayBonusRef.current;
 
     const completeCircuitReveal = () => {
-      const heroBg = overlayWrapRef.current?.closest(`.heroBg`);
-      const revealCompleteEvent = new Event(heroCircuitRevealCompleteEvent, { cancelable: true });
-      const releaseGridPlanes = window.dispatchEvent(revealCompleteEvent);
-      if (!shouldDelayGridPlanes || !releaseGridPlanes) return;
-      heroBg?.classList.remove(accentsPendingClass);
-      heroBg?.classList.add(accentsReadyClass);
+      onRevealComplete?.();
     };
 
     const ctx = gsap.context(() => {
@@ -167,7 +157,7 @@ export default function HeroCircuitOverlay({
     return () => {
       ctx.revert();
     };
-  }, [canReveal, defaultDelayBonus, revealAfterSlashes, revealSlantAmount, shouldDelayGridPlanes, shouldRenderCircuit, slashesComplete]);
+  }, [canReveal, defaultDelayBonus, onRevealComplete, revealAfterSlashes, revealSlantAmount, shouldRenderCircuit, slashesComplete]);
 
   return shouldRenderCircuit ? (
     <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>

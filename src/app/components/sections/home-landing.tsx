@@ -5,41 +5,51 @@ import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
 // import Section from './section';
-import { ScrollTrigger } from 'gsap/all';
 import AuthWidget from '../auth/auth-widget';
 import { config } from '@/shared/config/config';
-import { useLayoutEffect, useRef } from 'react';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import { useGlobalContext } from '@/shared/global-context';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
 import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import HeroBg, { heroCircuitRevealCompleteEvent } from '../hero/hero-bg';
+import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
 
+type HeroBgAnimationHandlers = {
+  gridPlaneRevealStart?: HeroBgMilestoneHandler;
+  circuitRevealComplete?: HeroBgMilestoneHandler;
+  signalLineRevealComplete?: () => void;
+};
+
 export default function HomeLanding() {
   const page: any = config?.pages?.home;
   const heroSectionRef = useRef<HTMLElement | null>(null);
+  const heroBgAnimationHandlersRef = useRef<HeroBgAnimationHandlers>({});
 
   const { width } = useGlobalContext();
 
-  useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  const gridPlaneRevealStart = useCallback<HeroBgMilestoneHandler>((releaseAccents) => {
+    heroBgAnimationHandlersRef.current.gridPlaneRevealStart?.(releaseAccents);
+  }, []);
+  const circuitRevealComplete = useCallback<HeroBgMilestoneHandler>((releaseAccents) => {
+    heroBgAnimationHandlersRef.current.circuitRevealComplete?.(releaseAccents);
+  }, []);
+  const signalLineRevealComplete = useCallback(() => {
+    heroBgAnimationHandlersRef.current.signalLineRevealComplete?.();
+  }, []);
 
+  useLayoutEffect(() => {
     const heroSection = heroSectionRef.current;
 
-    const heroBg = heroSection?.querySelector<HTMLElement>(`.heroBg`);
-    const heroBgClip = heroSection?.querySelector<HTMLElement>(`.heroBgClip`);
-    const firstGridPlane = heroSection?.querySelector<HTMLElement>(`.gridPlaneB`);
-    const finalSignalLine = heroSection?.querySelector<HTMLElement>(`.signalLineA`);
     const heroLogoPlate = heroSection?.querySelector<HTMLElement>(`.heroLogoPlate`);
     const avatarAnimation = heroSection?.querySelector<HTMLElement>(`.homeAvatarAccent`);
     const avatarArcText = avatarAnimation?.querySelector<HTMLElement>(`.avatarArcTextWrap`);
 
-    if (!heroBg || !heroLogoPlate || !finalSignalLine || !firstGridPlane || !avatarAnimation || !heroBgClip) return;
+    if (!heroLogoPlate || !avatarAnimation) return;
 
     const prefersReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
     if (prefersReducedMotion) {
@@ -65,25 +75,9 @@ export default function HomeLanding() {
       });
     }
 
-    gsap.to(heroBgClip, {
-      scale: 1.18,
-      ease: `none`,
-      scrollTrigger: {
-        scrub: true,
-        start: `top top`,
-        end: window.innerHeight,
-        trigger: document.documentElement,
-      },
-    });
-
-    const releaseGridAccents = () => {
-      heroBg.classList.remove(`heroCircuitAccentsPending`);
-      heroBg.classList.add(`heroCircuitAccentsReady`);
-    };
-
-    const revealAvatarText = () => {
+    const revealAvatarText = (releaseAccents: () => void) => {
       if (!avatarArcText) {
-        releaseGridAccents();
+        releaseAccents();
         return;
       }
       gsap.to(avatarArcText, {
@@ -93,13 +87,12 @@ export default function HomeLanding() {
         webkitClipPath: `circle(75% at 50% 50%)`,
         onComplete: () => {
           gsap.set(avatarArcText, { clearProps: `clipPath,webkitClipPath` });
-          releaseGridAccents();
+          releaseAccents();
         },
       });
     };
 
-    const revealAvatar = (event?: Event) => {
-      if (event?.type == heroCircuitRevealCompleteEvent) event.preventDefault();
+    const revealAvatar: HeroBgMilestoneHandler = (releaseAccents) => {
       if (accentsComplete) return;
       accentsComplete = true;
       gsap.to(avatarAnimation, {
@@ -109,17 +102,13 @@ export default function HomeLanding() {
         webkitClipPath: `circle(50% at 50% 50%)`,
         onComplete: () => {
           gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
-          revealAvatarText();
+          revealAvatarText(releaseAccents);
         },
       });
     };
 
-    const revealAvatarFallback = (event: AnimationEvent) => {
-      if (event.animationName.startsWith(`gridPlaneClipInLeft`)) revealAvatar();
-    };
-
-    const finishWithTripleGiggle = (event: AnimationEvent) => {
-      if (!shuttersComplete || !event.animationName.startsWith(`signalLineSlashInLeft`)) return;
+    const finishWithTripleGiggle = () => {
+      if (!shuttersComplete) return;
       laughingTimeline?.kill();
       heroLogoPlate.classList.remove(logoHoverAnimationClass);
       laughingTimeline = gsap.timeline();
@@ -142,9 +131,11 @@ export default function HomeLanding() {
       shuttersComplete = true;
     };
 
-    window.addEventListener(heroCircuitRevealCompleteEvent, revealAvatar);
-    firstGridPlane.addEventListener(`animationstart`, revealAvatarFallback);
-    finalSignalLine.addEventListener(`animationend`, finishWithTripleGiggle);
+    heroBgAnimationHandlersRef.current = {
+      gridPlaneRevealStart: revealAvatar,
+      circuitRevealComplete: revealAvatar,
+      signalLineRevealComplete: finishWithTripleGiggle,
+    };
     if (!shuttersComplete) {
       window.addEventListener(pageTransitionReadyEvent, shuttersCompleteHandler, { once: true });
     }
@@ -152,9 +143,7 @@ export default function HomeLanding() {
     return () => {
       laughingTimeline?.kill();
       heroLogoPlate.classList.remove(logoHoverAnimationClass);
-      window.removeEventListener(heroCircuitRevealCompleteEvent, revealAvatar);
-      firstGridPlane.removeEventListener(`animationstart`, revealAvatarFallback);
-      finalSignalLine.removeEventListener(`animationend`, finishWithTripleGiggle);
+      heroBgAnimationHandlersRef.current = {};
       window.removeEventListener(pageTransitionReadyEvent, shuttersCompleteHandler);
       gsap.killTweensOf([logoAnimationPause, avatarAnimation, avatarArcText]);
       gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
@@ -165,9 +154,13 @@ export default function HomeLanding() {
   return (
     <>
       <section ref={heroSectionRef} className={`pageSection heroSection`}>
-        <HeroBg />
-        <div className={`sectionInner heroGrid`}>
-          <div className={`heroCopy`}>
+        <HeroBg
+          onGridPlaneRevealStart={gridPlaneRevealStart}
+          onCircuitRevealComplete={circuitRevealComplete}
+          onSignalLineRevealComplete={signalLineRevealComplete}
+        />
+        <div className={`heroContent sectionInner heroGrid`}>
+          <div className={`heroStart heroCopy`}>
             <AvatarAnimation 
               size={135} 
               reveal={false}

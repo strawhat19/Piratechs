@@ -15,8 +15,8 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
     <>
       <section className={`pageSection heroSection subHero subPageSection`}>
         <HeroBg />
-        <div className={`sectionInner heroGrid`}>
-          <div className={`heroCopy`}>
+        <div className={`heroContent sectionInner heroGrid`}>
+          <div className={`heroStart heroCopy`}>
             <div className={`heroBannerText`}>
               <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
               {page?.html ? (
@@ -49,7 +49,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
               </ElementReveal>
             </div>
           </div>
-          <ElementReveal as={`div`} delay={0.28} y={16} className={`pageBadge`}>
+          <ElementReveal className={`heroEnd pageBadge`} as={`div`} delay={0.28} y={16}>
             <i className={`${config.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} gradientTextColor`} />
             <TextReveal as={`span`} text={page.eyebrow} delay={0.3} />
           </ElementReveal>
