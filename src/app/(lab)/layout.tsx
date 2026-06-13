@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import './lab.scss';
 import LabLoader from './lab-loader';
@@ -25,7 +26,13 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
     <html lang={`en`}>
       <body>
         <LabLoader />
-        {/* Drop a custom <Header /> here */}
+        {/* Minimal lab nav: soft-navigate between lab pages to see that the
+            loader does NOT replay on in-lab navigation (it persists in this
+            layout). Hard-refresh a page to watch it run again. */}
+        <nav className={`labNav`}>
+          <Link href={`/playground`}>Playground</Link>
+          <Link href={`/sandbox`}>Sandbox</Link>
+        </nav>
         {children}
         {/* Drop a custom <Footer /> here */}
       </body>

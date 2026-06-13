@@ -91,3 +91,129 @@ h3 {
   display: block;
   pointer-events: none;
 }
+
+/* TextReveal / ElementReveal support. The lab has its own stylesheet, so the
+   main site's reveal rules don't reach here — keep reveals hidden until they
+   animate (so onScroll reveals never flash before entering view) and mask the
+   slide variant. */
+.textRevealPending,
+.elementRevealPending {
+  visibility: hidden;
+}
+
+.elementReveal {
+  will-change: transform, opacity, filter, clip-path;
+}
+
+.elementRevealAnimating {
+  transition: none !important;
+}
+
+.textRevealWord,
+.textRevealChar {
+  display: inline-block;
+  vertical-align: bottom;
+  will-change: transform, opacity, clip-path;
+}
+
+.textRevealSlide {
+  overflow: hidden;
+}
+
+.textRevealSlide .textRevealWord,
+.textRevealSlide .textRevealChar {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Full-height scroll sections for the playground demo. */
+.labSection {
+  position: relative;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 6rem 4rem;
+  text-align: center;
+}
+
+.labStack {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.labScrollHint {
+  position: absolute;
+  left: 50%;
+  bottom: 2.5rem;
+  transform: translateX(-50%);
+  font-size: 0.875rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.labLead {
+  display: block;
+  max-width: 46rem;
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.labCardRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.labCard {
+  width: 18rem;
+  padding: 2rem;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.labCard h4 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.labCard p {
+  margin: 0;
+  font-weight: 300;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+/* Fixed lab nav sits beneath the loader (z-index 1000) and is revealed once it
+   slides away. Used to test in-lab navigation against the loader behaviour. */
+.labNav {
+  position: fixed;
+  top: 1.75rem;
+  left: 2rem;
+  z-index: 10;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.labNav a {
+  color: white;
+  text-decoration: none;
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+}
+
+.labNav a:hover {
+  opacity: 1;
+}

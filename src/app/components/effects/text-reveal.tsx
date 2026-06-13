@@ -24,6 +24,8 @@ type TextRevealProps = {
   slide?: boolean;
   /** Defer the reveal until the element scrolls into view (for below-the-fold content). */
   scroll?: boolean;
+  /** Replay the reveal every time the element re-enters the viewport (implies scroll). */
+  onScroll?: boolean;
 };
 
 export default function TextReveal({
@@ -36,6 +38,7 @@ export default function TextReveal({
   html = false,
   slide = false,
   scroll = false,
+  onScroll = false,
   byLetter = false,
 }: TextRevealProps) {
   const ref = useRef<HTMLElement>(null);
@@ -55,6 +58,7 @@ export default function TextReveal({
     el.classList.add(pendingClass);
 
     let cancelled = false;
+    let started = false;
     let split: SplitText | null = null;
     let timeline: gsap.core.Timeline | null = null;
     let observer: IntersectionObserver | null = null;
@@ -81,7 +85,9 @@ export default function TextReveal({
         defaults: { ease: `power3.out` },
         // Revert the split once revealed so we don't leave word/char wrappers (and
         // their will-change layers) on the page now that reveals run on lots of text.
+        // For onScroll we keep the split alive so the reveal can replay on re-entry.
         onComplete: () => {
+          if (onScroll) return;
           split?.revert();
           split = null;
         },
@@ -115,12 +121,14 @@ export default function TextReveal({
     };
 
     const start = () => {
+      if (started) return;
       if (isPageTransitionPending()) {
         if (transitionReadyHandler) return;
         transitionReadyHandler = () => start();
         window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
         return;
       }
+      started = true;
       if (`fonts` in document) {
         document.fonts.ready.then(run);
       } else {
@@ -128,29 +136,43 @@ export default function TextReveal({
       }
     };
 
+    // Enter the viewport: build + play on the first entry, and (with onScroll)
+    // replay on every subsequent entry. Without onScroll the observer is a
+    // one-shot, so it disconnects once the reveal has fired.
+    const enter = () => {
+      if (onScroll) {
+        if (timeline) timeline.restart();
+        else start();
+        return;
+      }
+      observer?.disconnect();
+      observer = null;
+      start();
+    };
+
     // Above-the-fold text plays immediately; below-the-fold text waits until it
     // scrolls into view so the reveal isn't already over by the time it's seen.
-    if (scroll) {
+    // With onScroll the reveal also resets when the element leaves the viewport
+    // so it can run again the next time it scrolls back in.
+    if (scroll || onScroll) {
       observer = new IntersectionObserver(entries => {
-        if (entries.some(entry => entry.isIntersecting)) {
-          if (isPageTransitionPending()) {
-            if (transitionReadyHandler) return;
-            transitionReadyHandler = () => {
-              transitionReadyHandler = null;
-              if (cancelled || !ref.current) return;
-              const bounds = ref.current.getBoundingClientRect();
-              if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
-              observer?.disconnect();
-              observer = null;
-              start();
-            };
-            window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
-            return;
-          }
-          observer?.disconnect();
-          observer = null;
-          start();
+        if (!entries.some(entry => entry.isIntersecting)) {
+          if (onScroll) timeline?.pause(0);
+          return;
         }
+        if (isPageTransitionPending()) {
+          if (transitionReadyHandler) return;
+          transitionReadyHandler = () => {
+            transitionReadyHandler = null;
+            if (cancelled || !ref.current) return;
+            const bounds = ref.current.getBoundingClientRect();
+            if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+            enter();
+          };
+          window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
+          return;
+        }
+        enter();
       }, { threshold: 0.05, rootMargin: `0px 0px -2%` });
       observer.observe(el);
     } else {
@@ -164,7 +186,7 @@ export default function TextReveal({
       split?.revert();
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
     };
-  }, [text, byLetter, html, slide, delay, duration, stagger, scroll]);
+  }, [text, byLetter, html, slide, delay, duration, stagger, scroll, onScroll]);
 
   return createElement(as, {
     ref,

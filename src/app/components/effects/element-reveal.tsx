@@ -16,6 +16,8 @@ type ElementRevealProps = {
   scale?: number;
   slide?: boolean;
   scroll?: boolean;
+  /** Replay the reveal every time the element re-enters the viewport (implies scroll). */
+  onScroll?: boolean;
   children: ReactNode;
   className?: string;
   duration?: number;
@@ -35,6 +37,7 @@ export default function ElementReveal({
   blur = false,
   slide = false,
   scroll = false,
+  onScroll = false,
   duration = 0.48,
   origin = `center`,
   ease = `power3.out`,
@@ -61,11 +64,28 @@ export default function ElementReveal({
     let tween: gsap.core.Tween | null = null;
     let observer: IntersectionObserver | null = null;
     let cancelled = false;
+    let started = false;
     let transitionReadyHandler: (() => void) | null = null;
+
+    // The hidden "from" state, shared so onScroll can reset the element to it
+    // when it leaves the viewport and animate from it again on the way back.
+    const fromVarsFor = () => {
+      const fromVars: gsap.TweenVars = { scale, x, y, transformOrigin: origin };
+      if (slide) {
+        fromVars.clipPath = `inset(100% 0% 0% 0%)`;
+        fromVars.webkitClipPath = `inset(100% 0% 0% 0%)`;
+      } else {
+        fromVars.autoAlpha = 0;
+      }
+      if (blur) fromVars.filter = `blur(2px)`;
+      return fromVars;
+    };
 
     const run = () => {
       if (cancelled || !ref.current) return;
-      const fromVars: gsap.TweenVars = { scale, x, y, transformOrigin: origin };
+      started = true;
+      tween?.kill();
+      const fromVars = fromVarsFor();
       const toVars: gsap.TweenVars = {
         delay,
         duration,
@@ -80,20 +100,25 @@ export default function ElementReveal({
         },
       };
       if (slide) {
-        fromVars.clipPath = `inset(100% 0% 0% 0%)`;
-        fromVars.webkitClipPath = `inset(100% 0% 0% 0%)`;
         toVars.clipPath = `inset(0% 0% 0% 0%)`;
         toVars.webkitClipPath = `inset(0% 0% 0% 0%)`;
       } else {
-        fromVars.autoAlpha = 0;
         toVars.autoAlpha = 1;
       }
-      if (blur) fromVars.filter = `blur(2px)`;
       el.classList.add(animatingClass);
       setAnimating(true);
       gsap.set(el, fromVars);
       reveal();
       tween = gsap.to(el, toVars);
+    };
+
+    // Reset to the hidden state when an onScroll element leaves the viewport so
+    // the reveal can play again the next time it scrolls back into view.
+    const hide = () => {
+      tween?.kill();
+      el.classList.remove(animatingClass);
+      setAnimating(false);
+      gsap.set(el, fromVarsFor());
     };
 
     const start = () => {
@@ -106,27 +131,39 @@ export default function ElementReveal({
       run();
     };
 
-    if (scroll) {
+    // Enter the viewport: animate in on the first entry, and (with onScroll)
+    // replay on every subsequent entry. Without onScroll the observer is a
+    // one-shot, so it disconnects once the reveal has fired.
+    const enter = () => {
+      if (onScroll) {
+        if (started) run();
+        else start();
+        return;
+      }
+      observer?.disconnect();
+      observer = null;
+      start();
+    };
+
+    if (scroll || onScroll) {
       observer = new IntersectionObserver(entries => {
-        if (entries.some(entry => entry.isIntersecting)) {
-          if (isPageTransitionPending()) {
-            if (transitionReadyHandler) return;
-            transitionReadyHandler = () => {
-              transitionReadyHandler = null;
-              if (cancelled || !ref.current) return;
-              const bounds = ref.current.getBoundingClientRect();
-              if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
-              observer?.disconnect();
-              observer = null;
-              start();
-            };
-            window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
-            return;
-          }
-          observer?.disconnect();
-          observer = null;
-          start();
+        if (!entries.some(entry => entry.isIntersecting)) {
+          if (onScroll && started) hide();
+          return;
         }
+        if (isPageTransitionPending()) {
+          if (transitionReadyHandler) return;
+          transitionReadyHandler = () => {
+            transitionReadyHandler = null;
+            if (cancelled || !ref.current) return;
+            const bounds = ref.current.getBoundingClientRect();
+            if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+            enter();
+          };
+          window.addEventListener(pageTransitionReadyEvent, transitionReadyHandler, { once: true });
+          return;
+        }
+        enter();
       }, { threshold: 0.05, rootMargin: `0px 0px -2%` });
       observer.observe(el);
     } else {
@@ -140,7 +177,7 @@ export default function ElementReveal({
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
       el.classList.remove(animatingClass);
     };
-  }, [x, y, blur, slide, delay, scale, scroll, duration, origin, ease]);
+  }, [x, y, blur, slide, delay, scale, scroll, onScroll, duration, origin, ease]);
 
   return createElement(as, {
     ...props,

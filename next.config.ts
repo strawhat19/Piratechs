@@ -12,12 +12,20 @@ const routes = {
   [`case-studies`]: { redirects: [] },
 };
 
+// Clean URLs for the (lab) sandbox pages, rewritten to their pages/ targets the
+// same way the main routes above are (e.g. /playground -> /pages/playground).
+const labRoutes = [`playground`, `sandbox`];
+
 const nextConfig: NextConfig = {
   turbopack: {},
   devIndicators: false,
   reactStrictMode: true,
   rewrites: async () => [
     ...Object.keys(routes).map(route => ({
+      source: `/${route}`,
+      destination: `/pages/${route}`,
+    })),
+    ...labRoutes.map(route => ({
       source: `/${route}`,
       destination: `/pages/${route}`,
     })),
