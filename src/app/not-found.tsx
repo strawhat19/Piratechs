@@ -1,53 +1,49 @@
-'use client';
-
 import Link from 'next/link';
-import HeroBg from './components/hero/hero-bg';
-import Section from './components/sections/section';
-import HeroContent from './components/hero/hero-content';
-import TextReveal from './components/effects/text-reveal';
-import ElementReveal from './components/effects/element-reveal';
+import type { Metadata } from 'next';
+import { config } from '@/shared/config/config';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 
-export default function NotFound() {
-  return <>
-    <section className={`pageSection heroSection subHero`}>
-      <HeroBg />
-      <HeroContent
-        start={
-          <>
-            <TextReveal as={`span`} className={`eyebrow`} text={`404`} delay={0.4} />
-            <TextReveal as={`h1`} className={`bannerText`} text={`Not Found`} delay={0.1} />
-            <TextReveal as={`p`} className={`bannerText`} text={`<i>We could not find what you were looking for.</i>`} html />
-            <div className={`heroActions`}>
-              <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
-                <Link href={`/`} className={`buttonLink primary`}>
-                  <ElementReveal delay={0.23}>
-                    <i className={`fa-solid fa-house logoLetter`} />
-                  </ElementReveal>
-                  <TextReveal as={`span`} className={`logoLetter`} text={`Back To Home`} delay={0.24} />
-                </Link>
-              </ElementReveal>
-              <ElementReveal as={`span`} delay={0.28} className={`heroActionReveal`}>
-                <Link href={`/projects`} className={`buttonLink ghost`}>
-                  <ElementReveal delay={0.29}>
-                    <i className={`fa-solid fa-diagram-project gradientTextColor logoLetter`} />
-                  </ElementReveal>
-                  <TextReveal as={`span`} className={`logoLetter`} text={`Our Work`} delay={0.3} />
-                </Link>
-              </ElementReveal>
-            </div>
-          </>
-        }
-        end={
-          <ElementReveal className={`heroEnd pageBadge`} as={`div`} delay={0.28} y={16}>
-            <i className={`fa-solid fa-ban gradientTextColor`} />
-            <TextReveal as={`span`} text={`404`} delay={0.3} />
-          </ElementReveal>
-        }
-      />
-    </section>
+import './globals.scss';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
-    <div id={`anchor`} className={`sep reveal`} />
-    
-    <Section />
-  </>;
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-plusJakartaSans',
+});
+
+export const metadata: Metadata = {
+  title: `Not Found // ${config.title}`,
+};
+
+// Global fallback for URLs that match no route group. Because the app now uses
+// multiple root layouts (one per route group), there is no shared root layout to
+// wrap this page, so it renders its own <html>/<body>. Branded but intentionally
+// free of the reveal-on-scroll effects so the content is always visible.
+export default function GlobalNotFound() {
+  return (
+    <html lang={`en`} className={plusJakartaSans.variable}>
+      <body>
+        <main
+          style={{
+            gap: `1rem`,
+            padding: `2rem`,
+            display: `flex`,
+            textAlign: `center`,
+            minHeight: `100dvh`,
+            alignItems: `center`,
+            flexDirection: `column`,
+            justifyContent: `center`,
+          }}
+        >
+          <span className={`eyebrow`}>404</span>
+          <h1 className={`bannerText`}>Not Found</h1>
+          <p>We could not find what you were looking for.</p>
+          <Link href={`/`} className={`buttonLink primary`}>
+            <i className={`fa-solid fa-house`} />
+            <span>Back To Home</span>
+          </Link>
+        </main>
+      </body>
+    </html>
+  );
 }

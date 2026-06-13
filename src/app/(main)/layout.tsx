@@ -1,4 +1,4 @@
-import './globals.scss';
+import '../globals.scss';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import Script from 'next/script';

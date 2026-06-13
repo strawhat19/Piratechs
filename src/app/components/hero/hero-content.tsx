@@ -41,17 +41,18 @@ export default function HeroContent({ end, start }: HeroContentProps) {
       })
       .addLabel(`heroContentHandoff`)
       .to(heroEndWrapper, {
-        duration: 0.4,
         ease: `none`,
-        xPercent: -85,
         scale: 1.18,
+        duration: 0.4,
+        xPercent: -115,
         transformOrigin: `bottom`,
       }, `heroContentHandoff`)
       .to(heroStart, {
         scale: 1.18,
-        duration: 0.4,
         ease: `none`,
+        duration: 0.4,
         yPercent: -100,
+        filter: `blur(10px)`,
       }, `heroContentHandoff`);
 
     return () => {
