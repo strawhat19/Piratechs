@@ -61,9 +61,19 @@ h3 {
   background: black;
 }
 
+/* Off-screen host for the SVG motion-blur filter referenced by the counter. */
+.labLoaderFilter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
 .labLoaderCount {
   font-size: 5rem;
   font-weight: 300;
   line-height: 1;
   font-variant-numeric: tabular-nums;
+  filter: url(#labMotionBlur);
+  will-change: filter;
 }
