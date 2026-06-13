@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import './lab.scss';
+import LabLoader from './lab-loader';
 
 export const metadata: Metadata = {
   title: `Playground`,
@@ -23,6 +24,7 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={`en`}>
       <body>
+        <LabLoader />
         {/* Drop a custom <Header /> here */}
         {children}
         {/* Drop a custom <Footer /> here */}

@@ -47,3 +47,23 @@ h3 {
   display: inline-block;
   clip-path: inset(0 0 0 0);
 }
+
+/* Full-screen page loader (see lab-loader.tsx): covers the page, counts to
+   100%, then slides up out of view. */
+.labLoader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 3rem 4rem;
+  background: black;
+}
+
+.labLoaderCount {
+  font-size: 5rem;
+  font-weight: 300;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
