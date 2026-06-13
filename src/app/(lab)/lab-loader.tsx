@@ -4,6 +4,12 @@ import gsap from 'gsap';
 import { useLayoutEffect, useRef } from 'react';
 import { markLabLoaderDone } from './lab-loader-events';
 
+// Initial center depth of the panel's bottom curve, in SVG viewBox units
+// (0–100, stretched to fill `.labLoaderCurve`). It eases to 0 as the panel
+// slides up, so the trailing edge starts curved and straightens out.
+const CURVE_DEPTH = 50;
+const curvePathFor = (depth: number) => `M0,0 L100,0 Q50,${(depth * 2).toFixed(3)} 0,0 Z`;
+
 // Full-screen loader for the (lab) sandbox: a counter ramps to 100% with a
 // velocity-driven vertical motion blur (digits smear while counting fast and
 // sharpen as they settle), then the whole overlay slides up out of view.
@@ -12,17 +18,24 @@ export default function LabLoader() {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const countRef = useRef<HTMLSpanElement | null>(null);
   const blurRef = useRef<SVGFEGaussianBlurElement | null>(null);
+  const curvePathRef = useRef<SVGPathElement | null>(null);
 
   useLayoutEffect(() => {
     const overlay = overlayRef.current;
     const count = countRef.current;
     const blurNode = blurRef.current;
-    if (!overlay || !count || !blurNode) return;
+    const curvePath = curvePathRef.current;
+    if (!overlay || !count || !blurNode || !curvePath) return;
 
     const progress = { value: 0 };
     let lastValue = 0;
     let lastTime = performance.now();
     let blur = 0;
+
+    // The panel's bottom edge bulges downward, then flattens as it slides away.
+    const curve = { depth: CURVE_DEPTH };
+    const applyCurve = () => curvePath.setAttribute(`d`, curvePathFor(curve.depth));
+    applyCurve();
 
     const ctx = gsap.context(() => {
       gsap
@@ -46,14 +59,28 @@ export default function LabLoader() {
           },
           onComplete: () => blurNode.setAttribute(`stdDeviation`, `0 0`),
         })
+        // Slow, smooth slide-up tuned to match the page's text-reveal pacing.
+        .addLabel(`slide`, `+=0.15`)
         .to(
           overlay,
           {
             yPercent: -100,
-            duration: 0.8,
-            ease: `power4.inOut`,
+            duration: 1.35,
+            ease: `power3.inOut`,
           },
-          `+=0.15`,
+          `slide`,
+        )
+        // Flatten the curved bottom edge in step with the slide: hold the curve
+        // through most of the travel, then straighten out toward the end.
+        .to(
+          curve,
+          {
+            depth: 0,
+            duration: 1.35,
+            ease: `power2.in`,
+            onUpdate: applyCurve,
+          },
+          `slide`,
         )
         .set(overlay, { display: `none` })
         // Tell the page the loader is gone so it can start its intro reveals.
@@ -75,6 +102,15 @@ export default function LabLoader() {
       <span className={`labLoaderCount`}>
         <span ref={countRef}>0</span>%
       </span>
+      <svg
+        className={`labLoaderCurve`}
+        viewBox={`0 0 100 100`}
+        preserveAspectRatio={`none`}
+        aria-hidden={true}
+        focusable={false}
+      >
+        <path ref={curvePathRef} d={curvePathFor(CURVE_DEPTH)} fill={`#fff`} />
+      </svg>
     </div>
   );
 }

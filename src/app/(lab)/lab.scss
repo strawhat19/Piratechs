@@ -58,7 +58,7 @@ h3 {
   align-items: flex-end;
   justify-content: flex-end;
   padding: 3rem 4rem;
-  background: black;
+  background: white;
 }
 
 /* Off-screen host for the SVG motion-blur filter referenced by the counter. */
@@ -73,7 +73,21 @@ h3 {
   font-size: 5rem;
   font-weight: 300;
   line-height: 1;
+  color: black;
   font-variant-numeric: tabular-nums;
   filter: url(#labMotionBlur);
   will-change: filter;
+}
+
+/* Trailing bottom edge of the panel: a downward bulge drawn just below the
+   panel (see lab-loader.tsx) that flattens as the panel slides up, so the edge
+   reads as a soft curve that straightens out by the end of the slide. */
+.labLoaderCurve {
+  position: absolute;
+  top: calc(100% - 1px); /* 1px overlap hides the seam with the panel */
+  left: 0;
+  width: 100%;
+  height: 24vh;
+  display: block;
+  pointer-events: none;
 }
