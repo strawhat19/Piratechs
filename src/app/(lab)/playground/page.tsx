@@ -1,5 +1,6 @@
 'use client';
 
+import TextReveal from '@/app/components/effects/text-reveal';
 // Blank page served at /playground. It renders inside (lab)/layout.tsx only —
 // completely isolated from the main site's header, footer, and theme. Replace
 
@@ -18,19 +19,19 @@ export default function PlaygroundPage() {
         gsap.registerPlugin(SplitText);
 
         const ctx = gsap.context(() => {
-        const split = new SplitText(titleRef.current, {
-            type: 'chars',
-            charsClass: 'splitChar',
-        });
+            const split = new SplitText(titleRef.current, {
+                type: 'chars',
+                charsClass: 'splitChar',
+            });
 
-        gsap.from(split.chars, {
-            yPercent: 120,
-            duration: 0.8,
-            stagger: 0.035,
-            ease: 'power4.out',
-        });
+            gsap.from(split.chars, {
+                yPercent: 120,
+                duration: 0.8,
+                stagger: 0.035,
+                ease: 'power4.out',
+            });
 
-        return () => split.revert();
+            return () => split.revert();
         }, titleRef);
 
         return () => ctx.revert();
@@ -45,9 +46,13 @@ export default function PlaygroundPage() {
         justifyContent: `center`,
       }}
     >
-        <h1 ref={titleRef} className="heroTitle">
-            Design // Develop
-        </h1>
+        <div style={{ display: `flex`, flexDirection: `column`, gap: 5 }}>
+            <h1 ref={titleRef} className={`splitTextElem heroTitle`}>
+                Design // Develop
+            </h1>
+            <TextReveal as={`h2`} text={`Full-Stack`} byLetter slide className={`splitTextElem`} delay={0.44} />
+            <TextReveal as={`h3`} text={`Applications`} byLetter slide className={`splitTextElem`} delay={0.88} />
+        </div>
         {/* <Button onClick={() => alert('Hello from the playground!')}>
             Click Me
         </Button> */}

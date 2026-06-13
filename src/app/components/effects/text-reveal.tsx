@@ -93,15 +93,14 @@ export default function TextReveal({
         stagger: stagger ?? (byLetter ? 0.018 : 0.07),
       };
       if (slide) {
-        timeline.fromTo(targets, {
-          yPercent: revealOffset,
-          clipPath: `inset(100% 0% 0% 0%)`,
-          webkitClipPath: `inset(100% 0% 0% 0%)`,
-        }, {
-          ...tweenVars,
-          yPercent: 0,
-          clipPath: `inset(0% 0% 0% 0%)`,
-          webkitClipPath: `inset(0% 0% 0% 0%)`,
+        // Matches the /playground reveal: each char slides up into place from
+        // below, masked by `.textRevealSlide { overflow: hidden }`.
+        timeline.from(targets, {
+          delay,
+          yPercent: 120,
+          ease: `power4.out`,
+          duration: duration ?? 0.8,
+          stagger: stagger ?? 0.035,
         });
       } else {
         timeline.from(targets, {

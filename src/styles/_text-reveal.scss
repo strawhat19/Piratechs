@@ -39,3 +39,15 @@
     -webkit-background-clip: text !important;
   }
 }
+
+// Slide reveal (TextReveal `slide`): characters start translated below their
+// line and slide up into place. `overflow: hidden` turns the element into a mask
+// so they appear from behind the text edge, matching the /playground reveal.
+.textRevealSlide {
+  overflow: hidden;
+}
+
+.textRevealSlide .textRevealWord,
+.textRevealSlide .textRevealChar {
+  clip-path: inset(0 0 0 0);
+}
