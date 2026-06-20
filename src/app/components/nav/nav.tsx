@@ -58,17 +58,18 @@ export const roleIcons = {
 
 export default function Nav({
   titleGraphic = true,
+  navLinks = config?.nav,
 }: any) {
   const pathname = usePathname();
 
-  const { user, width, loaded, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
+  const { user, loaded, theme, toggleTheme, menuExpanded, setMenuExpanded } = useGlobalContext();
 
   const navItems = useMemo(() => {
-    return config.nav.filter((navItem) => {
+    return navLinks.filter((navItem: any) => {
       if (!navItem?.role) return true;
       return Boolean(loaded && user?.role && minRole(user.role, navItem.role));
     });
-  }, [loaded, user?.role]);
+  }, [loaded, user?.role, navLinks]);
 
   const isActiveRoute = (href: string) => {
     if (href == `/`) return pathname == `/`;
@@ -79,7 +80,7 @@ export default function Nav({
     return (
       <nav className={className} aria-label={`${className} navigation`}>
         {navItems.map((navItem: NavItem) => {
-          const navDelayIndex = config.nav.findIndex(item => item?.id == navItem?.id);
+          const navDelayIndex = navLinks.findIndex((item: any) => item?.id == navItem?.id);
           return (
             <ElementReveal
               as={Link}

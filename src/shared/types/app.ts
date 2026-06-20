@@ -1,20 +1,10 @@
 import { Roles } from './types';
 
-export type PageID =
-  | `home`
-  | `about`
-  | `projects`
-  | `services`
-  | `store`
-  | `features`
-  | `gallery`
-  | `contact`;
-
 export type ThemeMode = `dark` | `light`;
-export type RouteID = Exclude<PageID, `home`>;
+export type RouteID = Exclude<string, `home`>;
 
 export type NavItem = {
-  id: PageID;
+  id: string;
   href: string;
   icon: string;
   label: string;

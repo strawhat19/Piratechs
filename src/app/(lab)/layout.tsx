@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import './lab.scss';
 import LabLoader from './lab-loader';
 import Nav from '../components/nav/nav';
+import { config } from '@/shared/config/config';
 import Footer from '../components/footer/footer';
 import GlobalProvider from '@/shared/global-context';
 import ScrollToTop from '../components/effects/scroll-to-top';
@@ -39,7 +40,7 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
             loader does NOT replay on in-lab navigation (it persists in this
             layout). Hard-refresh a page to watch it run again. */}
         <GlobalProvider>
-          <Nav />
+          <Nav navLinks={config?.nav_playground} />
           <MenuBlurBackdrop />
           <SmoothScroll>
             <main className={`main`}>

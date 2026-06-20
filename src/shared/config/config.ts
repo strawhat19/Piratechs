@@ -16,6 +16,10 @@ export const config = {
     { id: `gallery`, label: `Gallery`, href: `/gallery`, icon: `fa-solid fa-images`, role: Roles.Editor },
     { id: `contact`, label: `Contact`, href: `/contact`, icon: `fa-solid fa-paper-plane` },
   ] satisfies NavItem[],
+  nav_playground: [
+    { id: `home`, label: `Home`, href: `/playground`, icon: `fa-solid fa-house` },
+    { id: `sandbox`, label: `Sandbox`, href: `/sandbox`, icon: `fa-solid fa-anchor` },
+  ] satisfies NavItem[],
   topBarItems: [
     { icon: `fa-solid fa-code`, label: `Stack`, text: `TypeScript + Sass + Next` },
     { icon: `fa-solid fa-database`, label: `Data`, text: `Python, JSON, SQL, and REST APIs` },
