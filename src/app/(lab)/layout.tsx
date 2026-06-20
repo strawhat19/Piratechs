@@ -1,8 +1,17 @@
+import '../globals.scss';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 import './lab.scss';
 import LabLoader from './lab-loader';
+import Nav from '../components/nav/nav';
+import Footer from '../components/footer/footer';
+import GlobalProvider from '@/shared/global-context';
+import ScrollToTop from '../components/effects/scroll-to-top';
+import SmoothScroll from '../components/effects/smooth-scroll';
+import MenuBlurBackdrop from '../components/effects/menu-blur-backdrop';
+import ProjectQuerySheet from '../components/projects/project-query-sheet';
 
 export const metadata: Metadata = {
   title: `Playground`,
@@ -29,11 +38,21 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
         {/* Minimal lab nav: soft-navigate between lab pages to see that the
             loader does NOT replay on in-lab navigation (it persists in this
             layout). Hard-refresh a page to watch it run again. */}
-        <nav className={`labNav`}>
-          <Link href={`/playground`}>Playground</Link>
-          <Link href={`/sandbox`}>Sandbox</Link>
-        </nav>
-        {children}
+        <GlobalProvider>
+          <Nav />
+          <MenuBlurBackdrop />
+          <SmoothScroll>
+            <main className={`main`}>
+              {children}
+            </main>
+            <Footer />
+          </SmoothScroll>
+          <ProjectQuerySheet />
+          <ScrollToTop />
+          {/* <PageTransition>
+            {intersectionObserver && <ScrollReveal />}
+          </PageTransition> */}
+        </GlobalProvider>
         {/* Drop a custom <Footer /> here */}
       </body>
     </html>

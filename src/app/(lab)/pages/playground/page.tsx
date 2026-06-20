@@ -2,9 +2,9 @@
 
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import ElementReveal from '@/app/components/effects/element-reveal';
 import TextReveal from '@/app/components/effects/text-reveal';
+import ElementReveal from '@/app/components/effects/element-reveal';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { isLabLoaderDone, labLoaderDoneEvent } from '../../lab-loader-events';
 
 // Page served at /playground (rewritten to /pages/playground in next.config).
@@ -13,8 +13,8 @@ import { isLabLoaderDone, labLoaderDoneEvent } from '../../lab-loader-events';
 // they begin only once LabLoader has slid away. Below the hero are extra scroll
 // sections whose reveals use `onScroll`, so they replay on every re-entry.
 export default function PlaygroundPage() {
-    const titleRef = useRef<HTMLHeadingElement | null>(null);
     const [ready, setReady] = useState(false);
+    const titleRef = useRef<HTMLHeadingElement | null>(null);
 
     // Hold the reveals until the loader finishes; if it already has (e.g. a soft
     // navigation within the lab where the loader does not re-run), start now.
