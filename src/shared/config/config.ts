@@ -1,7 +1,7 @@
 import { Roles } from '../types/types';
 import type { NavItem, PageCopy, Service, Skill, SocialLink, Stat, TopBarItem } from '@/shared/types/app';
 
-export const config = {
+export const config: any = {
   title: `Piratechs`,
   domain: `piratechs.com`,
   contactEmail: `info@piratechs.com`,

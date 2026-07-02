@@ -54,7 +54,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
           }
           end={
             <ElementReveal className={`heroEnd pageBadge`} as={`div`} delay={0.28} y={16}>
-              <i className={`${config.nav.find(item => item.id == pageID)?.icon ?? `fa-solid fa-code`} gradientTextColor`} />
+              <i className={`${config.nav.find((item: any) => item.id == pageID)?.icon ?? `fa-solid fa-code`} gradientTextColor`} />
               <TextReveal as={`span`} text={page.eyebrow} delay={0.3} />
             </ElementReveal>
           }
@@ -72,7 +72,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
               <TextReveal scroll as={`p`} html text={`<i>${page.summary}</i>`} />
             </div>
             <div className={`detailCards`}>
-              {config.capabilities.slice(0, 6).map(capability => {
+              {config.capabilities.slice(0, 6).map((capability: any) => {
                 const meta = getTechnologyMeta(capability);
                 return (
                   <article key={capability} className={`serviceCard reveal`}>
