@@ -27,7 +27,7 @@ export default function Footer({
         </ElementReveal>
         {showNav && (
           <nav className={`footerNav`} aria-label={`Footer navigation`}>
-            {config.nav.map((item, index) => (
+            {config?.nav?.map((item: any, index: number) => (
               <ElementReveal scroll as={`span`} key={item.id} delay={0.08 + index * 0.025} className={`footerNavReveal`}>
                 <Link href={item.href}>
                   <TextReveal scroll as={`span`} text={item.label} />
@@ -43,7 +43,7 @@ export default function Footer({
             <TextReveal scroll as={`span`} text={String(new Date()?.getFullYear())} delay={0.04} />
           </ElementReveal>
           <div className={`footerSocials`}>
-            {config.social.map((item, index) => (
+            {config?.social?.map((item: any, index: number) => (
               <ElementReveal scroll as={`span`} key={item.label} delay={0.14 + index * 0.035} className={`footerIconReveal`}>
                 <a href={item.href} target={`_blank`} rel={`noreferrer`} aria-label={item.label} className={`iconButton`}>
                   <i className={item.icon} style={{ color: `white` }} />
