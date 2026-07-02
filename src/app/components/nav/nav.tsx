@@ -109,10 +109,10 @@ export default function Nav({
       <TopBar pauseonhover={false} />
       {/* <TopBar id={`topBar2`} direction={`ltr`} /> */}
       <div className={`navBar`}>
-        <ElementReveal as={Link} href={`/`} blur={false} delay={0.5} className={`homeButton`} aria-label={`Home`}>
+        <ElementReveal as={Link} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.5} className={`homeButton`} aria-label={`Home`}>
           <i className={`fa-solid fa-house logoLetter`} />
         </ElementReveal>
-        <ElementReveal as={Link} href={`/`} blur={false} delay={0.5} className={`brandMark`} aria-label={`Piratechs home`}>
+        <ElementReveal as={Link} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.5} className={`brandMark`} aria-label={`Piratechs home`}>
           <Logo className={`brandLogo`} />
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
             {titleGraphic ? (
