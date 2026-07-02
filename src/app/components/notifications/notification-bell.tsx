@@ -6,8 +6,8 @@ import { closeMenuOverlaysEvent } from '@/app/components/effects/menu-blur-backd
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
-  const notifications = config.topBarItems;
-  const unreadCount = notifications.length;
+  const notifications = config?.topBarItems;
+  const unreadCount = notifications?.length ?? 0;
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function NotificationBell() {
           <i className={`fa-solid fa-satellite-dish gradientTextColor`} />
         </div>
         <div className={`notificationList ${notifications?.length > 5 ? `overflowingNotificationList` : ``}`}>
-          {notifications.map(item => (
+          {notifications?.map((item: any) => (
             <article key={`${item.label}-${item.text}`} className={`notificationItem`}>
               <span className={`notificationIcon`}>
                 <i className={`${item.icon} gradientTextColor`} />
