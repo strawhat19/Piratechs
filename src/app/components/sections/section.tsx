@@ -18,7 +18,7 @@ export const prjctsSec = () => (
 export const statsSec = () => (
     <section className={`pageSection experienceSection`}>
         <div className={`sectionInner experienceGrid`}>
-            {config?.stats?.map(stat => (
+            {config?.stats?.map((stat: any) => (
                 <article key={stat.label} className={`statCard reveal`}>
                     <TextReveal scroll as={`span`} className={`gradientTextColor`} html text={`<i>${stat.label}</i>`} />
                     <TextReveal scroll as={`strong`} text={stat.value} delay={0.06} />

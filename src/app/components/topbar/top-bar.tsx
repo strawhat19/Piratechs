@@ -19,7 +19,7 @@ export default function TopBar({
   pauseonhover = true,
   id = `topBarComponent`,
 }: TopBarProps = {}) {
-  const items = config.topBarItems;
+  const items = config?.topBarItems;
 
   return (
     <Slider
@@ -32,7 +32,7 @@ export default function TopBar({
       ariaLabel={`Piratechs highlights`}
       className={`topBar ${fadeSides ? `fadeSides` : ``}`}
     >
-      {items.map((item, index) => (
+      {items?.map((item: any, index: number) => (
         <ElementReveal
           as={`span`}
           blur={false}

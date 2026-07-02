@@ -205,7 +205,7 @@ export default function HomeLanding() {
                 </div>
               </div>
               <div className={`heroMiniStats`}>
-                {config?.stats?.map((stat, index) => (
+                {config?.stats?.map((stat: any, index: any) => (
                   <span className={`heroMiniStat`} key={stat.label}>
                     <TextReveal as={`strong`} className={`gradientTextColor`} text={stat.value} delay={0.39 + index * 0.06} />
                     <TextReveal as={`i`} text={width <= 768 ? (stat?.title ?? stat?.label) : stat?.label} delay={0.42 + index * 0.06} />
@@ -229,7 +229,7 @@ export default function HomeLanding() {
             `} />
           </div>
           <div className={`capabilityGrid reveal`}>
-            {config.capabilities.map(capability => {
+            {config.capabilities.map((capability: any) => {
               const meta = getTechnologyMeta(capability);
               return (
                 <ElementReveal as={`span`} key={capability}>
@@ -255,7 +255,7 @@ export default function HomeLanding() {
             <TextReveal scroll as={`h2`} text={`Skills <span class="slashes">//</span> Technologies`} html delay={0.06} />
           </div>
           <div className={`skillsGrid`}>
-            {config.skills.map(skill => {
+            {config.skills.map((skill: any) => {
               const meta = getTechnologyMeta(skill.label);
               return (
                 <article key={skill.label} className={`skillTile reveal`}>
@@ -278,7 +278,7 @@ export default function HomeLanding() {
             <TextReveal scroll as={`h2`} text={`Useful enough for clients, sharp enough for hiring teams`} delay={0.06} />
           </div>
           <div className={`serviceGrid`}>
-            {config.services.map(service => (
+            {config.services.map((service: any) => (
               <article key={service.title} className={`serviceCard reveal`}>
                 <i className={`${service.icon} gradientTextColor reveal`} />
                 <TextReveal scroll as={`h3`} html text={`<i>${service.title}</i>`} />

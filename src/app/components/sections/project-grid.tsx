@@ -27,7 +27,7 @@ export default function ProjectGrid({
     <>
       {showFilters && (
         <div className={`filterBar reveal`} aria-label={`Project filters`}>
-          {config.filters.map(filter => (
+          {config.filters.map((filter: any) => (
             <button
               key={filter}
               type={`button`}
