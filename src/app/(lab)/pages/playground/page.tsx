@@ -58,11 +58,9 @@ export default function PlaygroundPage() {
             <>
                 <section className={`labSection`}>
                     <div className={`labStack`}>
-                        <h1 ref={titleRef} className={`splitTextElem heroTitle`}>
-                            Design // Develop
-                        </h1>
-                        <TextReveal as={`h2`} text={`Full-Stack`} byLetter slide className={`splitTextElem`} delay={0.44} />
-                        <TextReveal as={`h3`} text={`Applications`} byLetter slide className={`splitTextElem`} delay={0.88} />
+                        <TextReveal as={`h1`} text={`Design // Develop`} byLetter slide onScroll className={`splitTextElem`} delay={0} />
+                        <TextReveal as={`h2`} text={`Full-Stack`} byLetter slide onScroll className={`splitTextElem`} delay={0.44} />
+                        <TextReveal as={`h3`} text={`Applications`} byLetter slide onScroll className={`splitTextElem`} delay={0.88} />
                     </div>
                     <span className={`labScrollHint`}>Scroll &darr;</span>
                 </section>
