@@ -30,6 +30,7 @@ export class User {
   password?: string;
   number: number = 1;
   properties?: number;
+  uploads?: any[] = [];
   description?: string = ``;
   type: Types | string = Types.User;
   updated: Date | string | any = customDate()?.datetime;
@@ -51,6 +52,7 @@ export class User {
   signedIn?: boolean = false;
   anonymous?: boolean = false;
   data?: any = {};
+  media?: any = {};
   photoURL?: string = ``;
   metadata?: any = {};
   providerId?: string = ``;
