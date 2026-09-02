@@ -6,8 +6,10 @@ import Logo from '../logo/logo';
 import Word from '../logo/word';
 // import Section from './section';
 import AuthWidget from '../auth/auth-widget';
+import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
+import HomeLandingSections from './home-landing-sections';
 import { useGlobalContext } from '@/shared/global-context';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -15,7 +17,6 @@ import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
-import HeroContent from '../hero/hero-content';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
@@ -321,6 +322,8 @@ export default function HomeLanding() {
       </section>
 
       <div className={`sep reveal`} />
+
+      <HomeLandingSections />
     </>
   );
 }
