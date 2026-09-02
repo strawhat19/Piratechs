@@ -27,7 +27,7 @@ body.pageTransitionPending .heroBrand.reveal {
 
 .pageTransitionSplit {
   --page-transition-panel-duration: 288ms;
-  pointer-events: none;
+  pointer-events: auto;
   visibility: visible;
 
   .pageTransitionMotionFilter {
@@ -125,6 +125,7 @@ body.pageTransitionPending .heroBrand.reveal {
   }
 
   &.idle {
+    pointer-events: none;
     visibility: hidden;
   }
 

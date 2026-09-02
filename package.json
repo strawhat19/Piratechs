@@ -1,6 +1,6 @@
 {
   "name": "piratechs",
-  "version": "0.0.3.9",
+  "version": "0.1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

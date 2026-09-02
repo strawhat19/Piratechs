@@ -12,4 +12,6 @@ export type PageTransitionProps = {
   slanted?: boolean;
   children: ReactNode;
   showSpinner?: boolean;
+  /** Seconds to hold the loader at 100% before its leave animation starts. */
+  doneDelayBeforeLeave?: number;
 };

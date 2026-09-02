@@ -10,6 +10,14 @@ import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import HomeLandingSections from './home-landing-sections';
+import {
+  HomeCapabilityRadar,
+  HomeManifestoReveal,
+  HomeProjectBento,
+  HomeProjectVoyageSlider,
+  HomeServiceEstimator,
+  HomeVoyageMetrics,
+} from './home-landing-alternatives';
 import { useGlobalContext } from '@/shared/global-context';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -323,7 +331,14 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      <HomeLandingSections />
+      {/* Landing section lab — uncomment one component at a time to compare designs. */}
+      {/* <HomeLandingSections /> */}
+      <HomeManifestoReveal />
+      <HomeVoyageMetrics />
+      <HomeServiceEstimator />
+      <HomeProjectBento />
+      <HomeProjectVoyageSlider />
+      <HomeCapabilityRadar />
     </>
   );
 }

@@ -18,7 +18,6 @@ const slantExtraCols = 8;
 
 const loaderResetClass = `pageTransitionLoaderReset`;
 const rowIndexes = Array.from({ length: rows }, (_, index) => index);
-const loaderDoneDelay = 360;
 const loaderMinVisibleMs = 1100;
 const loaderMaxBeforeReady = 94;
 const authMaxWaitMs = 2000;
@@ -51,6 +50,7 @@ export default function ShutterPageTransition({
   slanted = true,
   duration = 0.24,
   showSpinner = false,
+  doneDelayBeforeLeave = 0,
 }: PageTransitionProps) {
   const pathname = usePathname();
   const gridRef = useRef<HTMLDivElement>(null);
@@ -65,6 +65,9 @@ export default function ShutterPageTransition({
   const [loaderProgress, setLoaderProgress] = useState(3);
   const [showInitialLoader, setShowInitialLoader] = useState(true);
 
+  const doneDelayBeforeLeaveMs = Number.isFinite(doneDelayBeforeLeave)
+    ? Math.max(0, doneDelayBeforeLeave * 1000)
+    : 0;
   const colOffset = slanted ? (width <= 768 ? Math.ceil(slantExtraCols * 2) : slantExtraCols) : 0;
   const renderCols = cols + colOffset * 2;
   const renderBlockCount = rows * renderCols;
@@ -269,6 +272,7 @@ export default function ShutterPageTransition({
 
     let cancelled = false;
     let initialOutTimeline: gsap.core.Timeline | null = null;
+    let doneDelayTimer: number | null = null;
     const startedAt = window.performance.now();
     const progressInterval = window.setInterval(() => {
       setLoaderProgress(currentProgress => (
@@ -283,7 +287,14 @@ export default function ShutterPageTransition({
       if (cancelled) return;
       window.clearInterval(progressInterval);
       setLoaderProgress(100);
-      await wait(loaderDoneDelay);
+      if (doneDelayBeforeLeaveMs > 0) {
+        await new Promise<void>(resolve => {
+          doneDelayTimer = window.setTimeout(() => {
+            doneDelayTimer = null;
+            resolve();
+          }, doneDelayBeforeLeaveMs);
+        });
+      }
       if (cancelled) return;
       initialOutTimeline = animateOut(() => {
         setShowInitialLoader(false);
@@ -295,6 +306,7 @@ export default function ShutterPageTransition({
     return () => {
       cancelled = true;
       window.clearInterval(progressInterval);
+      if (doneDelayTimer != null) window.clearTimeout(doneDelayTimer);
       initialOutTimeline?.kill();
       window.removeEventListener(`resize`, resizeShutterGrid);
     };

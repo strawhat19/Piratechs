@@ -5,15 +5,9 @@ import Word from '../logo/word';
 import { usePathname } from 'next/navigation';
 import { config } from '@/shared/config/config';
 import { TransitionRouter } from 'next-transition-router';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { PageTransitionProps } from './page-transition-config';
-import {
-  pageTransitionCompleteClass,
-  pageTransitionPendingClass,
-  pageTransitionReadyEvent,
-  pageTransitionRevealEvent,
-  pageTransitionRevealingClass,
-} from '@/app/components/effects/page-transition-events';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent, pageTransitionRevealEvent, pageTransitionRevealingClass } from '@/app/components/effects/page-transition-events';
 
 type TransitionPhase = `covered` | `covering` | `revealing` | `idle`;
 
@@ -67,7 +61,11 @@ const getLoaderKeyword = (offset: number, step: number = 0) => (
   loaderKeywords?.[(offset + step) % Math.max(loaderKeywords.length, 1)] ?? `TypeScript`
 );
 
-export default function SplitPageTransition({ children, duration = 0.36 }: PageTransitionProps) {
+export default function SplitPageTransition({
+  children,
+  duration = 0.36,
+  doneDelayBeforeLeave = 15,
+}: PageTransitionProps) {
   const pathname = usePathname();
   const initialPageName = getLoaderPageName(pathname);
   const [phase, setPhase] = useState<TransitionPhase>(`covered`);
@@ -82,6 +80,9 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
   const keywordOffsetRef = useRef(getKeywordOffset(initialPageName));
   const initialRevealCompleteRef = useRef(false);
   const durationMs = Math.max(180, Math.round(duration * 1000));
+  const doneDelayBeforeLeaveMs = Number.isFinite(doneDelayBeforeLeave)
+    ? Math.max(0, doneDelayBeforeLeave * 1000)
+    : 0;
   const initialHoldMs = 220;
   const transitionStyle = {
     '--page-transition-panel-duration': `${Math.max(108, durationMs - 72)}ms`,
@@ -213,7 +214,14 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
         return;
       }
 
-      timerRef.current = window.setTimeout(() => revealPage(() => {}, true), initialHoldMs);
+      timerRef.current = window.setTimeout(() => {
+        stopProgress(true);
+        if (doneDelayBeforeLeaveMs > 0) {
+          timerRef.current = window.setTimeout(() => revealPage(() => {}, true), doneDelayBeforeLeaveMs);
+          return;
+        }
+        revealPage(() => {}, true);
+      }, initialHoldMs);
     });
 
     return () => {
@@ -240,12 +248,17 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
         setPhase(`covering`);
         progressFrameRef.current = window.requestAnimationFrame(() => startProgress(durationMs));
         timerRef.current = window.setTimeout(() => {
+          stopProgress(true);
           setPhase(`covered`);
+          if (doneDelayBeforeLeaveMs > 0) {
+            timerRef.current = window.setTimeout(next, doneDelayBeforeLeaveMs);
+            return;
+          }
           next();
         }, durationMs);
         return clearScheduledWork;
       }}
-      enter={next => revealPage(next)}
+      enter={next => revealPage(next, !initialRevealCompleteRef.current)}
     >
       <div className={`pageTransitionRoot pageTransitionSplit ${phase}`} style={transitionStyle} aria-hidden={`true`}>
         <svg className={`pageTransitionMotionFilter`} aria-hidden={true} focusable={false}>
