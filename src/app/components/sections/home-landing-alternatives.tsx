@@ -497,6 +497,8 @@ export function HomeProjectVoyageSlider() {
   const previous = () => setActiveIndex(current => (current - 1 + voyageProjects.length) % voyageProjects.length);
   const next = () => setActiveIndex(current => (current + 1) % voyageProjects.length);
   const handleKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
+    if (event.target !== event.currentTarget) return;
+
     if (event.key === `ArrowLeft`) {
       event.preventDefault();
       previous();
@@ -536,6 +538,7 @@ export function HomeProjectVoyageSlider() {
             </button>
             <span aria-live={`polite`} aria-atomic={`true`}>
               <strong>{String(activeIndex + 1).padStart(2, `0`)}</strong> / {String(voyageProjects.length).padStart(2, `0`)}
+              <span className={`landingAltSrOnly`}>, {activeProject.title}</span>
             </span>
             <button type={`button`} onClick={next} aria-label={`Show next project`}>
               <i className={`fa-solid fa-arrow-right`} aria-hidden={`true`} />

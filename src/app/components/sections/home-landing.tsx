@@ -333,12 +333,12 @@ export default function HomeLanding() {
 
       {/* Landing section lab — uncomment one component at a time to compare designs. */}
       {/* <HomeLandingSections /> */}
-      <HomeManifestoReveal />
-      <HomeVoyageMetrics />
-      <HomeServiceEstimator />
-      <HomeProjectBento />
-      <HomeProjectVoyageSlider />
-      <HomeCapabilityRadar />
+      {/* <HomeManifestoReveal /> */}
+      {/* <HomeVoyageMetrics /> */}
+      {/* <HomeServiceEstimator /> */}
+      {/* <HomeProjectBento /> */}
+      {/* <HomeProjectVoyageSlider /> */}
+      {/* <HomeCapabilityRadar /> */}
     </>
   );
 }

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { config } from '@/shared/config/config';
 import { TransitionRouter } from 'next-transition-router';
 import type { PageTransitionProps } from './page-transition-config';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransitionReadyEvent, pageTransitionRevealEvent, pageTransitionRevealingClass } from '@/app/components/effects/page-transition-events';
 
 type TransitionPhase = `covered` | `covering` | `revealing` | `idle`;
@@ -64,7 +64,7 @@ const getLoaderKeyword = (offset: number, step: number = 0) => (
 export default function SplitPageTransition({
   children,
   duration = 0.36,
-  doneDelayBeforeLeave = 15,
+  doneDelayBeforeLeave = 0,
 }: PageTransitionProps) {
   const pathname = usePathname();
   const initialPageName = getLoaderPageName(pathname);
@@ -74,6 +74,8 @@ export default function SplitPageTransition({
   const frameRef = useRef<number | null>(null);
   const progressFrameRef = useRef<number | null>(null);
   const progressRef = useRef<HTMLSpanElement | null>(null);
+  const progressTrailRef = useRef<HTMLSpanElement | null>(null);
+  const displayedProgressRef = useRef(-1);
   const keywordRef = useRef<HTMLSpanElement | null>(null);
   const motionBlurRef = useRef<SVGFEGaussianBlurElement | null>(null);
   const keywordIndexRef = useRef(-1);
@@ -88,14 +90,14 @@ export default function SplitPageTransition({
     '--page-transition-panel-duration': `${Math.max(108, durationMs - 72)}ms`,
   } as CSSProperties;
 
-  const clearScheduledWork = () => {
+  const clearScheduledWork = useCallback(() => {
     if (timerRef.current != null) window.clearTimeout(timerRef.current);
     if (frameRef.current != null) window.cancelAnimationFrame(frameRef.current);
     timerRef.current = null;
     frameRef.current = null;
-  };
+  }, []);
 
-  const updateKeyword = (progress: number) => {
+  const updateKeyword = useCallback((progress: number) => {
     const keyword = keywordRef.current;
     const nextStep = Math.min(loaderKeywordSteps - 1, Math.floor((progress / 100) * loaderKeywordSteps));
     if (!keyword || nextStep == keywordIndexRef.current) return;
@@ -107,26 +109,43 @@ export default function SplitPageTransition({
     keyword.classList.remove(`isChanging`);
     void keyword.offsetWidth;
     keyword.classList.add(`isChanging`);
-  };
+  }, []);
 
-  const updateProgress = (value: number, keywordProgress: number = value) => {
-    const counter = progressRef.current;
-    if (!counter) return;
-    const label = `${String(Math.round(value)).padStart(3, `0`)}%`;
-    counter.textContent = label;
-    counter.dataset.progress = label;
+  const updateProgress = useCallback((value: number, keywordProgress: number = value) => {
+    const clampedValue = Math.min(100, Math.max(0, value));
+    const roundedValue = Math.round(clampedValue);
+    const progressTrail = progressTrailRef.current;
+    if (progressTrail) {
+      progressTrail.style.setProperty(`--page-transition-progress`, `${clampedValue / 100}`);
+    }
+
+    if (roundedValue != displayedProgressRef.current) {
+      displayedProgressRef.current = roundedValue;
+      const counter = progressRef.current;
+      if (counter) {
+        const label = `${String(roundedValue).padStart(3, `0`)}%`;
+        counter.textContent = label;
+        counter.dataset.progress = label;
+      }
+      if (progressTrail) {
+        progressTrail.setAttribute(`aria-valuenow`, String(roundedValue));
+        progressTrail.setAttribute(`aria-valuetext`, `${roundedValue}%`);
+      }
+    }
+
     updateKeyword(keywordProgress);
-  };
+  }, [updateKeyword]);
 
-  const stopProgress = (complete = false) => {
+  const stopProgress = useCallback((complete = false) => {
     if (progressFrameRef.current != null) window.cancelAnimationFrame(progressFrameRef.current);
     progressFrameRef.current = null;
     if (complete) updateProgress(100);
     motionBlurRef.current?.setAttribute(`stdDeviation`, `0 0`);
-  };
+  }, [updateProgress]);
 
-  const startProgress = (totalMs: number) => {
+  const startProgress = useCallback((totalMs: number) => {
     stopProgress();
+    displayedProgressRef.current = -1;
     updateProgress(0);
 
     if (getReducedMotion()) {
@@ -161,29 +180,29 @@ export default function SplitPageTransition({
     };
 
     progressFrameRef.current = window.requestAnimationFrame(tick);
-  };
+  }, [stopProgress, updateProgress]);
 
-  const setTransitionPending = () => {
+  const setTransitionPending = useCallback(() => {
     [document.documentElement, document.body].forEach(element => {
       element.classList.add(pageTransitionPendingClass);
       element.classList.remove(pageTransitionRevealingClass, pageTransitionCompleteClass);
     });
-  };
+  }, []);
 
-  const setTransitionRevealing = () => {
+  const setTransitionRevealing = useCallback(() => {
     [document.documentElement, document.body].forEach(element => element.classList.add(pageTransitionRevealingClass));
     window.dispatchEvent(new Event(pageTransitionRevealEvent));
-  };
+  }, []);
 
-  const setTransitionComplete = () => {
+  const setTransitionComplete = useCallback(() => {
     [document.documentElement, document.body].forEach(element => {
       element.classList.remove(pageTransitionPendingClass, pageTransitionRevealingClass);
       element.classList.add(pageTransitionCompleteClass);
     });
     window.dispatchEvent(new Event(pageTransitionReadyEvent));
-  };
+  }, []);
 
-  const revealPage = (onComplete: () => void, initial = false) => {
+  const revealPage = useCallback((onComplete: () => void, initial = false) => {
     clearScheduledWork();
     setTransitionRevealing();
     setPhase(`revealing`);
@@ -203,64 +222,87 @@ export default function SplitPageTransition({
 
     timerRef.current = window.setTimeout(finish, durationMs);
     return clearScheduledWork;
-  };
+  }, [clearScheduledWork, durationMs, setTransitionComplete, setTransitionRevealing, stopProgress]);
+
+  const handleLeave = useCallback((next: () => void, _from?: string, to?: string) => {
+    if (!initialRevealCompleteRef.current || getReducedMotion()) {
+      next();
+      return () => {};
+    }
+
+    const nextPageName = getLoaderPageName(to ?? pathname);
+    setLoadingPage(nextPageName);
+    keywordOffsetRef.current = getKeywordOffset(nextPageName);
+    keywordIndexRef.current = -1;
+    clearScheduledWork();
+    setTransitionPending();
+    setPhase(`covering`);
+    progressFrameRef.current = window.requestAnimationFrame(() => startProgress(durationMs));
+    timerRef.current = window.setTimeout(() => {
+      stopProgress(true);
+      setPhase(`covered`);
+      if (doneDelayBeforeLeaveMs > 0) {
+        timerRef.current = window.setTimeout(next, doneDelayBeforeLeaveMs);
+        return;
+      }
+      next();
+    }, durationMs);
+    return clearScheduledWork;
+  }, [clearScheduledWork, doneDelayBeforeLeaveMs, durationMs, pathname, setTransitionPending, startProgress, stopProgress]);
+
+  const handleEnter = useCallback((next: () => void) => (
+    revealPage(next, !initialRevealCompleteRef.current)
+  ), [revealPage]);
+
+  const initialLoaderRef = useRef({
+    clearScheduledWork,
+    doneDelayBeforeLeaveMs,
+    revealPage,
+    setTransitionPending,
+    startProgress,
+    stopProgress,
+  });
 
   useEffect(() => {
-    setTransitionPending();
-    startProgress(initialHoldMs);
+    const initialLoader = initialLoaderRef.current;
+    initialLoader.setTransitionPending();
+    initialLoader.startProgress(initialHoldMs);
     frameRef.current = window.requestAnimationFrame(() => {
       if (getReducedMotion()) {
-        revealPage(() => {}, true);
+        initialLoader.revealPage(() => {}, true);
         return;
       }
 
       timerRef.current = window.setTimeout(() => {
-        stopProgress(true);
-        if (doneDelayBeforeLeaveMs > 0) {
-          timerRef.current = window.setTimeout(() => revealPage(() => {}, true), doneDelayBeforeLeaveMs);
+        initialLoader.stopProgress(true);
+        if (initialLoader.doneDelayBeforeLeaveMs > 0) {
+          timerRef.current = window.setTimeout(
+            () => initialLoader.revealPage(() => {}, true),
+            initialLoader.doneDelayBeforeLeaveMs,
+          );
           return;
         }
-        revealPage(() => {}, true);
+        initialLoader.revealPage(() => {}, true);
       }, initialHoldMs);
     });
 
     return () => {
-      clearScheduledWork();
-      stopProgress();
+      initialLoader.clearScheduledWork();
+      initialLoader.stopProgress();
     };
   }, []);
 
   return (
     <TransitionRouter
       auto
-      leave={(next, _from, to) => {
-        if (!initialRevealCompleteRef.current || getReducedMotion()) {
-          next();
-          return () => {};
-        }
-
-        const nextPageName = getLoaderPageName(to ?? pathname);
-        setLoadingPage(nextPageName);
-        keywordOffsetRef.current = getKeywordOffset(nextPageName);
-        keywordIndexRef.current = -1;
-        clearScheduledWork();
-        setTransitionPending();
-        setPhase(`covering`);
-        progressFrameRef.current = window.requestAnimationFrame(() => startProgress(durationMs));
-        timerRef.current = window.setTimeout(() => {
-          stopProgress(true);
-          setPhase(`covered`);
-          if (doneDelayBeforeLeaveMs > 0) {
-            timerRef.current = window.setTimeout(next, doneDelayBeforeLeaveMs);
-            return;
-          }
-          next();
-        }, durationMs);
-        return clearScheduledWork;
-      }}
-      enter={next => revealPage(next, !initialRevealCompleteRef.current)}
+      leave={handleLeave}
+      enter={handleEnter}
     >
-      <div className={`pageTransitionRoot pageTransitionSplit ${phase}`} style={transitionStyle} aria-hidden={`true`}>
+      <div
+        className={`pageTransitionRoot pageTransitionSplit ${phase}`}
+        style={transitionStyle}
+        aria-hidden={phase == `idle`}
+      >
         <svg className={`pageTransitionMotionFilter`} aria-hidden={true} focusable={false}>
           <defs>
             <filter
@@ -283,11 +325,11 @@ export default function SplitPageTransition({
         ))}
         {phase != `idle` ? (
           <div className={`pageTransitionIdentity`}>
-            <div className={`pageTransitionMeta`}>
+            <div className={`pageTransitionMeta`} aria-hidden={true}>
               <span>PT / SYSTEM 01</span>
               <span>ATL / 404</span>
             </div>
-            <div className={`pageTransitionDistortion`}>
+            <div className={`pageTransitionDistortion`} aria-hidden={true}>
               <Image
                 src={`/assets/piratechs/animations/piratechs-distortion-loader.webp`}
                 alt={``}
@@ -297,10 +339,10 @@ export default function SplitPageTransition({
                 unoptimized
               />
             </div>
-            <div className={`pageTransitionBrand`}>
+            <div className={`pageTransitionBrand`} aria-hidden={true}>
               <Word className={`pageTransitionWord`} gradient={false} arrows gradientSword />
             </div>
-            <div className={`pageTransitionKeyword`}>
+            <div className={`pageTransitionKeyword`} aria-hidden={true}>
               <span>Building With /</span>
               <span className={`pageTransitionKeywordWindow`}>
                 <span
@@ -313,12 +355,26 @@ export default function SplitPageTransition({
               </span>
             </div>
             <div className={`pageTransitionProgress`}>
-              <span className={`pageTransitionRoute`}>
-                <span>Loading Page /</span>
-                <strong>{loadingPage}</strong>
+              <span className={`pageTransitionProgressRow`} aria-hidden={true}>
+                <span className={`pageTransitionRoute`}>
+                  <span>Loading Page /</span>
+                  <strong>{loadingPage}</strong>
+                </span>
+                <span ref={progressRef} className={`pageTransitionProgressValue`} data-progress={`000%`}>
+                  000%
+                </span>
               </span>
-              <span ref={progressRef} className={`pageTransitionProgressValue`} data-progress={`000%`}>
-                000%
+              <span
+                ref={progressTrailRef}
+                className={`pageTransitionProgressTrail`}
+                role={`progressbar`}
+                aria-label={`Loading ${loadingPage}`}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={0}
+                aria-valuetext={`0%`}
+              >
+                <span className={`pageTransitionProgressFill`} />
               </span>
             </div>
           </div>

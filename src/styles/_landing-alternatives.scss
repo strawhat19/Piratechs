@@ -100,6 +100,18 @@
   text-wrap: pretty;
 }
 
+.landingAltSrOnly {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  position: absolute;
+  margin: -1px;
+  white-space: nowrap;
+  clip-path: inset(50%);
+  border: 0;
+}
+
 .landingAltTextLink,
 .landingAltCardLink,
 .landingAltSlideLink {
@@ -418,6 +430,10 @@
   vector-effect: non-scaling-stroke;
   filter: drop-shadow(0 0 8px rgba(var(--piratechsNeon_rgb), 0.4));
   animation: landingAltChartDraw 1.45s var(--landing-alt-ease) 0.2s forwards;
+}
+
+.landingAltChartCard.elementRevealPending .landingAltChartLine {
+  animation: none;
 }
 
 .landingAltChartPoint circle {
@@ -1591,6 +1607,10 @@
   animation: landingAltRadarDraw 1.35s var(--landing-alt-ease) 0.2s forwards;
 }
 
+.landingAltRadarFigure.elementRevealPending .landingAltRadarShape {
+  animation: none;
+}
+
 .landingAltRadarPoint {
   fill: var(--backgroundDeep);
   stroke: var(--piratechsTeal);
@@ -1662,6 +1682,11 @@
   background: var(--main_gradient);
   transform-origin: left;
   animation: landingAltMeterFill 1s var(--landing-alt-ease) both;
+}
+
+.landingAltRadarLegend li.elementRevealPending .landingAltRadarLegendFill {
+  animation: none;
+  transform: scaleX(0);
 }
 
 .landingAltRadarLegend li:nth-child(even) .landingAltRadarLegendFill {
