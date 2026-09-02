@@ -2,8 +2,10 @@
 
 import Image from 'next/image';
 import Word from '../logo/word';
-import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { config } from '@/shared/config/config';
 import { TransitionRouter } from 'next-transition-router';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { PageTransitionProps } from './page-transition-config';
 import {
   pageTransitionCompleteClass,
@@ -15,19 +17,75 @@ import {
 
 type TransitionPhase = `covered` | `covering` | `revealing` | `idle`;
 
+const splitRows = [1, 2, 3, 4];
+const loaderKeywordSteps = 4;
+const loaderKeywords = Array.from(new Set<string>([
+  ...(config?.services ?? []).map((service: { title: string }) => service.title),
+  ...(config?.skills ?? []).map((skill: { label: string }) => skill.label),
+  ...(config?.topBarItems ?? []).map((item: { label: string }) => item.label),
+]));
+
 const getReducedMotion = () => (
   typeof window != `undefined` && window.matchMedia(`(prefers-reduced-motion: reduce)`).matches
 );
 
+const humanizeRouteSegment = (segment: string) => {
+  let decodedSegment = segment;
+  try {
+    decodedSegment = decodeURIComponent(segment);
+  } catch {
+    decodedSegment = segment;
+  }
+
+  return decodedSegment
+    .replace(/([a-z0-9])([A-Z])/g, `$1 $2`)
+    .replace(/[-_]+/g, ` `)
+    .replace(/\b\w/g, character => character.toUpperCase());
+};
+
+const getLoaderPageName = (href: string = `/`) => {
+  const routeSegments = href
+    .split(/[?#]/)?.[0]
+    ?.split(`/`)
+    .filter(segment => segment && segment != `pages`) ?? [];
+  if (!routeSegments?.[0]) return `Home`;
+
+  const routeName = routeSegments?.[0];
+  if (routeName == `case-studies`) {
+    return routeSegments?.[1] ? humanizeRouteSegment(routeSegments[1]) : `Case Studies`;
+  }
+
+  const navItem = config?.nav?.find((item: { href: string }) => item.href == `/${routeName}`);
+  return navItem?.label ?? config?.pages?.[routeName]?.eyebrow ?? humanizeRouteSegment(routeSegments.at(-1) ?? routeName);
+};
+
+const getKeywordOffset = (pageName: string) => (
+  Array.from(pageName).reduce((total, character) => total + character.charCodeAt(0), 0) % Math.max(loaderKeywords.length, 1)
+);
+
+const getLoaderKeyword = (offset: number, step: number = 0) => (
+  loaderKeywords?.[(offset + step) % Math.max(loaderKeywords.length, 1)] ?? `TypeScript`
+);
+
 export default function SplitPageTransition({ children, duration = 0.36 }: PageTransitionProps) {
+  const pathname = usePathname();
+  const initialPageName = getLoaderPageName(pathname);
   const [phase, setPhase] = useState<TransitionPhase>(`covered`);
+  const [loadingPage, setLoadingPage] = useState(initialPageName);
   const timerRef = useRef<number | null>(null);
   const frameRef = useRef<number | null>(null);
   const progressFrameRef = useRef<number | null>(null);
   const progressRef = useRef<HTMLSpanElement | null>(null);
+  const keywordRef = useRef<HTMLSpanElement | null>(null);
+  const motionBlurRef = useRef<SVGFEGaussianBlurElement | null>(null);
+  const keywordIndexRef = useRef(-1);
+  const keywordOffsetRef = useRef(getKeywordOffset(initialPageName));
   const initialRevealCompleteRef = useRef(false);
   const durationMs = Math.max(180, Math.round(duration * 1000));
   const initialHoldMs = 220;
+  const transitionStyle = {
+    '--page-transition-panel-duration': `${Math.max(108, durationMs - 72)}ms`,
+  } as CSSProperties;
 
   const clearScheduledWork = () => {
     if (timerRef.current != null) window.clearTimeout(timerRef.current);
@@ -36,18 +94,34 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
     frameRef.current = null;
   };
 
-  const updateProgress = (value: number) => {
+  const updateKeyword = (progress: number) => {
+    const keyword = keywordRef.current;
+    const nextStep = Math.min(loaderKeywordSteps - 1, Math.floor((progress / 100) * loaderKeywordSteps));
+    if (!keyword || nextStep == keywordIndexRef.current) return;
+
+    const nextKeyword = getLoaderKeyword(keywordOffsetRef.current, nextStep);
+    keywordIndexRef.current = nextStep;
+    keyword.textContent = nextKeyword;
+    keyword.dataset.keyword = nextKeyword;
+    keyword.classList.remove(`isChanging`);
+    void keyword.offsetWidth;
+    keyword.classList.add(`isChanging`);
+  };
+
+  const updateProgress = (value: number, keywordProgress: number = value) => {
     const counter = progressRef.current;
     if (!counter) return;
     const label = `${String(Math.round(value)).padStart(3, `0`)}%`;
     counter.textContent = label;
     counter.dataset.progress = label;
+    updateKeyword(keywordProgress);
   };
 
   const stopProgress = (complete = false) => {
     if (progressFrameRef.current != null) window.cancelAnimationFrame(progressFrameRef.current);
     progressFrameRef.current = null;
     if (complete) updateProgress(100);
+    motionBlurRef.current?.setAttribute(`stdDeviation`, `0 0`);
   };
 
   const startProgress = (totalMs: number) => {
@@ -59,13 +133,30 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
       return;
     }
 
-    const startedAt = window.performance.now();
+    let lastValue = 0;
+    let blurAmount = 0;
+    let lastTime = window.performance.now();
+    const startedAt = lastTime;
     const tick = (now: number) => {
       const elapsed = Math.min(1, (now - startedAt) / totalMs);
       const eased = 1 - Math.pow(1 - elapsed, 2.2);
-      updateProgress(eased * 100);
-      if (elapsed < 1) progressFrameRef.current = window.requestAnimationFrame(tick);
-      else progressFrameRef.current = null;
+      const nextValue = eased * 100;
+      const deltaTime = Math.max(now - lastTime, 1) / 1000;
+      const velocity = Math.abs(nextValue - lastValue) / deltaTime;
+      const targetBlur = Math.min(10, velocity * 0.02);
+      blurAmount += (targetBlur - blurAmount) * 0.35;
+      motionBlurRef.current?.setAttribute(`stdDeviation`, `0 ${blurAmount.toFixed(2)}`);
+      updateProgress(nextValue, elapsed * 100);
+      lastValue = nextValue;
+      lastTime = now;
+
+      if (elapsed < 1) {
+        progressFrameRef.current = window.requestAnimationFrame(tick);
+        return;
+      }
+
+      motionBlurRef.current?.setAttribute(`stdDeviation`, `0 0`);
+      progressFrameRef.current = null;
     };
 
     progressFrameRef.current = window.requestAnimationFrame(tick);
@@ -134,12 +225,16 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
   return (
     <TransitionRouter
       auto
-      leave={next => {
+      leave={(next, _from, to) => {
         if (!initialRevealCompleteRef.current || getReducedMotion()) {
           next();
           return () => {};
         }
 
+        const nextPageName = getLoaderPageName(to ?? pathname);
+        setLoadingPage(nextPageName);
+        keywordOffsetRef.current = getKeywordOffset(nextPageName);
+        keywordIndexRef.current = -1;
         clearScheduledWork();
         setTransitionPending();
         setPhase(`covering`);
@@ -152,9 +247,27 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
       }}
       enter={next => revealPage(next)}
     >
-      <div className={`pageTransitionRoot pageTransitionSplit ${phase}`} aria-hidden={`true`}>
-        <span className={`pageTransitionPanel pageTransitionPanelStart`} />
-        <span className={`pageTransitionPanel pageTransitionPanelEnd`} />
+      <div className={`pageTransitionRoot pageTransitionSplit ${phase}`} style={transitionStyle} aria-hidden={`true`}>
+        <svg className={`pageTransitionMotionFilter`} aria-hidden={true} focusable={false}>
+          <defs>
+            <filter
+              id={`pageTransitionMotionBlur`}
+              x={`-50%`}
+              y={`-80%`}
+              width={`200%`}
+              height={`260%`}
+              colorInterpolationFilters={`sRGB`}
+            >
+              <feGaussianBlur ref={motionBlurRef} in={`SourceGraphic`} stdDeviation={`0 0`} />
+            </filter>
+          </defs>
+        </svg>
+        {splitRows.map(row => (
+          <div key={row} className={`pageTransitionRow pageTransitionRow${row}`}>
+            <span className={`pageTransitionPanel pageTransitionPanelStart`} />
+            <span className={`pageTransitionPanel pageTransitionPanelEnd`} />
+          </div>
+        ))}
         {phase != `idle` ? (
           <div className={`pageTransitionIdentity`}>
             <div className={`pageTransitionMeta`}>
@@ -171,11 +284,26 @@ export default function SplitPageTransition({ children, duration = 0.36 }: PageT
                 unoptimized
               />
             </div>
-            <div style={{ textAlign: `center` }}>
-              <Word className={`wordLogoHomeGraphic`} gradient={false} arrows gradientSword />
+            <div className={`pageTransitionBrand`}>
+              <Word className={`pageTransitionWord`} gradient={false} arrows gradientSword />
+            </div>
+            <div className={`pageTransitionKeyword`}>
+              <span>Building With /</span>
+              <span className={`pageTransitionKeywordWindow`}>
+                <span
+                  ref={keywordRef}
+                  className={`pageTransitionKeywordValue`}
+                  data-keyword={getLoaderKeyword(keywordOffsetRef.current)}
+                >
+                  {getLoaderKeyword(keywordOffsetRef.current)}
+                </span>
+              </span>
             </div>
             <div className={`pageTransitionProgress`}>
-              <span>Loading /</span>
+              <span className={`pageTransitionRoute`}>
+                <span>Loading Page /</span>
+                <strong>{loadingPage}</strong>
+              </span>
               <span ref={progressRef} className={`pageTransitionProgressValue`} data-progress={`000%`}>
                 000%
               </span>
