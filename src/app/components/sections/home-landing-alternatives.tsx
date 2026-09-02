@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useId, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import TextReveal from '@/app/components/effects/text-reveal';
 import Logo from '@/app/components/logo/logo';
@@ -37,43 +37,6 @@ const voyageMetrics = [
   { value: `10`, suffix: `+`, label: `Years across design + development`, icon: `fa-solid fa-compass-drafting` },
   { value: `100`, suffix: `+`, label: `Technologies charted`, icon: `fa-solid fa-code-branch` },
   { value: `1`, suffix: ``, label: `Accountable studio crew`, icon: `fa-solid fa-anchor` },
-] as const;
-
-const servicePlans = [
-  {
-    id: `launch`,
-    name: `Launch Vessel`,
-    price: 4800,
-    duration: `3–5 weeks`,
-    icon: `fa-solid fa-sailboat`,
-    description: `A sharp marketing site for a new offer, campaign, or company.`,
-    includes: [`Strategy workshop`, `Up to 5 core pages`, `CMS handoff`],
-  },
-  {
-    id: `commerce`,
-    name: `Merchant Fleet`,
-    price: 8900,
-    duration: `6–8 weeks`,
-    icon: `fa-solid fa-ship`,
-    description: `A conversion-minded storefront with a confident branded system.`,
-    includes: [`Commerce integration`, `Product templates`, `Analytics setup`],
-  },
-  {
-    id: `product`,
-    name: `Flagship Product`,
-    price: 14500,
-    duration: `8–12 weeks`,
-    icon: `fa-solid fa-dharmachakra`,
-    description: `A custom application foundation built around a real workflow.`,
-    includes: [`Product design`, `App development`, `API integration`],
-  },
-] as const;
-
-const serviceAddOns = [
-  { id: `motion`, name: `Motion system`, price: 1200, icon: `fa-solid fa-water` },
-  { id: `copy`, name: `Copy direction`, price: 800, icon: `fa-solid fa-feather-pointed` },
-  { id: `seo`, name: `SEO launch kit`, price: 900, icon: `fa-solid fa-binoculars` },
-  { id: `care`, name: `90-day care plan`, price: 1350, icon: `fa-solid fa-life-ring` },
 ] as const;
 
 const bentoProjects = [
@@ -174,12 +137,6 @@ const radarCapabilities = [
 const chartY = (value: number) => 220 - (value / 100) * 170;
 const voyageLine = voyageChartPoints.map(point => `${point.x},${chartY(point.value)}`).join(` `);
 const voyageArea = `44,220 ${voyageLine} 676,220`;
-const currencyFormatter = new Intl.NumberFormat(`en-US`, {
-  style: `currency`,
-  currency: `USD`,
-  maximumFractionDigits: 0,
-});
-
 const radarCenter = 180;
 const radarRadius = 124;
 const radarPoint = (score: number, index: number, radius = radarRadius) => {
@@ -314,124 +271,7 @@ export function HomeVoyageMetrics() {
   );
 }
 
-export function HomeServiceEstimator() {
-  const formId = useId();
-  const [selectedPlanId, setSelectedPlanId] = useState<string>(servicePlans[0].id);
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([`care`]);
-  const [savedEstimates, setSavedEstimates] = useState(0);
-  const selectedPlan = servicePlans.find(plan => plan.id === selectedPlanId) ?? servicePlans[0];
-  const addOnTotal = serviceAddOns.reduce((total, addOn) => (
-    selectedAddOns.includes(addOn.id) ? total + addOn.price : total
-  ), 0);
-  const total = selectedPlan.price + addOnTotal;
-
-  const selectPlan = (planId: string) => {
-    setSelectedPlanId(planId);
-    setSavedEstimates(0);
-  };
-
-  const toggleAddOn = (addOnId: string) => {
-    setSelectedAddOns(current => (
-      current.includes(addOnId) ? current.filter(id => id !== addOnId) : [...current, addOnId]
-    ));
-    setSavedEstimates(0);
-  };
-
-  const saveEstimate = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSavedEstimates(current => current + 1);
-  };
-
-  return (
-    <section className={`landingAltSection landingAltEstimator`} aria-label={`Service estimate builder`}>
-      <div className={`landingAltEstimatorBackdrop`} aria-hidden={`true`}>
-        <i className={`fa-solid fa-anchor landingAltEstimatorAnchor`} />
-      </div>
-      <div className={`landingAltInner`}>
-        <header className={`landingAltSectionHeading landingAltEstimatorHeading`}>
-          <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Build your vessel`} />
-          <TextReveal scroll as={`h2`} className={`landingAltDisplay`} text={`Chart a working estimate.`} delay={0.06} />
-          <TextReveal scroll as={`p`} className={`landingAltLead`} text={`Choose a starting vessel, add the capabilities your voyage needs, and get a transparent planning number.`} />
-        </header>
-
-        <ElementReveal scroll as={`form`} className={`landingAltEstimatorForm`} y={26} onSubmit={saveEstimate}>
-          <fieldset className={`landingAltEstimatorPlans`}>
-            <legend>1. Choose a service plan</legend>
-            <div className={`landingAltEstimatorPlanGrid`}>
-              {servicePlans.map(plan => {
-                const controlId = `${formId}-${plan.id}`;
-                return (
-                  <label className={`landingAltPlanCard`} htmlFor={controlId} key={plan.id}>
-                    <input
-                      id={controlId}
-                      name={`${formId}-service-plan`}
-                      type={`radio`}
-                      value={plan.id}
-                      checked={selectedPlanId === plan.id}
-                      onChange={() => selectPlan(plan.id)}
-                    />
-                    <span className={`landingAltPlanCheck`} aria-hidden={`true`} />
-                    <i className={`${plan.icon} landingAltPlanIcon`} aria-hidden={`true`} />
-                    <span className={`landingAltPlanName`}>{plan.name}</span>
-                    <strong>{currencyFormatter.format(plan.price)}</strong>
-                    <small>{plan.duration}</small>
-                    <span className={`landingAltPlanDescription`}>{plan.description}</span>
-                    <span className={`landingAltPlanIncludes`}>{plan.includes.join(` · `)}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
-
-          <div className={`landingAltEstimatorLower`}>
-            <fieldset className={`landingAltEstimatorAddOns`}>
-              <legend>2. Outfit the build</legend>
-              <div className={`landingAltEstimatorAddOnGrid`}>
-                {serviceAddOns.map(addOn => {
-                  const controlId = `${formId}-${addOn.id}`;
-                  return (
-                    <label className={`landingAltAddOn`} htmlFor={controlId} key={addOn.id}>
-                      <input
-                        id={controlId}
-                        type={`checkbox`}
-                        checked={selectedAddOns.includes(addOn.id)}
-                        onChange={() => toggleAddOn(addOn.id)}
-                      />
-                      <span className={`landingAltAddOnCheck`} aria-hidden={`true`}><i className={`fa-solid fa-check`} /></span>
-                      <i className={`${addOn.icon} landingAltAddOnIcon`} aria-hidden={`true`} />
-                      <span>{addOn.name}</span>
-                      <strong>+{currencyFormatter.format(addOn.price)}</strong>
-                    </label>
-                  );
-                })}
-              </div>
-            </fieldset>
-
-            <aside className={`landingAltEstimateSummary`} aria-label={`Estimate summary`}>
-              <span className={`landingAltEstimateFlag`}><i className={`fa-solid fa-flag`} aria-hidden={`true`} /> Your course</span>
-              <dl>
-                <div><dt>{selectedPlan.name}</dt><dd>{currencyFormatter.format(selectedPlan.price)}</dd></div>
-                <div><dt>{selectedAddOns.length} add-on{selectedAddOns.length === 1 ? `` : `s`}</dt><dd>{currencyFormatter.format(addOnTotal)}</dd></div>
-              </dl>
-              <div className={`landingAltEstimateTotal`}>
-                <span>Estimated starting price</span>
-                <output name={`estimate-total`}>{currencyFormatter.format(total)}</output>
-                <small>Typical voyage: {selectedPlan.duration}</small>
-              </div>
-              <button className={`landingAltEstimateButton`} type={`submit`}>
-                <i className={`fa-solid fa-cart-plus`} aria-hidden={`true`} />
-                Add estimate to brief
-              </button>
-              <p className={`landingAltEstimateStatus`} aria-live={`polite`} aria-atomic={`true`}>
-                {savedEstimates > 0 ? `${savedEstimates} estimate${savedEstimates === 1 ? `` : `s`} saved to your project brief.` : `No payment required — this is a planning estimate.`}
-              </p>
-            </aside>
-          </div>
-        </ElementReveal>
-      </div>
-    </section>
-  );
-}
+export { HomeServiceEstimator } from './home-service-estimator';
 
 export function HomeProjectBento() {
   return (
