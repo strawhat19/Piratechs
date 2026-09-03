@@ -89,6 +89,7 @@ const buildEffortLevels = [
 ] as const;
 
 const buildFeatures = [
+  { id: 'blog', label: 'Blog', price: 50 },
   { id: 'qr', label: 'QR Code', price: 25 },
   { id: 'to-do', label: 'To Do', price: 50 },
   { id: 'grids', label: 'Grids', price: 50 },
