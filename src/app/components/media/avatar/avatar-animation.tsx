@@ -7,13 +7,15 @@ import ElementReveal from '../../effects/element-reveal';
 
 type AvatarAnimationProps = {
     text?: string;
-    html?: boolean;
     size?: number;
+    html?: boolean;
     reveal?: boolean;
+    className?: string;
     bottomIn?: boolean;
     bottomOut?: boolean;
-    className?: string;
     rotationSpeed?: number;
+    avatarUserName?: string;
+    avatarImageSrc?: string;
     textDirection?: boolean;
     textOrientation?: boolean;
 };
@@ -44,7 +46,7 @@ export default function AvatarAnimation({
         <Avatar size={size}>
             <figure className={`ceoHeadshotWrapper`}>
                 <div className={`ceoHeadshotWrapperOverlay`} />
-                <img className={`ceoHeadshot`} style={{ maxWidth: size, maxHeight: size }} alt={`Rakib`} src={`/assets/teams/developers/rakib/Rakib_Headshot.jpeg`} />
+                <img className={`ceoHeadshot`} style={{ maxWidth: size, maxHeight: size }} alt={`Rakib`} src={`/assets/teams/developers/rakib/waterfall.jpg`} />
             </figure>
             {text ? (
                 <span className={`avatarArcTextWrap`} style={{ width: size * 1.28, height: size * 1.28 }} aria-hidden={`true`}>

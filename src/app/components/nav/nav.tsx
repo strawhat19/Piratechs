@@ -12,8 +12,8 @@ import TopBar from '@/app/components/topbar/top-bar';
 import type { SvgIconProps } from '@mui/material/SvgIcon';
 import AuthWidget from '@/app/components/auth/auth-widget';
 import { useGlobalContext } from '@/shared/global-context';
-import { useMemo, useState, useEffect, type ComponentType } from 'react';
 import ElementReveal from '@/app/components/effects/element-reveal';
+import { useMemo, useState, useEffect, type ComponentType } from 'react';
 import NotificationBell from '@/app/components/notifications/notification-bell';
 import { Code, Star, Edit, Person, Security, WorkspacePremium, AdminPanelSettings, ShoppingCart } from '@mui/icons-material';
 
