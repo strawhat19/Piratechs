@@ -88,21 +88,32 @@ const buildEffortLevels = [
 
 const buildFeatures = [
   { id: 'logo', label: 'Logo Design', price: 25 },
+  { id: 'clock', label: 'Dynamic Clock', price: 25 },
+  { id: 'loader', label: 'Loader Design', price: 50 },
   { id: 'design', label: 'Example Design', price: 50 },
+  { id: 'ai-chatbot', label: 'AI Chatbot', price: 50 },
+  { id: 'maps', label: 'Maps Integration', price: 50 },
+  { id: 'weather', label: 'Weather Widget', price: 50 },
+  { id: 'drag-drop', label: 'Drag & Drop', price: 100 },
   { id: 'api-server', label: 'API // Server', price: 50 },
+  { id: 'haptics', label: 'Haptic Feedback', price: 150 },
   { id: 'analytics', label: 'Simple Analytics', price: 50 },
   { id: 'contact-form', label: 'Simple Contact Form', price: 50 },
   { id: 'adv-analytics', label: 'Advanced Analytics', price: 150 },
   { id: 'auth', label: 'Sign In + Sign Up w/ Google', price: 100 },
+  { id: 'capture', label: 'Capture Customer Feedback', price: 100 },
+  { id: 'missed', label: 'Missed Call Call // Text Back', price: 50 },
+  { id: 'social-media', label: 'Social Media Integration', price: 50 },
   { id: 'animations', label: 'Simple Animations + Effects', price: 50 },
-  { id: 'ecommerce', label: 'ECommerce + Products + Cart', price: 300 },
   { id: 'cms-database', label: 'CMS // Database Management', price: 100 },
   { id: 'advanced-contact-form', label: 'Advanced Contact Form', price: 150 },
   { id: 'adv-animations', label: 'Advanced Animations + Effects', price: 150 },
   { id: 'booking-calendar', label: 'Booking Calendar or Schedule', price: 150 },
   { id: 'customer-order-tracking', label: 'Customer // Order Tracking', price: 150 },
+  { id: 'news-letter', label: 'News Letter // Mailing List // RSS Feed', price: 100 },
   { id: 'multiplayer', label: 'Multiplayer // Shared Sessions for Users', price: 150 },
   { id: 'notifications', label: 'Push Notifications or Message Notifications', price: 150 },
+  { id: 'ecommerce', label: 'E-Commerce + Products + Cart + Subscriptions + Payments', price: 150 },
 ] as const satisfies readonly PricedOption[];
 
 export const SERVICE_ESTIMATOR_CATALOG = {
