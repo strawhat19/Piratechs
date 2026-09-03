@@ -158,7 +158,7 @@ export default function HomeLandingSections() {
         <style>{`.landingMotionPending [data-landing-reveal],.landingMotionPending .landingSplitWord{opacity:1!important;filter:none!important;transform:none!important}`}</style>
       </noscript>
 
-      <section id={`selected-work`} className={`landingSection landingWorkSection`}>
+      {/* <section id={`selected-work`} className={`landingSection landingWorkSection`}>
         <div className={`landingSectionHeading`} data-landing-blur data-landing-reveal>
           <span className={`landingEyebrow`}>Selected work</span>
           <SplitHeading
@@ -204,7 +204,7 @@ export default function HomeLandingSections() {
             </article>
           ))}
         </div>
-      </section>
+      </section> */}
 
       <section id={`services`} className={`landingSection landingServicesSection`}>
         <div className={`landingServicesLead`} data-landing-blur data-landing-reveal>
@@ -271,7 +271,7 @@ export default function HomeLandingSections() {
         </div>
       </section>
 
-      <section id={`process`} className={`landingSection landingProcessSection`}>
+      {/* <section id={`process`} className={`landingSection landingProcessSection`}>
         <div className={`landingProcessLead`} data-landing-blur data-landing-reveal>
           <span className={`landingEyebrow`}>How we work</span>
           <SplitHeading
@@ -294,7 +294,7 @@ export default function HomeLandingSections() {
             </li>
           ))}
         </ol>
-      </section>
+      </section> */}
 
       <section className={`landingStackSection`} aria-labelledby={`landing-stack-title`}>
         <div className={`landingStackIntro`} data-landing-blur data-landing-reveal>
@@ -314,7 +314,7 @@ export default function HomeLandingSections() {
         </ul>
       </section>
 
-      <section className={`landingSection landingContactSection`}>
+      {/* <section className={`landingSection landingContactSection`}>
         <div className={`landingContactCard`} data-landing-blur data-landing-reveal>
           <div>
             <span className={`landingEyebrow`}>Start something useful</span>
@@ -337,7 +337,7 @@ export default function HomeLandingSections() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

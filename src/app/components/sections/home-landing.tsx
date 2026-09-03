@@ -228,7 +228,7 @@ export default function HomeLanding() {
 
       <div id={`anchor`} className={`sep reveal`} />
 
-      <section className={`pageSection specialtiesSection`}>
+      {/* <section className={`pageSection specialtiesSection`}>
         <div className={`sectionInner backendGrid`}>
           <div className={`sectionTitle`}>
             <TextReveal scroll as={`span`} className={`eyebrow`} text={`Specialties`} delay={0.4} />
@@ -251,13 +251,13 @@ export default function HomeLanding() {
         </div>
       </section>
 
-      <div className={`sep reveal`} />
+      <div className={`sep reveal`} /> */}
 
       {/* {(isMounted && isChromeOrAdvancedDevice) && (
         <Section className={`homeProjects`} inversed />
       )} */}
 
-      <section className={`pageSection skillsSection`}>
+      {/* <section className={`pageSection skillsSection`}>
         <div className={`sectionInner`}>
           <div className={`sectionTitle`}>
             <TextReveal scroll as={`span`} className={`eyebrow`} text={`Skills`} delay={0.4} />
@@ -278,7 +278,15 @@ export default function HomeLanding() {
         </div>
       </section>
 
-      <div className={`sep reveal`} />
+      <div className={`sep reveal`} /> */}
+
+      <HomeLandingSections />
+      <HomeManifestoReveal />
+      <HomeVoyageMetrics />
+      {/* <HomeServiceEstimator /> */}
+      <HomeProjectBento />
+      <HomeProjectVoyageSlider />
+      <HomeCapabilityRadar />
 
       <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>
@@ -330,15 +338,6 @@ export default function HomeLanding() {
       </section>
 
       <div className={`sep reveal`} />
-
-      {/* Landing section lab — uncomment one component at a time to compare designs. */}
-      {/* <HomeLandingSections /> */}
-      {/* <HomeManifestoReveal /> */}
-      {/* <HomeVoyageMetrics /> */}
-      {/* <HomeServiceEstimator /> */}
-      {/* <HomeProjectBento /> */}
-      {/* <HomeProjectVoyageSlider /> */}
-      {/* <HomeCapabilityRadar /> */}
     </>
   );
 }
