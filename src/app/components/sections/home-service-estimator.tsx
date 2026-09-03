@@ -21,7 +21,9 @@ type PricedOption = {
   services?: any[];
   multiplier?: number;
   description?: string;
+  example_uses?: string[];
   multiplier_label?: string;
+  additional_values?: string[];
 };
 
 const mentoringTopics = [
@@ -87,7 +89,19 @@ const buildEffortLevels = [
 ] as const;
 
 const buildFeatures = [
+  { id: 'qr', label: 'QR Code', price: 25 },
+  { id: 'to-do', label: 'To Do', price: 50 },
+  { id: 'grids', label: 'Grids', price: 50 },
+  { id: 'charts', label: 'Charts', price: 50 },
+  { id: 'stocks', label: 'Stocks', price: 75 },
+  { id: 'search', label: 'Search', price: 25 },
+  { id: 'testing', label: 'Testing', price: 50 },
+  { id: 'reviews', label: 'Reviews', price: 50 },
+  { id: 'sliders', label: 'Sliders', price: 75 },
   { id: 'logo', label: 'Logo Design', price: 25 },
+  { id: 'security', label: 'Security', price: 100 },
+  { id: 'news', label: 'News Articles', price: 50 },
+  { id: 'media', label: 'Media Player', price: 50 },
   { id: 'clock', label: 'Dynamic Clock', price: 25 },
   { id: 'loader', label: 'Loader Design', price: 50 },
   { id: 'design', label: 'Example Design', price: 50 },
@@ -95,15 +109,31 @@ const buildFeatures = [
   { id: 'maps', label: 'Maps Integration', price: 50 },
   { id: 'weather', label: 'Weather Widget', price: 50 },
   { id: 'drag-drop', label: 'Drag & Drop', price: 100 },
+  { id: 'maintenance', label: 'Maintenance', price: 25 },
+  { id: 'content', label: 'Content Writing', price: 50 },
+  { id: 'music', label: 'Music Integration', price: 50 },
+  { id: 'automations', label: 'Automations', price: 100 },
   { id: 'api-server', label: 'API // Server', price: 50 },
   { id: 'haptics', label: 'Haptic Feedback', price: 150 },
+  { id: 'functions', label: 'Cloud Functions', price: 75 },
+  { id: 'location', label: 'Location Services', price: 75 },
   { id: 'analytics', label: 'Simple Analytics', price: 50 },
+  { id: 'audio', label: 'Audio Visualizations', price: 50 },
+  { id: 'dashboard', label: 'Custom Dashboard', price: 100 },
+  { id: 'announcements', label: 'Announcements', price: 25 },
+  { id: 'international', label: 'International', price: 75 },
+  { id: 'accessibility', label: 'Accessibility', price: 50 },
+  { id: 'pwa', label: 'PWA - Progressive Web App', price: 50 },
+  { id: 'fonts', label: 'Custom Fonts // Typeface', price: 50 },
+  { id: 'themes', label: 'Dark Mode // Light Mode', price: 25 },
   { id: 'contact-form', label: 'Simple Contact Form', price: 50 },
   { id: 'adv-analytics', label: 'Advanced Analytics', price: 150 },
-  { id: 'auth', label: 'Sign In + Sign Up w/ Google', price: 100 },
   { id: 'capture', label: 'Capture Customer Feedback', price: 100 },
   { id: 'missed', label: 'Missed Call Call // Text Back', price: 50 },
+  { id: 'images', label: 'Image // GIF // Video Examples', price: 50 },
+  { id: 'email', label: 'Custom Email: Email@Website.com', price: 75 },
   { id: 'social-media', label: 'Social Media Integration', price: 50 },
+  { id: 'storage', label: 'File Storage // User Uploads', price: 100 },
   { id: 'animations', label: 'Simple Animations + Effects', price: 50 },
   { id: 'cms-database', label: 'CMS // Database Management', price: 100 },
   { id: 'advanced-contact-form', label: 'Advanced Contact Form', price: 150 },
@@ -114,6 +144,7 @@ const buildFeatures = [
   { id: 'multiplayer', label: 'Multiplayer // Shared Sessions for Users', price: 150 },
   { id: 'notifications', label: 'Push Notifications or Message Notifications', price: 150 },
   { id: 'ecommerce', label: 'E-Commerce + Products + Cart + Subscriptions + Payments', price: 150 },
+  { id: 'auth', label: 'Sign In + Sign Up w/ Google + User Profiles + Roles // Permissions', price: 100 },
 ] as const satisfies readonly PricedOption[];
 
 export const SERVICE_ESTIMATOR_CATALOG = {
