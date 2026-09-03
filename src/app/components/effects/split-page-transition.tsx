@@ -340,7 +340,7 @@ export default function SplitPageTransition({
               />
             </div>
             <div className={`pageTransitionBrand`} aria-hidden={true}>
-              <Word className={`pageTransitionWord`} gradient={false} arrows gradientSword />
+              <Word className={`pageTransitionWord`} gradient={false} arrows={false} gradientSword />
             </div>
             <div className={`pageTransitionKeyword`} aria-hidden={true}>
               <span>Building With /</span>
