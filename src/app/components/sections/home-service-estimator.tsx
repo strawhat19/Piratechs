@@ -18,6 +18,8 @@ type PricedOption = {
   id: string;
   label: string;
   price: number;
+  services?: any[];
+  description?: string;
 };
 
 const mentoringTopics = [
@@ -83,39 +85,43 @@ const buildEffortLevels = [
 ] as const;
 
 const buildFeatures = [
-  { id: 'analytics', label: 'Analytics', price: 150 },
-  { id: 'animations', label: 'Animations', price: 250 },
-  { id: 'multiplayer', label: 'Multiplayer', price: 400 },
-  { id: 'contact-form', label: 'Contact Form', price: 100 },
-  { id: 'api-server', label: 'API // Server', price: 300 },
-  { id: 'booking-calendar', label: 'Booking Calendar', price: 200 },
-  { id: 'auth', label: 'Sign In + Sign Up', price: 250 },
-  { id: 'customer-order-tracking', label: 'Customer // Order Tracking', price: 250 },
-  { id: 'cms-database', label: 'CMS // Database Management', price: 350 },
-  { id: 'ecommerce', label: 'ECommerce + Products + Cart', price: 500 },
-  { id: 'notifications', label: 'Push Notifications or Message Notifications', price: 250 },
+  { id: 'logo', label: 'Logo Design', price: 25 },
+  { id: 'design', label: 'Example Design', price: 50 },
+  { id: 'api-server', label: 'API // Server', price: 50 },
+  { id: 'analytics', label: 'Simple Analytics', price: 50 },
+  { id: 'contact-form', label: 'Simple Contact Form', price: 50 },
+  { id: 'animations', label: 'Animations + Effects', price: 100 },
+  { id: 'adv-analytics', label: 'Advanced Analytics', price: 150 },
+  { id: 'auth', label: 'Sign In + Sign Up w/ Google', price: 100 },
+  { id: 'ecommerce', label: 'ECommerce + Products + Cart', price: 300 },
+  { id: 'cms-database', label: 'CMS // Database Management', price: 100 },
+  { id: 'advanced-contact-form', label: 'Advanced Contact Form', price: 150 },
+  { id: 'booking-calendar', label: 'Booking Calendar or Schedule', price: 150 },
+  { id: 'customer-order-tracking', label: 'Customer // Order Tracking', price: 150 },
+  { id: 'multiplayer', label: 'Multiplayer // Shared Sessions for Users', price: 150 },
+  { id: 'notifications', label: 'Push Notifications or Message Notifications', price: 150 },
 ] as const satisfies readonly PricedOption[];
 
 export const SERVICE_ESTIMATOR_CATALOG = {
   mentoring: {
     label: 'Mentoring // Tutoring',
     prompt: 'What is the name of the Student?',
-    basePrice: 400,
+    basePrice: 100,
     maximum: 2000,
     topics: mentoringTopics,
   },
   marketing: {
     label: 'Marketing // Analytics',
     prompt: 'What is the name of the Service?',
-    basePrice: 600,
+    basePrice: 200,
     maximum: 3000,
     options: marketingOptions,
   },
   build: {
     label: 'Website // Mobile Application or Game Development',
     prompt: 'What is the name of the Project?',
-    startingPrice: 350,
-    maximum: 20000,
+    startingPrice: 300,
+    maximum: 10000,
     types: buildTypes,
     features: buildFeatures,
   },
@@ -130,12 +136,12 @@ export type BuildEffortId = typeof buildEffortLevels[number]['id'];
 export type BuildPlatform = 'website' | 'mobile' | 'game';
 
 const buildPricingMatrix: Record<BuildEffortId, Record<BuildPageCountId, number>> = {
-  simple: { one: 350, three: 500, 'five-plus': 1000, 'ten-plus': 1500 },
+  simple: { one: 300, three: 500, 'five-plus': 1000, 'ten-plus': 1500 },
   business: { one: 500, three: 1000, 'five-plus': 2000, 'ten-plus': 3500 },
   enterprise: { one: 1000, three: 2000, 'five-plus': 3500, 'ten-plus': 5500 },
 };
-const serviceEstimatorMaximum = SERVICE_ESTIMATOR_CATALOG.mentoring.maximum +
-  SERVICE_ESTIMATOR_CATALOG.marketing.maximum + SERVICE_ESTIMATOR_CATALOG.build.maximum;
+
+const serviceEstimatorMaximum = SERVICE_ESTIMATOR_CATALOG.mentoring.maximum + SERVICE_ESTIMATOR_CATALOG.marketing.maximum + SERVICE_ESTIMATOR_CATALOG.build.maximum;
 
 export type ServiceEstimatorDraft = {
   selectedServices: ServiceId[];
@@ -1314,7 +1320,7 @@ export function HomeServiceEstimator({
                       type="range"
                       min={0}
                       max={serviceEstimatorMaximum}
-                      step={250}
+                      step={50}
                       value={effectiveBudget}
                       onChange={event => dispatch({ type: 'set-budget', value: Number(event.target.value) })}
                     />
