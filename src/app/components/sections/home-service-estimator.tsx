@@ -19,32 +19,34 @@ type PricedOption = {
   label: string;
   price: number;
   services?: any[];
+  multiplier?: number;
   description?: string;
+  multiplier_label?: string;
 };
 
 const mentoringTopics = [
-  { id: 'ai', label: 'AI', price: 200 },
-  { id: 'design', label: 'Design', price: 175 },
-  { id: 'business', label: 'Business', price: 175 },
-  { id: 'development', label: 'Development', price: 225 },
-  { id: 'career-advice', label: 'Career Advice', price: 125 },
-  { id: 'resume-review', label: 'Resume Review', price: 100 },
-  { id: 'gamify-learning', label: 'Gamify Learning', price: 175 },
-  { id: 'project-management', label: 'Project Management', price: 150 },
-  { id: 'computers-technology', label: 'Computers + Technology', price: 200 },
-  { id: 'technical-writing-reading', label: 'Technical Writing + Reading', price: 75 },
+  { id: 'ai', label: 'AI', price: 50 },
+  { id: 'design', label: 'Design', price: 75 },
+  { id: 'business', label: 'Business', price: 100 },
+  { id: 'development', label: 'Development', price: 150 },
+  { id: 'resume-review', label: 'Resume Review', price: 50 },
+  { id: 'career-advice', label: 'Career Advice', price: 50 },
+  { id: 'gamify-learning', label: 'Gamify Learning', price: 75 },
+  { id: 'project-management', label: 'Project Management', price: 100 },
+  { id: 'computers-technology', label: 'Computers + Technology', price: 100 },
+  { id: 'technical-writing-reading', label: 'Technical Writing + Reading', price: 50 },
 ] as const satisfies readonly PricedOption[];
 
 const marketingOptions = [
-  { id: 'seo', label: 'SEO', price: 250 },
-  { id: 'cms', label: 'CMS', price: 250 },
-  { id: 'automations', label: 'Automations', price: 300 },
-  { id: 'advertising', label: 'Advertising', price: 250 },
-  { id: 'social-media', label: 'Social Media', price: 200 },
-  { id: 'ai-drone-analysis', label: 'AI // Drone Analysis', price: 350 },
-  { id: 'customer-feedback', label: 'Capture Customer Feedback', price: 150 },
-  { id: 'photography-videography', label: 'Photography // Videography', price: 250 },
-  { id: 'graphic-design-custom-art', label: 'Graphic Design // Custom Art', price: 200 },
+  { id: 'seo', label: 'SEO', price: 100 },
+  { id: 'cms', label: 'CMS', price: 150 },
+  { id: 'automations', label: 'Automations', price: 150 },
+  { id: 'advertising', label: 'Advertising', price: 300 },
+  { id: 'social-media', label: 'Social Media', price: 100 },
+  { id: 'ai-drone-analysis', label: 'AI // Drone Analysis', price: 300 },
+  { id: 'customer-feedback', label: 'Capture Customer Feedback', price: 100 },
+  { id: 'photography-videography', label: 'Photography // Videography', price: 150 },
+  { id: 'graphic-design-custom-art', label: 'Graphic Design // Custom Art', price: 300 },
   { id: 'writing-copy-articles-blogs', label: 'Writing Copy, Articles, Blogs', price: 100 },
   { id: 'short-form-video', label: 'Tik Toks // Youtube Shorts // Instagram Reels', price: 100 },
 ] as const satisfies readonly PricedOption[];
@@ -90,12 +92,13 @@ const buildFeatures = [
   { id: 'api-server', label: 'API // Server', price: 50 },
   { id: 'analytics', label: 'Simple Analytics', price: 50 },
   { id: 'contact-form', label: 'Simple Contact Form', price: 50 },
-  { id: 'animations', label: 'Animations + Effects', price: 100 },
   { id: 'adv-analytics', label: 'Advanced Analytics', price: 150 },
   { id: 'auth', label: 'Sign In + Sign Up w/ Google', price: 100 },
+  { id: 'animations', label: 'Simple Animations + Effects', price: 50 },
   { id: 'ecommerce', label: 'ECommerce + Products + Cart', price: 300 },
   { id: 'cms-database', label: 'CMS // Database Management', price: 100 },
   { id: 'advanced-contact-form', label: 'Advanced Contact Form', price: 150 },
+  { id: 'adv-animations', label: 'Advanced Animations + Effects', price: 150 },
   { id: 'booking-calendar', label: 'Booking Calendar or Schedule', price: 150 },
   { id: 'customer-order-tracking', label: 'Customer // Order Tracking', price: 150 },
   { id: 'multiplayer', label: 'Multiplayer // Shared Sessions for Users', price: 150 },
@@ -233,21 +236,21 @@ const serviceCards: readonly {
     id: 'mentoring',
     label: SERVICE_ESTIMATOR_CATALOG.mentoring.label,
     description: 'Focused guidance for a student, professional, or project team.',
-    price: 'Up to $2,000',
+    price: 'Starting at $100',
     icon: 'fa-solid fa-compass',
   },
   {
     id: 'marketing',
     label: SERVICE_ESTIMATOR_CATALOG.marketing.label,
     description: 'A measurable campaign, content, or growth systems engagement.',
-    price: 'Up to $3,000',
+    price: 'Starting at $200',
     icon: 'fa-solid fa-satellite-dish',
   },
   {
     id: 'build',
     label: SERVICE_ESTIMATOR_CATALOG.build.label,
     description: 'A web, mobile, or game product built as one connected system.',
-    price: 'Starting at $350',
+    price: 'Starting at $300',
     icon: 'fa-solid fa-ship',
   },
 ];
