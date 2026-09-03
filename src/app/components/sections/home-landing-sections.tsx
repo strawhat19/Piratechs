@@ -246,12 +246,16 @@ export default function HomeLandingSections() {
       <section className={`landingSection landingStudioSection`}>
         <div className={`landingStudioCard`} data-landing-reveal>
           <div className={`landingStudioMark`} data-landing-blur>
-            <span className={`landingStudioCoordinate`}>PIRATECHS / ATLANTA</span>
+            <span className={`landingStudioCoordinate`}>
+              WILL OF D.
+            </span>
             <div className={`landingStudioLockup`}>
               <Logo fullSword className={`landingStudioLogo`} />
               <Word className={`landingStudioWordmark`} gradient={false} arrows gradientSword />
             </div>
-            <span className={`landingStudioCoordinate`}>DESIGN / CODE / CREATE</span>
+            <span className={`landingStudioCoordinate`}>
+              DESIGN // DEVELOP // DISTORT
+            </span>
           </div>
           <div className={`landingStudioCopy`}>
             <span className={`landingEyebrow`}>The studio</span>
@@ -259,7 +263,7 @@ export default function HomeLandingSections() {
               as={`h2`}
               className={`landingStatement`}
               lines={[
-                [{ text: `Small` }, { text: `studio` }, { text: `.`, accent: true }],
+                [{ text: `Atlanta` }, { text: `studio` }, { text: `.`, accent: true }],
                 [{ text: `Full-stack` }, { text: `reach` }, { text: `.`, accent: true }],
               ]}
             />

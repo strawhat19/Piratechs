@@ -10,12 +10,12 @@ import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import HomeLandingSections from './home-landing-sections';
+import HomeServiceEstimator from './home-service-estimator';
 import {
   HomeCapabilityRadar,
   HomeManifestoReveal,
   HomeProjectBento,
   HomeProjectVoyageSlider,
-  HomeServiceEstimator,
   HomeVoyageMetrics,
 } from './home-landing-alternatives';
 import { useGlobalContext } from '@/shared/global-context';
@@ -283,7 +283,7 @@ export default function HomeLanding() {
       <HomeLandingSections />
       <HomeManifestoReveal />
       <HomeVoyageMetrics />
-      {/* <HomeServiceEstimator /> */}
+      <HomeServiceEstimator />
       <HomeProjectBento />
       <HomeProjectVoyageSlider />
       <HomeCapabilityRadar />

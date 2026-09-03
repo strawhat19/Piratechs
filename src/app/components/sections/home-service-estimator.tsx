@@ -57,6 +57,31 @@ const buildTypes = [
   { id: 'website-mobile-game', label: 'Website + Mobile Application + Game', platforms: ['website', 'mobile', 'game'] },
 ] as const;
 
+const buildPageCounts = [
+  { id: `one`, label: `1 Page // Screen // View`, shortLabel: `1 page // screen // view` },
+  { id: `three`, label: `3 Pages // Screens // Views`, shortLabel: `3 pages // screens // views` },
+  { id: `five-plus`, label: `5+ Pages // Screens // Views`, shortLabel: `5+ pages // screens // views` },
+  { id: `ten-plus`, label: `10+ Pages // Screens // Views`, shortLabel: `10+ pages // screens // views` },
+] as const;
+
+const buildEffortLevels = [
+  {
+    id: `simple`,
+    label: `Simple, Clean, Professional`,
+    description: `A polished focused experience with essential interactions.`,
+  },
+  {
+    id: `business`,
+    label: `Business Feature Rich`,
+    description: `More workflows, integrations, content, and business logic.`,
+  },
+  {
+    id: `enterprise`,
+    label: `Enterprise Flagship`,
+    description: `A flagship experience with advanced polish, systems, and scale.`,
+  },
+] as const;
+
 const buildFeatures = [
   { id: 'analytics', label: 'Analytics', price: 150 },
   { id: 'animations', label: 'Animations', price: 250 },
@@ -89,8 +114,8 @@ export const SERVICE_ESTIMATOR_CATALOG = {
   build: {
     label: 'Website // Mobile Application or Game Development',
     prompt: 'What is the name of the Project?',
-    basePrice: 2000,
-    maximum: 10000,
+    startingPrice: 350,
+    maximum: 20000,
     types: buildTypes,
     features: buildFeatures,
   },
@@ -100,7 +125,17 @@ export type MentoringTopicId = typeof mentoringTopics[number]['id'];
 export type MarketingOptionId = typeof marketingOptions[number]['id'];
 export type BuildTypeId = typeof buildTypes[number]['id'];
 export type BuildFeatureId = typeof buildFeatures[number]['id'];
+export type BuildPageCountId = typeof buildPageCounts[number]['id'];
+export type BuildEffortId = typeof buildEffortLevels[number]['id'];
 export type BuildPlatform = 'website' | 'mobile' | 'game';
+
+const buildPricingMatrix: Record<BuildEffortId, Record<BuildPageCountId, number>> = {
+  simple: { one: 350, three: 500, 'five-plus': 1000, 'ten-plus': 1500 },
+  business: { one: 500, three: 1000, 'five-plus': 2000, 'ten-plus': 3500 },
+  enterprise: { one: 1000, three: 2000, 'five-plus': 3500, 'ten-plus': 5500 },
+};
+const serviceEstimatorMaximum = SERVICE_ESTIMATOR_CATALOG.mentoring.maximum +
+  SERVICE_ESTIMATOR_CATALOG.marketing.maximum + SERVICE_ESTIMATOR_CATALOG.build.maximum;
 
 export type ServiceEstimatorDraft = {
   selectedServices: ServiceId[];
@@ -109,6 +144,8 @@ export type ServiceEstimatorDraft = {
   marketingOptions: MarketingOptionId[];
   buildTypes: BuildTypeId[];
   buildFeatures: BuildFeatureId[];
+  buildPageCount: BuildPageCountId | null;
+  buildEffort: BuildEffortId | null;
   mentoringPricingMode: 'package' | 'hourly';
   hourlyRate: number;
   mentoringHours: number;
@@ -157,7 +194,7 @@ export type ServicePaymentProjection = {
 
 export type ServiceCartItem = {
   id: string;
-  pricingVersion: 1;
+  pricingVersion: 2;
   title: string;
   draft: ServiceEstimatorDraft;
   estimate: ServiceEstimate;
@@ -204,16 +241,10 @@ const serviceCards: readonly {
     id: 'build',
     label: SERVICE_ESTIMATOR_CATALOG.build.label,
     description: 'A web, mobile, or game product built as one connected system.',
-    price: 'Up to $10,000',
+    price: 'Starting at $350',
     icon: 'fa-solid fa-ship',
   },
 ];
-
-const platformPrices: Record<BuildPlatform, number> = {
-  website: 1200,
-  mobile: 2000,
-  game: 1800,
-};
 
 const platformLabels: Record<BuildPlatform, string> = {
   website: 'Website',
@@ -230,6 +261,21 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 const percentFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 1,
 });
+
+const getBuildScopePrice = (
+  pageCount: BuildPageCountId | null,
+  effort: BuildEffortId | null,
+) => pageCount && effort ? buildPricingMatrix[effort][pageCount] : 0;
+
+const getBuildScopePriceLabel = (
+  pageCount: BuildPageCountId | null,
+  effort: BuildEffortId | null,
+) => {
+  const price = getBuildScopePrice(pageCount, effort);
+  if (!price) return `Select a scope`;
+  const startingSuffix = pageCount === `ten-plus` && effort === `enterprise` ? `+` : ``;
+  return currencyFormatter.format(price) + startingSuffix;
+};
 
 const clamp = (minimum: number, value: number, maximum: number) => (
   Math.min(maximum, Math.max(minimum, value))
@@ -252,6 +298,8 @@ export function createEmptyServiceEstimatorDraft(): ServiceEstimatorDraft {
     marketingOptions: [],
     buildTypes: [],
     buildFeatures: [],
+    buildPageCount: null,
+    buildEffort: null,
     mentoringPricingMode: 'package',
     hourlyRate: 35,
     mentoringHours: 10,
@@ -273,6 +321,8 @@ const cloneDraft = (draft: ServiceEstimatorDraft): ServiceEstimatorDraft => ({
   marketingOptions: [...draft.marketingOptions],
   buildTypes: [...draft.buildTypes],
   buildFeatures: [...draft.buildFeatures],
+  buildPageCount: draft.buildPageCount ?? null,
+  buildEffort: draft.buildEffort ?? null,
 });
 
 const selectedPricedOptions = (
@@ -307,54 +357,56 @@ export function calculateServiceEstimate(draft: ServiceEstimatorDraft): ServiceE
           clamp(20, Math.round(draft.hourlyRate), 50),
       }]
       : [
-        { id: 'mentoring-base', label: 'Mentoring engagement base', amount: 400 },
+        { id: 'mentoring-base', label: 'Mentoring engagement base', amount: SERVICE_ESTIMATOR_CATALOG.mentoring.basePrice },
         ...selectedPricedOptions(mentoringTopics, draft.mentoringTopics),
       ];
     groups.push({
       service: 'mentoring',
       label: SERVICE_ESTIMATOR_CATALOG.mentoring.label,
       items,
-      total: Math.min(2000, items.reduce((sum, item) => sum + item.amount, 0)),
+      total: Math.min(SERVICE_ESTIMATOR_CATALOG.mentoring.maximum, items.reduce((sum, item) => sum + item.amount, 0)),
     });
   }
 
   if (selectedServices.has('marketing')) {
     const items = [
-      { id: 'marketing-base', label: 'Marketing engagement base', amount: 600 },
+      { id: 'marketing-base', label: 'Marketing engagement base', amount: SERVICE_ESTIMATOR_CATALOG.marketing.basePrice },
       ...selectedPricedOptions(marketingOptions, draft.marketingOptions),
     ];
     groups.push({
       service: 'marketing',
       label: SERVICE_ESTIMATOR_CATALOG.marketing.label,
       items,
-      total: Math.min(3000, items.reduce((sum, item) => sum + item.amount, 0)),
+      total: Math.min(SERVICE_ESTIMATOR_CATALOG.marketing.maximum, items.reduce((sum, item) => sum + item.amount, 0)),
     });
   }
 
   if (selectedServices.has('build')) {
+    const pageCount = buildPageCounts.find(option => option.id === draft.buildPageCount);
+    const effort = buildEffortLevels.find(option => option.id === draft.buildEffort);
+    const platformScopePrice = getBuildScopePrice(draft.buildPageCount, draft.buildEffort);
     const items: ServiceEstimateItem[] = [
-      { id: 'build-base', label: 'Product build foundation', amount: 2000 },
-      ...platforms.map(platform => ({
-        id: 'platform-' + platform,
-        label: platformLabels[platform],
-        amount: platformPrices[platform],
-      })),
+      ...(platformScopePrice && pageCount && effort ? platforms.map(platform => ({
+        id: `platform-${platform}`,
+        label: `${platformLabels[platform]} · ${effort.label} · ${pageCount.shortLabel}`,
+        amount: platformScopePrice,
+      })) : []),
       ...selectedPricedOptions(buildFeatures, draft.buildFeatures),
     ];
     groups.push({
       service: 'build',
       label: SERVICE_ESTIMATOR_CATALOG.build.label,
       items,
-      total: Math.min(10000, items.reduce((sum, item) => sum + item.amount, 0)),
+      total: Math.min(SERVICE_ESTIMATOR_CATALOG.build.maximum, items.reduce((sum, item) => sum + item.amount, 0)),
     });
   }
 
-  const total = Math.min(15000, groups.reduce((sum, group) => sum + group.total, 0));
+  const total = Math.min(serviceEstimatorMaximum, groups.reduce((sum, group) => sum + group.total, 0));
   return {
     groups,
     platforms,
     total,
-    maximum: 15000,
+    maximum: serviceEstimatorMaximum,
     isFreeConsultation: selectedServices.size === 0,
   };
 }
@@ -450,6 +502,8 @@ const getPricingKey = (draft: ServiceEstimatorDraft, estimate: ServiceEstimate, 
   draft.marketingOptions,
   draft.buildTypes,
   draft.buildFeatures,
+  draft.buildPageCount,
+  draft.buildEffort,
   draft.mentoringPricingMode,
   draft.hourlyRate,
   draft.mentoringHours,
@@ -469,7 +523,11 @@ const getScopeIssue = (draft: ServiceEstimatorDraft): string => {
   if (draft.selectedServices.includes('build')) {
     if (!hasValidName(draft.names.build)) return 'Enter the project name to reveal build options.';
     if (!draft.buildTypes.length) return 'Choose at least one website, mobile application, or game option.';
-    if (!draft.maintenance) return 'Choose how you want website updates and maintenance handled.';
+    if (!draft.buildPageCount) return `Choose the number of pages, screens, or views.`;
+    if (!draft.buildEffort) return `Choose a build effort level.`;
+    if (getBuildPlatforms(draft.buildTypes).includes(`website`) && !draft.maintenance) {
+      return 'Choose how you want website updates and maintenance handled.';
+    }
   }
   return '';
 };
@@ -493,6 +551,8 @@ type EstimatorAction =
   | { type: 'set-mentoring-mode'; value: 'package' | 'hourly' }
   | { type: 'set-hourly-rate'; value: number }
   | { type: 'set-hours'; value: number }
+  | { type: 'set-build-page-count'; value: BuildPageCountId }
+  | { type: 'set-build-effort'; value: BuildEffortId }
   | { type: 'set-maintenance'; value: Exclude<MaintenanceChoice, null> }
   | { type: 'set-budget'; value: number }
   | { type: 'accept-price'; pricingKey: string }
@@ -561,6 +621,10 @@ const reducer = (state: EstimatorState, action: EstimatorAction): EstimatorState
         ...state.draft,
         mentoringHours: clamp(1, Math.round(action.value), 40),
       });
+    case 'set-build-page-count':
+      return invalidatePricing(state, { ...state.draft, buildPageCount: action.value });
+    case 'set-build-effort':
+      return invalidatePricing(state, { ...state.draft, buildEffort: action.value });
     case 'set-maintenance':
       return invalidatePricing(state, { ...state.draft, maintenance: action.value });
     case 'set-budget':
@@ -568,7 +632,7 @@ const reducer = (state: EstimatorState, action: EstimatorAction): EstimatorState
         ...state,
         draft: {
           ...state.draft,
-          budget: clamp(0, Math.round(action.value / 250) * 250, 15000),
+          budget: clamp(0, Math.round(action.value / 250) * 250, serviceEstimatorMaximum),
           budgetTouched: true,
         },
         acceptedPricingKey: null,
@@ -704,6 +768,48 @@ function ChoiceGrid({
   );
 }
 
+type SingleChoiceGridProps<Value extends string> = {
+  idPrefix: string;
+  label: string;
+  options: readonly { id: Value; label: string; detail: string }[];
+  selected: Value | null;
+  onChange: (value: Value) => void;
+};
+
+function SingleChoiceGrid<Value extends string>({
+  idPrefix,
+  label,
+  options,
+  selected,
+  onChange,
+}: SingleChoiceGridProps<Value>) {
+  return (
+    <fieldset className="landingQuoteChoices">
+      <legend>{label}</legend>
+      <div className="landingQuoteSingleChoiceGrid">
+        {options.map(option => {
+          const id = idPrefix + '-' + option.id;
+          const isSelected = selected === option.id;
+          return (
+            <label className="landingQuoteSingleChoice" data-selected={isSelected || undefined} htmlFor={id} key={option.id}>
+              <input
+                id={id}
+                type="radio"
+                name={idPrefix}
+                checked={isSelected}
+                onChange={() => onChange(option.id)}
+              />
+              <span className="landingQuoteSingleChoiceCheck" aria-hidden="true" />
+              <strong>{option.label}</strong>
+              <small>{option.detail}</small>
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
 export function HomeServiceEstimator({
   initialItem,
   onAddToCart,
@@ -715,7 +821,9 @@ export function HomeServiceEstimator({
   const previousStageRef = useRef<EstimatorStage>('services');
   const [state, dispatch] = useReducer(reducer, initialItem, createInitialState);
   const estimate = calculateServiceEstimate(state.draft);
-  const suggestedBudget = estimate.total === 0 ? 0 : Math.min(15000, Math.ceil(estimate.total / 250) * 250);
+  const suggestedBudget = estimate.total === 0
+    ? 0
+    : Math.min(serviceEstimatorMaximum, Math.ceil(estimate.total / 250) * 250);
   const effectiveBudget = state.draft.budgetTouched ? state.draft.budget : suggestedBudget;
   const pricingKey = getPricingKey(state.draft, estimate, effectiveBudget);
   const payment = calculatePaymentProjection(state.draft, estimate);
@@ -724,6 +832,22 @@ export function HomeServiceEstimator({
   const activeStageIndex = stages.findIndex(stage => stage.id === state.stage);
   const budgetGap = effectiveBudget - estimate.total;
   const canReview = state.acceptedPricingKey === pricingKey;
+  const buildScopePrice = getBuildScopePrice(state.draft.buildPageCount, state.draft.buildEffort);
+  const buildScopeTotal = buildScopePrice * estimate.platforms.length;
+  const buildPageCountChoices = buildPageCounts.map(option => ({
+    id: option.id,
+    label: option.label,
+    detail: state.draft.buildEffort
+      ? getBuildScopePriceLabel(option.id, state.draft.buildEffort) + ` per platform`
+      : `Simple from ${getBuildScopePriceLabel(option.id, `simple`)}`,
+  }));
+  const buildEffortChoices = buildEffortLevels.map(option => ({
+    id: option.id,
+    label: option.label,
+    detail: state.draft.buildPageCount
+      ? getBuildScopePriceLabel(state.draft.buildPageCount, option.id) + ` per platform`
+      : option.description,
+  }));
 
   useEffect(() => {
     if (previousStageRef.current !== state.stage) {
@@ -745,7 +869,7 @@ export function HomeServiceEstimator({
     const id = state.editingId ?? globalThis.crypto?.randomUUID?.() ?? 'plan-' + Date.now();
     const item: ServiceCartItem = {
       id,
-      pricingVersion: 1,
+      pricingVersion: 2,
       title: reviewTitles.join(' + '),
       draft: cloneDraft(state.draft),
       estimate,
@@ -1034,7 +1158,7 @@ export function HomeServiceEstimator({
                           <i className="fa-solid fa-ship" aria-hidden="true" />
                           <div>
                             <span>Website // Mobile Application or Game Development</span>
-                            <strong>Up to $10,000</strong>
+                            <strong>Starting at $350</strong>
                           </div>
                         </header>
                         <label className="landingQuoteNameField" htmlFor={instanceId + '-build-name'}>
@@ -1067,8 +1191,43 @@ export function HomeServiceEstimator({
                               })}
                             />
                             <p className="landingQuotePlatformNote">
-                              Overlapping selections share one platform cost, so nothing is double-counted.
+                              Overlapping selections share one platform scope, so nothing is double-counted.
                             </p>
+                            {state.draft.buildTypes.length ? (
+                              <>
+                                <SingleChoiceGrid
+                                  idPrefix={instanceId + '-build-page-count'}
+                                  label="How many pages, screens, or views?"
+                                  options={buildPageCountChoices}
+                                  selected={state.draft.buildPageCount}
+                                  onChange={value => dispatch({ type: 'set-build-page-count', value })}
+                                />
+                                <SingleChoiceGrid
+                                  idPrefix={instanceId + '-build-effort'}
+                                  label="What level of effort does the experience need?"
+                                  options={buildEffortChoices}
+                                  selected={state.draft.buildEffort}
+                                  onChange={value => dispatch({ type: 'set-build-effort', value })}
+                                />
+                                {buildScopePrice && state.draft.buildPageCount && state.draft.buildEffort ? (
+                                  <div className="landingQuoteBuildPrice">
+                                    <div>
+                                      <span>Selected platform scope</span>
+                                      <strong>
+                                        {currencyFormatter.format(buildScopeTotal)}
+                                        {state.draft.buildPageCount === `ten-plus` &&
+                                        state.draft.buildEffort === `enterprise` ? `+` : ``}
+                                      </strong>
+                                    </div>
+                                    <p>
+                                      {getBuildScopePriceLabel(state.draft.buildPageCount, state.draft.buildEffort)} per platform
+                                      {estimate.platforms.length > 1 ? ` × ${estimate.platforms.length} platforms` : ``}.
+                                      Additional feature prices are shared across the build.
+                                    </p>
+                                  </div>
+                                ) : null}
+                              </>
+                            ) : null}
                             <ChoiceGrid
                               idPrefix={instanceId + '-build-feature'}
                               label="And additional features"
@@ -1080,33 +1239,35 @@ export function HomeServiceEstimator({
                                 value,
                               })}
                             />
-                            <fieldset className="landingQuoteMaintenance">
-                              <legend>
-                                Do you need the ability to do simple updates and maintenance on the website,
-                                or would you like us to handle everything?
-                              </legend>
-                              <div className="landingQuoteSegmented">
-                                <label>
-                                  <input
-                                    type="radio"
-                                    name={instanceId + '-maintenance'}
-                                    checked={state.draft.maintenance === 'self'}
-                                    onChange={() => dispatch({ type: 'set-maintenance', value: 'self' })}
-                                  />
-                                  <span>Give me simple update tools</span>
-                                </label>
-                                <label>
-                                  <input
-                                    type="radio"
-                                    name={instanceId + '-maintenance'}
-                                    checked={state.draft.maintenance === 'managed'}
-                                    onChange={() => dispatch({ type: 'set-maintenance', value: 'managed' })}
-                                  />
-                                  <span>Have Piratechs handle everything</span>
-                                </label>
-                              </div>
-                              <small>Managed maintenance is scoped separately and does not change this build estimate.</small>
-                            </fieldset>
+                            {estimate.platforms.includes(`website`) ? (
+                              <fieldset className="landingQuoteMaintenance">
+                                <legend>
+                                  Do you need the ability to do simple updates and maintenance on the website,
+                                  or would you like us to handle everything?
+                                </legend>
+                                <div className="landingQuoteSegmented">
+                                  <label>
+                                    <input
+                                      type="radio"
+                                      name={instanceId + '-maintenance'}
+                                      checked={state.draft.maintenance === 'self'}
+                                      onChange={() => dispatch({ type: 'set-maintenance', value: 'self' })}
+                                    />
+                                    <span>Give me simple update tools</span>
+                                  </label>
+                                  <label>
+                                    <input
+                                      type="radio"
+                                      name={instanceId + '-maintenance'}
+                                      checked={state.draft.maintenance === 'managed'}
+                                      onChange={() => dispatch({ type: 'set-maintenance', value: 'managed' })}
+                                    />
+                                    <span>Have Piratechs handle everything</span>
+                                  </label>
+                                </div>
+                                <small>Managed maintenance is scoped separately and does not change this build estimate.</small>
+                              </fieldset>
+                            ) : null}
                           </>
                         ) : (
                           <p className="landingQuoteGate">Enter at least two characters to reveal project options.</p>
@@ -1152,13 +1313,13 @@ export function HomeServiceEstimator({
                       id={instanceId + '-budget'}
                       type="range"
                       min={0}
-                      max={15000}
+                      max={serviceEstimatorMaximum}
                       step={250}
                       value={effectiveBudget}
                       onChange={event => dispatch({ type: 'set-budget', value: Number(event.target.value) })}
                     />
                     <div className="landingQuoteRangeEnds" aria-hidden="true">
-                      <span>$0</span><span>$15,000</span>
+                      <span>$0</span><span>{currencyFormatter.format(serviceEstimatorMaximum)}</span>
                     </div>
                     <p>
                       {estimate.isFreeConsultation
@@ -1412,7 +1573,7 @@ export function HomeServiceEstimator({
                     </article>
                   </div>
 
-                  {state.draft.selectedServices.includes('build') ? (
+                  {estimate.platforms.includes(`website`) ? (
                     <p className="landingQuoteMaintenanceReview">
                       <i className="fa-solid fa-anchor" aria-hidden="true" />
                       {state.draft.maintenance === 'managed'

@@ -621,6 +621,7 @@ body[data-theme="light"] .landingLogoPlate {
 .landingProcessSection {
   display: grid;
   gap: clamp(54px, 8vw, 126px);
+  align-items: start;
   grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
 }
 
@@ -633,6 +634,7 @@ body[data-theme="light"] .landingLogoPlate {
 .landingProcessLead {
   top: 150px;
   position: sticky;
+  align-self: start;
   height: fit-content;
 }
 
@@ -1039,17 +1041,14 @@ body[data-theme="light"] .landingLogoPlate {
 }
 
 @media (max-width: 1080px) {
-  .landingServicesSection,
   .landingProcessSection {
     grid-template-columns: 1fr;
   }
 
-  .landingServicesSection::before,
   .landingProcessSection::before {
     display: none;
   }
 
-  .landingServicesLead,
   .landingProcessLead {
     top: auto;
     position: static;
@@ -1062,6 +1061,20 @@ body[data-theme="light"] .landingLogoPlate {
 }
 
 @media (max-width: 900px) {
+  .landingServicesSection {
+    grid-template-columns: 1fr;
+  }
+
+  .landingServicesSection::before {
+    display: none;
+  }
+
+  .landingServicesLead {
+    top: auto;
+    position: static;
+    width: min(100%, 820px);
+  }
+
   .landingHero {
     min-height: auto;
     grid-template-columns: 1fr;
