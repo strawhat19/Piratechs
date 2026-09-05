@@ -11,8 +11,16 @@ import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransition
 
 type TransitionPhase = `covered` | `covering` | `revealing` | `idle`;
 
-const splitRows = [1, 2, 3, 4];
+type TransitionCssProperties = CSSProperties & {
+  [key: `--${string}`]: string | number;
+};
+
+const initialHoldMs = 1450;
 const loaderKeywordSteps = 4;
+const shutterBlindCount = 12;
+const loaderCompleteHoldMs = 180;
+const shutterBlindStaggerMs = 38;
+const shutterBlinds = Array.from({ length: shutterBlindCount }, (_, index) => index);
 const loaderKeywords = Array.from(new Set<string>([
   ...(config?.services ?? []).map((service: { title: string }) => service.title),
   ...(config?.skills ?? []).map((skill: { label: string }) => skill.label),
@@ -63,7 +71,7 @@ const getLoaderKeyword = (offset: number, step: number = 0) => (
 
 export default function SplitPageTransition({
   children,
-  duration = 0.36,
+  duration = 1.12,
   doneDelayBeforeLeave = 0,
 }: PageTransitionProps) {
   const pathname = usePathname();
@@ -81,14 +89,14 @@ export default function SplitPageTransition({
   const keywordIndexRef = useRef(-1);
   const keywordOffsetRef = useRef(getKeywordOffset(initialPageName));
   const initialRevealCompleteRef = useRef(false);
-  const durationMs = Math.max(180, Math.round(duration * 1000));
+  const durationMs = Math.max(920, Math.round(duration * 1000));
+  const blindTransitionMs = Math.max(480, durationMs - shutterBlindStaggerMs * (shutterBlindCount - 1));
   const doneDelayBeforeLeaveMs = Number.isFinite(doneDelayBeforeLeave)
     ? Math.max(0, doneDelayBeforeLeave * 1000)
     : 0;
-  const initialHoldMs = 220;
-  const transitionStyle = {
-    '--page-transition-panel-duration': `${Math.max(108, durationMs - 72)}ms`,
-  } as CSSProperties;
+  const transitionStyle: TransitionCssProperties = {
+    '--page-transition-blind-duration': `${blindTransitionMs}ms`,
+  };
 
   const clearScheduledWork = useCallback(() => {
     if (timerRef.current != null) window.clearTimeout(timerRef.current);
@@ -159,7 +167,7 @@ export default function SplitPageTransition({
     const startedAt = lastTime;
     const tick = (now: number) => {
       const elapsed = Math.min(1, (now - startedAt) / totalMs);
-      const eased = 1 - Math.pow(1 - elapsed, 2.2);
+      const eased = elapsed * elapsed * (3 - 2 * elapsed);
       const nextValue = eased * 100;
       const deltaTime = Math.max(now - lastTime, 1) / 1000;
       const velocity = Math.abs(nextValue - lastValue) / deltaTime;
@@ -275,14 +283,10 @@ export default function SplitPageTransition({
 
       timerRef.current = window.setTimeout(() => {
         initialLoader.stopProgress(true);
-        if (initialLoader.doneDelayBeforeLeaveMs > 0) {
-          timerRef.current = window.setTimeout(
-            () => initialLoader.revealPage(() => {}, true),
-            initialLoader.doneDelayBeforeLeaveMs,
-          );
-          return;
-        }
-        initialLoader.revealPage(() => {}, true);
+        timerRef.current = window.setTimeout(
+          () => initialLoader.revealPage(() => {}, true),
+          loaderCompleteHoldMs + initialLoader.doneDelayBeforeLeaveMs,
+        );
       }, initialHoldMs);
     });
 
@@ -317,12 +321,18 @@ export default function SplitPageTransition({
             </filter>
           </defs>
         </svg>
-        {splitRows.map(row => (
-          <div key={row} className={`pageTransitionRow pageTransitionRow${row}`}>
-            <span className={`pageTransitionPanel pageTransitionPanelStart`} />
-            <span className={`pageTransitionPanel pageTransitionPanelEnd`} />
-          </div>
-        ))}
+        <div className={`pageTransitionBlinds`} aria-hidden={true}>
+          {shutterBlinds.map(index => (
+            <span
+              key={index}
+              className={`pageTransitionBlind`}
+              style={{
+                '--cover-delay': `${index * shutterBlindStaggerMs}ms`,
+                '--reveal-delay': `${(shutterBlindCount - index - 1) * shutterBlindStaggerMs}ms`,
+              } as TransitionCssProperties}
+            />
+          ))}
+        </div>
         {phase != `idle` ? (
           <div className={`pageTransitionIdentity`}>
             <div className={`pageTransitionMeta`} aria-hidden={true}>
