@@ -20,8 +20,8 @@ const loaderKeywordSteps = 4;
 const shutterBlindCount = 12;
 const loaderCompleteHoldMs = 0;
 const revealDurationMs = 1120;
-const coverBlindStaggerMs = 12;
 const revealBlindStaggerMs = 38;
+const coverBlindStaggerMs = revealBlindStaggerMs;
 const shutterBlinds = Array.from({ length: shutterBlindCount }, (_, index) => index);
 const loaderCornerPositions = [`TopLeft`, `TopRight`, `BottomLeft`, `BottomRight`];
 const loaderKeywords = Array.from(new Set<string>([
@@ -85,7 +85,7 @@ const getLoaderKeyword = (offset: number, step: number = 0) => (
 
 export default function SplitPageTransition({
   children,
-  duration = 0.36,
+  duration = revealDurationMs / 1000,
   doneDelayBeforeLeave = 0,
 }: PageTransitionProps) {
   const pathname = usePathname();

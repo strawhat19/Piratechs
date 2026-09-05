@@ -31,7 +31,7 @@ body.pageTransitionPending .heroBrand.reveal {
 
 .pageTransitionSplit {
   --page-transition-blind-angle: -14deg;
-  --page-transition-cover-duration: 228ms;
+  --page-transition-cover-duration: 702ms;
   --page-transition-reveal-duration: 702ms;
   pointer-events: auto;
   visibility: visible;
@@ -244,6 +244,11 @@ body.pageTransitionPending .heroBrand.reveal {
   &.idle {
     pointer-events: none;
     visibility: hidden;
+  }
+
+  &.idle .pageTransitionBlind {
+    // Reset offscreen immediately so the next entrance always starts at the top.
+    transition: none;
   }
 
   .pageTransitionIdentity {
