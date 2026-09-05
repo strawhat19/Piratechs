@@ -109,99 +109,136 @@ body.pageTransitionPending .heroBrand.reveal {
   }
 
   .pageTransitionCorner {
-    --corner-rotation: 0deg;
-    --corner-size: clamp(76px, 10vw, 148px);
+    --corner-size: clamp(152px, 18vw, 252px);
+    --corner-inset: clamp(20px, 2.2vw, 36px);
+    --corner-flip-x: 1;
+    --corner-flip-y: 1;
+    --corner-ink: var(--piratechsNeon);
+    --corner-accent: var(--piratechsTeal);
+    --corner-signal: #e0fcff;
+    display: block;
     width: var(--corner-size);
-    height: var(--corner-size);
+    aspect-ratio: 6 / 5;
     position: absolute;
+    color: var(--corner-ink);
     opacity: 0;
-    border-radius: 50%;
-    filter: drop-shadow(0 0 18px rgba(var(--piratechsNeon_rgb), 0.2));
-    transform: scale(0.82) rotate(var(--corner-rotation));
-    transition: opacity 320ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform: scale(0.94);
+    transition: opacity 280ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .pageTransitionCorner::before {
-    inset: 0;
-    position: absolute;
-    content: "";
-    border-radius: 50%;
-    background: conic-gradient(
-      from 28deg,
-      transparent 0 13%,
-      rgba(var(--piratechsNeon_rgb), 0.82) 13% 17%,
-      transparent 17% 42%,
-      rgba(var(--piratechsTeal_rgb), 0.72) 42% 49%,
-      transparent 49% 76%,
-      rgba(255, 255, 255, 0.44) 76% 79%,
-      transparent 79% 100%
-    );
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
-    mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
-    animation: pageTransitionOrbitSpin 9s linear infinite;
+  .pageTransitionCornerCircuit {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linejoin: bevel;
+    transform: scale(var(--corner-flip-x), var(--corner-flip-y));
   }
 
-  .pageTransitionCorner::after {
-    top: 50%;
-    left: 50%;
-    width: 7px;
-    height: 7px;
-    position: absolute;
-    content: "";
-    border-radius: 50%;
-    background: var(--piratechsTeal);
-    box-shadow: 0 0 16px rgba(var(--piratechsTeal_rgb), 0.88), 0 0 42px rgba(var(--piratechsNeon_rgb), 0.36);
-    transform: translate3d(-50%, -50%, 0);
+  .pageTransitionCornerFrame {
+    opacity: 0.64;
   }
 
-  .pageTransitionCorner > span {
-    inset: 18%;
-    position: absolute;
-    border: 1px solid rgba(var(--piratechsNeon_rgb), 0.24);
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(var(--piratechsNeon_rgb), 0.16), transparent 62%);
-    animation: pageTransitionOrbitBreathe 2.8s ease-in-out infinite alternate;
+  .pageTransitionCornerPlate {
+    fill: currentColor;
+    stroke: none;
+    opacity: 0.3;
+  }
+
+  .pageTransitionCornerTrace {
+    opacity: 0.34;
+  }
+
+  .pageTransitionCornerTicks {
+    opacity: 0.46;
+  }
+
+  .pageTransitionCornerAccent {
+    stroke: var(--corner-accent);
+    stroke-width: 2;
+    opacity: 0.85;
+  }
+
+  .pageTransitionCornerTerminals {
+    fill: var(--navy-deep);
+    stroke: var(--corner-accent);
+    opacity: 0.8;
+  }
+
+  .pageTransitionCornerSignal {
+    stroke: var(--corner-signal);
+    stroke-width: 1.6;
+    stroke-dasharray: 12 88;
+    stroke-linecap: round;
+    animation: pageTransitionCornerSignal 3.6s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .pageTransitionCornerSignalAlt {
+    animation-delay: -1.8s;
+    animation-direction: reverse;
+  }
+
+  .pageTransitionCornerBeacon {
+    fill: var(--corner-signal);
+    stroke: none;
+    animation: pageTransitionCornerBeacon 2.4s ease-in-out infinite alternate;
+    animation-play-state: paused;
   }
 
   .pageTransitionCornerTopLeft {
-    top: clamp(20px, 5vw, 68px);
-    left: clamp(18px, 5vw, 72px);
-    --corner-rotation: -18deg;
+    top: var(--corner-inset);
+    left: var(--corner-inset);
+    transform-origin: top left;
   }
 
   .pageTransitionCornerTopRight {
-    top: clamp(20px, 5vw, 68px);
-    right: clamp(18px, 5vw, 72px);
-    --corner-rotation: 24deg;
+    --corner-flip-x: -1;
+    top: var(--corner-inset);
+    right: var(--corner-inset);
+    transform-origin: top right;
   }
 
   .pageTransitionCornerBottomLeft {
-    bottom: clamp(20px, 5vw, 68px);
-    left: clamp(18px, 5vw, 72px);
-    --corner-rotation: 16deg;
+    --corner-flip-y: -1;
+    bottom: var(--corner-inset);
+    left: var(--corner-inset);
+    transform-origin: bottom left;
   }
 
   .pageTransitionCornerBottomRight {
-    right: clamp(18px, 5vw, 72px);
-    bottom: clamp(20px, 5vw, 68px);
-    --corner-rotation: -28deg;
+    --corner-flip-x: -1;
+    --corner-flip-y: -1;
+    right: var(--corner-inset);
+    bottom: var(--corner-inset);
+    transform-origin: bottom right;
   }
 
-  .pageTransitionCornerTopRight::before,
-  .pageTransitionCornerBottomLeft::before {
-    animation-direction: reverse;
-    animation-duration: 11s;
+  .pageTransitionCornerBottomLeft,
+  .pageTransitionCornerBottomRight {
+    --corner-ink: var(--navy-deep);
+    --corner-accent: var(--navy-deep);
+    --corner-signal: white;
   }
 
   &.covered .pageTransitionCorner,
   &.covering .pageTransitionCorner {
-    opacity: 0.58;
-    transform: scale(1) rotate(var(--corner-rotation));
+    opacity: 0.88;
+    transform: scale(1);
+  }
+
+  &.covered .pageTransitionCornerSignal,
+  &.covering .pageTransitionCornerSignal,
+  &.covered .pageTransitionCornerBeacon,
+  &.covering .pageTransitionCornerBeacon {
+    animation-play-state: running;
   }
 
   &.revealing .pageTransitionCorner {
     opacity: 0;
-    transform: scale(1.14) rotate(var(--corner-rotation));
+    transform: scale(1.04);
   }
 
   &.idle {
@@ -644,13 +681,14 @@ body.pageTransitionPending .heroBrand.reveal {
   100% { opacity: 1; transform: translate3d(0, 0, 0) scaleY(1); }
 }
 
-@keyframes pageTransitionOrbitSpin {
-  to { transform: rotate(1turn); }
+@keyframes pageTransitionCornerSignal {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
 }
 
-@keyframes pageTransitionOrbitBreathe {
-  from { opacity: 0.42; transform: scale(0.9); }
-  to { opacity: 0.88; transform: scale(1.04); }
+@keyframes pageTransitionCornerBeacon {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }
 
 @keyframes pageTransitionShutterFade {
@@ -698,27 +736,12 @@ body.pageTransitionPending .heroBrand.reveal {
 @media (max-width: 768px) {
   .pageTransitionSplit {
     .pageTransitionCorner {
-      --corner-size: clamp(62px, 18vw, 82px);
+      --corner-size: clamp(112px, 34vw, 164px);
+      --corner-inset: 16px;
     }
 
-    .pageTransitionCornerTopLeft,
-    .pageTransitionCornerTopRight {
-      top: 20px;
-    }
-
-    .pageTransitionCornerBottomLeft,
-    .pageTransitionCornerBottomRight {
-      bottom: 20px;
-    }
-
-    .pageTransitionCornerTopLeft,
-    .pageTransitionCornerBottomLeft {
-      left: 16px;
-    }
-
-    .pageTransitionCornerTopRight,
-    .pageTransitionCornerBottomRight {
-      right: 16px;
+    .pageTransitionCornerTicks {
+      display: none;
     }
 
     .pageTransitionIdentity {
@@ -888,12 +911,13 @@ body.pageTransitionPending .heroBrand.reveal {
 @media (max-height: 430px) {
   .pageTransitionSplit {
     .pageTransitionCorner {
-      --corner-size: 56px;
+      --corner-size: clamp(72px, 24svh, 100px);
+      --corner-inset: 10px;
     }
 
     &.covered .pageTransitionCorner,
     &.covering .pageTransitionCorner {
-      opacity: 0.4;
+      opacity: 0.64;
     }
 
     .pageTransitionIdentity {

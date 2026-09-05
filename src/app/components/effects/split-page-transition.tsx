@@ -25,9 +25,20 @@ const revealBlindStaggerMs = 38;
 const shutterBlinds = Array.from({ length: shutterBlindCount }, (_, index) => index);
 const loaderCornerPositions = [`TopLeft`, `TopRight`, `BottomLeft`, `BottomRight`];
 const loaderKeywords = Array.from(new Set<string>([
-  ...(config?.services ?? []).map((service: { title: string }) => service.title),
-  ...(config?.skills ?? []).map((skill: { label: string }) => skill.label),
-  ...(config?.topBarItems ?? []).map((item: { label: string }) => item.label),
+  `Next`,
+  `Design`,
+  `TypeScript`,
+  `JavaScript`,
+  `Developnent`,
+  `API`,
+  `AI`,
+  `App`,
+  `PHP`,
+  `C-Sharp`,
+  `Python`,
+  `React`,
+  `Piratechs`,
+  `SCSS`,
 ]));
 
 const getReducedMotion = () => (
@@ -341,7 +352,29 @@ export default function SplitPageTransition({
         <div className={`pageTransitionAmbience`} aria-hidden={true}>
           {loaderCornerPositions.map(position => (
             <span key={position} className={`pageTransitionCorner pageTransitionCorner${position}`}>
-              <span />
+              <svg className={`pageTransitionCornerCircuit`} viewBox={`0 0 240 200`} fill={`none`} focusable={false}>
+                <path className={`pageTransitionCornerFrame`} d={`M4 122V24L24 4H156L166 14H236M4 138V176L14 186V196M16 136V32L32 16H126`} />
+                <path className={`pageTransitionCornerPlate`} d={`M44 4H118L124 10H38ZM4 48L10 42V96L4 102Z`} />
+                <path className={`pageTransitionCornerTrace`} d={`M88 54L108 34H180L190 24H224M54 88L34 108V158L24 168V188M96 70H132L148 54H210M70 96V124L54 140V176`} />
+                <path className={`pageTransitionCornerSignal`} pathLength={100} d={`M54 88L34 108V158L24 168V188`} />
+                <path className={`pageTransitionCornerSignal pageTransitionCornerSignalAlt`} pathLength={100} d={`M88 54L108 34H180L190 24H224`} />
+                <g className={`pageTransitionCornerDial`}>
+                  <path className={`pageTransitionCornerTrace`} d={`M66 34V42M66 90V98M34 66H42M90 66H98M43 43L48 48M84 84L89 89`} />
+                  <circle className={`pageTransitionCornerTrace`} cx={66} cy={66} r={25} />
+                  <path className={`pageTransitionCornerAccent`} d={`M41 66A25 25 0 0 1 66 41M91 66A25 25 0 0 1 66 91`} />
+                  <path className={`pageTransitionCornerFrame`} d={`M66 50L82 66L66 82L50 66Z`} />
+                  <path className={`pageTransitionCornerTrace`} d={`M59 66H73M66 59V73`} />
+                  <circle className={`pageTransitionCornerBeacon`} cx={66} cy={66} r={3} />
+                </g>
+                <path className={`pageTransitionCornerTicks`} d={`M142 20V25M150 20V25M158 20V25M166 20V25M174 20V25M20 118H25M20 126H25M20 134H25M20 142H25M20 150H25`} />
+                <path className={`pageTransitionCornerAccent`} d={`M204 10L208 14L204 18M214 10L218 14L214 18M10 178L14 182L18 178`} />
+                <g className={`pageTransitionCornerTerminals`}>
+                  <circle cx={224} cy={24} r={3} />
+                  <circle cx={210} cy={54} r={3} />
+                  <circle cx={54} cy={176} r={3} />
+                  <path d={`M21 185H27V191H21Z`} />
+                </g>
+              </svg>
             </span>
           ))}
         </div>
