@@ -168,7 +168,7 @@ export function HomeManifestoReveal() {
       </svg>
 
       <div className={`landingAltInner landingAltManifestoInner`}>
-        <div className={`landingAltManifestoHeading`}>
+        {/* <div className={`landingAltManifestoHeading`}>
           <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`The code of the crew`} />
           <TextReveal
             scroll
@@ -188,7 +188,7 @@ export function HomeManifestoReveal() {
           <Link className={`landingAltTextLink`} href={`/about`}>
             Meet the studio <span aria-hidden={`true`}>↗</span>
           </Link>
-        </ElementReveal>
+        </ElementReveal> */}
 
         <ol className={`landingAltManifestoList`}>
           {manifestoPrinciples.map((principle, index) => (
@@ -369,8 +369,10 @@ export function HomeProjectVoyageSlider() {
       <div className={`landingAltInner`}>
         <header className={`landingAltSectionHeading landingAltSliderHeading`}>
           <div>
-            <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Selected voyages`} />
-            <h2 className={`landingAltDisplay`} id={titleId}>Work with a wake.</h2>
+            <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Featured Projects`} />
+            <h2 className={`landingAltDisplay`} id={titleId}>
+              Make Waves.
+            </h2>
           </div>
           <div className={`landingAltSliderControls`}>
             <button type={`button`} onClick={previous} aria-label={`Show previous project`}>
@@ -444,7 +446,7 @@ export function HomeCapabilityRadar() {
       <div className={`landingAltInner landingAltRadarInner`}>
         <header className={`landingAltSectionHeading landingAltRadarHeading`}>
           <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Full-stack fleet`} />
-          <TextReveal scroll byLetter slide as={`h2`} className={`landingAltDisplay`} text={`Range without drift.`} delay={0.06} />
+          <TextReveal scroll byLetter slide as={`h2`} className={`landingAltDisplay`} text={`Any Tech`} delay={0.06} />
           <TextReveal scroll as={`p`} className={`landingAltLead`} text={`A deliberately broad studio practice, connected by one product-minded standard from discovery through launch care.`} />
           <Link className={`landingAltTextLink`} href={`/services`}>
             Explore every capability <span aria-hidden={`true`}>↗</span>
