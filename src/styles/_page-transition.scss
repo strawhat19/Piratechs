@@ -109,21 +109,43 @@ body.pageTransitionPending .heroBrand.reveal {
   }
 
   .pageTransitionCorner {
-    --corner-size: clamp(152px, 18vw, 252px);
+    --corner-size: clamp(132px, 14vw, 200px);
     --corner-inset: clamp(20px, 2.2vw, 36px);
     --corner-flip-x: 1;
     --corner-flip-y: 1;
     --corner-ink: var(--piratechsNeon);
     --corner-accent: var(--piratechsTeal);
-    --corner-signal: #e0fcff;
+    --corner-signal: var(--piratechsTeal);
     display: block;
     width: var(--corner-size);
     aspect-ratio: 6 / 5;
     position: absolute;
+    isolation: isolate;
     color: var(--corner-ink);
     opacity: 0;
-    transform: scale(0.94);
-    transition: opacity 280ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity var(--page-transition-reveal-duration) cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .pageTransitionCorner::before,
+  .pageTransitionIdentity {
+    background:
+      radial-gradient(circle at 14% 0, rgba(var(--piratechsNeon_rgb), 0.24), transparent 42%),
+      radial-gradient(circle at 88% 100%, rgba(var(--piratechsTeal_rgb), 0.18), transparent 38%),
+      linear-gradient(145deg, rgba(var(--navy_rgb), 0.88), var(--navy-deep) 58%, var(--navy-dark));
+    box-shadow: 0 34px 100px rgba(0, 9, 27, 0.46), 0 0 70px rgba(var(--piratechsNeon_rgb), 0.14);
+    backdrop-filter: blur(16px);
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  }
+
+  .pageTransitionCorner::before {
+    inset: -32px;
+    z-index: -1;
+    position: absolute;
+    content: "";
+    clip-path: none;
+    box-shadow: none;
+    mask-image: radial-gradient(ellipse 100% 100% at 0 0, black 12%, rgba(0, 0, 0, 0.8) 32%, transparent 100%);
+    transform: scale(var(--corner-flip-x), var(--corner-flip-y));
   }
 
   .pageTransitionCornerCircuit {
@@ -138,27 +160,32 @@ body.pageTransitionPending .heroBrand.reveal {
   }
 
   .pageTransitionCornerFrame {
-    opacity: 0.64;
+    opacity: 0.5;
   }
 
   .pageTransitionCornerPlate {
     fill: currentColor;
     stroke: none;
-    opacity: 0.3;
+    opacity: 0.18;
   }
 
   .pageTransitionCornerTrace {
-    opacity: 0.34;
+    opacity: 0.48;
   }
 
   .pageTransitionCornerTicks {
-    opacity: 0.46;
+    opacity: 0.28;
+  }
+
+  .pageTransitionCornerDial {
+    opacity: 0.55;
   }
 
   .pageTransitionCornerAccent {
     stroke: var(--corner-accent);
-    stroke-width: 2;
+    stroke-width: 1.5;
     opacity: 0.85;
+    filter: drop-shadow(0 0 3px rgba(var(--piratechsTeal_rgb), 0.3));
   }
 
   .pageTransitionCornerTerminals {
@@ -216,17 +243,14 @@ body.pageTransitionPending .heroBrand.reveal {
     transform-origin: bottom right;
   }
 
-  .pageTransitionCornerBottomLeft,
-  .pageTransitionCornerBottomRight {
-    --corner-ink: var(--navy-deep);
-    --corner-accent: var(--navy-deep);
-    --corner-signal: white;
-  }
-
   &.covered .pageTransitionCorner,
   &.covering .pageTransitionCorner {
-    opacity: 0.88;
-    transform: scale(1);
+    opacity: 0.82;
+  }
+
+  &.covering .pageTransitionCorner {
+    transition-duration: var(--page-transition-cover-duration);
+    transition-delay: calc(var(--page-transition-cover-duration) * 0.25);
   }
 
   &.covered .pageTransitionCornerSignal,
@@ -238,7 +262,10 @@ body.pageTransitionPending .heroBrand.reveal {
 
   &.revealing .pageTransitionCorner {
     opacity: 0;
-    transform: scale(1.04);
+  }
+
+  &.idle .pageTransitionCorner {
+    transition: none;
   }
 
   &.idle {
@@ -265,13 +292,6 @@ body.pageTransitionPending .heroBrand.reveal {
     overflow: hidden;
     color: white;
     opacity: 0;
-    background:
-      radial-gradient(circle at 14% 0, rgba(var(--piratechsNeon_rgb), 0.24), transparent 42%),
-      radial-gradient(circle at 88% 100%, rgba(var(--piratechsTeal_rgb), 0.18), transparent 38%),
-      linear-gradient(145deg, rgba(var(--navy_rgb), 0.88), var(--navy-deep) 58%, var(--navy-dark));
-    box-shadow: 0 34px 100px rgba(0, 9, 27, 0.46), 0 0 70px rgba(var(--piratechsNeon_rgb), 0.14);
-    backdrop-filter: blur(16px);
-    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
     transform: translate3d(-50%, -48%, 0) scale(0.985);
     transition: opacity 150ms ease, filter 180ms ease, transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -741,7 +761,7 @@ body.pageTransitionPending .heroBrand.reveal {
 @media (max-width: 768px) {
   .pageTransitionSplit {
     .pageTransitionCorner {
-      --corner-size: clamp(112px, 34vw, 164px);
+      --corner-size: clamp(98px, 28vw, 128px);
       --corner-inset: 16px;
     }
 
