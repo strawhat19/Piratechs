@@ -5,14 +5,11 @@ import { useGlobalContext } from '@/shared/global-context';
 import { advancedGraphics } from '@/shared/common/scripts/globals';
 import { advancedDevice } from '@/shared/common/database/constants';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { isPageTransitionPending, isPageTransitionRevealing, pageTransitionCompleteClass, pageTransitionRevealEvent } from '@/app/components/effects/page-transition-events';
+import { isPageTransitionPending, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
-const initialLoadDelayBonus = 1.22;
-
-const getInitialLoadDelayBonus = () => (
-  typeof document != `undefined` && !document.body.classList.contains(pageTransitionCompleteClass) ? initialLoadDelayBonus : 0
-);
+const circuitRevealDelay = 0.18;
+const circuitRevealDuration = 1.2;
 
 const slantedClipPath = (reveal: number, slantAmount: number) => {
   const slant = Math.sign(slantAmount) * Math.min(Math.abs(slantAmount), reveal, 100 - reveal);
@@ -52,24 +49,18 @@ export default function HeroCircuitOverlay({
 }: HeroCircuitOverlayProps) {
   const { isChromeOrAdvancedDevice } = useGlobalContext();
 
-  const [isMounted, setIsMounted] = useState(false);
-  const [canReveal, setCanReveal] = useState(() => !isPageTransitionPending() || isPageTransitionRevealing());
+  const [canReveal, setCanReveal] = useState(() => !isPageTransitionPending());
+  const [revealComplete, setRevealComplete] = useState(false);
   const [slashesComplete, setSlashesComplete] = useState(() => !revealAfterSlashes);
 
-  const overlayRef = useRef<SVGSVGElement | null>(null);
   const overlayWrapRef = useRef<HTMLSpanElement | null>(null);
-  const initialDelayBonusRef = useRef<number | null>(null);
 
-  const glowFilter = blur ? `url(#piratechsCircuitGlow)` : undefined;
+  const glowFilter = blur && revealComplete ? `url(#piratechsCircuitGlow)` : undefined;
   const numericSlant = typeof revealSlant === `number` && Number.isFinite(revealSlant) ? revealSlant : ((revealSlant) ? 45 : 0);
   const revealSlantAmount = Math.max(-32, Math.min(32, numericSlant));
 
   const shouldRenderCircuit = showCircuitOverlay && isChromeOrAdvancedDevice;
   const shouldDelayGridPlanes = revealGridPlanesAfterCircuit && !revealAfterSlashes;
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useLayoutEffect(() => {
     if (!shouldRenderCircuit || !shouldDelayGridPlanes) return;
@@ -79,13 +70,13 @@ export default function HeroCircuitOverlay({
 
   useEffect(() => {
     if (!shouldRenderCircuit) return;
-    if (!isPageTransitionPending() || isPageTransitionRevealing()) {
+    if (!isPageTransitionPending()) {
       setCanReveal(true);
       return;
     }
     const transitionRevealHandler = () => setCanReveal(true);
-    window.addEventListener(pageTransitionRevealEvent, transitionRevealHandler, { once: true });
-    return () => window.removeEventListener(pageTransitionRevealEvent, transitionRevealHandler);
+    window.addEventListener(pageTransitionReadyEvent, transitionRevealHandler, { once: true });
+    return () => window.removeEventListener(pageTransitionReadyEvent, transitionRevealHandler);
   }, [shouldRenderCircuit]);
 
   useEffect(() => {
@@ -112,10 +103,10 @@ export default function HeroCircuitOverlay({
 
   useEffect(() => {
     if (!overlayWrapRef.current || !shouldRenderCircuit || !canReveal || !slashesComplete) return;
-    initialDelayBonusRef.current ??= getInitialLoadDelayBonus();
-    const delayBonus = defaultDelayBonus ?? initialDelayBonusRef.current;
+    const delayBonus = defaultDelayBonus ?? 0;
 
     const completeCircuitReveal = () => {
+      setRevealComplete(true);
       onRevealComplete?.();
     };
 
@@ -125,9 +116,9 @@ export default function HeroCircuitOverlay({
         gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(0, revealSlantAmount) });
         gsap.to(reveal, {
           value: 100,
-          duration: 1.75,
+          duration: circuitRevealDuration,
           ease: `power3.in`,
-          delay: revealAfterSlashes ? delayBonus : (0.55 + delayBonus),
+          delay: revealAfterSlashes ? delayBonus : (circuitRevealDelay + 0.02 + delayBonus),
           onUpdate: () => {
             gsap.set(overlayWrapRef.current, { clipPath: slantedClipPath(reveal.value, revealSlantAmount) });
           },
@@ -145,11 +136,11 @@ export default function HeroCircuitOverlay({
           clipPath: `inset(0 100% 0 0 round 22px)`,
         },
         {
-          duration: 1.75,
+          duration: circuitRevealDuration,
           ease: `power3.in`,
           onComplete: completeCircuitReveal,
           clipPath: `inset(0 0% 0 0 round 22px)`,
-          delay: revealAfterSlashes ? delayBonus : (0.5 + delayBonus),
+          delay: revealAfterSlashes ? delayBonus : (circuitRevealDelay + delayBonus),
         }
       );
     }, overlayWrapRef);
@@ -162,7 +153,6 @@ export default function HeroCircuitOverlay({
   return shouldRenderCircuit ? (
     <span ref={overlayWrapRef} className={`heroCircuitOverlayClip`}>
       <svg
-        ref={overlayRef}
         aria-hidden={`true`}
         viewBox={`0 0 1440 760`}
         data-blur={blur ? `true` : `false`}

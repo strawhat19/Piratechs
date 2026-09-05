@@ -18,47 +18,63 @@ export default function HeroContent({ end, start }: HeroContentProps) {
   useLayoutEffect(() => {
     const heroStart = heroStartRef.current;
     const heroEndWrapper = heroEndWrapperRef.current;
+    const heroSection = heroEndWrapper?.closest<HTMLElement>(`.heroSection`);
 
-    if (!heroStart || !heroEndWrapper || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) return;
+    if (!heroStart || !heroSection || !heroEndWrapper) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    const scrollTimeline = gsap.timeline({
-      scrollTrigger: {
-        scrub: true,
-        start: `top top`,
-        end: () => window.innerHeight,
-        trigger: document.documentElement,
-      },
+    const media = gsap.matchMedia();
+
+    media.add(`(min-width: 1371px) and (prefers-reduced-motion: no-preference)`, () => {
+      const diagonalX = () => -Math.min(160, window.innerWidth * 0.1);
+      const diagonalY = () => Math.min(250, window.innerHeight * 0.28);
+      const horizontalX = () => -Math.min(500, window.innerWidth * 0.3);
+      const scrollTimeline = gsap.timeline({
+        scrollTrigger: {
+          scrub: 0.65,
+          start: `top top`,
+          end: `bottom top`,
+          trigger: heroSection,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      scrollTimeline
+        .to(heroEndWrapper, {
+          x: diagonalX,
+          y: diagonalY,
+          scale: 1.1,
+          ease: `none`,
+          force3D: true,
+          duration: 0.35,
+          transformOrigin: `center bottom`,
+        })
+        .addLabel(`heroContentHandoff`)
+        .to(heroEndWrapper, {
+          x: horizontalX,
+          scale: 1.18,
+          ease: `none`,
+          force3D: true,
+          duration: 0.65,
+        }, `heroContentHandoff`)
+        .to(heroStart, {
+          scale: 1.18,
+          ease: `none`,
+          force3D: true,
+          duration: 0.65,
+          yPercent: -100,
+          filter: `blur(10px)`,
+        }, `heroContentHandoff`);
+
+      return () => {
+        scrollTimeline.scrollTrigger?.kill();
+        scrollTimeline.kill();
+      };
     });
 
-    scrollTimeline
-      .to(heroEndWrapper, {
-        y: 250,
-        scale: 1.18,
-        ease: `none`,
-        xPercent: -35,
-        duration: 0.25,
-      })
-      .addLabel(`heroContentHandoff`)
-      .to(heroEndWrapper, {
-        ease: `none`,
-        scale: 1.18,
-        duration: 0.4,
-        xPercent: -115,
-        transformOrigin: `bottom`,
-      }, `heroContentHandoff`)
-      .to(heroStart, {
-        scale: 1.18,
-        ease: `none`,
-        duration: 0.4,
-        yPercent: -100,
-        filter: `blur(10px)`,
-      }, `heroContentHandoff`);
-
     return () => {
-      scrollTimeline.scrollTrigger?.kill();
-      scrollTimeline.kill();
-      gsap.set([heroStart, heroEndWrapper], { clearProps: `transform,opacity` });
+      media.revert();
+      gsap.set([heroStart, heroEndWrapper], { clearProps: `transform,filter,willChange` });
     };
   }, []);
 

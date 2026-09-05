@@ -33,13 +33,41 @@ body.sideMenuBlurOff .menuBlurBackdropOpen {
   top: 0;
   width: 100%;
   z-index: 70;
+  opacity: 1;
   color: white;
   position: fixed;
   box-shadow: var(--shadow);
+  transform: translate3d(0, 0, 0);
   backdrop-filter: blur(18px);
-  transition: background var(--transition);
+  will-change: opacity, transform;
+  transition:
+    opacity 320ms ease,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
   border-bottom: 1px solid rgba(0, 191, 255, 0.28);
   background: linear-gradient(90deg, rgba(4, 57, 123, 0.15), rgb(6, 68, 134, 0.25));
+}
+
+body.pageTransitionPending .header {
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: none;
+  transform: translate3d(0, -105%, 0);
+  transition:
+    opacity 520ms ease,
+    transform 680ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-backdrop-filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: background var(--transition);
+  }
+
+  body.pageTransitionPending .header {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .navBar {

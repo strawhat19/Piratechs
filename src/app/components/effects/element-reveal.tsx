@@ -18,6 +18,7 @@ type ElementRevealProps = {
   scroll?: boolean;
   /** Replay the reveal every time the element re-enters the viewport (implies scroll). */
   onScroll?: boolean;
+  replayKey?: string;
   children: ReactNode;
   className?: string;
   duration?: number;
@@ -38,6 +39,7 @@ export default function ElementReveal({
   slide = false,
   scroll = false,
   onScroll = false,
+  replayKey,
   duration = 0.48,
   origin = `center`,
   ease = `power3.out`,
@@ -177,7 +179,7 @@ export default function ElementReveal({
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
       el.classList.remove(animatingClass);
     };
-  }, [x, y, blur, slide, delay, scale, scroll, onScroll, duration, origin, ease]);
+  }, [x, y, blur, slide, delay, scale, scroll, onScroll, replayKey, duration, origin, ease]);
 
   return createElement(as, {
     ...props,

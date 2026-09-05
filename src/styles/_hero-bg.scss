@@ -136,36 +136,36 @@
 }
 
 body.revealReady .heroBg::before {
-  animation: heroGridSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
+  animation: heroGridSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
 }
 
 body.revealReady .gridPlaneA {
-  animation: gridPlaneClipInRight 0.62s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneADelay, calc(0.72s + var(--gridsStagger, 0.58s))) both;
+  animation: gridPlaneClipInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneADelay, calc(0.35s + var(--gridsStagger, 0.18s))) both;
 }
 
 body.revealReady .gridPlaneB {
-  animation: gridPlaneClipInLeft 0.62s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneBDelay, 0.72s) both;
+  animation: gridPlaneClipInLeft 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--gridPlaneBDelay, 0.35s) both;
 }
 
 body.revealReady .signalLineB {
-  animation: signalLineSlashInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineBDelay, 1.88s) both;
+  animation: signalLineSlashInRight 0.22s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineBDelay, 1s) both;
   &.slanted {
-    animation: signalLineSlashInRightRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineBDelay, 1.88s) both;
+    animation: signalLineSlashInRightRotate 0.22s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineBDelay, 1s) both;
   }
 }
 
 body.revealReady .signalLineA {
-  animation: signalLineSlashInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineADelay, calc(1.88s + var(--signalLinesStagger, 0.22s))) both;
+  animation: signalLineSlashInLeft 0.22s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineADelay, calc(1s + var(--signalLinesStagger, 0.2s))) both;
   &.slanted {
-    animation: signalLineSlashInLeftRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineADelay, calc(1.88s + var(--signalLinesStagger, 0.22s))) both;
+    animation: signalLineSlashInLeftRotate 0.22s cubic-bezier(0.16, 1, 0.3, 1) var(--signalLineADelay, calc(1s + var(--signalLinesStagger, 0.2s))) both;
   }
 }
 
 .heroBg.heroCircuitAccentsReady {
   --gridPlaneBDelay: 0s;
   --gridPlaneADelay: var(--gridsStagger);
-  --signalLineBDelay: 1.16s;
-  --signalLineADelay: calc(1.16s + var(--signalLinesStagger));
+  --signalLineBDelay: 0.55s;
+  --signalLineADelay: calc(0.55s + var(--signalLinesStagger));
 }
 
 .heroBg.heroCircuitAccentsPending .gridPlaneA {

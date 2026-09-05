@@ -10,8 +10,8 @@ import { useCallback, useLayoutEffect, useRef } from 'react';
 const accentsReadyClass = `heroCircuitAccentsReady`;
 const accentsPendingClass = `heroCircuitAccentsPending`;
 
-const defaultGridsStagger = 0.33;
-const defaultSignalLinesStagger = 0.44;
+const defaultGridsStagger = 0.18;
+const defaultSignalLinesStagger = 0.2;
 
 export type HeroBgMilestoneHandler = (releaseAccents: () => void) => void;
 
@@ -47,8 +47,11 @@ export default function HeroBg({
   const signalLineARef = useRef<HTMLSpanElement | null>(null);
 
   const releaseAccents = useCallback(() => {
-    heroBgRef.current?.classList.remove(accentsPendingClass);
-    heroBgRef.current?.classList.add(accentsReadyClass);
+    const heroBg = heroBgRef.current;
+    if (!heroBg) return;
+    const accentsWerePending = heroBg.classList.contains(accentsPendingClass);
+    heroBg.classList.remove(accentsPendingClass);
+    if (accentsWerePending) heroBg.classList.add(accentsReadyClass);
   }, []);
 
   const holdAccents = useCallback(() => {

@@ -9,6 +9,7 @@ type TopBarProps = {
   autoplay?: boolean;
   fadeSides?: boolean;
   pauseonhover?: boolean;
+  replayKey?: string;
   direction?: `rtl` | `ltr`;
 };
 
@@ -17,6 +18,7 @@ export default function TopBar({
   direction = `rtl`,
   fadeSides = true,
   pauseonhover = true,
+  replayKey,
   id = `topBarComponent`,
 }: TopBarProps = {}) {
   const items = config?.topBarItems;
@@ -34,11 +36,13 @@ export default function TopBar({
     >
       {items?.map((item: any, index: number) => (
         <ElementReveal
+          y={-9}
           as={`span`}
           blur={false}
-          duration={0.2}
+          duration={0.34}
           role={`listitem`}
-          delay={0.5 + index * 0.012}
+          replayKey={replayKey}
+          delay={0.16 + index * 0.008}
           key={`${item.text}-${index}`}
           className={`topBarItem buttonHoverBorder`}
         >

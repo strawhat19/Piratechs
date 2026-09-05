@@ -77,19 +77,15 @@ export default function HomeLanding() {
       });
     }
 
-    const revealAvatarText = (releaseAccents: () => void) => {
-      if (!avatarArcText) {
-        releaseAccents();
-        return;
-      }
+    const revealAvatarText = () => {
+      if (!avatarArcText) return;
       gsap.to(avatarArcText, {
-        duration: 0.34,
+        duration: 0.2,
         ease: `power3.out`,
         clipPath: `circle(75% at 50% 50%)`,
         webkitClipPath: `circle(75% at 50% 50%)`,
         onComplete: () => {
           gsap.set(avatarArcText, { clearProps: `clipPath,webkitClipPath` });
-          releaseAccents();
         },
       });
     };
@@ -97,14 +93,15 @@ export default function HomeLanding() {
     const revealAvatar: HeroBgMilestoneHandler = (releaseAccents) => {
       if (accentsComplete) return;
       accentsComplete = true;
+      releaseAccents();
       gsap.to(avatarAnimation, {
-        duration: 0.72,
+        duration: 0.44,
         ease: `power3.out`,
         clipPath: `circle(50% at 50% 50%)`,
         webkitClipPath: `circle(50% at 50% 50%)`,
         onComplete: () => {
           gsap.set(avatarAnimation, { clearProps: `clipPath,webkitClipPath` });
-          revealAvatarText(releaseAccents);
+          revealAvatarText();
         },
       });
     };
@@ -116,13 +113,13 @@ export default function HomeLanding() {
       laughingTimeline = gsap.timeline();
       laughingTimeline
         .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 1, duration: 0.18, ease: `power2.out` })
+        .to(logoAnimationPause, { progress: 1, duration: 0.14, ease: `power2.out` })
         .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 0, duration: 0.14, ease: `power2.inOut` })
+        .to(logoAnimationPause, { progress: 0, duration: 0.1, ease: `power2.inOut` })
         .call(() => heroLogoPlate.classList.add(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 1, duration: 0.3, ease: `power2.out` })
+        .to(logoAnimationPause, { progress: 1, duration: 0.2, ease: `power2.out` })
         .call(() => heroLogoPlate.classList.remove(logoHoverAnimationClass))
-        .to(logoAnimationPause, { progress: 0, duration: 0.24, ease: `power2.inOut` });
+        .to(logoAnimationPause, { progress: 0, duration: 0.16, ease: `power2.inOut` });
     };
 
     const shuttersCompleteHandler = () => {

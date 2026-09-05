@@ -15,11 +15,12 @@ type TransitionCssProperties = CSSProperties & {
   [key: `--${string}`]: string | number;
 };
 
-const initialHoldMs = 220;
 const loaderKeywordSteps = 4;
 const shutterBlindCount = 12;
-const loaderCompleteHoldMs = 0;
+const loaderCompleteHoldMs = 80;
 const revealDurationMs = 1120;
+const initialHoldMs = revealDurationMs;
+const centerRevealMaxDurationMs = 760;
 const revealBlindStaggerMs = 38;
 const coverBlindStaggerMs = revealBlindStaggerMs;
 const shutterBlinds = Array.from({ length: shutterBlindCount }, (_, index) => index);
@@ -106,12 +107,16 @@ export default function SplitPageTransition({
   const coverDurationMs = Math.max(180, Math.round(duration * 1000));
   const coverBlindTransitionMs = Math.max(48, coverDurationMs - coverBlindStaggerMs * (shutterBlindCount - 1));
   const revealBlindTransitionMs = Math.max(480, revealDurationMs - revealBlindStaggerMs * (shutterBlindCount - 1));
+  const centerRevealDurationMs = Math.min(centerRevealMaxDurationMs, Math.max(120, Math.round(coverDurationMs * 0.68)));
+  const centerRevealDelayMs = Math.max(0, coverDurationMs - centerRevealDurationMs);
   const doneDelayBeforeLeaveMs = Number.isFinite(doneDelayBeforeLeave)
     ? Math.max(0, doneDelayBeforeLeave * 1000)
     : 0;
   const transitionStyle: TransitionCssProperties = {
     '--page-transition-cover-duration': `${coverBlindTransitionMs}ms`,
+    '--page-transition-center-delay': `${centerRevealDelayMs}ms`,
     '--page-transition-reveal-duration': `${revealBlindTransitionMs}ms`,
+    '--page-transition-center-duration': `${centerRevealDurationMs}ms`,
   };
 
   const clearScheduledWork = useCallback(() => {

@@ -113,11 +113,13 @@ export default function Nav({
           return (
             <ElementReveal
               as={Link}
+              y={-14}
               blur={false}
-              duration={0.42}
+              duration={0.5}
               key={navItem?.id}
+              replayKey={pathname}
               href={navItem?.href}
-              delay={0.5 + Math.max(navDelayIndex, 0) * 0.025}
+              delay={0.18 + Math.max(navDelayIndex, 0) * 0.035}
               onClick={() => setMenuExpanded(false)}
               className={`navLink ${mobile ? `mobileNavLink` : ``} ${isActiveRoute(navItem?.href) ? `activeRoute` : ``}`}
             >
@@ -133,15 +135,14 @@ export default function Nav({
   };
 
   return (
-    // <header className={`header ${width <= 768 ? `` : `reveal`} ${menuExpanded ? `headerMenuOpen` : ``}`}>
-    <ElementReveal slide as={`header`} className={`header ${sideMenuActive ? `sideMenuMode` : ``} ${sideMenuBlurOff ? `sideMenuBlurOff` : ``} ${menuExpanded ? `headerMenuOpen` : ``}`}>
-      <TopBar pauseonhover={false} />
+    <header className={`header ${sideMenuActive ? `sideMenuMode` : ``} ${sideMenuBlurOff ? `sideMenuBlurOff` : ``} ${menuExpanded ? `headerMenuOpen` : ``}`}>
+      <TopBar replayKey={pathname} pauseonhover={false} />
       {/* <TopBar id={`topBar2`} direction={`ltr`} /> */}
       <div className={`navBar`}>
-        <ElementReveal as={Link} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.5} className={`homeButton`} aria-label={`Home`}>
+        <ElementReveal as={Link} y={-12} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.16} replayKey={pathname} className={`homeButton`} aria-label={`Home`}>
           <i className={`fa-solid fa-house logoLetter`} />
         </ElementReveal>
-        <ElementReveal as={Link} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.5} className={`brandMark`} aria-label={`Piratechs home`}>
+        <ElementReveal as={Link} y={-12} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.16} duration={0.5} replayKey={pathname} className={`brandMark`} aria-label={`Piratechs home`}>
           <Logo className={`brandLogo`} />
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
             {titleGraphic ? (
@@ -182,22 +183,24 @@ export default function Nav({
               <i className={`fa-solid ${sideMenuBlur ? `fa-eye` : `fa-eye-slash`}`} />
             </ElementReveal>
           )} */}
-          <ElementReveal as={`button`} type={`button`} blur={false} delay={0.5} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
+          <ElementReveal as={`button`} y={-12} type={`button`} blur={false} delay={0.3} replayKey={pathname} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
             <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
           </ElementReveal>
-          <ElementReveal as={`span`} blur={false} delay={0.5} className={`navActionReveal`}>
+          <ElementReveal as={`span`} y={-12} blur={false} delay={0.34} replayKey={pathname} className={`navActionReveal`}>
             <AuthWidget />
           </ElementReveal>
           {loaded && user && Boolean(user?.role && minRole(user.role, Roles.Editor)) && <>
-            <ElementReveal as={`span`} blur={false} delay={0.5} className={`navActionReveal`}>
+            <ElementReveal as={`span`} y={-12} blur={false} delay={0.38} replayKey={pathname} className={`navActionReveal`}>
               <NotificationBell />
             </ElementReveal>
           </>}
           <ElementReveal
-            delay={0.5}
             blur={false}
             as={`button`}
             type={`button`}
+            y={-12}
+            delay={0.42}
+            replayKey={pathname}
             aria-label={sideMenuActive ? (menuExpanded ? `Collapse side menu` : `Expand side menu`) : `Toggle menu`}
             aria-expanded={menuExpanded}
             className={`iconButton mobileMenuButton`}
@@ -211,7 +214,6 @@ export default function Nav({
         {renderLinks(`mobileNav`)}
         <AuthWidget mobile />
       </div>
-    {/* </header> */}
-    </ElementReveal>
+    </header>
   );
 }
