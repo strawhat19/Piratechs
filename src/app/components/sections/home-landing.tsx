@@ -4,20 +4,11 @@ import gsap from 'gsap';
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
-// import Section from './section';
 import AuthWidget from '../auth/auth-widget';
 import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
-import { getTechnologyMeta } from '@/shared/utils/tech';
 import HomeLandingSections from './home-landing-sections';
 import HomeServiceEstimator from './home-service-estimator';
-import {
-  HomeCapabilityRadar,
-  HomeManifestoReveal,
-  HomeProjectBento,
-  HomeProjectVoyageSlider,
-  HomeVoyageMetrics,
-} from './home-landing-alternatives';
 import { useGlobalContext } from '@/shared/global-context';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -26,6 +17,7 @@ import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
+import { HomeCapabilityRadar, HomeManifestoReveal, HomeProjectBento, HomeProjectVoyageSlider, HomeVoyageMetrics } from './home-landing-alternatives';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
 
@@ -280,13 +272,13 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} /> */}
 
-      <HomeLandingSections />
-      <HomeManifestoReveal />
-      <HomeVoyageMetrics />
       <HomeServiceEstimator />
-      <HomeProjectBento />
+      <HomeLandingSections />
       <HomeProjectVoyageSlider />
       <HomeCapabilityRadar />
+      <HomeProjectBento />
+      <HomeManifestoReveal />
+      {/* <HomeVoyageMetrics /> */}
 
       <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>

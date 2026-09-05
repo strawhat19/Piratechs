@@ -11,12 +11,34 @@ import { pageTransitionCompleteClass, pageTransitionPendingClass, pageTransition
 
 type TransitionPhase = `covered` | `covering` | `revealing` | `idle`;
 
-const splitRows = [1, 2, 3, 4];
+type TransitionCssProperties = CSSProperties & {
+  [key: `--${string}`]: string | number;
+};
+
+const initialHoldMs = 220;
 const loaderKeywordSteps = 4;
+const shutterBlindCount = 12;
+const loaderCompleteHoldMs = 0;
+const revealDurationMs = 1120;
+const coverBlindStaggerMs = 12;
+const revealBlindStaggerMs = 38;
+const shutterBlinds = Array.from({ length: shutterBlindCount }, (_, index) => index);
+const loaderCornerPositions = [`TopLeft`, `TopRight`, `BottomLeft`, `BottomRight`];
 const loaderKeywords = Array.from(new Set<string>([
-  ...(config?.services ?? []).map((service: { title: string }) => service.title),
-  ...(config?.skills ?? []).map((skill: { label: string }) => skill.label),
-  ...(config?.topBarItems ?? []).map((item: { label: string }) => item.label),
+  `Next`,
+  `Design`,
+  `TypeScript`,
+  `JavaScript`,
+  `Developnent`,
+  `API`,
+  `AI`,
+  `App`,
+  `PHP`,
+  `C-Sharp`,
+  `Python`,
+  `React`,
+  `Piratechs`,
+  `SCSS`,
 ]));
 
 const getReducedMotion = () => (
@@ -81,14 +103,16 @@ export default function SplitPageTransition({
   const keywordIndexRef = useRef(-1);
   const keywordOffsetRef = useRef(getKeywordOffset(initialPageName));
   const initialRevealCompleteRef = useRef(false);
-  const durationMs = Math.max(180, Math.round(duration * 1000));
+  const coverDurationMs = Math.max(180, Math.round(duration * 1000));
+  const coverBlindTransitionMs = Math.max(48, coverDurationMs - coverBlindStaggerMs * (shutterBlindCount - 1));
+  const revealBlindTransitionMs = Math.max(480, revealDurationMs - revealBlindStaggerMs * (shutterBlindCount - 1));
   const doneDelayBeforeLeaveMs = Number.isFinite(doneDelayBeforeLeave)
     ? Math.max(0, doneDelayBeforeLeave * 1000)
     : 0;
-  const initialHoldMs = 220;
-  const transitionStyle = {
-    '--page-transition-panel-duration': `${Math.max(108, durationMs - 72)}ms`,
-  } as CSSProperties;
+  const transitionStyle: TransitionCssProperties = {
+    '--page-transition-cover-duration': `${coverBlindTransitionMs}ms`,
+    '--page-transition-reveal-duration': `${revealBlindTransitionMs}ms`,
+  };
 
   const clearScheduledWork = useCallback(() => {
     if (timerRef.current != null) window.clearTimeout(timerRef.current);
@@ -123,7 +147,7 @@ export default function SplitPageTransition({
       displayedProgressRef.current = roundedValue;
       const counter = progressRef.current;
       if (counter) {
-        const label = `${String(roundedValue).padStart(3, `0`)}%`;
+        const label = `${roundedValue}%`;
         counter.textContent = label;
         counter.dataset.progress = label;
       }
@@ -159,12 +183,12 @@ export default function SplitPageTransition({
     const startedAt = lastTime;
     const tick = (now: number) => {
       const elapsed = Math.min(1, (now - startedAt) / totalMs);
-      const eased = 1 - Math.pow(1 - elapsed, 2.2);
+      const eased = elapsed * elapsed * (3 - 2 * elapsed);
       const nextValue = eased * 100;
       const deltaTime = Math.max(now - lastTime, 1) / 1000;
       const velocity = Math.abs(nextValue - lastValue) / deltaTime;
-      const targetBlur = Math.min(10, velocity * 0.02);
-      blurAmount += (targetBlur - blurAmount) * 0.35;
+      const targetBlur = Math.min(3.5, velocity * 0.006);
+      blurAmount += (targetBlur - blurAmount) * 0.3;
       motionBlurRef.current?.setAttribute(`stdDeviation`, `0 ${blurAmount.toFixed(2)}`);
       updateProgress(nextValue, elapsed * 100);
       lastValue = nextValue;
@@ -220,9 +244,9 @@ export default function SplitPageTransition({
       return () => {};
     }
 
-    timerRef.current = window.setTimeout(finish, durationMs);
+    timerRef.current = window.setTimeout(finish, revealDurationMs);
     return clearScheduledWork;
-  }, [clearScheduledWork, durationMs, setTransitionComplete, setTransitionRevealing, stopProgress]);
+  }, [clearScheduledWork, setTransitionComplete, setTransitionRevealing, stopProgress]);
 
   const handleLeave = useCallback((next: () => void, _from?: string, to?: string) => {
     if (!initialRevealCompleteRef.current || getReducedMotion()) {
@@ -237,7 +261,7 @@ export default function SplitPageTransition({
     clearScheduledWork();
     setTransitionPending();
     setPhase(`covering`);
-    progressFrameRef.current = window.requestAnimationFrame(() => startProgress(durationMs));
+    progressFrameRef.current = window.requestAnimationFrame(() => startProgress(coverDurationMs));
     timerRef.current = window.setTimeout(() => {
       stopProgress(true);
       setPhase(`covered`);
@@ -246,9 +270,9 @@ export default function SplitPageTransition({
         return;
       }
       next();
-    }, durationMs);
+    }, coverDurationMs);
     return clearScheduledWork;
-  }, [clearScheduledWork, doneDelayBeforeLeaveMs, durationMs, pathname, setTransitionPending, startProgress, stopProgress]);
+  }, [clearScheduledWork, coverDurationMs, doneDelayBeforeLeaveMs, pathname, setTransitionPending, startProgress, stopProgress]);
 
   const handleEnter = useCallback((next: () => void) => (
     revealPage(next, !initialRevealCompleteRef.current)
@@ -275,14 +299,10 @@ export default function SplitPageTransition({
 
       timerRef.current = window.setTimeout(() => {
         initialLoader.stopProgress(true);
-        if (initialLoader.doneDelayBeforeLeaveMs > 0) {
-          timerRef.current = window.setTimeout(
-            () => initialLoader.revealPage(() => {}, true),
-            initialLoader.doneDelayBeforeLeaveMs,
-          );
-          return;
-        }
-        initialLoader.revealPage(() => {}, true);
+        timerRef.current = window.setTimeout(
+          () => initialLoader.revealPage(() => {}, true),
+          loaderCompleteHoldMs + initialLoader.doneDelayBeforeLeaveMs,
+        );
       }, initialHoldMs);
     });
 
@@ -317,12 +337,47 @@ export default function SplitPageTransition({
             </filter>
           </defs>
         </svg>
-        {splitRows.map(row => (
-          <div key={row} className={`pageTransitionRow pageTransitionRow${row}`}>
-            <span className={`pageTransitionPanel pageTransitionPanelStart`} />
-            <span className={`pageTransitionPanel pageTransitionPanelEnd`} />
-          </div>
-        ))}
+        <div className={`pageTransitionBlinds`} aria-hidden={true}>
+          {shutterBlinds.map(index => (
+            <span
+              key={index}
+              className={`pageTransitionBlind`}
+              style={{
+                '--cover-delay': `${index * coverBlindStaggerMs}ms`,
+                '--reveal-delay': `${(shutterBlindCount - index - 1) * revealBlindStaggerMs}ms`,
+              } as TransitionCssProperties}
+            />
+          ))}
+        </div>
+        <div className={`pageTransitionAmbience`} aria-hidden={true}>
+          {loaderCornerPositions.map(position => (
+            <span key={position} className={`pageTransitionCorner pageTransitionCorner${position}`}>
+              <svg className={`pageTransitionCornerCircuit`} viewBox={`0 0 240 200`} fill={`none`} focusable={false}>
+                <path className={`pageTransitionCornerFrame`} d={`M4 122V24L24 4H156L166 14H236M4 138V176L14 186V196M16 136V32L32 16H126`} />
+                <path className={`pageTransitionCornerPlate`} d={`M44 4H118L124 10H38ZM4 48L10 42V96L4 102Z`} />
+                <path className={`pageTransitionCornerTrace`} d={`M88 54L108 34H180L190 24H224M54 88L34 108V158L24 168V188M96 70H132L148 54H210M70 96V124L54 140V176`} />
+                <path className={`pageTransitionCornerSignal`} pathLength={100} d={`M54 88L34 108V158L24 168V188`} />
+                <path className={`pageTransitionCornerSignal pageTransitionCornerSignalAlt`} pathLength={100} d={`M88 54L108 34H180L190 24H224`} />
+                <g className={`pageTransitionCornerDial`}>
+                  <path className={`pageTransitionCornerTrace`} d={`M66 34V42M66 90V98M34 66H42M90 66H98M43 43L48 48M84 84L89 89`} />
+                  <circle className={`pageTransitionCornerTrace`} cx={66} cy={66} r={25} />
+                  <path className={`pageTransitionCornerAccent`} d={`M41 66A25 25 0 0 1 66 41M91 66A25 25 0 0 1 66 91`} />
+                  <path className={`pageTransitionCornerFrame`} d={`M66 50L82 66L66 82L50 66Z`} />
+                  <path className={`pageTransitionCornerTrace`} d={`M59 66H73M66 59V73`} />
+                  <circle className={`pageTransitionCornerBeacon`} cx={66} cy={66} r={3} />
+                </g>
+                <path className={`pageTransitionCornerTicks`} d={`M142 20V25M150 20V25M158 20V25M166 20V25M174 20V25M20 118H25M20 126H25M20 134H25M20 142H25M20 150H25`} />
+                <path className={`pageTransitionCornerAccent`} d={`M204 10L208 14L204 18M214 10L218 14L214 18M10 178L14 182L18 178`} />
+                <g className={`pageTransitionCornerTerminals`}>
+                  <circle cx={224} cy={24} r={3} />
+                  <circle cx={210} cy={54} r={3} />
+                  <circle cx={54} cy={176} r={3} />
+                  <path d={`M21 185H27V191H21Z`} />
+                </g>
+              </svg>
+            </span>
+          ))}
+        </div>
         {phase != `idle` ? (
           <div className={`pageTransitionIdentity`}>
             <div className={`pageTransitionMeta`} aria-hidden={true}>
@@ -343,25 +398,32 @@ export default function SplitPageTransition({
               <Word className={`pageTransitionWord`} gradient={false} arrows={false} gradientSword />
             </div>
             <div className={`pageTransitionKeyword`} aria-hidden={true}>
-              <span>Building With /</span>
-              <span className={`pageTransitionKeywordWindow`}>
-                <span
-                  ref={keywordRef}
-                  className={`pageTransitionKeywordValue`}
-                  data-keyword={getLoaderKeyword(keywordOffsetRef.current)}
-                >
-                  {getLoaderKeyword(keywordOffsetRef.current)}
-                </span>
+              <span>Progress /</span>
+              <span
+                ref={progressRef}
+                className={`pageTransitionProgressValue pageTransitionProgressValuePrimary`}
+                data-progress={`0%`}
+              >
+                0%
               </span>
             </div>
             <div className={`pageTransitionProgress`}>
               <span className={`pageTransitionProgressRow`} aria-hidden={true}>
                 <span className={`pageTransitionRoute`}>
-                  <span>Loading Page /</span>
+                  <span>Loading /</span>
                   <strong>{loadingPage}</strong>
                 </span>
-                <span ref={progressRef} className={`pageTransitionProgressValue`} data-progress={`000%`}>
-                  000%
+                <span className={`pageTransitionTechnology`}>
+                  <span>Technologies /</span>
+                  <span className={`pageTransitionKeywordWindow`}>
+                    <span
+                      ref={keywordRef}
+                      className={`pageTransitionKeywordValue`}
+                      data-keyword={getLoaderKeyword(keywordOffsetRef.current)}
+                    >
+                      {getLoaderKeyword(keywordOffsetRef.current)}
+                    </span>
+                  </span>
                 </span>
               </span>
               <span
