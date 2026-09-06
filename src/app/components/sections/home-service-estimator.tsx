@@ -7,6 +7,7 @@ import {
   useRef,
   type FormEvent,
 } from 'react';
+import TextReveal from '@/app/components/effects/text-reveal';
 
 export type ServiceId = 'mentoring' | 'marketing' | 'build';
 export type EstimatorStage = 'services' | 'scope' | 'budget' | 'payment' | 'review';
@@ -948,7 +949,7 @@ export function HomeServiceEstimator({
       <div className="landingAltInner landingQuoteInner">
         <header className="landingQuoteHeader">
           <span className="landingAltEyebrow">Build your voyage</span>
-          <h2 id={headingId}>What service are you looking for?</h2>
+          <TextReveal scroll slide byLetter as={`h2`} id={headingId} text={`What service are you looking for?`} duration={0.58} stagger={0.016} />
           <p>Select one route or combine the whole crew. Every choice updates the planning estimate.</p>
         </header>
 

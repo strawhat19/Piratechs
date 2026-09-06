@@ -20,16 +20,16 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
           start={
             <>
               <div className={`heroBannerText`}>
-                <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
+                <TextReveal scroll as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
                 {page?.html ? (
-                  <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
+                  <TextReveal scroll as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
                 ) : (
-                  <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
+                  <TextReveal scroll as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
                 )}
                 {page?.summaryHtml ? (
-                  <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summaryHtml}</i>`} html />
+                  <TextReveal scroll as={`p`} className={`bannerText`} text={`<i>${page?.summaryHtml}</i>`} html />
                 ) : (
-                  <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summary}</i>`} html />
+                  <TextReveal scroll as={`p`} className={`bannerText`} text={`<i>${page?.summary}</i>`} html />
                 )}
               </div>
               <div className={`heroActions`}>
@@ -55,7 +55,7 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
           end={
             <ElementReveal className={`heroEnd pageBadge`} as={`div`} delay={0.28} y={16}>
               <i className={`${config.nav.find((item: any) => item.id == pageID)?.icon ?? `fa-solid fa-code`} gradientTextColor`} />
-              <TextReveal as={`span`} text={page.eyebrow} delay={0.3} />
+              <TextReveal scroll as={`span`} text={page.eyebrow} delay={0.3} />
             </ElementReveal>
           }
         />

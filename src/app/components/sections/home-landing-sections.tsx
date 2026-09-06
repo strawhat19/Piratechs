@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import Logo from '@/app/components/logo/logo';
 import Word from '@/app/components/logo/word';
 import { config } from '@/shared/config/config';
+import TextReveal from '@/app/components/effects/text-reveal';
 import LandingReveal from '@/app/components/effects/landing-reveal';
 import { getTechnologyMeta, type TechnologyMeta } from '@/shared/utils/tech';
 
@@ -227,7 +228,7 @@ export default function HomeLandingSections() {
               <span className={`landingServiceIndex`}>{String(index + 1).padStart(2, `0`)}</span>
               <div className={`landingServiceCopy`}>
                 <i className={`${service.icon} landingServiceIcon`} aria-hidden={`true`} />
-                <h3>{service.title}</h3>
+                <TextReveal scroll as={`h3`} text={service.title} />
                 <p>{service.description}</p>
               </div>
               <ul className={`landingServiceOfferings`} aria-label={`${service.title} services`}>
@@ -303,7 +304,12 @@ export default function HomeLandingSections() {
       <section className={`landingStackSection`} aria-labelledby={`landing-stack-title`}>
         <div className={`landingStackIntro`} data-landing-blur data-landing-reveal>
           <span className={`landingEyebrow`}>Built on a practical stack</span>
-          <h2 id={`landing-stack-title`}>Modern where it matters<span className={`landingAccent`}>.</span></h2>
+          <SplitHeading
+            as={`h2`}
+            id={`landing-stack-title`}
+            className={`landingStackHeading`}
+            lines={[[{ text: `Modern` }, { text: `where` }, { text: `it` }, { text: `matters` }, { text: `.`, accent: true }]]}
+          />
         </div>
         <ul className={`landingStackList`} data-landing-reveal>
           {technologies.map(technology => {

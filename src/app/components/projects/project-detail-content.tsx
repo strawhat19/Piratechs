@@ -23,8 +23,8 @@ export default function ProjectDetailContent({
     return (
       <div className={`projectDetailSheetInner projectDetailMissing`}>
         <div className={`projectDetailContent`}>
-          <TextReveal as={`h2`} text={`Project Not Found`} />
-          <TextReveal as={`p`} text={`This project may have moved or the link is no longer available.`} delay={0.08} />
+          <TextReveal scroll as={`h2`} text={`Project Not Found`} />
+          <TextReveal scroll as={`p`} text={`This project may have moved or the link is no longer available.`} delay={0.08} />
         </div>
       </div>
     );
@@ -36,14 +36,14 @@ export default function ProjectDetailContent({
         <ElementReveal as={`figure`} y={22} duration={0.58} className={`projectDetailMedia`}>
           <ElementReveal as={`div`} y={16} delay={0.08} className={`projectDetailMeta`}>
             <span className={`statusPill`}>
-              <TextReveal as={`span`} text={project.status} delay={0.08} />
+              <TextReveal scroll as={`span`} text={project.status} delay={0.08} />
             </span>
           </ElementReveal>
           <img src={project.mediaURL} alt={project.title} />
         </ElementReveal>
       ) : null}
       <div className={`projectDetailContent`}>
-        <TextReveal as={`h2`} text={project.title} className={`projectDetailTitle`} delay={0.12} />
+        <TextReveal scroll as={`h2`} text={project.title} className={`projectDetailTitle`} delay={0.12} />
         {topics?.length ? (
           <ElementReveal as={`div`} y={14} delay={0.16} className={`projectTopics projectDetailTopics`}>
             {topics.map((topic: string, index: number) => {
@@ -51,13 +51,13 @@ export default function ProjectDetailContent({
               return (
                 <span key={topic}>
                   <i className={`${meta.icon} techIcon ${meta.className}`} />
-                  <TextReveal as={`em`} text={topic} delay={0.02 + index * 0.015} />
+                  <TextReveal scroll as={`em`} text={topic} delay={0.02 + index * 0.015} />
                 </span>
               );
             })}
           </ElementReveal>
         ) : null}
-        <TextReveal as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.14} />
+        <TextReveal scroll as={`p`} className={`projectDetailSummary`} text={project.summary} delay={0.14} />
         <div className={`projectActions projectDetailActions`}>
           {showCaseStudyLink ? (
             <ElementReveal as={`span`} delay={0.18} className={`projectActionReveal`}>

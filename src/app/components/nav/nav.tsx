@@ -142,14 +142,14 @@ export default function Nav({
         <ElementReveal as={Link} y={-12} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.16} replayKey={pathname} className={`homeButton`} aria-label={`Home`}>
           <i className={`fa-solid fa-house logoLetter`} />
         </ElementReveal>
-        <ElementReveal as={Link} y={-12} href={navItems?.find((ni: any) => ni?.id == `home`)?.href} blur={false} delay={0.16} duration={0.5} replayKey={pathname} className={`brandMark`} aria-label={`Piratechs home`}>
+        <Link href={navItems?.find((ni: any) => ni?.id == `home`)?.href} className={`brandMark`} aria-label={`Piratechs home`}>
           <Logo className={`brandLogo`} />
           <span className={`navLink`} style={{ position: `relative`, left: -7, color: `white` }}>
             {titleGraphic ? (
               <Word className={`wordLogoNav`} gradient={false} gradientSword arrows={false} />
             ) : config?.title}
           </span>
-        </ElementReveal>
+        </Link>
         {renderLinks(`desktopNav`)}
         <div className={`navActions`}>
           {/* <ElementReveal

@@ -16,6 +16,7 @@ type TextRevealProps = {
   html?: boolean;
   /** Element/tag to render, e.g. `h1`, `p`, `span`. Defaults to `span`. */
   as?: ElementType;
+  id?: string;
   className?: string;
   /** Start offset in seconds, handy for sequencing multiple reveals. */
   delay?: number;
@@ -26,6 +27,8 @@ type TextRevealProps = {
   scroll?: boolean;
   /** Replay the reveal every time the element re-enters the viewport (implies scroll). */
   onScroll?: boolean;
+  threshold?: number;
+  replayThreshold?: number;
 };
 
 export default function TextReveal({
@@ -33,6 +36,7 @@ export default function TextReveal({
   stagger,
   duration,
   delay = 0,
+  id,
   className,
   as = `span`,
   html = false,
@@ -40,6 +44,8 @@ export default function TextReveal({
   scroll = false,
   onScroll = false,
   byLetter = false,
+  threshold = 0.12,
+  replayThreshold = 0.025,
 }: TextRevealProps) {
   const ref = useRef<HTMLElement>(null);
 
@@ -59,10 +65,14 @@ export default function TextReveal({
 
     let cancelled = false;
     let started = false;
+    let inView = false;
     let split: SplitText | null = null;
     let timeline: gsap.core.Timeline | null = null;
     let observer: IntersectionObserver | null = null;
     let transitionReadyHandler: (() => void) | null = null;
+    const replayOnEntry = scroll || onScroll;
+    const firstThreshold = Math.min(Math.max(threshold, 0), 1);
+    const returnThreshold = Math.min(firstThreshold, Math.max(replayThreshold, 0));
 
     const run = () => {
       if (cancelled || !ref.current) return;
@@ -72,7 +82,7 @@ export default function TextReveal({
         // tag: `span`,
         wordsClass: `textRevealWord`,
         charsClass: `textRevealChar`,
-        type: byLetter ? `chars` : `words`,
+        type: byLetter ? `words,chars` : `words`,
       });
       const targets = byLetter ? split.chars : split.words;
       if (!targets.length) {
@@ -85,9 +95,12 @@ export default function TextReveal({
         defaults: { ease: `power3.out` },
         // Revert the split once revealed so we don't leave word/char wrappers (and
         // their will-change layers) on the page now that reveals run on lots of text.
-        // For onScroll we keep the split alive so the reveal can replay on re-entry.
+        onStart: () => gsap.set(targets, { willChange: `transform, opacity` }),
         onComplete: () => {
-          if (onScroll) return;
+          if (replayOnEntry) {
+            gsap.set(targets, { willChange: `auto` });
+            return;
+          }
           split?.revert();
           split = null;
         },
@@ -99,11 +112,10 @@ export default function TextReveal({
         stagger: stagger ?? (byLetter ? 0.018 : 0.07),
       };
       if (slide) {
-        // Matches the /playground reveal: each char slides up into place from
-        // below, masked by `.textRevealSlide { overflow: hidden }`.
         timeline.from(targets, {
           delay,
-          yPercent: 120,
+          autoAlpha: 0,
+          yPercent: 68,
           ease: `power4.out`,
           duration: duration ?? 0.8,
           stagger: stagger ?? 0.035,
@@ -136,30 +148,26 @@ export default function TextReveal({
       }
     };
 
-    // Enter the viewport: build + play on the first entry, and (with onScroll)
-    // replay on every subsequent entry. Without onScroll the observer is a
-    // one-shot, so it disconnects once the reveal has fired.
     const enter = () => {
-      if (onScroll) {
-        if (timeline) timeline.restart();
-        else start();
-        return;
-      }
-      observer?.disconnect();
-      observer = null;
-      start();
+      if (timeline) timeline.restart();
+      else start();
     };
 
-    // Above-the-fold text plays immediately; below-the-fold text waits until it
-    // scrolls into view so the reveal isn't already over by the time it's seen.
-    // With onScroll the reveal also resets when the element leaves the viewport
-    // so it can run again the next time it scrolls back in.
     if (scroll || onScroll) {
       observer = new IntersectionObserver(entries => {
-        if (!entries.some(entry => entry.isIntersecting)) {
-          if (onScroll) timeline?.pause(0);
+        const entry = entries[0];
+        if (!entry) return;
+        const requiredThreshold = started ? returnThreshold : firstThreshold;
+        const isVisible = entry.isIntersecting && entry.intersectionRatio >= requiredThreshold;
+        if (!isVisible) {
+          if (started && entry.intersectionRatio <= returnThreshold) {
+            inView = false;
+            timeline?.pause(0);
+          }
           return;
         }
+        if (inView) return;
+        inView = true;
         if (isPageTransitionPending()) {
           if (transitionReadyHandler) return;
           transitionReadyHandler = () => {
@@ -173,7 +181,10 @@ export default function TextReveal({
           return;
         }
         enter();
-      }, { threshold: 0.05, rootMargin: `0px 0px -2%` });
+      }, {
+        threshold: [...new Set([0, returnThreshold, firstThreshold])].sort((a, b) => a - b),
+        rootMargin: `0px 0px -2%`,
+      });
       observer.observe(el);
     } else {
       start();
@@ -186,9 +197,10 @@ export default function TextReveal({
       split?.revert();
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
     };
-  }, [text, byLetter, html, slide, delay, duration, stagger, scroll, onScroll]);
+  }, [text, byLetter, html, slide, delay, duration, stagger, scroll, onScroll, threshold, replayThreshold]);
 
   return createElement(as, {
+    id,
     ref,
     className: `${className ?? ``} ${slide ? `textRevealSlide` : ``} ${pendingClass}`.trim(),
     ...(html ? { dangerouslySetInnerHTML: { __html: text } } : { children: text }),

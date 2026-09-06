@@ -1,6 +1,5 @@
 'use client';
 
-import gsap from 'gsap';
 import Avatar from './avatar';
 import ElementReveal from '../../effects/element-reveal';
 import { useEffect, useId, useRef, type CSSProperties } from 'react';
@@ -52,30 +51,20 @@ export default function AvatarAnimation({
 
         let lastScrollY = window.scrollY;
         let activeDirection = 1;
-        const playback = { rate: 1 };
         const onScroll = () => {
             const nextScrollY = window.scrollY;
             const scrollDelta = nextScrollY - lastScrollY;
             lastScrollY = nextScrollY;
-            if (Math.abs(scrollDelta) < 2) return;
+            if (!scrollDelta) return;
 
-            const nextDirection = scrollDelta > 0 ? 1 : -1;
+            const nextDirection = scrollDelta > 0 ? -1 : 1;
             if (nextDirection == activeDirection) return;
             activeDirection = nextDirection;
-            gsap.to(playback, {
-                rate: nextDirection,
-                ease: `power2.out`,
-                duration: 0.32,
-                overwrite: true,
-                onUpdate: () => rotationAnimation.updatePlaybackRate(playback.rate),
-            });
+            rotationAnimation.updatePlaybackRate(nextDirection);
         };
 
         window.addEventListener(`scroll`, onScroll, { passive: true });
-        return () => {
-            gsap.killTweensOf(playback);
-            window.removeEventListener(`scroll`, onScroll);
-        };
+        return () => window.removeEventListener(`scroll`, onScroll);
     }, []);
 
     const avatar = (

@@ -8,19 +8,22 @@ import Logo from '@/app/components/logo/logo';
 
 const manifestoPrinciples = [
   {
-    icon: `fa-solid fa-compass`,
-    title: `Plot the useful course`,
-    text: `Every screen earns its place by making the next decision clearer.`,
+    icon: `fa-solid fa-chart-line`,
+    discipline: `Strategy`,
+    title: `Think like a business`,
+    text: `Start with the audience, the opportunity, and the result worth creating. Every decision should support a real goal and earn its place.`,
   },
   {
-    icon: `fa-solid fa-anchor`,
-    title: `Build for rough water`,
-    text: `Fast, accessible systems that stay dependable after launch day.`,
+    icon: `fa-solid fa-pen-ruler`,
+    discipline: `Creative`,
+    title: `Work like an agency`,
+    text: `Bring brand, story, experience, and production into one clear direction. The work should feel considered at every touchpoint.`,
   },
   {
-    icon: `fa-solid fa-flag`,
-    title: `Leave a distinct wake`,
-    text: `A visual point of view that feels like your brand, not a template.`,
+    icon: `fa-solid fa-code`,
+    discipline: `Systems`,
+    title: `Code like an engineer`,
+    text: `Build fast, accessible, maintainable systems that hold up after launch and leave room for the business to keep evolving.`,
   },
 ] as const;
 
@@ -168,15 +171,15 @@ export function HomeManifestoReveal() {
       </svg>
 
       <div className={`landingAltInner landingAltManifestoInner`}>
-        {/* <div className={`landingAltManifestoHeading`}>
-          <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`The code of the crew`} />
+        <div className={`landingAltManifestoHeading`}>
+          <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Business // Creative // Engineering`} />
           <TextReveal
             scroll
             byLetter
             slide
             as={`h2`}
             className={`landingAltDisplay landingAltManifestoTitle`}
-            text={`Make waves. Keep the code calm.`}
+            text={`One crew. Three ways of thinking.`}
             duration={0.72}
             stagger={0.018}
           />
@@ -184,11 +187,11 @@ export function HomeManifestoReveal() {
 
         <ElementReveal scroll as={`div`} className={`landingAltManifestoIntro`} y={24} blur>
           <span className={`landingAltManifestoRule`} aria-hidden={`true`} />
-          <p>We pair a pirate's appetite for unexplored territory with an engineer's respect for a sound vessel.</p>
+          <p>Strong digital work has to make commercial sense, communicate with character, and survive contact with the real world. We bring all three perspectives to the same table.</p>
           <Link className={`landingAltTextLink`} href={`/about`}>
-            Meet the studio <span aria-hidden={`true`}>↗</span>
+            How the studio works <span aria-hidden={`true`}>↗</span>
           </Link>
-        </ElementReveal> */}
+        </ElementReveal>
 
         <ol className={`landingAltManifestoList`}>
           {manifestoPrinciples.map((principle, index) => (
@@ -200,9 +203,12 @@ export function HomeManifestoReveal() {
               delay={0.06 + index * 0.08}
               key={principle.title}
             >
-              <span className={`landingAltManifestoIndex`}>{String(index + 1).padStart(2, `0`)}</span>
-              <i className={`${principle.icon} landingAltManifestoIcon`} aria-hidden={`true`} />
-              <h3>{principle.title}</h3>
+              <div className={`landingAltManifestoTopline`}>
+                <span className={`landingAltManifestoIndex`}>{String(index + 1).padStart(2, `0`)}</span>
+                <i className={`${principle.icon} landingAltManifestoIcon`} aria-hidden={`true`} />
+                <span className={`landingAltManifestoDiscipline`}>{principle.discipline}</span>
+              </div>
+              <TextReveal scroll as={`h3`} text={principle.title} />
               <p>{principle.text}</p>
             </ElementReveal>
           ))}
@@ -309,7 +315,7 @@ export function HomeProjectBento() {
                 <span>{project.label}</span>
                 <span>{String(index + 1).padStart(2, `0`)}</span>
               </div>
-              <h3>{project.title}</h3>
+              <TextReveal scroll as={`h3`} text={project.title} />
               <p>{project.summary}</p>
               <div className={`landingAltBentoOutcome`}>
                 <strong>{project.metric}</strong>
@@ -370,9 +376,7 @@ export function HomeProjectVoyageSlider() {
         <header className={`landingAltSectionHeading landingAltSliderHeading`}>
           <div>
             <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Featured Projects`} />
-            <h2 className={`landingAltDisplay`} id={titleId}>
-              Make Waves.
-            </h2>
+            <TextReveal scroll slide byLetter as={`h2`} id={titleId} className={`landingAltDisplay`} text={`Make Waves.`} />
           </div>
           <div className={`landingAltSliderControls`}>
             <button type={`button`} onClick={previous} aria-label={`Show previous project`}>
@@ -407,7 +411,7 @@ export function HomeProjectVoyageSlider() {
             </div>
             <div className={`landingAltSlideCopy`}>
               <span className={`landingAltSlideCategory`}>{activeProject.category}</span>
-              <h3>{activeProject.title}</h3>
+              <TextReveal scroll as={`h3`} text={activeProject.title} />
               <p>{activeProject.summary}</p>
               <blockquote>{activeProject.result}</blockquote>
               <Link className={`landingAltSlideLink`} href={activeProject.href}>

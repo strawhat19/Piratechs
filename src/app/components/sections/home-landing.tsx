@@ -16,8 +16,9 @@ import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
+import HomeFeaturedProjectCarousel from './home-featured-project-carousel';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
-import { HomeCapabilityRadar, HomeManifestoReveal, HomeProjectBento, HomeProjectVoyageSlider, HomeVoyageMetrics } from './home-landing-alternatives';
+import { HomeCapabilityRadar, HomeManifestoReveal, HomeProjectBento } from './home-landing-alternatives';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
 
@@ -163,16 +164,16 @@ export default function HomeLanding() {
                 className={`ceoHeadshotContainer homeAvatarAccent`}
                 text={`Rakib Ahmed // Developer // Designer // Atlanta // Georgia // USA //`}
               />
-              <TextReveal as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
+              <TextReveal scroll as={`span`} className={`eyebrow`} text={page.eyebrow} delay={0.4} />
               {page?.html ? (
-                <TextReveal as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
+                <TextReveal scroll as={`h1`} className={`bannerText`} text={page.html} html delay={0.1} />
               ) : (
-                <TextReveal as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
+                <TextReveal scroll as={`h1`} className={`bannerText`} text={page.title} delay={0.1} />
               )}
               {page?.summaryHtml ? (
-                <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summaryHtml}</i>`} html />
+                <TextReveal scroll as={`p`} className={`bannerText`} text={`<i>${page?.summaryHtml}</i>`} html />
               ) : (
-                <TextReveal as={`p`} className={`bannerText`} text={`<i>${page?.summary}</i>`} html />
+                <TextReveal scroll as={`p`} className={`bannerText`} text={`<i>${page?.summary}</i>`} html />
               )}
               <div className={`heroActions`}>
                 <ElementReveal as={`span`} delay={0.22} className={`heroActionReveal`}>
@@ -269,12 +270,12 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} /> */}
 
-      <HomeServiceEstimator />
+      <HomeManifestoReveal />
       <HomeLandingSections />
-      <HomeProjectVoyageSlider />
+      <HomeServiceEstimator />
+      <HomeFeaturedProjectCarousel />
       <HomeCapabilityRadar />
       <HomeProjectBento />
-      <HomeManifestoReveal />
       {/* <HomeVoyageMetrics /> */}
 
       <section className={`pageSection servicesSection`}>

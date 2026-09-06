@@ -18,7 +18,7 @@
 .textRevealChar {
   display: inline-block;
   vertical-align: bottom;
-  will-change: transform, opacity, clip-path;
+  will-change: transform, opacity;
 }
 
 // SplitText wraps every word/char in its own element. Gradient text is painted via
@@ -40,14 +40,13 @@
   }
 }
 
-// Slide reveal (TextReveal `slide`): characters start translated below their
-// line and slide up into place. `overflow: hidden` turns the element into a mask
-// so they appear from behind the text edge, matching the /playground reveal.
 .textRevealSlide {
-  overflow: hidden;
+  overflow: visible;
+  padding-block: 0.08em;
+  margin-block: -0.08em;
 }
 
 .textRevealSlide .textRevealWord,
 .textRevealSlide .textRevealChar {
-  clip-path: inset(0 0 0 0);
+  overflow: visible;
 }
