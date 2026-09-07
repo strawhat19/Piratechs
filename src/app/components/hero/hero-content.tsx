@@ -26,9 +26,29 @@ export default function HeroContent({ end, start }: HeroContentProps) {
     const media = gsap.matchMedia();
 
     media.add(`(min-width: 1371px) and (prefers-reduced-motion: no-preference)`, () => {
+      const finalScale = 1.18;
+      const heroContent = heroEndWrapper.parentElement;
+      const heroEndVisual = heroEndWrapper.querySelector<HTMLElement>(`.heroMiniStats`)
+        ?? heroEndWrapper.querySelector<HTMLElement>(`.pageBadge`)
+        ?? heroEndWrapper.querySelector<HTMLElement>(`.heroLogoPlate`)
+        ?? heroEndWrapper;
       const diagonalX = () => -Math.min(160, window.innerWidth * 0.1);
-      const diagonalY = () => Math.min(250, window.innerHeight * 0.28);
-      const horizontalX = () => -Math.min(500, window.innerWidth * 0.3);
+      const diagonalY = () => Math.min(290, window.innerHeight * 0.32);
+      const horizontalX = () => {
+        if (!heroContent) return -heroEndWrapper.offsetLeft;
+
+        let visualLeft = 0;
+        let currentElement: HTMLElement | null = heroEndVisual;
+        while (currentElement && currentElement !== heroContent) {
+          visualLeft += currentElement.offsetLeft;
+          currentElement = currentElement.offsetParent as HTMLElement | null;
+        }
+        if (currentElement !== heroContent) return -heroEndWrapper.offsetLeft;
+
+        const transformOriginX = heroEndWrapper.offsetLeft + heroEndWrapper.offsetWidth / 2;
+        const scaledVisualLeft = transformOriginX + (visualLeft - transformOriginX) * finalScale;
+        return -scaledVisualLeft;
+      };
       const scrollTimeline = gsap.timeline({
         scrollTrigger: {
           scrub: 0.65,
@@ -52,7 +72,7 @@ export default function HeroContent({ end, start }: HeroContentProps) {
         .addLabel(`heroContentHandoff`)
         .to(heroEndWrapper, {
           x: horizontalX,
-          scale: 1.18,
+          scale: finalScale,
           ease: `none`,
           force3D: true,
           duration: 0.65,

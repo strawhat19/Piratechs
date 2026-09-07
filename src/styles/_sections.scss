@@ -183,11 +183,7 @@
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
   clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
-  background: radial-gradient(circle, rgba(0, 191, 255, 0.16), rgba(0, 9, 27, 0.36) 56%, rgba(0, 9, 27, 0.8));
-}
-
-body[data-theme="light"] .heroLogoPlate {
-  background: radial-gradient(circle, rgba(0, 191, 255, 0.16), rgba(255, 255, 255, 0.57) 58%, rgba(255, 255, 255, 0.68));
+  background: var(--heroLogoPlateBackground);
 }
 
 .heroLogoPlate img {
@@ -208,26 +204,74 @@ body[data-theme="light"] .heroLogoPlate {
 }
 
 .heroMiniStats {
-  gap: 8px;
+  gap: 10px;
   display: grid;
-  width: min(100%, 460px);
+  position: relative;
+  width: min(100%, 480px);
+  counter-reset: heroMiniStat;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   .heroMiniStat {
-    gap: 2px;
+    gap: 5px;
     display: grid;
-    padding: 12px;
-    font-size: 0.74rem;
+    overflow: hidden;
+    min-height: 88px;
+    position: relative;
+    align-content: center;
+    padding: 18px 12px 14px;
+    isolation: isolate;
+    font-size: 0.7rem;
     text-align: center;
+    counter-increment: heroMiniStat;
     color: var(--foregroundMuted);
-    // background: var(--navy-deep);
+    background: var(--heroLogoPlateBackground);
     border: 1px solid var(--border);
-    border-radius: var(--borderRadius);
+    border-radius: 2px 16px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.06), 0 12px 26px rgba(0, 9, 27, 0.18);
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    &::before {
+      top: -1px;
+      left: 16%;
+      width: 68%;
+      height: 2px;
+      content: "";
+      position: absolute;
+      background: var(--main_gradient);
+      box-shadow: 0 0 14px rgba(var(--piratechsNeon_rgb), 0.65);
+    }
+    &::after {
+      top: 7px;
+      right: 10px;
+      opacity: 0.52;
+      line-height: 1;
+      position: absolute;
+      font-size: 0.52rem;
+      letter-spacing: 0.08em;
+      color: var(--piratechsTeal);
+      content: "0" counter(heroMiniStat);
+    }
+    &:hover {
+      z-index: 1;
+      transform: translateY(-4px);
+      border-color: rgba(var(--piratechsNeon_rgb), 0.55);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 16px 34px rgba(0, 9, 27, 0.28), 0 0 22px rgba(var(--piratechsNeon_rgb), 0.1);
+    }
   }
 }
 
 .heroMiniStats strong {
-  font-size: 1rem;
+  line-height: 1;
+  font-weight: 900;
+  font-size: 1.2rem;
   color: var(--foreground);
+  letter-spacing: -0.04em;
+}
+
+.heroMiniStats i {
+  opacity: 0.86;
+  font-style: normal;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .projectsSection,

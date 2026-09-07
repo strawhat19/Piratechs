@@ -3,7 +3,6 @@ import type { CSSProperties } from 'react';
 import Logo from '@/app/components/logo/logo';
 import Word from '@/app/components/logo/word';
 import { config } from '@/shared/config/config';
-import TextReveal from '@/app/components/effects/text-reveal';
 import LandingReveal from '@/app/components/effects/landing-reveal';
 import { getTechnologyMeta, type TechnologyMeta } from '@/shared/utils/tech';
 
@@ -61,46 +60,6 @@ const selectedWork = [
     tags: [`WordPress`, `PHP`, `CSS`],
     href: `/case-studies/Dyer-Posta`,
     linkLabel: `View case study`,
-  },
-];
-
-const services = [
-  {
-    title: `Websites`,
-    icon: `fa-solid fa-window-maximize`,
-    description: `Launch, run, and evolve a fast branded website with one studio accountable for the full lifecycle.`,
-    offerings: [
-      { label: `Website Development`, icon: `fa-solid fa-code` },
-      { label: `Website Hosting`, icon: `fa-solid fa-server` },
-      { label: `Website Maintenance`, icon: `fa-solid fa-screwdriver-wrench` },
-    ],
-  },
-  {
-    title: `Apps + Games`,
-    icon: `fa-solid fa-cubes`,
-    description: `Purpose-built interactive products shaped around the platform, audience, and experience they need to deliver.`,
-    offerings: [
-      { label: `Mobile App Development`, icon: `fa-solid fa-mobile-screen-button` },
-      { label: `Game Development`, icon: `fa-solid fa-gamepad` },
-    ],
-  },
-  {
-    title: `Photo + Film`,
-    icon: `fa-solid fa-clapperboard`,
-    description: `Original visual content for launches, campaigns, products, people, and the moments behind the brand.`,
-    offerings: [
-      { label: `Videography`, icon: `fa-solid fa-video` },
-      { label: `Photography`, icon: `fa-solid fa-camera` },
-    ],
-  },
-  {
-    title: `Design + Art`,
-    icon: `fa-solid fa-bezier-curve`,
-    description: `Distinct creative assets that give digital and physical touchpoints a coherent visual point of view.`,
-    offerings: [
-      { label: `Graphic Design`, icon: `fa-solid fa-pen-ruler` },
-      { label: `Custom Art`, icon: `fa-solid fa-palette` },
-    ],
   },
 ];
 
@@ -206,43 +165,6 @@ export default function HomeLandingSections() {
           ))}
         </div>
       </section> */}
-
-      <section id={`services`} className={`landingSection landingServicesSection`}>
-        <div className={`landingServicesLead`} data-landing-blur data-landing-reveal>
-          <span className={`landingEyebrow`}>What we do</span>
-          <SplitHeading
-            as={`h2`}
-            className={`landingDisplayHeading`}
-            lines={[
-              [{ text: `One` }, { text: `studio` }, { text: `.`, accent: true }],
-              [{ text: `More` }, { text: `range` }, { text: `.`, accent: true }],
-            ]}
-          />
-          <p>Digital engineering and visual production stay connected, giving every touchpoint one clear creative and technical direction.</p>
-          <Link href={`/services`} className={`landingInlineLink`}>Explore services <span aria-hidden={`true`}>↗</span></Link>
-        </div>
-
-        <div className={`landingServiceList`}>
-          {services.map((service, index) => (
-            <article className={`landingServiceRow`} data-landing-reveal key={service.title}>
-              <span className={`landingServiceIndex`}>{String(index + 1).padStart(2, `0`)}</span>
-              <div className={`landingServiceCopy`}>
-                <i className={`${service.icon} landingServiceIcon`} aria-hidden={`true`} />
-                <TextReveal scroll as={`h3`} text={service.title} />
-                <p>{service.description}</p>
-              </div>
-              <ul className={`landingServiceOfferings`} aria-label={`${service.title} services`}>
-                {service.offerings.map(offering => (
-                  <li key={offering.label}>
-                    <i className={offering.icon} aria-hidden={`true`} />
-                    <span>{offering.label}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </section>
 
       <section className={`landingSection landingStudioSection`}>
         <div className={`landingStudioCard`} data-landing-reveal>

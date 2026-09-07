@@ -1,29 +1,47 @@
 'use client';
 
+import gsap from 'gsap';
 import Link from 'next/link';
-import { useId, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
-import ElementReveal from '@/app/components/effects/element-reveal';
-import TextReveal from '@/app/components/effects/text-reveal';
+import Image from 'next/image';
 import Logo from '@/app/components/logo/logo';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import TextReveal from '@/app/components/effects/text-reveal';
+import ElementReveal from '@/app/components/effects/element-reveal';
+import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 const manifestoPrinciples = [
   {
     icon: `fa-solid fa-chart-line`,
-    discipline: `Strategy`,
+    discipline: `Small business`,
     title: `Think like a business`,
-    text: `Start with the audience, the opportunity, and the result worth creating. Every decision should support a real goal and earn its place.`,
+    stageTitle: `Clarity before complexity.`,
+    stageText: `Real constraints become focused digital decisions that create useful leverage.`,
+    text: `We have worked alongside many small businesses, so we know the pain points are rarely abstract: limited time, tight budgets, disconnected tools, and inconsistent lead flow. We find the friction and build the specific website, workflow, or product that helps relieve it.`,
+    image: `/assets/piratechs/studio-story/think-like-a-business.webp`,
+    imageAlt: `A connected neighborhood storefront surrounded by scheduling, payment, customer, and growth touchpoints`,
+    signals: [`Practical priorities`, `Lean, focused solutions`, `Built for daily operations`],
   },
   {
     icon: `fa-solid fa-pen-ruler`,
-    discipline: `Creative`,
+    discipline: `Agency operations`,
     title: `Work like an agency`,
-    text: `Bring brand, story, experience, and production into one clear direction. The work should feel considered at every touchpoint.`,
+    stageTitle: `Volume without compromise.`,
+    stageText: `A practiced production rhythm keeps speed, visibility, and craft moving together.`,
+    text: `We have partnered with many agencies and understand how they manage volume, track customers and leads, coordinate handoffs, and protect quality under deadline pressure. That experience lets us support an agency workflow with high-volume output and a high-quality standard.`,
+    image: `/assets/piratechs/studio-story/work-like-an-agency.webp`,
+    imageAlt: `A coordinated creative production space with parallel project lanes and quality-control checkpoints`,
+    signals: [`High-volume delivery`, `Lead + client visibility`, `Quality at every handoff`],
   },
   {
-    icon: `fa-solid fa-code`,
-    discipline: `Systems`,
-    title: `Code like an engineer`,
-    text: `Build fast, accessible, maintainable systems that hold up after launch and leave room for the business to keep evolving.`,
+    icon: `fa-solid fa-microchip`,
+    discipline: `Enterprise systems`,
+    title: `Build like an engineer`,
+    stageTitle: `Systems built to hold.`,
+    stageText: `Complex requirements become resilient architecture designed for the long run.`,
+    text: `We have worked with corporations on custom internal software engineering, so we know how to turn complex, specific requirements into robust solutions. We design for integrations, edge cases, maintainability, security, and the enterprise-level scale the system must support next.`,
+    image: `/assets/piratechs/studio-story/build-like-an-engineer.webp`,
+    imageAlt: `A resilient modular software system core with layered architecture and connected services`,
+    signals: [`Custom internal systems`, `Complex integrations`, `Enterprise-ready scale`],
   },
 ] as const;
 
@@ -160,57 +178,132 @@ const radarRings = [25, 50, 75, 100].map(score => radarCapabilities.map((_, inde
 }).join(` `));
 
 export function HomeManifestoReveal() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const chapterRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const context = gsap.context(() => {
+      chapterRefs.current.forEach((chapter, index) => {
+        if (!chapter) return;
+        ScrollTrigger.create({
+          trigger: chapter,
+          start: `top 58%`,
+          end: `bottom 42%`,
+          onEnter: () => setActiveIndex(index),
+          onEnterBack: () => setActiveIndex(index),
+          onToggle: trigger => {
+            if (trigger.isActive) setActiveIndex(index);
+          },
+        });
+      });
+    }, section);
+
+    return () => context.revert();
+  }, []);
+
+  const scrollToChapter = (index: number) => {
+    const chapter = chapterRefs.current[index];
+    if (!chapter) return;
+    const reducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+    chapter.scrollIntoView({ behavior: reducedMotion ? `auto` : `smooth`, block: `center` });
+  };
+
   return (
-    <section className={`landingAltSection landingAltManifesto`} aria-label={`Piratechs studio manifesto`}>
-      <div className={`landingAltManifestoMark`} aria-hidden={`true`}>
-        <Logo fullSword className={`landingAltManifestoLogo`} />
+    <section
+      id={`services`}
+      ref={sectionRef}
+      className={`landingAltSection studioStorySection`}
+      data-active-chapter={activeIndex}
+      aria-label={`How Piratechs thinks and works`}
+    >
+      <div className={`studioStoryWatermark`} aria-hidden={`true`}>
+        <Logo fullSword className={`studioStoryWatermarkLogo`} />
       </div>
-      <svg className={`landingAltWave landingAltManifestoWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`} aria-hidden={`true`}>
+      <svg className={`landingAltWave studioStoryWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`} aria-hidden={`true`}>
         <path className={`landingAltWaveLine landingAltWaveLineBack`} d={`M0 111C172 37 307 163 493 94C662 31 786 124 947 88C1126 48 1262 108 1440 42`} />
         <path className={`landingAltWaveLine landingAltWaveLineFront`} d={`M0 146C189 70 320 178 520 124C682 80 852 164 1018 110C1176 59 1303 136 1440 90`} />
       </svg>
 
-      <div className={`landingAltInner landingAltManifestoInner`}>
-        <div className={`landingAltManifestoHeading`}>
-          <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Business // Creative // Engineering`} />
-          <TextReveal
-            scroll
-            byLetter
-            slide
-            as={`h2`}
-            className={`landingAltDisplay landingAltManifestoTitle`}
-            text={`One crew. Three ways of thinking.`}
-            duration={0.72}
-            stagger={0.018}
-          />
-        </div>
+      <div className={`landingAltInner studioStoryInner`}>
+        <aside className={`studioStoryStage`}>
+          <header className={`studioStoryHeader`}>
+            <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`What we do`} />
+            <p className={`studioStoryRange`}><span>One studio.</span><span>More range.</span></p>
+          </header>
 
-        <ElementReveal scroll as={`div`} className={`landingAltManifestoIntro`} y={24} blur>
-          <span className={`landingAltManifestoRule`} aria-hidden={`true`} />
-          <p>Strong digital work has to make commercial sense, communicate with character, and survive contact with the real world. We bring all three perspectives to the same table.</p>
-          <Link className={`landingAltTextLink`} href={`/about`}>
-            How the studio works <span aria-hidden={`true`}>↗</span>
-          </Link>
-        </ElementReveal>
+          <div className={`studioStoryVisual`} aria-hidden={`true`}>
+            <div className={`studioStoryImageStack`}>
+              {manifestoPrinciples.map((principle, index) => (
+                <figure className={`studioStoryImage ${index === activeIndex ? `studioStoryImageActive` : ``}`} key={principle.image}>
+                  <Image fill src={principle.image} alt={``} sizes={`(max-width: 980px) 0px, 46vw`} />
+                  <span className={`studioStoryImageShade`} />
+                </figure>
+              ))}
+            </div>
+            <span className={`studioStoryVisualIndex`}>0{activeIndex + 1} / 03</span>
+            <span className={`studioStoryVisualCoordinate`}>ATL // 33.7490° N</span>
+            <span className={`studioStoryScanline`} />
+          </div>
 
-        <ol className={`landingAltManifestoList`}>
+          <div className={`studioStoryStageCopy`} aria-live={`polite`}>
+            {manifestoPrinciples.map((principle, index) => (
+              <div
+                className={`studioStoryStageCopyItem ${index === activeIndex ? `studioStoryStageCopyItemActive` : ``}`}
+                aria-hidden={index !== activeIndex}
+                key={principle.stageTitle}
+              >
+                <span>{principle.discipline} // 0{index + 1}</span>
+                <h2>{principle.stageTitle}</h2>
+                <p>{principle.stageText}</p>
+              </div>
+            ))}
+          </div>
+
+          <nav className={`studioStoryNav`} aria-label={`Story chapters`}>
+            <span className={`studioStoryProgress`} aria-hidden={`true`}><span /></span>
+            {manifestoPrinciples.map((principle, index) => (
+              <button
+                type={`button`}
+                onClick={() => scrollToChapter(index)}
+                className={index === activeIndex ? `studioStoryNavActive` : ``}
+                aria-label={`Go to ${principle.title}`}
+                aria-current={index === activeIndex ? `step` : undefined}
+                key={principle.title}
+              >
+                0{index + 1}
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        <ol className={`studioStoryList`}>
           {manifestoPrinciples.map((principle, index) => (
-            <ElementReveal
-              scroll
-              as={`li`}
-              className={`landingAltManifestoItem`}
-              y={30}
-              delay={0.06 + index * 0.08}
+            <li
+              ref={element => { chapterRefs.current[index] = element; }}
+              className={`studioStoryChapter ${index === activeIndex ? `studioStoryChapterActive` : ``}`}
+              aria-current={index === activeIndex ? `step` : undefined}
               key={principle.title}
             >
-              <div className={`landingAltManifestoTopline`}>
-                <span className={`landingAltManifestoIndex`}>{String(index + 1).padStart(2, `0`)}</span>
-                <i className={`${principle.icon} landingAltManifestoIcon`} aria-hidden={`true`} />
-                <span className={`landingAltManifestoDiscipline`}>{principle.discipline}</span>
+              <div className={`studioStoryMobileVisual`}>
+                <Image fill src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
+                <span className={`studioStoryImageShade`} aria-hidden={`true`} />
               </div>
-              <TextReveal scroll as={`h3`} text={principle.title} />
+              <div className={`studioStoryTopline`}>
+                <span className={`studioStoryIndex`}>0{index + 1}</span>
+                <i className={`${principle.icon} studioStoryIcon`} aria-hidden={`true`} />
+                <span className={`studioStoryDiscipline`}>{principle.discipline}</span>
+              </div>
+              <TextReveal scroll as={`h3`} text={`${principle.title}.`} />
               <p>{principle.text}</p>
-            </ElementReveal>
+              <ul className={`studioStorySignals`} aria-label={`${principle.title} priorities`}>
+                {principle.signals.map(signal => <li key={signal}>{signal}</li>)}
+              </ul>
+            </li>
           ))}
         </ol>
       </div>
