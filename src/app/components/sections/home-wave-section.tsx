@@ -7,7 +7,9 @@ import { useEffect, useId, useRef, useState } from 'react';
 const waveCrest = `M0 100 C240 20 480 20 720 100 S1200 180 1440 100 S1920 20 2160 100 S2640 180 2880 100`;
 const waveLayers = [`distant`, `middle`, `near`] as const;
 
-export default function HomeWaveSection() {
+export default function HomeWaveSection({
+  showPlayPauseButton = false,
+}) {
   const id = useId();
   const sectionRef = useRef<HTMLElement>(null);
   const [paused, setPaused] = useState(false);
@@ -42,21 +44,27 @@ export default function HomeWaveSection() {
       data-paused={paused}
     >
       <div className="homeWaveTopline">
-        <span className="eyebrow">Independent spirit. Forward motion.</span>
-        <button
+        <span className="eyebrow">
+          We Appreciate You
+        </span>
+        {showPlayPauseButton && (
+          <button
           type="button"
           className="homeWaveToggle"
           aria-label="Pause wave animation"
           aria-pressed={paused}
           onClick={() => setPaused(value => !value)}
         >
-          <i className={`fa-solid ${paused ? `fa-play` : `fa-pause`}`} aria-hidden="true" />
-          <span>{paused ? `Resume waves` : `Pause waves`}</span>
-        </button>
+            <i className={`fa-solid ${paused ? `fa-play` : `fa-pause`}`} aria-hidden="true" />
+            <span>{paused ? `Resume waves` : `Pause waves`}</span>
+          </button>
+        )}
       </div>
 
       <div className="homeWaveCopy">
-        <h2 id={`${id}-heading`}>Make waves.<br /><span>Build what’s next.</span></h2>
+        <h2 id={`${id}-heading`}>
+          Make waves.<br /><span>Build what’s next.</span>
+        </h2>
         <p>Bold design. Purposeful code. A crew ready to take your next idea beyond the horizon.</p>
         <Link href="/contact" className="homeWaveLink">
           Chart your course <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
@@ -81,7 +89,7 @@ export default function HomeWaveSection() {
       </div>
 
       <div className="homeWaveCoordinates" aria-hidden="true">
-        <span>PIRATECHS <span>{`//`}</span> OPEN WATERS</span>
+        <span>DESIGN <span>{`//`}</span> DEVELOPMENT</span>
         <span>DESIGN <span>→</span> DEVELOP <span>→</span> SET SAIL</span>
       </div>
     </section>

@@ -194,7 +194,7 @@ export default function HomeFeaturedProjectCarousel() {
       <header className={`homeFeaturedHeader`}>
         <div>
           <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`Featured projects / Swipe the deck`} />
-          <TextReveal scroll slide byLetter as={`h2`} className={`landingAltDisplay`} text={`Make waves.`} delay={0.04} duration={0.66} stagger={0.022} />
+          <TextReveal scroll slide byLetter as={`h2`} className={`landingAltDisplay`} text={`High Water.`} delay={0.04} duration={0.66} stagger={0.022} />
         </div>
         <ElementReveal scroll as={`p`} y={18} className={`landingAltLead`}>
           Grab the work and pull it into view. Every slide is a different system, identity, and problem worth solving.

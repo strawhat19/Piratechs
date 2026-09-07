@@ -271,7 +271,6 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} /> */}
 
-      <HomeWaveSection />
       <HomeManifestoReveal />
       <HomeLandingSections />
       <HomeServiceEstimator />
@@ -280,11 +279,13 @@ export default function HomeLanding() {
       <HomeProjectBento />
       {/* <HomeVoyageMetrics /> */}
 
+      <div className={`sep reveal`} />
+
       <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>
           <div className={`sectionTitle`}>
             <TextReveal scroll as={`span`} className={`eyebrow`} text={`Services`} delay={0.4} />
-            <TextReveal scroll as={`h2`} text={`Useful enough for clients, sharp enough for hiring teams`} delay={0.06} />
+            <TextReveal scroll as={`h2`} text={`Types of Projects`} delay={0.06} />
           </div>
           <div className={`serviceGrid`}>
             {config.services.map((service: any) => (
@@ -297,6 +298,10 @@ export default function HomeLanding() {
           </div>
         </div>
       </section>
+
+      <div className={`sep reveal`} />
+
+      <HomeWaveSection />
 
       <div className={`sep reveal`} />
 
