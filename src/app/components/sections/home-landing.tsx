@@ -9,6 +9,7 @@ import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
 import HomeLandingSections from './home-landing-sections';
 import HomeServiceEstimator from './home-service-estimator';
+import HomeWaveSection from './home-wave-section';
 import { useGlobalContext } from '@/shared/global-context';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -270,6 +271,7 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} /> */}
 
+      <HomeWaveSection />
       <HomeManifestoReveal />
       <HomeLandingSections />
       <HomeServiceEstimator />

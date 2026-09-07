@@ -1,0 +1,190 @@
+.homeWaveSection {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  scroll-margin-top: 112px;
+  padding: 32px var(--contentInset) 220px;
+  border-block: 1px solid var(--border);
+  background: var(--navy-dark);
+  color: var(--white-soft);
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    content: "";
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 82% 75%, rgba(var(--piratechsTeal_rgb), 0.12), transparent 55%),
+      linear-gradient(rgba(var(--piratechsNeon_rgb), 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--piratechsNeon_rgb), 0.045) 1px, transparent 1px);
+    background-size: auto, 72px 72px, 72px 72px;
+    mask-image: linear-gradient(90deg, transparent, black);
+  }
+}
+
+.homeWaveTopline,
+.homeWaveCoordinates {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.homeWaveTopline .eyebrow {
+  margin: 0;
+  color: var(--piratechsTeal);
+}
+
+.homeWaveToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 8px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--borderRadius);
+  background: var(--navy-deep);
+  color: var(--white-soft);
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+
+  i { color: var(--piratechsTeal); }
+  &:hover { border-color: var(--piratechsTeal); }
+}
+
+.homeWaveToggle:focus-visible,
+.homeWaveLink:focus-visible {
+  outline: 2px solid var(--piratechsTeal);
+  outline-offset: 5px;
+}
+
+.homeWaveCopy {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(40px, 5vw, 72px);
+  max-width: 920px;
+
+  h2 {
+    margin: 0;
+    font-size: clamp(2.6rem, 6.3vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+
+    span {
+      background: linear-gradient(100deg, var(--piratechsNeon), var(--piratechsTeal));
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  p {
+    max-width: 490px;
+    margin: 24px 0;
+    color: var(--white-smoke);
+    font-size: clamp(0.95rem, 1.25vw, 1.1rem);
+    line-height: 1.75;
+  }
+}
+
+.homeWaveLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+  border-bottom: 1px solid var(--piratechsTeal);
+  color: var(--white-soft);
+  font-size: 0.83rem;
+  font-weight: 700;
+
+  i { color: var(--piratechsTeal); }
+  &:hover { color: var(--piratechsTeal); }
+}
+
+.homeWaveOcean {
+  position: absolute;
+  inset: auto 0 0;
+  height: 220px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.homeWaveLayer {
+  position: absolute;
+  inset: auto auto 0 0;
+  width: 200%;
+  height: 100%;
+  animation: homeWaveDrift 24s linear infinite;
+  animation-play-state: paused;
+
+  svg { display: block; width: 100%; height: 100%; }
+  .homeWaveColor { stop-color: var(--piratechsNeon); stop-opacity: 0.38; }
+  .homeWaveDepth { stop-color: var(--navy-deep); }
+  .homeWaveCrest { stroke: var(--piratechsNeon); stroke-opacity: 0.5; stroke-width: 1; }
+
+  &--distant { animation-delay: -8s; }
+
+  &--middle {
+    bottom: -25px;
+    animation-duration: 18s;
+    animation-delay: -5s;
+    animation-direction: reverse;
+
+    .homeWaveColor { stop-color: var(--piratechsTeal); stop-opacity: 0.48; }
+    .homeWaveCrest { stroke: var(--piratechsTeal); stroke-opacity: 0.65; }
+  }
+
+  &--near {
+    bottom: -55px;
+    animation-duration: 12s;
+    animation-delay: -9s;
+
+    .homeWaveColor { stop-opacity: 0.64; }
+    .homeWaveCrest { stroke-opacity: 0.8; }
+  }
+}
+
+.homeWaveSection[data-running="true"][data-paused="false"] .homeWaveLayer {
+  animation-play-state: running;
+}
+
+.homeWaveCoordinates {
+  position: absolute;
+  inset: auto var(--contentInset) 22px;
+  color: var(--white-smoke);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+
+  span span { color: var(--piratechsTeal); }
+}
+
+@keyframes homeWaveDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (max-width: 640px) {
+  .homeWaveSection { padding-top: 24px; padding-bottom: 185px; }
+  .homeWaveTopline { align-items: flex-start; }
+  .homeWaveTopline .eyebrow { max-width: 190px; font-size: 0.6rem; line-height: 1.8; }
+  .homeWaveToggle { width: 44px; justify-content: center; padding: 0; }
+  .homeWaveToggle span { display: none; }
+  .homeWaveCopy h2 { font-size: clamp(2rem, 8.1vw, 3.2rem); }
+  .homeWaveOcean { height: 175px; }
+  .homeWaveCoordinates { font-size: 0.52rem; letter-spacing: 0.08em; }
+  .homeWaveCoordinates > span:last-child { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homeWaveLayer { animation: none; }
+  .homeWaveLayer--distant { transform: translateX(-15%); }
+  .homeWaveLayer--middle { transform: translateX(-30%); }
+  .homeWaveLayer--near { transform: translateX(-5%); }
+  .homeWaveToggle { display: none; }
+}
