@@ -63,10 +63,18 @@
   outline-offset: 5px;
 }
 
-.homeWaveCopy {
+.homeWaveContent {
+  gap: clamp(28px, 4vw, 64px);
+  display: grid;
   position: relative;
   z-index: 2;
+  align-items: start;
   margin-top: clamp(40px, 5vw, 72px);
+  grid-template-columns: minmax(0, 1fr) clamp(269px, 25vw, 360px);
+}
+
+.homeWaveCopy {
+  position: relative;
   max-width: 920px;
 
   h2 {
@@ -89,6 +97,25 @@
     color: var(--white-smoke);
     font-size: clamp(0.95rem, 1.25vw, 1.1rem);
     line-height: 1.75;
+  }
+}
+
+.homeWaveAuth {
+  width: 100%;
+  max-width: 360px;
+  justify-self: end;
+
+  .authWidget,
+  .authPanel {
+    width: 100%;
+  }
+
+  .authPanel {
+    inset: auto;
+    opacity: 1;
+    position: static;
+    pointer-events: auto;
+    transform: none;
   }
 }
 
@@ -169,12 +196,19 @@
   to { transform: translate3d(-50%, 0, 0); }
 }
 
+@media (max-width: 900px) {
+  .homeWaveContent { grid-template-columns: minmax(0, 1fr); }
+  .homeWaveAuth { max-width: 520px; justify-self: start; }
+}
+
 @media (max-width: 640px) {
   .homeWaveSection { padding-top: 24px; padding-bottom: 185px; }
   .homeWaveTopline { align-items: flex-start; }
   .homeWaveTopline .eyebrow { max-width: 190px; font-size: 0.6rem; line-height: 1.8; }
   .homeWaveToggle { width: 44px; justify-content: center; padding: 0; }
   .homeWaveToggle span { display: none; }
+  .homeWaveContent { gap: 32px; }
+  .homeWaveAuth { max-width: none; }
   .homeWaveCopy h2 { font-size: clamp(2rem, 8.1vw, 3.2rem); }
   .homeWaveOcean { height: 175px; }
   .homeWaveCoordinates { font-size: 0.52rem; letter-spacing: 0.08em; }

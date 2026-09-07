@@ -7,10 +7,10 @@ import Word from '../logo/word';
 import AuthWidget from '../auth/auth-widget';
 import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
-import HomeLandingSections from './home-landing-sections';
-import HomeServiceEstimator from './home-service-estimator';
 import HomeWaveSection from './home-wave-section';
+import HomeLandingSections from './home-landing-sections';
 import { useGlobalContext } from '@/shared/global-context';
+import HomeServiceEstimator from './home-service-estimator';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
 import AvatarAnimation from '../media/avatar/avatar-animation';
@@ -18,8 +18,9 @@ import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
 import HomeFeaturedProjectCarousel from './home-featured-project-carousel';
-import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 import { HomeCapabilityRadar, HomeManifestoReveal, HomeProjectBento } from './home-landing-alternatives';
+import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
+import StartCtaSection from './start-cta';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
 
@@ -301,38 +302,11 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      <HomeWaveSection />
+      <StartCtaSection />
 
       <div className={`sep reveal`} />
 
-      <section className={`pageSection contactSection reveal cta`}>
-        <ElementReveal as={`div`} delay={0.35} y={16} className={`sectionInner contactBand`}>
-          <div className={`ctaOuterRow flex gap16 spaceBetween alignCenter`}>
-            <div className={`ctaOuterColumn flex gap16 column`}>
-              <TextReveal scroll as={`span`} className={`eyebrow`} text={`Start`} delay={0.4} />
-              <TextReveal scroll as={`h2`} text={`Ready for the next version?`} delay={0.06} />
-              <div className={`ctaRow flex gap16 spaceBetween alignCenter`}>
-                <div className={`ctaColumn flex gap16 column`}>
-                  <TextReveal scroll as={`p`} html text={`<i>Join us as we turn your vision into a reality.</i>`} />
-                  <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
-                    <Link href={`mailto:${config.contactEmail}`} className={`buttonLink primary`}>
-                      <ElementReveal delay={0.46}>
-                        <i className={`fa-solid fa-paper-plane logoLetter`} />
-                      </ElementReveal>
-                      <TextReveal as={`span`} className={`logoLetter`} text={config?.contactEmail} delay={0.47} />
-                    </Link>
-                  </ElementReveal>
-                </div>
-              </div>
-            </div>
-            <div className={`ctaOuterColumn flex gap16 column`}>
-              <ElementReveal as={`span`} delay={0.45} className={`heroActionReveal`}>
-                <AuthWidget defaultOpen />
-              </ElementReveal>
-            </div>
-          </div>
-        </ElementReveal>
-      </section>
+      <HomeWaveSection />
 
       <div className={`sep reveal`} />
     </>

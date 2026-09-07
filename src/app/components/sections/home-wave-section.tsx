@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import AuthWidget from '../auth/auth-widget';
 import { useEffect, useId, useRef, useState } from 'react';
 
 // Each crest repeats at x=1440 with matching end tangents for a seamless loop.
@@ -61,14 +62,20 @@ export default function HomeWaveSection({
         )}
       </div>
 
-      <div className="homeWaveCopy">
-        <h2 id={`${id}-heading`}>
-          Make waves.<br /><span>Build what’s next.</span>
-        </h2>
-        <p>Bold design. Purposeful code. A crew ready to take your next idea beyond the horizon.</p>
-        <Link href="/contact" className="homeWaveLink">
-          Chart your course <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
-        </Link>
+      <div className="homeWaveContent">
+        <div className="homeWaveCopy">
+          <h2 id={`${id}-heading`}>
+            Make waves.<br /><span>Build what’s next.</span>
+          </h2>
+          <p>Bold design. Purposeful code. A crew ready to take your next idea beyond the horizon.</p>
+          <Link href="/contact" className="homeWaveLink">
+            Chart your course <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+          </Link>
+        </div>
+
+        <div className="homeWaveAuth">
+          <AuthWidget defaultOpen />
+        </div>
       </div>
 
       <div className="homeWaveOcean" aria-hidden="true">
@@ -89,8 +96,8 @@ export default function HomeWaveSection({
       </div>
 
       <div className="homeWaveCoordinates" aria-hidden="true">
-        <span>DESIGN <span>{`//`}</span> DEVELOPMENT</span>
-        <span>DESIGN <span>→</span> DEVELOP <span>→</span> SET SAIL</span>
+        <span>PIRATECHS <span>{`//`}</span> STUDIOS</span>
+        <span>DESIGN <span>→</span> DEVELOP <span>→</span> DISTORT</span>
       </div>
     </section>
   );
