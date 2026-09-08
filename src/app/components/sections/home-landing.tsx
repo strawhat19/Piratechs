@@ -10,7 +10,6 @@ import { config } from '@/shared/config/config';
 import HomeWaveSection from './home-wave-section';
 import HomeLandingSections from './home-landing-sections';
 import { useGlobalContext } from '@/shared/global-context';
-import HomeServiceEstimator from './home-service-estimator';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
 import AvatarAnimation from '../media/avatar/avatar-animation';
@@ -274,7 +273,6 @@ export default function HomeLanding() {
 
       <HomeManifestoReveal />
       <HomeLandingSections />
-      <HomeServiceEstimator />
       <HomeFeaturedProjectCarousel />
       <HomeCapabilityRadar />
       <HomeProjectBento />
@@ -306,7 +304,7 @@ export default function HomeLanding() {
 
       <div className={`sep reveal`} />
 
-      <HomeWaveSection />
+      <HomeWaveSection includeServiceEstimator={true} />
 
       <div className={`sep reveal`} />
     </>

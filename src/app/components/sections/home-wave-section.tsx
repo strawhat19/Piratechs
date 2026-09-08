@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import AuthWidget from '../auth/auth-widget';
+import HomeServiceEstimator from './home-service-estimator';
 import { useEffect, useId, useRef, useState } from 'react';
 
 // Each crest repeats at x=1440 with matching end tangents for a seamless loop.
@@ -10,6 +11,10 @@ const waveLayers = [`distant`, `middle`, `near`] as const;
 
 export default function HomeWaveSection({
   showPlayPauseButton = false,
+  includeServiceEstimator = false,
+}: {
+  showPlayPauseButton?: boolean;
+  includeServiceEstimator?: boolean;
 }) {
   const id = useId();
   const sectionRef = useRef<HTMLElement>(null);
@@ -41,6 +46,7 @@ export default function HomeWaveSection({
       ref={sectionRef}
       id="waves"
       className="homeWaveSection"
+      data-service-estimator={includeServiceEstimator}
       aria-labelledby={`${id}-heading`}
       data-paused={paused}
     >
@@ -73,9 +79,11 @@ export default function HomeWaveSection({
           </Link>
         </div>
 
-        <div className="homeWaveAuth">
-          <AuthWidget defaultOpen />
-        </div>
+        {includeServiceEstimator ? (
+          <div className="homeWaveEstimator"><HomeServiceEstimator /></div>
+        ) : (
+          <div className="homeWaveAuth"><AuthWidget defaultOpen /></div>
+        )}
       </div>
 
       <div className="homeWaveOcean" aria-hidden="true">

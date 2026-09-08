@@ -119,6 +119,24 @@
   }
 }
 
+.homeWaveEstimator {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (min-width: 901px) {
+  .homeWaveSection[data-service-estimator="true"] {
+    .homeWaveContent {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: center;
+    }
+
+    .homeWaveCopy h2 { font-size: clamp(2.4rem, 4vw, 4.8rem); }
+    .homeWaveCopy p { margin-block: 16px; }
+  }
+}
+
 .homeWaveLink {
   display: inline-flex;
   align-items: center;
