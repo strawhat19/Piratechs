@@ -287,11 +287,11 @@
 
 .studioStoryStageCopyItem h2 {
   max-width: 660px;
-  font-size: clamp(2rem, 3.35vw, 4.35rem);
   font-weight: 800;
   line-height: 0.94;
-  letter-spacing: -0.055em;
   text-wrap: balance;
+  letter-spacing: -0.055em;
+  font-size: clamp(2rem,2.35vw,4.35rem);
 }
 
 .studioStoryStageCopyItem p {
@@ -454,13 +454,12 @@
 }
 
 .studioStoryChapter h3 {
-  max-width: 860px;
-  margin-top: clamp(42px, 5vw, 74px);
-  font-size: clamp(3rem, 5.3vw, 6.8rem);
   font-weight: 800;
   line-height: 0.9;
-  letter-spacing: -0.06em;
   text-wrap: balance;
+  letter-spacing: -0.06em;
+  margin-top: clamp(42px, 5vw, 74px);
+  font-size: clamp(3rem, 5vw, 6.8rem);
 }
 
 .studioStoryChapter > p {

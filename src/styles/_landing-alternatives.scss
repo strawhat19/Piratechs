@@ -38,10 +38,10 @@
 }
 
 .landingAltInner {
-  width: min(100%, 1480px);
-  margin-inline: auto;
-  position: relative;
   z-index: 1;
+  position: relative;
+  margin-inline: auto;
+  width: min(100%, 100%);
 }
 
 .landingAltSectionHeading {
