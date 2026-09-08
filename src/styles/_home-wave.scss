@@ -65,13 +65,14 @@
 }
 
 .homeWaveContent {
-  gap: clamp(28px, 4vw, 64px);
+  z-index: 2;
   display: grid;
   position: relative;
-  z-index: 2;
   align-items: start;
+  gap: clamp(28px, 4vw, 64px);
+  grid-template-columns: auto 1fr;
   margin-top: clamp(40px, 5vw, 72px);
-  grid-template-columns: minmax(0, 1fr) clamp(269px, 25vw, 360px);
+  // grid-template-columns: minmax(0, 1fr) clamp(269px, 25vw, 360px);
 }
 
 .homeWaveCopy {
@@ -123,29 +124,139 @@
 .homeWaveEstimator {
   width: 100%;
   min-width: 0;
-  min-height: 280px;
   position: relative;
-  align-self: stretch;
+}
 
-  // Keep the original form's footprint; use the existing ocean space below it.
-  .servicesWidget {
-    position: absolute;
-    inset: 0 0 auto;
-    height: calc(100% + var(--home-wave-bottom-space) - 58px);
+.homeWaveSection[data-service-estimator="true"] {
+  --home-wave-bottom-space: 150px;
+
+  .homeWaveContent {
+    margin-top: 28px;
+    gap: clamp(24px, 3vw, 42px);
+    grid-template-columns: auto 1fr;
+  }
+
+  .homeWaveCopy {
+    gap: 36px;
+    display: flex;
+    max-width: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .homeWaveCopy h2 { font-size: clamp(2.4rem, 4.3vw, 4.8rem); }
+  .homeWaveIntro { max-width: 420px; }
+  .homeWaveCopy p { margin: 0 0 12px; }
+}
+
+.homeWaveSection[data-estimator-active="true"] {
+  --home-wave-bottom-space: 78px;
+
+  .homeWaveContent {
+    gap: 22px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .homeWaveCopy h2 {
+    font-size: clamp(1.7rem, 2.7vw, 2.8rem);
+    line-height: 1.15;
+    br { display: none; }
+    span { margin-left: 0.3em; }
+  }
+
+  .homeWaveEstimator .servicesWidget { height: clamp(460px, 61svh, 680px); }
+}
+
+.homeWaveServices {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.homeWaveServiceChoices {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  legend { padding: 0; font-size: 1rem; font-weight: 750; letter-spacing: -0.02em; }
+  > p { margin: 6px 0 16px; color: var(--silver); font-size: 0.8rem; line-height: 1.5; }
+}
+
+.homeWaveServiceButtons {
+  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.homeWaveServiceButton,
+.homeWaveStart {
+  position: relative;
+  min-width: 0;
+  color: var(--white-soft);
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid rgba(var(--piratechsNeon_rgb), 0.26);
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(var(--piratechsNeon_rgb), 0.1), rgba(var(--piratechsTeal_rgb), 0.035));
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  backdrop-filter: blur(16px) saturate(130%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.055), 0 8px 24px rgba(0, 9, 27, 0.1);
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+
+  &:focus-visible { outline: 2px solid var(--piratechsTeal); outline-offset: 3px; }
+}
+
+.homeWaveServiceButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  min-height: 100px;
+  padding: 16px 14px;
+  text-align: left;
+
+  > i:first-child { color: var(--piratechsTeal); font-size: 1.25rem; }
+  > span { font-size: 0.77rem; font-weight: 650; line-height: 1.45; }
+  .homeWaveServiceCheck { position: absolute; top: 12px; right: 10px; color: var(--piratechsTeal); font-size: 0.65rem; opacity: 0; }
+
+  &[aria-pressed="true"] {
+    border-color: var(--piratechsTeal);
+    background: linear-gradient(130deg, rgba(var(--piratechsNeon_rgb), 0.22), rgba(var(--piratechsTeal_rgb), 0.14));
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 0 22px rgba(var(--piratechsTeal_rgb), 0.07);
+    .homeWaveServiceCheck { opacity: 1; }
   }
 }
 
-@media (min-width: 901px) {
-  .homeWaveSection[data-service-estimator="true"] {
-    .homeWaveContent {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      align-items: center;
-    }
+.homeWaveStart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 54px;
+  padding: 12px 20px;
+  border-color: rgba(var(--piratechsTeal_rgb), 0.5);
+  background: linear-gradient(105deg, rgba(var(--piratechsNeon_rgb), 0.2), rgba(var(--piratechsTeal_rgb), 0.16));
 
-    .homeWaveCopy h2 { font-size: clamp(2.4rem, 4vw, 4.8rem); }
-    .homeWaveCopy p { margin-block: 16px; }
+  > i:first-child { color: var(--piratechsTeal); font-size: 1.1rem; }
+  > span { display: inline-flex; align-items: center; gap: 14px; font-size: 0.95rem; font-weight: 750; }
+  > i:last-child { position: absolute; right: 20px; color: var(--piratechsTeal); font-size: 0.85rem; }
+}
+
+.homeWaveStartDetail { color: var(--white-smoke); font-size: 0.75rem; font-weight: 400; }
+
+@media (hover: hover) {
+  .homeWaveServiceButton:hover,
+  .homeWaveStart:hover {
+    border-color: var(--piratechsTeal);
+    background-color: rgba(var(--piratechsTeal_rgb), 0.09);
   }
 }
+
 
 .homeWaveLink {
   display: inline-flex;
@@ -311,10 +422,76 @@
   .homeWaveCoordinates { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
 }
 
+@media (max-width: 1100px) {
+  .homeWaveServiceButtons {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    > :last-child { grid-column: span 2; }
+  }
+  .homeWaveServiceButton { min-height: 72px; gap: 8px; padding: 12px; }
+}
+
+@media (min-width: 901px) {
+  .homeWaveEstimator .servicesWidgetCards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .homeWaveEstimator .servicesWidgetStage { padding: 22px; gap: 18px; }
+  .homeWaveEstimator .servicesWidgetRadioCards { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .homeWaveSection[data-service-estimator="true"] {
+    .homeWaveCopy { display: block; }
+    .homeWaveCopy h2 { font-size: clamp(1.65rem, 7vw, 2.3rem); }
+    .homeWaveCopy p { margin-block: 10px; font-size: 0.875rem; line-height: 1.5; }
+  }
+  .homeWaveSection[data-estimator-active="true"] .homeWaveCopy h2 {
+    font-size: clamp(1.25rem, 5.2vw, 1.8rem);
+  }
+  .homeWaveServiceButtons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .homeWaveServiceButton {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 9px;
+    min-height: 54px;
+    padding: 10px 20px 10px 10px;
+
+    > i:first-child { flex: 0 0 20px; font-size: 1rem; text-align: center; }
+    > span { font-size: 0.73rem; }
+    .homeWaveServiceCheck { top: 7px; right: 6px; font-size: 0.55rem; }
+  }
+  .homeWaveStart { min-height: 50px; padding-inline: 14px; }
+  .homeWaveStart > span { gap: 10px; }
+  .homeWaveStart > i:last-child { right: 14px; }
+  .homeWaveStartDetail { font-size: 0.68rem; }
+}
+
+@media (max-width: 980px) and (orientation: portrait) {
+  .homeWaveSection[data-service-estimator="true"] {
+    height: auto;
+    min-height: calc(100svh - var(--home-wave-header-height, 104px));
+
+    .homeWaveContent {
+      gap: 22px;
+      flex: 1 0 auto;
+      margin-top: 12px;
+      grid-template-rows: auto auto;
+    }
+
+    .homeWaveCopy { max-height: none; overflow: visible; }
+    .homeWaveEstimator { height: auto; }
+  }
+
+  .homeWaveSection[data-estimator-active="true"] {
+    .homeWaveContent { flex: 1 1 auto; gap: 16px; }
+    .homeWaveEstimator .servicesWidget { height: max(460px, calc(100svh - var(--home-wave-header-height, 104px) - 150px)); }
+  }
+}
+
+
 @media (prefers-reduced-motion: reduce) {
   .homeWaveLayer { animation: none; }
   .homeWaveLayer--distant { transform: translateX(-15%); }
   .homeWaveLayer--middle { transform: translateX(-30%); }
   .homeWaveLayer--near { transform: translateX(-5%); }
   .homeWaveToggle { display: none; }
+  .homeWaveServiceButton, .homeWaveStart { transition: none; }
 }

@@ -363,6 +363,13 @@ body[data-theme="light"] .servicesWidgetCard[data-selected="true"] .servicesWidg
   .servicesWidgetCard { padding: 12px 30px 12px 12px; }
   .servicesWidgetCardIcon { flex-basis: 40px; height: 42px; font-size: 1.25rem; }
   .servicesWidgetFooter { gap: 7px; padding-inline: 10px; }
+  .servicesWidgetFooter:has(.servicesWidgetTextButton) {
+    flex-wrap: wrap;
+    gap: 5px;
+    .servicesWidgetStatus { flex-basis: 100%; }
+    .servicesWidgetActions { width: 100%; justify-content: flex-end; }
+    .servicesWidgetTextButton { margin-right: auto; min-height: 40px; }
+  }
   .servicesWidgetPrimary, .servicesWidgetSecondary { min-height: 40px; padding-inline: 9px; }
 }
 

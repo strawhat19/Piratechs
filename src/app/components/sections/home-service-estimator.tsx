@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useReducer, useRef, type FormEvent, type KeyboardEvent } from 'react';
 import {
-  buildEffortLevels, buildFeatures, buildPageCounts, creativeOptions, marketingOptions,
+  buildEffortLevels, buildPageCounts, creativeOptions,
   mentoringTopics, serviceCards, type CreativeServiceId, type ServiceId, type ServiceOption,
 } from './service-estimator-catalog';
 import { buildDetails, marketingDetails, mentoringDetails } from './service-estimator-copy';
@@ -12,6 +12,7 @@ import {
   type BuildEffortId, type BuildPageCountId, type EstimatorStage, type HomeServiceEstimatorProps,
   type ServiceCartItem, type ServiceEstimatorDraft,
 } from './service-estimator-model';
+import { buildAddOnSteps, getServiceEstimatorFlow, marketingCampaignOptions, marketingToolOptions } from './service-estimator-steps';
 
 export * from './service-estimator-model';
 
@@ -125,22 +126,8 @@ function RangeField({ label, value, min, max, step = 1, display, onChange }: {
   );
 }
 
-function BuildScope({ draft, patch, id }: {
-  draft: ServiceEstimatorDraft; patch: (patch: Partial<ServiceEstimatorDraft>) => void; id: string;
-}) {
-  return (
-    <>
-      <RadioCards<BuildPageCountId> label="Pages // Screens // Views" name={`${id}-pages`} selected={draft.buildPageCount}
-        options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort))} per platform` }))}
-        onChange={buildPageCount => patch({ buildPageCount })} />
-      <RadioCards<BuildEffortId> label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
-        options={buildEffortLevels} onChange={buildEffort => patch({ buildEffort })} />
-    </>
-  );
-}
-
 function getScopeIssue(draft: ServiceEstimatorDraft): { stage: EstimatorStage; message: string } | null {
-  for (const service of draft.selectedServices) {
+  for (const { id: service } of serviceCards.filter(service => draft.selectedServices.includes(service.id))) {
     if (isCreativeService(service) && !draft.creativeOptions[service].length) {
       return { stage: service, message: 'Choose at least one option, or remove this service in the Services tab.' };
     }
@@ -154,7 +141,7 @@ function getScopeIssue(draft: ServiceEstimatorDraft): { stage: EstimatorStage; m
   return null;
 }
 
-export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }: HomeServiceEstimatorProps = {}) {
+export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, renderServiceSelection, onStageChange }: HomeServiceEstimatorProps = {}) {
   const id = useId();
   const [state, dispatch] = useReducer(reducer, initialItem, initialState);
   const { draft, stage } = state;
@@ -163,19 +150,15 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
   const nameRef = useRef<HTMLInputElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const previousStage = useRef(stage);
-  const keyboardTabChange = useRef(false);
+  const keyboardTabChange = useRef<EstimatorStage | null>(null);
   const estimate = calculateServiceEstimate(draft);
   const payment = calculatePaymentProjection(draft, estimate);
   const selectedCards = serviceCards.filter(service => draft.selectedServices.includes(service.id));
-  const flow: { id: EstimatorStage; label: string; icon: string }[] = [
-    { id: 'services', label: 'Services', icon: 'fa-layer-group' },
-    ...selectedCards.map(service => ({ id: service.id, label: service.tab, icon: service.icon })),
-    { id: 'payment', label: 'Payment', icon: 'fa-wallet' },
-    { id: 'review', label: 'Review', icon: 'fa-flag' },
-  ];
+  const flow = getServiceEstimatorFlow(draft);
   const tabs = state.cart.length ? [...flow, { id: 'cart' as const, label: `Cart (${state.cart.length})`, icon: 'fa-cart-shopping' }] : flow;
   const stageIndex = flow.findIndex(step => step.id === stage);
-  const currentService = serviceCards.find(service => service.id === stage);
+  const currentStep = flow.find(step => step.id === stage);
+  const addOnStep = buildAddOnSteps.find(step => step.id === stage);
   const scopeIssue = getScopeIssue(draft);
   const patch = (patch: Partial<ServiceEstimatorDraft>) => dispatch({ type: 'patch', patch });
   const toggleList = <Field extends 'mentoringTopics' | 'marketingOptions' | 'buildTypes' | 'buildFeatures'>(field: Field, value: string) => {
@@ -191,11 +174,16 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
   };
 
   useEffect(() => {
+    onStageChange?.(stage);
+  }, [onStageChange, stage]);
+
+  useEffect(() => {
     if (previousStage.current !== stage) {
       scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' });
-      if (!keyboardTabChange.current) headingRef.current?.focus({ preventScroll: true });
-      keyboardTabChange.current = false;
       const tab = tabsRef.current?.querySelector<HTMLElement>('[aria-selected="true"]');
+      if (keyboardTabChange.current === stage) tab?.focus({ preventScroll: true });
+      else headingRef.current?.focus({ preventScroll: true });
+      keyboardTabChange.current = null;
       const bar = tabsRef.current;
       if (tab && bar) {
         // Scroll only the tab strip, never the home page or its waves section.
@@ -218,9 +206,10 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
     event.preventDefault();
     const target = tabs[next];
     const allowed = !scopeIssue || !['payment', 'review'].includes(target.id);
-    keyboardTabChange.current = allowed;
+    // Focus the newly rendered tab, or let the wave section focus its native
+    // service choices when returning Services unmounts this tab strip.
+    keyboardTabChange.current = allowed && !(target.id === 'services' && renderServiceSelection) ? target.id : null;
     go(target.id);
-    if (allowed) tabsRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus({ preventScroll: true });
   };
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -246,10 +235,13 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
     dispatch({ type: 'commit', item });
   };
 
-  const panelTitle = stage === 'services' ? 'What can we help you create?'
-    : currentService?.label ?? ({ payment: 'Choose how to pay', review: 'Review your plan and name your project', cart: 'Your saved plans' } as const)[stage as 'payment' | 'review' | 'cart'];
-  const showBuildScope = stage === 'build' || (stage === 'video' && draft.creativeOptions.video.includes('game'));
-  const showBuildAddOns = stage === 'build' || (stage === 'video' && draft.creativeOptions.video.includes('game') && !draft.selectedServices.includes('build'));
+  const panelTitle = stage === 'cart' ? 'Your saved plans' : currentStep?.title;
+  const toggleService = (service: ServiceId) => patch({ selectedServices: toggleValue(draft.selectedServices, service) });
+  const afterAddOns = flow.findIndex(step => step.id === buildAddOnSteps[buildAddOnSteps.length - 1].id) + 1;
+
+  if (stage === 'services' && renderServiceSelection) {
+    return renderServiceSelection({ selectedServices: draft.selectedServices, onToggle: toggleService, onStart: () => go(flow[1].id) });
+  }
 
   return (
     <section className="servicesWidget" aria-label="Service estimator">
@@ -278,7 +270,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
 
             {stage === 'services' ? (
               <ChoiceCards label="Select your services" options={serviceCards} selected={draft.selectedServices} pricePrefix="From "
-                onToggle={value => patch({ selectedServices: toggleValue(draft.selectedServices, value as ServiceId) })} />
+                onToggle={value => toggleService(value as ServiceId)} />
             ) : null}
 
             {isCreativeService(stage) ? (
@@ -287,6 +279,11 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
             ) : null}
 
             {stage === 'mentoring' ? (
+              <ChoiceCards label="What would you like to learn?" options={mentoringTopics} selected={draft.mentoringTopics} details={mentoringDetails}
+                showPrices={draft.mentoringPricingMode === 'package'} onToggle={value => toggleList('mentoringTopics', value)} />
+            ) : null}
+
+            {stage === 'mentoring-session' ? (
               <>
                 <RadioCards label="Session pricing" name={`${id}-mentoring-mode`} selected={draft.mentoringPricingMode}
                   options={[{ id: 'hourly', label: 'By the hour', description: 'Start with one focused hour. Topics are included.' }, { id: 'package', label: 'Project package', description: '$100 base, plus the topics you choose.' }]}
@@ -297,14 +294,16 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
                     <RangeField label="Session hours" min={1} max={40} value={draft.mentoringHours} display={`${draft.mentoringHours} hour${draft.mentoringHours === 1 ? '' : 's'}`} onChange={mentoringHours => patch({ mentoringHours })} />
                   </div>
                 ) : null}
-                <ChoiceCards label="What would you like to learn?" options={mentoringTopics} selected={draft.mentoringTopics} details={mentoringDetails}
-                  showPrices={draft.mentoringPricingMode === 'package'} onToggle={value => toggleList('mentoringTopics', value)} />
               </>
             ) : null}
 
             {stage === 'marketing' ? (
               <><p className="servicesWidgetNote">Your $200 engagement starts with a focused growth plan. Add the tools and content you need.</p>
-                <ChoiceCards label="Build your campaign" options={marketingOptions} selected={draft.marketingOptions} details={marketingDetails} onToggle={value => toggleList('marketingOptions', value)} /></>
+                <ChoiceCards label="Build your campaign" options={marketingCampaignOptions} selected={draft.marketingOptions} details={marketingDetails} onToggle={value => toggleList('marketingOptions', value)} /></>
+            ) : null}
+
+            {stage === 'marketing-tools' ? (
+              <ChoiceCards label="Add tools and insights · optional" options={marketingToolOptions} selected={draft.marketingOptions} details={marketingDetails} onToggle={value => toggleList('marketingOptions', value)} />
             ) : null}
 
             {stage === 'build' ? (
@@ -312,10 +311,18 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
                 selected={getBuildPlatforms(draft.buildTypes).map(platform => `${platform}-only`)}
                 onToggle={value => patch({ buildTypes: toggleValue(getBuildPlatforms(draft.buildTypes).map(platform => `${platform}-only` as 'website-only' | 'mobile-only' | 'game-only'), value as 'website-only' | 'mobile-only' | 'game-only') })} />
             ) : null}
-            {showBuildScope ? <BuildScope draft={draft} patch={patch} id={id} /> : null}
-            {stage === 'video' && draft.creativeOptions.video.includes('game') && draft.selectedServices.includes('build') ? <p className="servicesWidgetNote">Your game and website/app use the same scope settings. Choose shared add-ons in the Website // App tab.</p> : null}
-            {showBuildAddOns ? <ChoiceCards label="Make it yours · optional add-ons" options={buildFeatures} selected={draft.buildFeatures} details={buildDetails} onToggle={value => toggleList('buildFeatures', value)} /> : null}
-            {stage === 'build' && estimate.platforms.includes('website') ? (
+            {stage === 'build-pages' ? (
+              <RadioCards<BuildPageCountId> label="Pages // Screens // Views" name={`${id}-pages`} selected={draft.buildPageCount}
+                options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort))} per platform` }))}
+                onChange={buildPageCount => patch({ buildPageCount })} />
+            ) : null}
+            {stage === 'build-detail' ? (
+              <RadioCards<BuildEffortId> label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
+                options={buildEffortLevels} onChange={buildEffort => patch({ buildEffort })} />
+            ) : null}
+            {stage === 'video' && draft.creativeOptions.video.includes('game') && draft.selectedServices.includes('build') ? <p className="servicesWidgetNote">Your game shares scope and add-ons with your website or app. You’ll choose those together in the steps after Website // App.</p> : null}
+            {addOnStep ? <ChoiceCards label="Make it yours · optional add-ons" options={addOnStep.options} selected={draft.buildFeatures} details={buildDetails} onToggle={value => toggleList('buildFeatures', value)} /> : null}
+            {stage === 'build-care' ? (
               <RadioCards label="After launch" name={`${id}-care`} selected={draft.maintenance}
                 options={[{ id: 'self', label: 'I’ll handle updates', description: 'Simple tools and a handoff. No ongoing care added.' }, { id: 'managed', label: 'Piratechs handles it', description: 'Request ongoing care, quoted separately.' }]}
                 onChange={maintenance => patch({ maintenance })} />
@@ -387,6 +394,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
         <footer className="servicesWidgetFooter">
           <p className="servicesWidgetStatus" role="status" aria-live="polite">{state.status || (stage === 'cart' ? `${state.cart.length} saved plan${state.cart.length === 1 ? '' : 's'}` : `Step ${stageIndex + 1} of ${flow.length}${state.editingId ? ' · Editing plan' : ''}`)}</p>
           <div className="servicesWidgetActions">
+            {addOnStep ? <button type="button" className="servicesWidgetTextButton" onClick={() => go(flow[afterAddOns].id)}>Finish add-ons</button> : null}
             {stage === 'cart' ? <button type="button" className="servicesWidgetPrimary" onClick={() => dispatch({ type: 'new' })}>Create another plan<i className="fa-solid fa-plus" aria-hidden="true" /></button> : (
               <>
                 {stageIndex > 0 ? <button type="button" className="servicesWidgetSecondary" onClick={() => go(flow[stageIndex - 1].id)} aria-label="Previous step"><i className="fa-solid fa-arrow-left" aria-hidden="true" /></button>

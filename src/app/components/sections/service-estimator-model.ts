@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import {
   buildEffortLevels, buildFeatures, buildPageCounts, buildTypes, creativeOptions,
   marketingOptions, mentoringTopics, serviceCards,
@@ -5,7 +6,9 @@ import {
 } from './service-estimator-catalog';
 
 export type { ServiceId } from './service-estimator-catalog';
-export type EstimatorStage = 'services' | ServiceId | 'payment' | 'review' | 'cart';
+export type BuildStepId = 'build-pages' | 'build-detail' | 'build-content' | 'build-design'
+  | 'build-data' | 'build-connect' | 'build-experience' | 'build-customers' | 'build-operations' | 'build-care';
+export type EstimatorStage = 'services' | ServiceId | BuildStepId | 'mentoring-session' | 'marketing-tools' | 'payment' | 'review' | 'cart';
 export type MaintenanceChoice = 'self' | 'managed' | null;
 export type PaymentMethod = 'full' | 'finance';
 export type DownPaymentMode = 'lower-monthly' | 'finish-sooner';
@@ -82,10 +85,17 @@ export type ServiceCartItem = {
   payment: ServicePaymentProjection;
   createdAt: string;
 };
+export type ServiceEstimatorSelectionProps = {
+  selectedServices: ServiceId[];
+  onToggle: (service: ServiceId) => void;
+  onStart: () => void;
+};
 export type HomeServiceEstimatorProps = {
   initialItem?: ServiceCartItem | null;
   onAddToCart?: (item: ServiceCartItem) => void;
   onUpdateCart?: (item: ServiceCartItem) => void;
+  renderServiceSelection?: (props: ServiceEstimatorSelectionProps) => ReactNode;
+  onStageChange?: (stage: EstimatorStage) => void;
 };
 
 export const currencyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
