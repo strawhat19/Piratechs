@@ -204,6 +204,7 @@ const radarRings = [25, 50, 75, 100].map(score => radarCapabilities.map((_, inde
 export function HomeManifestoReveal() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const chapterRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const mobileStoryTriggerRef = useRef<ScrollTrigger | null>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useLayoutEffect(() => {
@@ -211,7 +212,8 @@ export function HomeManifestoReveal() {
     if (!section) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    const context = gsap.context(() => {
+    const media = gsap.matchMedia();
+    media.add(`(min-width: 981px)`, () => {
       chapterRefs.current.forEach((chapter, index) => {
         if (!chapter) return;
         ScrollTrigger.create({
@@ -228,16 +230,56 @@ export function HomeManifestoReveal() {
           },
         });
       });
-    }, section);
+    });
 
-    return () => context.revert();
+    media.add(`(max-width: 980px)`, () => {
+      const inner = section.querySelector<HTMLElement>(`.studioStoryInner`);
+      if (!inner) return;
+
+      const getTop = () => (document.querySelector<HTMLElement>(`.header`)?.offsetHeight ?? 104) + 12;
+      const syncTop = () => section.style.setProperty(`--story-top`, `${getTop()}px`);
+      const syncChapter = (trigger: ScrollTrigger) => {
+        setActiveIndex(Math.min(manifestoPrinciples.length - 1, Math.floor(trigger.progress * manifestoPrinciples.length)));
+      };
+
+      syncTop();
+      const trigger = ScrollTrigger.create({
+        trigger: inner,
+        pin: inner,
+        start: () => `top ${getTop()}px`,
+        end: () => `+=${inner.clientHeight * manifestoPrinciples.length}`,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onRefreshInit: syncTop,
+        onUpdate: syncChapter,
+        onRefresh: syncChapter,
+      });
+      mobileStoryTriggerRef.current = trigger;
+      syncChapter(trigger);
+
+      return () => {
+        mobileStoryTriggerRef.current = null;
+        section.style.removeProperty(`--story-top`);
+      };
+    });
+
+    return () => media.revert();
   }, []);
 
   const scrollToChapter = (index: number) => {
+    const reducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+    const smoothEnabled = document.documentElement.classList.contains(`smoothScrollEnabled`);
+    const behavior = reducedMotion || smoothEnabled ? `auto` : `smooth`;
+    const mobileTrigger = mobileStoryTriggerRef.current;
+    if (mobileTrigger) {
+      // Mobile chapters share one frame, so navigation targets their scroll ranges.
+      const top = mobileTrigger.start + ((index + 0.5) / manifestoPrinciples.length) * (mobileTrigger.end - mobileTrigger.start);
+      window.scrollTo({ top, behavior });
+      return;
+    }
     const chapter = chapterRefs.current[index];
     if (!chapter) return;
-    const reducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
-    chapter.scrollIntoView({ behavior: reducedMotion ? `auto` : `smooth`, block: `center` });
+    chapter.scrollIntoView({ behavior, block: `center` });
   };
 
   const activePrinciple = activeIndex === null ? null : manifestoPrinciples[activeIndex];
@@ -281,7 +323,7 @@ export function HomeManifestoReveal() {
             <div className={`studioStoryImageStack`}>
               {manifestoPrinciples.map((principle, index) => (
                 <figure className={`studioStoryImage ${index === activeIndex ? `studioStoryImageActive` : ``}`} key={principle.image}>
-                  <Image fill unoptimized loading={`eager`} src={principle.image} alt={``} sizes={`(max-width: 980px) 0px, 32vw`} />
+                  <Image fill unoptimized loading={`eager`} src={principle.image} alt={``} sizes={`(max-width: 980px) 92vw, 32vw`} />
                   <span className={`studioStoryImageShade`} />
                 </figure>
               ))}

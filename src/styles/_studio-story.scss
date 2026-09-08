@@ -564,93 +564,117 @@
 
 @media (max-width: 980px) {
   .studioStorySection {
-    padding-block: clamp(84px, 11vw, 112px);
+    padding-block: 24px;
   }
 
-  .studioStorySection::after {
-    display: none;
-  }
+  .studioStorySection::after { display: none; }
 
+  // ScrollTrigger supplies the scroll distance; this frame stays inside the viewport.
   .studioStoryInner {
-    gap: clamp(42px, 7vw, 68px);
-    grid-template-columns: 1fr;
+    height: calc(100svh - var(--story-top, 116px) - 12px);
+    min-height: 0;
+    gap: 14px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
   .studioStoryStage {
     top: auto;
-    gap: 0;
+    position: relative;
     height: auto;
     min-height: 0;
-    position: relative;
-    grid-template-rows: auto;
+    gap: 10px;
+    grid-template-rows: auto clamp(110px, 20svh, 190px) auto;
   }
 
   .studioStoryHeader {
-    padding-bottom: 28px;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 10px;
+  }
+
+  .studioStoryHeader .landingAltEyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
   }
 
   .studioStoryRange {
-    color: var(--foreground);
-    font-family: var(--font);
-    font-size: clamp(1.55rem, 5vw, 3.1rem);
-    line-height: 0.96;
-    letter-spacing: -0.045em;
-    text-transform: none;
+    font-size: 0.625rem;
+    line-height: 1.4;
+    white-space: normal;
+    letter-spacing: 0.06em;
   }
 
-  .studioStoryVisual,
+  .studioStoryVisual { display: block; margin-top: 0; }
+  .studioStoryNav { display: grid; grid-template-columns: minmax(0, 1fr) repeat(3, 44px); }
+  .studioStoryNav button { width: 44px; height: 44px; font-size: 0.75rem; }
   .studioStoryStageCopy,
-  .studioStoryNav {
-    display: none;
-  }
+  .studioStoryMobileVisual { display: none; }
 
   .studioStoryList {
+    display: grid;
+    min-height: 0;
+    overflow: hidden;
     border-top: 0;
   }
 
   .studioStoryChapter {
+    grid-area: 1 / 1;
+    height: 100%;
     min-height: 0;
-    padding: clamp(66px, 10vw, 96px) 0;
-    opacity: 1;
+    padding: 6px 4px 12px 0;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--landing-alt-line-strong) transparent;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
     filter: none;
-    transform: none;
+    transform: translate3d(16px, 0, 0);
+    border-bottom: 0;
   }
 
-  .studioStoryChapter::before {
-    display: none;
+  .studioStoryChapterActive {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0);
   }
 
-  .studioStoryMobileVisual {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    margin-bottom: clamp(30px, 6vw, 48px);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--landing-alt-line-strong);
-    background: rgba(0, 9, 27, 0.86);
-    box-shadow: 0 24px 64px rgba(0, 9, 27, 0.24);
-    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
-  }
-
-  .studioStoryMobileVisual .studioStoryImageShade {
-    display: block;
-  }
+  .studioStoryChapter::before { display: none; }
+  .studioStoryChapter > * { flex-shrink: 0; }
+  .studioStoryTopline { gap: 10px; }
+  .studioStoryIcon { width: 30px; height: 30px; font-size: 0.85rem; }
+  .studioStoryDiscipline { font-size: 0.6rem; letter-spacing: 0.04em; }
 
   .studioStoryChapter h3 {
-    max-width: 760px;
-    font-size: clamp(3rem, 10vw, 6.2rem);
+    margin-top: 14px;
+    font-size: clamp(1.7rem, 6.5vw, 2.75rem);
+    line-height: 1.04;
   }
 
   .studioStoryChapter > p {
-    max-width: 760px;
-    font-size: clamp(1rem, 2vw, 1.15rem);
+    margin-top: 12px;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
 
   .studioStorySignals {
-    max-width: 760px;
+    margin-top: 16px;
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .studioStorySignals li {
+    gap: 7px;
+    min-height: 48px;
+    padding: 8px;
+    font-size: 0.6rem;
+    letter-spacing: 0;
+  }
+
+  .studioStorySignalIcon { width: 24px; height: 24px; font-size: 0.65rem; }
 
   .studioStoryWatermark {
     width: min(92vw, 760px);
@@ -661,57 +685,17 @@
 }
 
 @media (max-width: 640px) {
-  .studioStorySection {
-    padding-inline: max(18px, var(--contentInset));
-  }
+  .studioStorySection { padding-inline: max(18px, var(--contentInset)); }
+  .studioStoryVisual { clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px)); }
+  .studioStoryVisualIndex { top: 12px; left: 14px; }
+  .studioStoryVisualCoordinate { right: 14px; bottom: 12px; font-size: 0.5rem; }
+  .studioStorySignals li { flex-direction: column; align-items: flex-start; }
+}
 
-  .studioStoryHeader {
-    gap: 20px;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .studioStoryRange {
-    text-align: left;
-  }
-
-  .studioStoryMobileVisual {
-    aspect-ratio: 4 / 5;
-    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-  }
-
-  .studioStoryTopline {
-    gap: 11px;
-  }
-
-  .studioStoryIcon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .studioStoryDiscipline {
-    margin-left: auto;
-    font-size: 0.56rem;
-    text-align: right;
-  }
-
-  .studioStoryChapter h3 {
-    margin-top: 34px;
-    font-size: clamp(2.75rem, 14vw, 4.65rem);
-  }
-
-  .studioStoryChapter > p {
-    margin-top: 24px;
-    line-height: 1.7;
-  }
-
-  .studioStorySignals {
-    grid-template-columns: 1fr;
-  }
-
-  .studioStorySignals li {
-    min-height: 58px;
-  }
+// Keep the copy readable on short phones and in landscape; decorative imagery yields space.
+@media (max-width: 980px) and (max-height: 650px) {
+  .studioStoryStage { grid-template-rows: auto auto; }
+  .studioStoryVisual { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

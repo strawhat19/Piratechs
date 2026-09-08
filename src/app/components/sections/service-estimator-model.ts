@@ -5,7 +5,7 @@ import {
 } from './service-estimator-catalog';
 
 export type { ServiceId } from './service-estimator-catalog';
-export type EstimatorStage = 'services' | ServiceId | 'budget' | 'payment' | 'review' | 'cart';
+export type EstimatorStage = 'services' | ServiceId | 'payment' | 'review' | 'cart';
 export type MaintenanceChoice = 'self' | 'managed' | null;
 export type PaymentMethod = 'full' | 'finance';
 export type DownPaymentMode = 'lower-monthly' | 'finish-sooner';
@@ -46,8 +46,6 @@ export type ServiceEstimatorDraft = {
   hourlyRate: number;
   mentoringHours: number;
   maintenance: MaintenanceChoice;
-  budget: number;
-  budgetTouched: boolean;
   paymentMethod: PaymentMethod;
   monthlyTarget: number;
   downPayment: number;
@@ -108,7 +106,7 @@ export function createEmptyServiceEstimatorDraft(): ServiceEstimatorDraft {
     creativeOptions: { ai: ['ai-chatbot'], video: ['short-form-video'], art: ['logo'], writing: ['content'] },
     mentoringTopics: ['ai'], marketingOptions: [], buildTypes: ['website-only'], buildFeatures: [],
     buildPageCount: 'one', buildEffort: 'simple', mentoringPricingMode: 'hourly',
-    hourlyRate: 20, mentoringHours: 1, maintenance: 'self', budget: 0, budgetTouched: false,
+    hourlyRate: 20, mentoringHours: 1, maintenance: 'self',
     paymentMethod: 'full', monthlyTarget: 175, downPayment: 0, downPaymentMode: 'finish-sooner',
   };
 }

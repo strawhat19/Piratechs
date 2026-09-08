@@ -1,9 +1,10 @@
 .homeWaveSection {
+  --home-wave-bottom-space: 220px;
   position: relative;
   isolation: isolate;
   overflow: hidden;
   scroll-margin-top: 112px;
-  padding: 32px var(--contentInset) 220px;
+  padding: 32px var(--contentInset) var(--home-wave-bottom-space);
   border-block: 1px solid var(--border);
   background: var(--navy-dark);
   color: var(--white-soft);
@@ -122,7 +123,16 @@
 .homeWaveEstimator {
   width: 100%;
   min-width: 0;
-  min-height: 0;
+  min-height: 280px;
+  position: relative;
+  align-self: stretch;
+
+  // Keep the original form's footprint; use the existing ocean space below it.
+  .servicesWidget {
+    position: absolute;
+    inset: 0 0 auto;
+    height: calc(100% + var(--home-wave-bottom-space) - 58px);
+  }
 }
 
 @media (min-width: 901px) {
@@ -206,7 +216,13 @@
   font-size: 0.6rem;
   letter-spacing: 0.14em;
 
+  > span { min-width: 0; white-space: nowrap; }
+  > span:last-child { text-align: right; }
   span span { color: var(--piratechsTeal); }
+  .homeWaveCoordinatesStudio,
+  .homeWaveCoordinatesFull,
+  .homeWaveCoordinatesShort { color: inherit; }
+  .homeWaveCoordinatesShort { display: none; }
 }
 
 @keyframes homeWaveDrift {
@@ -220,7 +236,7 @@
 }
 
 @media (max-width: 640px) {
-  .homeWaveSection { padding-top: 24px; padding-bottom: 185px; }
+  .homeWaveSection { --home-wave-bottom-space: 185px; padding-top: 24px; }
   .homeWaveTopline { align-items: flex-start; }
   .homeWaveTopline .eyebrow { max-width: 190px; font-size: 0.6rem; line-height: 1.8; }
   .homeWaveToggle { width: 44px; justify-content: center; padding: 0; }
@@ -229,8 +245,13 @@
   .homeWaveAuth { max-width: none; }
   .homeWaveCopy h2 { font-size: clamp(2rem, 8.1vw, 3.2rem); }
   .homeWaveOcean { height: 175px; }
-  .homeWaveCoordinates { font-size: 0.52rem; letter-spacing: 0.08em; }
-  .homeWaveCoordinates > span:last-child { display: none; }
+  .homeWaveCoordinates { gap: 10px; font-size: 0.52rem; letter-spacing: 0.08em; }
+  .homeWaveCoordinates .homeWaveCoordinatesFull { display: none; }
+  .homeWaveCoordinates .homeWaveCoordinatesShort { display: inline; }
+}
+
+@media (max-width: 400px) {
+  .homeWaveCoordinates .homeWaveCoordinatesStudio { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
