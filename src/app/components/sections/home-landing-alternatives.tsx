@@ -233,8 +233,8 @@ export function HomeManifestoReveal() {
     });
 
     media.add(`(max-width: 980px)`, () => {
-      const inner = section.querySelector<HTMLElement>(`.studioStoryInner`);
-      if (!inner) return;
+      const viewport = section.querySelector<HTMLElement>(`.studioStoryViewport`);
+      if (!viewport) return;
 
       const getTop = () => (document.querySelector<HTMLElement>(`.header`)?.offsetHeight ?? 104) + 12;
       const syncTop = () => section.style.setProperty(`--story-top`, `${getTop()}px`);
@@ -244,10 +244,10 @@ export function HomeManifestoReveal() {
 
       syncTop();
       const trigger = ScrollTrigger.create({
-        trigger: inner,
-        pin: inner,
+        trigger: viewport,
+        pin: viewport,
         start: () => `top ${getTop()}px`,
-        end: () => `+=${inner.clientHeight * manifestoPrinciples.length}`,
+        end: () => `+=${viewport.clientHeight * manifestoPrinciples.length}`,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onRefreshInit: syncTop,
@@ -293,111 +293,113 @@ export function HomeManifestoReveal() {
       data-active-chapter={activeIndex ?? `default`}
       className={`landingAltSection studioStorySection`}
     >
-      <div className={`studioStoryStickyDecor`} aria-hidden={`true`}>
-        <div className={`studioStoryStickyDecorFrame`}>
-          <div className={`studioStoryWatermark`}>
-            <Logo fullSword className={`studioStoryWatermarkLogo`} />
-          </div>
-          <svg className={`landingAltWave studioStoryWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`}>
-            <path className={`landingAltWaveLine landingAltWaveLineBack`} d={`M0 111C172 37 307 163 493 94C662 31 786 124 947 88C1126 48 1262 108 1440 42`} />
-            <path className={`landingAltWaveLine landingAltWaveLineFront`} d={`M0 146C189 70 320 178 520 124C682 80 852 164 1018 110C1176 59 1303 136 1440 90`} />
-          </svg>
-        </div>
-      </div>
-
-      <div id={`anchor`} className={`landingAltInner studioStoryInner`}>
-        <aside className={`studioStoryStage`}>
-          <header className={`studioStoryHeader`}>
-            <span className={`landingAltEyebrow studioStoryHeaderSwap`} key={`eyebrow-${activeKey}`}>
-              {activePrinciple?.headerEyebrow ?? `What we do`}
-            </span>
-            <p className={`studioStoryRange studioStoryHeaderSwap`} key={`statement-${activeKey}`}>
-              {activePrinciple?.headerStatement ?? `One studio. More range.`}
-            </p>
-          </header>
-
-          <div className={`studioStoryVisual`} aria-hidden={`true`}>
-            <div className={`studioStoryVisualIdle ${activeIndex === null ? `studioStoryVisualIdleActive` : ``}`}>
-              <Logo fullSword className={`studioStoryVisualIdleLogo`} />
+      <div className={`studioStoryViewport`}>
+        <div className={`studioStoryStickyDecor`} aria-hidden={`true`}>
+          <div className={`studioStoryStickyDecorFrame`}>
+            <div className={`studioStoryWatermark`}>
+              <Logo fullSword className={`studioStoryWatermarkLogo`} />
             </div>
-            <div className={`studioStoryImageStack`}>
+            <svg className={`landingAltWave studioStoryWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`}>
+              <path className={`landingAltWaveLine landingAltWaveLineBack`} d={`M0 111C172 37 307 163 493 94C662 31 786 124 947 88C1126 48 1262 108 1440 42`} />
+              <path className={`landingAltWaveLine landingAltWaveLineFront`} d={`M0 146C189 70 320 178 520 124C682 80 852 164 1018 110C1176 59 1303 136 1440 90`} />
+            </svg>
+          </div>
+        </div>
+
+        <div id={`anchor`} className={`landingAltInner studioStoryInner`}>
+          <aside className={`studioStoryStage`}>
+            <header className={`studioStoryHeader`}>
+              <span className={`landingAltEyebrow studioStoryHeaderSwap`} key={`eyebrow-${activeKey}`}>
+                {activePrinciple?.headerEyebrow ?? `What we do`}
+              </span>
+              <p className={`studioStoryRange studioStoryHeaderSwap`} key={`statement-${activeKey}`}>
+                {activePrinciple?.headerStatement ?? `One studio. More range.`}
+              </p>
+            </header>
+
+            <div className={`studioStoryVisual`} aria-hidden={`true`}>
+              <div className={`studioStoryVisualIdle ${activeIndex === null ? `studioStoryVisualIdleActive` : ``}`}>
+                <Logo fullSword className={`studioStoryVisualIdleLogo`} />
+              </div>
+              <div className={`studioStoryImageStack`}>
+                {manifestoPrinciples.map((principle, index) => (
+                  <figure className={`studioStoryImage ${index === activeIndex ? `studioStoryImageActive` : ``}`} key={principle.image}>
+                    <Image fill unoptimized loading={`eager`} src={principle.image} alt={``} sizes={`(max-width: 980px) 92vw, 32vw`} />
+                    <span className={`studioStoryImageShade`} />
+                  </figure>
+                ))}
+              </div>
+              <span className={`studioStoryVisualIndex`}>{activeIndex === null ? `00 / 03` : `0${activeIndex + 1} / 03`}</span>
+              <span className={`studioStoryVisualCoordinate`} key={`coordinate-${activeKey}`}>
+                {activePrinciple?.coordinate ?? `ATLANTA // 33.7490° N, 84.3880° W`}
+              </span>
+              <span className={`studioStoryScanline`} />
+            </div>
+
+            <div className={`studioStoryStageCopy`} aria-live={`polite`}>
               {manifestoPrinciples.map((principle, index) => (
-                <figure className={`studioStoryImage ${index === activeIndex ? `studioStoryImageActive` : ``}`} key={principle.image}>
-                  <Image fill unoptimized loading={`eager`} src={principle.image} alt={``} sizes={`(max-width: 980px) 92vw, 32vw`} />
-                  <span className={`studioStoryImageShade`} />
-                </figure>
+                <div
+                  className={`studioStoryStageCopyItem ${index === activeIndex ? `studioStoryStageCopyItemActive` : ``}`}
+                  aria-hidden={index !== activeIndex}
+                  key={principle.stageTitle}
+                >
+                  <span>{principle.discipline} // 0{index + 1}</span>
+                  <h2>{principle.stageTitle}</h2>
+                  <p>{principle.stageText}</p>
+                </div>
               ))}
             </div>
-            <span className={`studioStoryVisualIndex`}>{activeIndex === null ? `00 / 03` : `0${activeIndex + 1} / 03`}</span>
-            <span className={`studioStoryVisualCoordinate`} key={`coordinate-${activeKey}`}>
-              {activePrinciple?.coordinate ?? `ATLANTA // 33.7490° N, 84.3880° W`}
-            </span>
-            <span className={`studioStoryScanline`} />
-          </div>
 
-          <div className={`studioStoryStageCopy`} aria-live={`polite`}>
-            {manifestoPrinciples.map((principle, index) => (
-              <div
-                className={`studioStoryStageCopyItem ${index === activeIndex ? `studioStoryStageCopyItemActive` : ``}`}
-                aria-hidden={index !== activeIndex}
-                key={principle.stageTitle}
-              >
-                <span>{principle.discipline} // 0{index + 1}</span>
-                <h2>{principle.stageTitle}</h2>
-                <p>{principle.stageText}</p>
-              </div>
-            ))}
-          </div>
+            <nav className={`studioStoryNav`} aria-label={`Story chapters`}>
+              <span className={`studioStoryProgress`} aria-hidden={`true`}><span /></span>
+              {manifestoPrinciples.map((principle, index) => (
+                <button
+                  type={`button`}
+                  onClick={() => scrollToChapter(index)}
+                  className={index === activeIndex ? `studioStoryNavActive` : ``}
+                  aria-label={`Go to ${principle.title}`}
+                  aria-current={index === activeIndex ? `step` : undefined}
+                  key={principle.title}
+                >
+                  0{index + 1}
+                </button>
+              ))}
+            </nav>
+          </aside>
 
-          <nav className={`studioStoryNav`} aria-label={`Story chapters`}>
-            <span className={`studioStoryProgress`} aria-hidden={`true`}><span /></span>
+          <ol className={`studioStoryList`}>
             {manifestoPrinciples.map((principle, index) => (
-              <button
-                type={`button`}
-                onClick={() => scrollToChapter(index)}
-                className={index === activeIndex ? `studioStoryNavActive` : ``}
-                aria-label={`Go to ${principle.title}`}
+              <li
+                ref={element => { chapterRefs.current[index] = element; }}
+                className={`studioStoryChapter ${index === activeIndex ? `studioStoryChapterActive` : ``}`}
                 aria-current={index === activeIndex ? `step` : undefined}
                 key={principle.title}
               >
-                0{index + 1}
-              </button>
+                <div className={`studioStoryMobileVisual`}>
+                  <Image fill unoptimized src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
+                  <span className={`studioStoryImageShade`} aria-hidden={`true`} />
+                </div>
+                <div className={`studioStoryTopline`}>
+                  <span className={`studioStoryIndex`}>0{index + 1}</span>
+                  <i className={`${principle.icon} studioStoryIcon`} aria-hidden={`true`} />
+                  <span className={`studioStoryDiscipline`}>
+                    {principle.about}
+                  </span>
+                </div>
+                <TextReveal scroll as={`h3`} text={`${principle.title}.`} />
+                <p>{principle.text}</p>
+                <ul className={`studioStorySignals`} aria-label={`${principle.title} priorities`}>
+                  {principle.signals.map(signal => (
+                    <li key={signal.label}>
+                      <i className={`${signal.icon} studioStorySignalIcon`} aria-hidden={`true`} />
+                      <span>{signal.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
             ))}
-          </nav>
-        </aside>
-
-        <ol className={`studioStoryList`}>
-          {manifestoPrinciples.map((principle, index) => (
-            <li
-              ref={element => { chapterRefs.current[index] = element; }}
-              className={`studioStoryChapter ${index === activeIndex ? `studioStoryChapterActive` : ``}`}
-              aria-current={index === activeIndex ? `step` : undefined}
-              key={principle.title}
-            >
-              <div className={`studioStoryMobileVisual`}>
-                <Image fill unoptimized src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
-                <span className={`studioStoryImageShade`} aria-hidden={`true`} />
-              </div>
-              <div className={`studioStoryTopline`}>
-                <span className={`studioStoryIndex`}>0{index + 1}</span>
-                <i className={`${principle.icon} studioStoryIcon`} aria-hidden={`true`} />
-                <span className={`studioStoryDiscipline`}>
-                  {principle.about}
-                </span>
-              </div>
-              <TextReveal scroll as={`h3`} text={`${principle.title}.`} />
-              <p>{principle.text}</p>
-              <ul className={`studioStorySignals`} aria-label={`${principle.title} priorities`}>
-                {principle.signals.map(signal => (
-                  <li key={signal.label}>
-                    <i className={`${signal.icon} studioStorySignalIcon`} aria-hidden={`true`} />
-                    <span>{signal.label}</span>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
+          </ol>
+        </div>
       </div>
     </section>
   );

@@ -22,6 +22,20 @@ export default function HomeWaveSection({
 
   useEffect(() => {
     const section = sectionRef.current;
+    const header = document.querySelector<HTMLElement>('.header');
+    if (!section || !header) return;
+
+    const syncHeaderHeight = () => {
+      section.style.setProperty('--home-wave-header-height', `${header.offsetHeight}px`);
+    };
+    syncHeaderHeight();
+    const observer = new ResizeObserver(syncHeaderHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
     if (!section) return;
 
     let inView = false;
