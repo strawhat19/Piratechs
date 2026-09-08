@@ -22,6 +22,20 @@ export default function HomeWaveSection({
 
   useEffect(() => {
     const section = sectionRef.current;
+    const header = document.querySelector<HTMLElement>('.header');
+    if (!section || !header) return;
+
+    const syncHeaderHeight = () => {
+      section.style.setProperty('--home-wave-header-height', `${header.offsetHeight}px`);
+    };
+    syncHeaderHeight();
+    const observer = new ResizeObserver(syncHeaderHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
     if (!section) return;
 
     let inView = false;
@@ -104,8 +118,11 @@ export default function HomeWaveSection({
       </div>
 
       <div className="homeWaveCoordinates" aria-hidden="true">
-        <span>PIRATECHS <span>{`//`}</span> STUDIOS</span>
-        <span>DESIGN <span>→</span> DEVELOP <span>→</span> DISTORT</span>
+        <span>PIRATECHS<span className="homeWaveCoordinatesStudio"> <span>{`//`}</span> STUDIOS</span></span>
+        <span>
+          <span className="homeWaveCoordinatesFull">DESIGN <span>→</span> DEVELOP <span>→</span> DISTORT</span>
+          <span className="homeWaveCoordinatesShort">DSGN <span>→</span> DEV <span>→</span> DISTORT</span>
+        </span>
       </div>
     </section>
   );

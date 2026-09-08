@@ -166,14 +166,12 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
   const keyboardTabChange = useRef(false);
   const estimate = calculateServiceEstimate(draft);
   const payment = calculatePaymentProjection(draft, estimate);
-  const effectiveBudget = draft.budgetTouched ? draft.budget : estimate.total;
   const selectedCards = serviceCards.filter(service => draft.selectedServices.includes(service.id));
   const flow: { id: EstimatorStage; label: string; icon: string }[] = [
     { id: 'services', label: 'Services', icon: 'fa-layer-group' },
     ...selectedCards.map(service => ({ id: service.id, label: service.tab, icon: service.icon })),
-    { id: 'budget', label: 'Budget', icon: 'fa-sliders' },
     { id: 'payment', label: 'Payment', icon: 'fa-wallet' },
-    { id: 'review', label: 'Your project', icon: 'fa-flag' },
+    { id: 'review', label: 'Review', icon: 'fa-flag' },
   ];
   const tabs = state.cart.length ? [...flow, { id: 'cart' as const, label: `Cart (${state.cart.length})`, icon: 'fa-cart-shopping' }] : flow;
   const stageIndex = flow.findIndex(step => step.id === stage);
@@ -184,7 +182,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
     patch({ [field]: toggleValue(draft[field] as string[], value) });
   };
   const go = (nextStage: EstimatorStage) => {
-    if (scopeIssue && ['budget', 'payment', 'review'].includes(nextStage)) {
+    if (scopeIssue && ['payment', 'review'].includes(nextStage)) {
       dispatch({ type: 'go', stage: scopeIssue.stage });
       dispatch({ type: 'status', message: scopeIssue.message });
       return;
@@ -219,7 +217,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
     else return;
     event.preventDefault();
     const target = tabs[next];
-    const allowed = !scopeIssue || !['budget', 'payment', 'review'].includes(target.id);
+    const allowed = !scopeIssue || !['payment', 'review'].includes(target.id);
     keyboardTabChange.current = allowed;
     go(target.id);
     if (allowed) tabsRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus({ preventScroll: true });
@@ -249,7 +247,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
   };
 
   const panelTitle = stage === 'services' ? 'What can we help you create?'
-    : currentService?.label ?? ({ budget: 'A budget that works for you', payment: 'Choose how to pay', review: 'One last thing: name your project', cart: 'Your saved plans' } as const)[stage as 'budget' | 'payment' | 'review' | 'cart'];
+    : currentService?.label ?? ({ payment: 'Choose how to pay', review: 'Review your plan and name your project', cart: 'Your saved plans' } as const)[stage as 'payment' | 'review' | 'cart'];
   const showBuildScope = stage === 'build' || (stage === 'video' && draft.creativeOptions.video.includes('game'));
   const showBuildAddOns = stage === 'build' || (stage === 'video' && draft.creativeOptions.video.includes('game') && !draft.selectedServices.includes('build'));
 
@@ -323,15 +321,6 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
                 onChange={maintenance => patch({ maintenance })} />
             ) : null}
 
-            {stage === 'budget' ? (
-              <>
-                <p className="servicesWidgetNote">Your estimate follows your selections. A budget helps us prioritize; it does not change the price.</p>
-                <RangeField label="Working budget" min={0} max={estimate.maximum} step={25} value={effectiveBudget} display={money(effectiveBudget)} onChange={budget => patch({ budget, budgetTouched: true })} />
-                <p className="servicesWidgetNote">{effectiveBudget < estimate.total ? 'Your selections are above this budget. You can adjust any service tab or discuss a smaller scope with us.' : 'Your current selections fit within this budget.'}</p>
-                <button className="servicesWidgetTextButton" type="button" onClick={() => patch({ budgetTouched: false })}>Match budget to my selections</button>
-              </>
-            ) : null}
-
             {stage === 'payment' ? (
               <>
                 <RadioCards label="Payment preference" name={`${id}-payment`} selected={draft.paymentMethod}
@@ -403,7 +392,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart }:
                 {stageIndex > 0 ? <button type="button" className="servicesWidgetSecondary" onClick={() => go(flow[stageIndex - 1].id)} aria-label="Previous step"><i className="fa-solid fa-arrow-left" aria-hidden="true" /></button>
                   : <button type="button" className="servicesWidgetSecondary" onClick={() => dispatch({ type: 'new' })} aria-label="Clear selections and start over"><i className="fa-solid fa-rotate-left" aria-hidden="true" /></button>}
                 {stage === 'review' ? <button type="submit" className="servicesWidgetPrimary"><i className="fa-solid fa-cart-plus" aria-hidden="true" />{state.editingId ? 'Update cart' : 'Add to cart'}</button>
-                  : <button type="button" className="servicesWidgetPrimary" onClick={() => go(flow[stageIndex + 1].id)}>{stage === 'services' && estimate.isFreeConsultation ? 'Free consultation' : stage === 'payment' ? 'Name your project' : 'Continue'}<i className="fa-solid fa-arrow-right" aria-hidden="true" /></button>}
+                  : <button type="button" className="servicesWidgetPrimary" onClick={() => go(flow[stageIndex + 1].id)}>{stage === 'services' && estimate.isFreeConsultation ? 'Free consultation' : stage === 'payment' ? 'Review plan' : 'Continue'}<i className="fa-solid fa-arrow-right" aria-hidden="true" /></button>}
               </>
             )}
           </div>
