@@ -83,12 +83,12 @@ export const config: any = {
     { 
       value: `10+`, 
       title: `Years`,
-      label: `Years of Experience`, 
+      label: `Years`, 
       text: `Full-Stack Design // Development`, 
       html: `Full<span class="slashes slashesSM">-</span>Stack Design <span class="slashes slashesSM">//</span> Development`, 
     },
-    { label: `Technologies`, value: `100+`, text:  `PWAs, Apps, E-Commerce, Games, APIs` },
-    { label: `Applications`, value: `1000+`, text: `Enterprise Level with Robust Feature Sets` },
+    { label: `Applications`, value: `100+`, text:  `Enterprise Level with Robust Feature Sets` },
+    { label: `Technologies`, value: `1000+`, text: `PWAs, Apps, E-Commerce, Games, APIs` },
   ] satisfies Stat[],
   filters: [`All`, `Featured`, `PWA`, `Website`, `WordPress`, `E-Commerce`, `Game`, `API`],
   services: [

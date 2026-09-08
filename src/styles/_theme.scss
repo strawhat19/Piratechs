@@ -301,7 +301,7 @@ img {
   }
 }
 
-.wordLogo, .heroLogoPlate, .navLink, .footerBrand {
+.wordLogo, .heroBrand, .navLink, .footerBrand {
   &:has(.logoWordLettersArrows) {
     &:hover, &.logoHoverAnimation {
       .fullSwordCaptainsHat {

@@ -218,7 +218,7 @@ export default function HomeLanding() {
         />
       </section>
 
-      <div id={`anchor`} className={`sep reveal`} />
+      <div className={`sep reveal`} />
 
       {/* <section className={`pageSection specialtiesSection`}>
         <div className={`sectionInner backendGrid`}>

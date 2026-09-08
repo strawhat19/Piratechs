@@ -12,36 +12,60 @@ import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent as ReactKe
 const manifestoPrinciples = [
   {
     icon: `fa-solid fa-chart-line`,
-    discipline: `Small business`,
     title: `Think like a business`,
+    discipline: `Scalable business`,
+    headerEyebrow: `Business insight`,
+    headerStatement: `Built for momentum.`,
     stageTitle: `Clarity before complexity.`,
+    about: `Assistant Manager from 2017 - 2019`,
     stageText: `Real constraints become focused digital decisions that create useful leverage.`,
-    text: `We have worked alongside many small businesses, so we know the pain points are rarely abstract: limited time, tight budgets, disconnected tools, and inconsistent lead flow. We find the friction and build the specific website, workflow, or product that helps relieve it.`,
-    image: `/assets/piratechs/studio-story/think-like-a-business.webp`,
-    imageAlt: `A connected neighborhood storefront surrounded by scheduling, payment, customer, and growth touchpoints`,
-    signals: [`Practical priorities`, `Lean, focused solutions`, `Built for daily operations`],
+    text: `We have worked alongside growing businesses, so we know the pain points are rarely abstract: limited time, tight budgets, disconnected tools, and inconsistent lead flow. We find the friction and build the specific website, workflow, or product that creates useful leverage.`,
+    image: `/assets/piratechs/studio-story/scalable-business-photo.webp`,
+    imageAlt: `A growing business team reviewing operations together in a working studio`,
+    coordinate: `MARIETTA // 33.9526° N, 84.5499° W`,
+    signals: [
+      { icon: `fa-solid fa-bullseye`, label: `Practical priorities` },
+      { icon: `fa-solid fa-layer-group`, label: `Lean, focused systems` },
+      { icon: `fa-solid fa-gears`, label: `Built for daily operations` },
+    ],
   },
   {
-    icon: `fa-solid fa-pen-ruler`,
-    discipline: `Agency operations`,
     title: `Work like an agency`,
+    icon: `fa-solid fa-pen-ruler`,
+    headerEyebrow: `Agency rhythm`,
+    discipline: `Agency operations`,
     stageTitle: `Volume without compromise.`,
+    headerStatement: `Move fast. Stay sharp.`,
+    about: `Designer // Developer from 2019 - 2021`,
     stageText: `A practiced production rhythm keeps speed, visibility, and craft moving together.`,
     text: `We have partnered with many agencies and understand how they manage volume, track customers and leads, coordinate handoffs, and protect quality under deadline pressure. That experience lets us support an agency workflow with high-volume output and a high-quality standard.`,
-    image: `/assets/piratechs/studio-story/work-like-an-agency.webp`,
-    imageAlt: `A coordinated creative production space with parallel project lanes and quality-control checkpoints`,
-    signals: [`High-volume delivery`, `Lead + client visibility`, `Quality at every handoff`],
+    image: `/assets/piratechs/studio-story/agency-operations-photo.webp`,
+    imageAlt: `A creative agency team coordinating projects in an active production studio`,
+    coordinate: `KENNESAW // 34.0234° N, 84.6155° W`,
+    signals: [
+      { icon: `fa-solid fa-gauge-high`, label: `High-volume delivery` },
+      { icon: `fa-solid fa-address-card`, label: `Lead + client visibility` },
+      { icon: `fa-solid fa-circle-check`, label: `Quality at every handoff` },
+    ],
   },
   {
     icon: `fa-solid fa-microchip`,
-    discipline: `Enterprise systems`,
     title: `Build like an engineer`,
+    discipline: `Enterprise systems`,
+    headerEyebrow: `Engineering depth`,
     stageTitle: `Systems built to hold.`,
+    headerStatement: `Complexity, engineered.`,
+    about: `Software Engineer from 2022 - ${new Date().getFullYear()}`,
     stageText: `Complex requirements become resilient architecture designed for the long run.`,
     text: `We have worked with corporations on custom internal software engineering, so we know how to turn complex, specific requirements into robust solutions. We design for integrations, edge cases, maintainability, security, and the enterprise-level scale the system must support next.`,
-    image: `/assets/piratechs/studio-story/build-like-an-engineer.webp`,
-    imageAlt: `A resilient modular software system core with layered architecture and connected services`,
-    signals: [`Custom internal systems`, `Complex integrations`, `Enterprise-ready scale`],
+    image: `/assets/piratechs/studio-story/enterprise-engineering-photo.webp`,
+    imageAlt: `An enterprise engineering team reviewing a complex system architecture`,
+    coordinate: `DULUTH // 34.0029° N, 84.1446° W`,
+    signals: [
+      { icon: `fa-solid fa-server`, label: `Custom internal systems` },
+      { icon: `fa-solid fa-link`, label: `Complex integrations` },
+      { icon: `fa-solid fa-shield-halved`, label: `Enterprise-ready scale` },
+    ],
   },
 ] as const;
 
@@ -180,7 +204,7 @@ const radarRings = [25, 50, 75, 100].map(score => radarCapabilities.map((_, inde
 export function HomeManifestoReveal() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const chapterRefs = useRef<Array<HTMLLIElement | null>>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -196,6 +220,9 @@ export function HomeManifestoReveal() {
           end: `bottom 42%`,
           onEnter: () => setActiveIndex(index),
           onEnterBack: () => setActiveIndex(index),
+          onLeaveBack: () => {
+            if (index === 0) setActiveIndex(null);
+          },
           onToggle: trigger => {
             if (trigger.isActive) setActiveIndex(index);
           },
@@ -213,40 +240,56 @@ export function HomeManifestoReveal() {
     chapter.scrollIntoView({ behavior: reducedMotion ? `auto` : `smooth`, block: `center` });
   };
 
+  const activePrinciple = activeIndex === null ? null : manifestoPrinciples[activeIndex];
+  const activeKey = activeIndex === null ? `default` : String(activeIndex);
+
   return (
     <section
       id={`services`}
       ref={sectionRef}
-      className={`landingAltSection studioStorySection`}
-      data-active-chapter={activeIndex}
       aria-label={`How Piratechs thinks and works`}
+      data-active-chapter={activeIndex ?? `default`}
+      className={`landingAltSection studioStorySection`}
     >
-      <div className={`studioStoryWatermark`} aria-hidden={`true`}>
-        <Logo fullSword className={`studioStoryWatermarkLogo`} />
+      <div className={`studioStoryStickyDecor`} aria-hidden={`true`}>
+        <div className={`studioStoryStickyDecorFrame`}>
+          <div className={`studioStoryWatermark`}>
+            <Logo fullSword className={`studioStoryWatermarkLogo`} />
+          </div>
+          <svg className={`landingAltWave studioStoryWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`}>
+            <path className={`landingAltWaveLine landingAltWaveLineBack`} d={`M0 111C172 37 307 163 493 94C662 31 786 124 947 88C1126 48 1262 108 1440 42`} />
+            <path className={`landingAltWaveLine landingAltWaveLineFront`} d={`M0 146C189 70 320 178 520 124C682 80 852 164 1018 110C1176 59 1303 136 1440 90`} />
+          </svg>
+        </div>
       </div>
-      <svg className={`landingAltWave studioStoryWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`} aria-hidden={`true`}>
-        <path className={`landingAltWaveLine landingAltWaveLineBack`} d={`M0 111C172 37 307 163 493 94C662 31 786 124 947 88C1126 48 1262 108 1440 42`} />
-        <path className={`landingAltWaveLine landingAltWaveLineFront`} d={`M0 146C189 70 320 178 520 124C682 80 852 164 1018 110C1176 59 1303 136 1440 90`} />
-      </svg>
 
-      <div className={`landingAltInner studioStoryInner`}>
+      <div id={`anchor`} className={`landingAltInner studioStoryInner`}>
         <aside className={`studioStoryStage`}>
           <header className={`studioStoryHeader`}>
-            <TextReveal scroll as={`span`} className={`landingAltEyebrow`} text={`What we do`} />
-            <p className={`studioStoryRange`}><span>One studio.</span><span>More range.</span></p>
+            <span className={`landingAltEyebrow studioStoryHeaderSwap`} key={`eyebrow-${activeKey}`}>
+              {activePrinciple?.headerEyebrow ?? `What we do`}
+            </span>
+            <p className={`studioStoryRange studioStoryHeaderSwap`} key={`statement-${activeKey}`}>
+              {activePrinciple?.headerStatement ?? `One studio. More range.`}
+            </p>
           </header>
 
           <div className={`studioStoryVisual`} aria-hidden={`true`}>
+            <div className={`studioStoryVisualIdle ${activeIndex === null ? `studioStoryVisualIdleActive` : ``}`}>
+              <Logo fullSword className={`studioStoryVisualIdleLogo`} />
+            </div>
             <div className={`studioStoryImageStack`}>
               {manifestoPrinciples.map((principle, index) => (
                 <figure className={`studioStoryImage ${index === activeIndex ? `studioStoryImageActive` : ``}`} key={principle.image}>
-                  <Image fill src={principle.image} alt={``} sizes={`(max-width: 980px) 0px, 46vw`} />
+                  <Image fill unoptimized loading={`eager`} src={principle.image} alt={``} sizes={`(max-width: 980px) 0px, 32vw`} />
                   <span className={`studioStoryImageShade`} />
                 </figure>
               ))}
             </div>
-            <span className={`studioStoryVisualIndex`}>0{activeIndex + 1} / 03</span>
-            <span className={`studioStoryVisualCoordinate`}>ATL // 33.7490° N</span>
+            <span className={`studioStoryVisualIndex`}>{activeIndex === null ? `00 / 03` : `0${activeIndex + 1} / 03`}</span>
+            <span className={`studioStoryVisualCoordinate`} key={`coordinate-${activeKey}`}>
+              {activePrinciple?.coordinate ?? `ATLANTA // 33.7490° N, 84.3880° W`}
+            </span>
             <span className={`studioStoryScanline`} />
           </div>
 
@@ -290,18 +333,25 @@ export function HomeManifestoReveal() {
               key={principle.title}
             >
               <div className={`studioStoryMobileVisual`}>
-                <Image fill src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
+                <Image fill unoptimized src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
                 <span className={`studioStoryImageShade`} aria-hidden={`true`} />
               </div>
               <div className={`studioStoryTopline`}>
                 <span className={`studioStoryIndex`}>0{index + 1}</span>
                 <i className={`${principle.icon} studioStoryIcon`} aria-hidden={`true`} />
-                <span className={`studioStoryDiscipline`}>{principle.discipline}</span>
+                <span className={`studioStoryDiscipline`}>
+                  {principle.about}
+                </span>
               </div>
               <TextReveal scroll as={`h3`} text={`${principle.title}.`} />
               <p>{principle.text}</p>
               <ul className={`studioStorySignals`} aria-label={`${principle.title} priorities`}>
-                {principle.signals.map(signal => <li key={signal}>{signal}</li>)}
+                {principle.signals.map(signal => (
+                  <li key={signal.label}>
+                    <i className={`${signal.icon} studioStorySignalIcon`} aria-hidden={`true`} />
+                    <span>{signal.label}</span>
+                  </li>
+                ))}
               </ul>
             </li>
           ))}
