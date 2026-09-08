@@ -20,7 +20,7 @@ const manifestoPrinciples = [
     about: `Assistant Manager from 2017 - 2019`,
     stageText: `Real constraints become focused digital decisions that create useful leverage.`,
     text: `We have worked alongside growing businesses, so we know the pain points are rarely abstract: limited time, tight budgets, disconnected tools, and inconsistent lead flow. We find the friction and build the specific website, workflow, or product that creates useful leverage.`,
-    image: `/assets/piratechs/studio-story/scalable-business-photo.webp`,
+    image: `/assets/piratechs/studio-story/scalable-business-photo-v3.webp`,
     imageAlt: `A growing business team reviewing operations together in a working studio`,
     coordinate: `MARIETTA // 33.9526° N, 84.5499° W`,
     signals: [
@@ -39,7 +39,7 @@ const manifestoPrinciples = [
     about: `Designer // Developer from 2019 - 2021`,
     stageText: `A practiced production rhythm keeps speed, visibility, and craft moving together.`,
     text: `We have partnered with many agencies and understand how they manage volume, track customers and leads, coordinate handoffs, and protect quality under deadline pressure. That experience lets us support an agency workflow with high-volume output and a high-quality standard.`,
-    image: `/assets/piratechs/studio-story/agency-operations-photo.webp`,
+    image: `/assets/piratechs/studio-story/agency-operations-photo-v3.webp`,
     imageAlt: `A creative agency team coordinating projects in an active production studio`,
     coordinate: `KENNESAW // 34.0234° N, 84.6155° W`,
     signals: [
