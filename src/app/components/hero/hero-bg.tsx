@@ -69,7 +69,7 @@ export default function HeroBg({
 
   useLayoutEffect(() => {
     const heroBgClip = heroBgClipRef.current;
-    if (!heroBgClip || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) return;
+    if (!heroBgClip || document.documentElement.dataset.perf === `lite` || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) return;
 
     gsap.registerPlugin(ScrollTrigger);
     const scrollTween = gsap.to(heroBgClip, {

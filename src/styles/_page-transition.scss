@@ -135,7 +135,8 @@ body.pageTransitionPending .heroBrand.reveal {
       radial-gradient(circle at 88% 100%, rgba(var(--piratechsTeal_rgb), 0.18), transparent 38%),
       linear-gradient(145deg, rgba(var(--navy_rgb), 0.88), var(--navy-deep) 58%, var(--navy-dark));
     box-shadow: 0 34px 100px rgba(0, 9, 27, 0.46), 0 0 70px rgba(var(--piratechsNeon_rgb), 0.14);
-    backdrop-filter: blur(16px);
+    // Opaque gradient tint preserves the glass appearance without sampling moving blinds.
+    backdrop-filter: none;
     clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
   }
 
@@ -275,7 +276,13 @@ body.pageTransitionPending .heroBrand.reveal {
     visibility: hidden;
   }
 
+  &.idle .pageTransitionCornerSignal,
+  &.idle .pageTransitionCornerBeacon {
+    animation-play-state: paused;
+  }
+
   &.idle .pageTransitionBlind {
+    will-change: auto;
     // Reset offscreen immediately so the next entrance always starts at the top.
     transition: none;
   }
@@ -294,8 +301,7 @@ body.pageTransitionPending .heroBrand.reveal {
     overflow: hidden;
     color: white;
     opacity: 0;
-    filter: blur(7px);
-    will-change: opacity, filter, transform;
+    will-change: opacity, transform;
     transform: translate3d(-50%, -47.5%, 0) scale(0.975);
   }
 
@@ -306,7 +312,6 @@ body.pageTransitionPending .heroBrand.reveal {
     opacity: 0.28;
     pointer-events: none;
     background: radial-gradient(circle, rgba(0, 191, 255, 0.24), transparent 58%);
-    filter: blur(32px);
   }
 
   .pageTransitionMeta {
@@ -383,9 +388,8 @@ body.pageTransitionPending .heroBrand.reveal {
     line-height: 1;
     letter-spacing: 0.06em;
     white-space: nowrap;
-    filter: url(#pageTransitionMotionBlur);
     text-shadow: 0 0 20px rgba(0, 191, 255, 0.38);
-    will-change: filter, opacity, transform;
+    will-change: opacity, transform;
   }
 
   .pageTransitionTechnology {
@@ -498,10 +502,8 @@ body.pageTransitionPending .heroBrand.reveal {
     line-height: 1;
     letter-spacing: 0.06em;
     text-align: right;
-    filter: url(#pageTransitionMotionBlur);
     text-shadow: 0 0 12px rgba(0, 191, 255, 0.46);
-    will-change: filter, transform;
-    animation: pageTransitionCounterFocus 240ms ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   .pageTransitionProgressValuePrimary {
@@ -558,16 +560,18 @@ body.pageTransitionPending .heroBrand.reveal {
   &.covered .pageTransitionIdentity,
   &.covering .pageTransitionIdentity {
     opacity: 1;
-    filter: blur(0);
     animation: pageTransitionIdentityEnter var(--page-transition-center-duration) cubic-bezier(0.22, 1, 0.36, 1) var(--page-transition-center-delay) both;
     transform: translate3d(-50%, -50%, 0) scale(1);
   }
 
   &.revealing .pageTransitionIdentity {
     opacity: 0;
-    filter: blur(7px);
-    animation: pageTransitionIdentityExit 700ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: pageTransitionIdentityExit 320ms cubic-bezier(0.4, 0, 0.2, 1) both;
     transform: translate3d(-50%, -52%, 0) scale(1.03);
+  }
+
+  &.covered .pageTransitionIdentity {
+    animation: none;
   }
 }
 
@@ -704,12 +708,10 @@ body.pageTransitionPending .heroBrand.reveal {
 @keyframes pageTransitionIdentityEnter {
   from {
     opacity: 0;
-    filter: blur(7px);
     transform: translate3d(-50%, -47.5%, 0) scale(0.975);
   }
   to {
     opacity: 1;
-    filter: blur(0);
     transform: translate3d(-50%, -50%, 0) scale(1);
   }
 }
@@ -717,12 +719,10 @@ body.pageTransitionPending .heroBrand.reveal {
 @keyframes pageTransitionIdentityExit {
   from {
     opacity: 1;
-    filter: blur(0);
     transform: translate3d(-50%, -50%, 0) scale(1);
   }
   to {
     opacity: 0;
-    filter: blur(7px);
     transform: translate3d(-50%, -52%, 0) scale(1.03);
   }
 }

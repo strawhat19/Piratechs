@@ -1,48 +1,62 @@
-// Performance-lite mode (Phases 3-5).
-// Auto-applied by the inline script in layout.tsx when devicePixelRatio > 1.5
-// (Retina / HiDPI displays such as MacBooks) or when the user prefers reduced
-// motion. Standard-DPI displays (e.g. a 1080p Windows desktop) never match these
-// selectors, so they keep the full-quality effects untouched.
+// Retina displays rasterize substantially more pixels per CSS pixel. Preserve
+// the artwork and transform/opacity motion, but avoid stacked live blur passes.
+// The layout's beforeInteractive script selects this mode before hydration.
+html[data-perf="lite"] {
+  // .header,
+  .scrollToTop,
+  .homeWaveServiceButton,
+  .homeWaveStart,
+  .buttonLink.ghost,
+  .googleButton,
+  .filterButton {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 
-// html[data-perf="lite"] {
-//   scroll-behavior: auto;
-// }
+  .heroCircuitOverlay[data-blur="true"],
+  .circuitLayerMain,
+  .circuitNodes,
+  .heroSection .logoLetter,
+  .heroSection .dropShadow,
+  .studioStoryWatermark,
+  .studioStoryVisualIdleLogo,
+  .studioStoryImage,
+  .studioStoryStageCopyItem,
+  .studioStoryHeaderSwap,
+  .studioStoryVisualCoordinate {
+    filter: none !important;
+  }
 
-// --- Phase 3: cheaper backdrop-filters (the costliest effect at 2x+ DPI) ---
+  .heroCircuitOverlay[data-animate-pulses="true"] .pulseB,
+  .heroCircuitOverlay[data-animate-pulses="true"] .pulseC {
+    animation: none;
+  }
 
-html[data-perf="lite"] .header {
-  backdrop-filter: blur(9px);
+  .heroCircuitOverlay[data-blend-mode="true"] { mix-blend-mode: normal; }
+
+  // Keep the rotation but omit the continuously repainting stroke animation.
+  .heroSection .blackWaves path { animation: rotate 7s linear infinite reverse; }
+
+  .pageSection:not(.heroSection) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 520px;
+  }
 }
 
-html[data-perf="lite"] .scrollToTop {
-  backdrop-filter: blur(9px);
+// Pausing only the repeating decoration preserves entrance/reveal callbacks.
+// The observer in HomeLanding also pauses these when the tab is hidden.
+.heroSection[data-motion-active="false"] {
+  .heroCircuitOverlay,
+  .heroCircuitOverlay .circuitPulse,
+  .heroCircuitEnergy,
+  .avatarArcTextSvg,
+  .blackWaves path,
+  .pictureWaves::after {
+    animation-play-state: paused !important;
+  }
 }
 
-// A live backdrop blur adds little to a small button but forces a separate
-// compositing pass for each one; drop it and keep the existing tint.
-// html[data-perf="lite"] .buttonLink.ghost,
-// html[data-perf="lite"] .googleButton,
-// html[data-perf="lite"] .filterButton {
-//   backdrop-filter: none !important;
-// }
-
-// --- Phase 4: tame the hero circuit overlay ---
-
-// The SVG Gaussian glow is re-rasterized at the device pixel ratio on every
-// frame the pulses move; removing it is the single biggest hero win on Retina.
-// html[data-perf="lite"] .circuitLayerMain,
-// html[data-perf="lite"] .circuitNodes {
-//   filter: none !important;
-// }
-
-// Keep a single animated pulse instead of three to cut per-frame repaint cost.
-// html[data-perf="lite"] .heroCircuitOverlay[data-animate-pulses="true"] .pulseB,
-// html[data-perf="lite"] .heroCircuitOverlay[data-animate-pulses="true"] .pulseC {
-//   animation: none;
-// }
-
-// Skip painting offscreen sections until they approach the viewport.
-html[data-perf="lite"] .pageSection:not(.heroSection) {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 520px;
+.studioStorySection[data-motion-active="false"] {
+  .landingAltWaveLine,
+  .studioStoryScanline { animation-play-state: paused; }
 }

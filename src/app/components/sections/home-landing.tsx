@@ -11,14 +11,14 @@ import { config } from '@/shared/config/config';
 import HomeWaveSection from './home-wave-section';
 import HomeLandingSections from './home-landing-sections';
 import { useGlobalContext } from '@/shared/global-context';
-import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
 import AvatarAnimation from '../media/avatar/avatar-animation';
 import { scrollToElement } from '@/shared/common/scripts/globals';
+import { HomeManifestoReveal } from './home-landing-alternatives';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
-import HomeFeaturedProjectCarousel from './home-featured-project-carousel';
-import { HomeCapabilityRadar, HomeManifestoReveal, HomeProjectBento } from './home-landing-alternatives';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+// import HomeFeaturedProjectCarousel from './home-featured-project-carousel';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
@@ -37,6 +37,32 @@ export default function HomeLanding({
   const heroBgAnimationHandlersRef = useRef<HeroBgAnimationHandlers>({});
 
   const { width } = useGlobalContext();
+
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>(`.heroSection, .studioStorySection`));
+    const visible = new Set<Element>();
+    const sync = () => {
+      const ready = document.body.classList.contains(pageTransitionCompleteClass);
+      sections.forEach(section => {
+        section.dataset.motionActive = String(ready && !document.hidden && visible.has(section));
+      });
+    };
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      });
+      sync();
+    });
+    sections.forEach(section => observer.observe(section));
+    document.addEventListener(`visibilitychange`, sync);
+    window.addEventListener(pageTransitionReadyEvent, sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener(`visibilitychange`, sync);
+      window.removeEventListener(pageTransitionReadyEvent, sync);
+    };
+  }, []);
 
   const gridPlaneRevealStart = useCallback<HeroBgMilestoneHandler>((releaseAccents) => {
     heroBgAnimationHandlersRef.current.gridPlaneRevealStart?.(releaseAccents);
@@ -152,7 +178,7 @@ export default function HomeLanding({
 
   return (
     <>
-      <section ref={heroSectionRef} className={`pageSection heroSection`}>
+      <section ref={heroSectionRef} className={`pageSection heroSection`} data-motion-active={`false`}>
         <HeroBg
           onGridPlaneRevealStart={gridPlaneRevealStart}
           onCircuitRevealComplete={circuitRevealComplete}

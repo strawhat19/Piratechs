@@ -291,6 +291,7 @@ export function HomeManifestoReveal() {
       ref={sectionRef}
       aria-label={`How Piratechs thinks and works`}
       data-active-chapter={activeIndex ?? `default`}
+      data-motion-active={`false`}
       className={`landingAltSection studioStorySection`}
     >
       <div className={`studioStoryViewport`}>
@@ -324,7 +325,7 @@ export function HomeManifestoReveal() {
               <div className={`studioStoryImageStack`}>
                 {manifestoPrinciples.map((principle, index) => (
                   <figure className={`studioStoryImage ${index === activeIndex ? `studioStoryImageActive` : ``}`} key={principle.image}>
-                    <Image fill unoptimized loading={`eager`} src={principle.image} alt={``} sizes={`(max-width: 980px) 92vw, 32vw`} />
+                    <Image fill unoptimized src={principle.image} alt={``} sizes={`(max-width: 980px) 92vw, 32vw`} />
                     <span className={`studioStoryImageShade`} />
                   </figure>
                 ))}
@@ -375,10 +376,6 @@ export function HomeManifestoReveal() {
                 aria-current={index === activeIndex ? `step` : undefined}
                 key={principle.title}
               >
-                <div className={`studioStoryMobileVisual`}>
-                  <Image fill unoptimized src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
-                  <span className={`studioStoryImageShade`} aria-hidden={`true`} />
-                </div>
                 <div className={`studioStoryTopline`}>
                   <span className={`studioStoryIndex`}>0{index + 1}</span>
                   <i className={`${principle.icon} studioStoryIcon`} aria-hidden={`true`} />

@@ -17,11 +17,12 @@ type TransitionCssProperties = CSSProperties & {
 
 const loaderKeywordSteps = 4;
 const shutterBlindCount = 12;
-const loaderCompleteHoldMs = 80;
-const revealDurationMs = 1120;
-const initialHoldMs = revealDurationMs;
-const centerRevealMaxDurationMs = 760;
-const revealBlindStaggerMs = 38;
+const loaderCompleteHoldMs = 40;
+const revealDurationMs = 640;
+// The page is already hydrated; keep only a brief brand beat before revealing.
+const initialHoldMs = 120;
+const centerRevealMaxDurationMs = 360;
+const revealBlindStaggerMs = 20;
 const coverBlindStaggerMs = revealBlindStaggerMs;
 const shutterBlinds = Array.from({ length: shutterBlindCount }, (_, index) => index);
 const loaderCornerPositions = [`TopLeft`, `TopRight`, `BottomLeft`, `BottomRight`];
@@ -100,13 +101,12 @@ export default function SplitPageTransition({
   const progressTrailRef = useRef<HTMLSpanElement | null>(null);
   const displayedProgressRef = useRef(-1);
   const keywordRef = useRef<HTMLSpanElement | null>(null);
-  const motionBlurRef = useRef<SVGFEGaussianBlurElement | null>(null);
   const keywordIndexRef = useRef(-1);
   const keywordOffsetRef = useRef(getKeywordOffset(initialPageName));
   const initialRevealCompleteRef = useRef(false);
   const coverDurationMs = Math.max(180, Math.round(duration * 1000));
   const coverBlindTransitionMs = Math.max(48, coverDurationMs - coverBlindStaggerMs * (shutterBlindCount - 1));
-  const revealBlindTransitionMs = Math.max(480, revealDurationMs - revealBlindStaggerMs * (shutterBlindCount - 1));
+  const revealBlindTransitionMs = Math.max(240, revealDurationMs - revealBlindStaggerMs * (shutterBlindCount - 1));
   const centerRevealDurationMs = Math.min(centerRevealMaxDurationMs, Math.max(120, Math.round(coverDurationMs * 0.68)));
   const centerRevealDelayMs = Math.max(0, coverDurationMs - centerRevealDurationMs);
   const doneDelayBeforeLeaveMs = Number.isFinite(doneDelayBeforeLeave)
@@ -169,7 +169,6 @@ export default function SplitPageTransition({
     if (progressFrameRef.current != null) window.cancelAnimationFrame(progressFrameRef.current);
     progressFrameRef.current = null;
     if (complete) updateProgress(100);
-    motionBlurRef.current?.setAttribute(`stdDeviation`, `0 0`);
   }, [updateProgress]);
 
   const startProgress = useCallback((totalMs: number) => {
@@ -182,29 +181,18 @@ export default function SplitPageTransition({
       return;
     }
 
-    let lastValue = 0;
-    let blurAmount = 0;
-    let lastTime = window.performance.now();
-    const startedAt = lastTime;
+    const startedAt = window.performance.now();
     const tick = (now: number) => {
       const elapsed = Math.min(1, (now - startedAt) / totalMs);
       const eased = elapsed * elapsed * (3 - 2 * elapsed);
       const nextValue = eased * 100;
-      const deltaTime = Math.max(now - lastTime, 1) / 1000;
-      const velocity = Math.abs(nextValue - lastValue) / deltaTime;
-      const targetBlur = Math.min(3.5, velocity * 0.006);
-      blurAmount += (targetBlur - blurAmount) * 0.3;
-      motionBlurRef.current?.setAttribute(`stdDeviation`, `0 ${blurAmount.toFixed(2)}`);
       updateProgress(nextValue, elapsed * 100);
-      lastValue = nextValue;
-      lastTime = now;
 
       if (elapsed < 1) {
         progressFrameRef.current = window.requestAnimationFrame(tick);
         return;
       }
 
-      motionBlurRef.current?.setAttribute(`stdDeviation`, `0 0`);
       progressFrameRef.current = null;
     };
 
@@ -328,20 +316,6 @@ export default function SplitPageTransition({
         style={transitionStyle}
         aria-hidden={phase == `idle`}
       >
-        <svg className={`pageTransitionMotionFilter`} aria-hidden={true} focusable={false}>
-          <defs>
-            <filter
-              id={`pageTransitionMotionBlur`}
-              x={`-50%`}
-              y={`-80%`}
-              width={`200%`}
-              height={`260%`}
-              colorInterpolationFilters={`sRGB`}
-            >
-              <feGaussianBlur ref={motionBlurRef} in={`SourceGraphic`} stdDeviation={`0 0`} />
-            </filter>
-          </defs>
-        </svg>
         <div className={`pageTransitionBlinds`} aria-hidden={true}>
           {shutterBlinds.map(index => (
             <span

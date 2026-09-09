@@ -21,6 +21,9 @@ export default function HeroContent({ end, start }: HeroContentProps) {
     const heroSection = heroEndWrapper?.closest<HTMLElement>(`.heroSection`);
 
     if (!heroStart || !heroSection || !heroEndWrapper) return;
+    // Large scrolling layers are costly at Retina resolution; native scrolling
+    // retains the layout without scaling and repainting the entire hero.
+    if (document.documentElement.dataset.perf === `lite`) return;
 
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
