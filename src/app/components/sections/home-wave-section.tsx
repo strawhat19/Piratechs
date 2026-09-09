@@ -132,7 +132,11 @@ export default function HomeWaveSection({
         renderServiceSelection={selection => (
           <WaveServiceSelection {...selection} onStart={() => {
             const section = sectionRef.current;
-            if (section) section.style.setProperty('--home-wave-resting-height', `${section.getBoundingClientRect().height}px`);
+            if (section) {
+              const sectionWidth = section.getBoundingClientRect().width;
+              const sectionHeight = section.getBoundingClientRect().height;
+              section.style.setProperty(`--home-wave-resting-height`, `${sectionWidth >= 981 ? (sectionHeight + 193) : sectionHeight}px`);
+            }
             selection.onStart();
           }} />
         )} 

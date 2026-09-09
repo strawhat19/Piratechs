@@ -169,8 +169,8 @@ export function createEmptyServiceEstimatorDraft(): ServiceEstimatorDraft {
     creativeOptions: { ai: ['ai-chatbot'], video: ['short-form-video'], art: ['logo'], writing: ['content'] },
     mentoringTopics: ['ai'], marketingOptions: [], buildTypes: ['website-only'], buildFeatures: [],
     buildPageCount: 'one', buildEffort: 'simple', buildPackage: 'essential', mentoringPricingMode: 'hourly',
-    hourlyRate: 20, mentoringHours: 1, maintenance: 'self',
-    paymentMethod: 'full', monthlyTarget: 175, downPayment: 0, financeTermMonths: 24, financingControl: 'term',
+    hourlyRate: 20, mentoringHours: 1, maintenance: 'managed',
+    paymentMethod: 'finance', monthlyTarget: 175, downPayment: 0, financeTermMonths: 24, financingControl: 'term',
   };
 }
 
@@ -186,7 +186,7 @@ export function cloneDraft(draft: ServiceEstimatorDraft): ServiceEstimatorDraft 
     mentoringTopics: [...draft.mentoringTopics], marketingOptions: [...draft.marketingOptions],
     buildTypes: ['website-only'],
     buildFeatures: getSelectedBuildFeatures(draft), buildPageCount: draft.buildPageCount ?? 'one',
-    buildEffort: draft.buildEffort ?? 'simple', maintenance: draft.maintenance ?? 'self',
+    buildEffort: draft.buildEffort ?? 'simple', maintenance: draft.maintenance ?? 'managed', paymentMethod: 'finance',
   };
 }
 
@@ -268,17 +268,17 @@ export function calculatePaymentProjection(
   estimate: ServiceEstimate = calculateServiceEstimate(draft),
 ): ServicePaymentProjection {
   const total = estimate.total;
-  if (draft.paymentMethod === 'full' || total === 0) {
+  if (total === 0) {
     return {
       method: 'full',
-      principal: total,
+      principal: 0,
       financeFee: 0,
-      financedTotal: total,
+      financedTotal: 0,
       interestRate: 0,
       monthlyPayment: 0,
       months: 0,
       customReviewRequired: false,
-      completionWeeks: total === 0 ? 0 : Math.ceil(getBaseCompletionWeeks(draft.selectedServices) * 0.7),
+      completionWeeks: 0,
       cadence: 'Weekly',
     };
   }
@@ -286,21 +286,34 @@ export function calculatePaymentProjection(
   const downPayment = clamp(0, Math.round(draft.downPayment), total);
   const downRatio = total > 0 ? downPayment / total : 0;
   const principal = Math.max(0, total - downPayment);
+  if (principal === 0) {
+    return {
+      method: 'full',
+      principal: 0,
+      financeFee: 0,
+      financedTotal: total,
+      interestRate: 0,
+      monthlyPayment: 0,
+      months: 0,
+      customReviewRequired: false,
+      completionWeeks: Math.ceil(getBaseCompletionWeeks(draft.selectedServices) * 0.7),
+      cadence: 'Weekly',
+    };
+  }
   const schedule = (months: number) => {
     const interestRate = clamp(3, 3 + 15 * (months - 1) / 119 - 5 * downRatio, 18);
     const financeFee = Math.round(principal * interestRate / 100);
     const financedTotal = principal + financeFee;
     return { interestRate, financeFee, financedTotal, monthlyPayment: Math.ceil(financedTotal * 100 / months) / 100 };
   };
-  let months = clamp(1, Math.round(draft.financeTermMonths ?? 24), 120);
+  let months = clamp(2, Math.round(draft.financeTermMonths ?? 24), 120);
   if (draft.financingControl === 'monthly') {
     months = 120;
-    for (let term = 1; term <= 120; term++) {
+    for (let term = 2; term <= 120; term++) {
       if (schedule(term).monthlyPayment <= Math.max(1, draft.monthlyTarget)) { months = term; break; }
     }
   }
   const { interestRate, financeFee, financedTotal, monthlyPayment } = schedule(months);
-  if (principal === 0) months = 0;
   const speed = 1 - Math.max(0, months - 1) / 119;
   const paceScore = clamp(0, speed + (downRatio * 0.25), 1);
   const cadence = paceScore < 0.34 ? 'Monthly' : paceScore < 0.67 ? 'Every two weeks' : 'Weekly';

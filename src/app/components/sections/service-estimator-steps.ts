@@ -58,7 +58,7 @@ export function getServiceEstimatorFlow(draft: ServiceEstimatorDraft): ServiceEs
     }
   }
 
-  if (draft.selectedServices.length) flow.push({ id: 'payment', label: 'Payment', title: 'Choose how to pay', icon: 'fa-wallet' });
+  if (draft.selectedServices.length) flow.push({ id: 'payment', label: 'Payment', title: 'Plan your payment', icon: 'fa-wallet' });
   flow.push({ id: 'review', label: 'Review', title: 'Review your plan and name your project', icon: 'fa-flag' });
   return flow;
 }

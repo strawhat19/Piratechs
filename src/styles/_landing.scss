@@ -717,16 +717,59 @@ body[data-theme="light"] .landingLogoPlate {
 }
 
 .landingStudioSection {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: linear-gradient(135deg, var(--white-soft), #e8f7ff);
 }
 
 .landingStudioCard {
   display: grid;
+  position: relative;
+  z-index: 1;
   gap: clamp(34px, 6vw, 92px);
   align-items: stretch;
   color: var(--navy-deep);
   grid-template-columns: minmax(260px, 0.68fr) minmax(0, 1.32fr);
 }
+
+.landingStudioPixels {
+  position: absolute;
+  z-index: 0;
+  width: 204px;
+  height: 111px;
+  pointer-events: none;
+}
+
+.landingStudioPixelsTopLeft {
+  top: clamp(16px, 2vw, 30px);
+  left: clamp(16px, 2vw, 30px);
+}
+
+.landingStudioPixelsBottomRight {
+  right: clamp(16px, 2vw, 30px);
+  bottom: clamp(16px, 2vw, 30px);
+  transform: rotate(180deg);
+}
+
+.landingStudioPixels i {
+  display: block;
+  position: absolute;
+}
+
+.landingStudioPixels i:nth-child(1) { top: 3px; left: 0; width: 48px; height: 48px; opacity: 0.18; background: var(--piratechsNeon); }
+.landingStudioPixels i:nth-child(2) { top: 12px; left: 60px; width: 30px; height: 30px; opacity: 0.32; background: var(--active_blue); }
+.landingStudioPixels i:nth-child(3) { top: 0; left: 99px; width: 24px; height: 24px; opacity: 0.24; background: var(--navBar); }
+.landingStudioPixels i:nth-child(4) { top: 63px; left: 9px; width: 27px; height: 27px; opacity: 0.2; background: var(--piratechsNeon); }
+.landingStudioPixels i:nth-child(5) { top: 60px; left: 45px; width: 12px; height: 12px; opacity: 0.72; background: var(--active_blue); }
+.landingStudioPixels i:nth-child(6) { top: 51px; left: 75px; width: 21px; height: 21px; opacity: 0.34; background: var(--piratechsNeon); }
+.landingStudioPixels i:nth-child(7) { top: 39px; left: 111px; width: 9px; height: 9px; opacity: 0.95; background: var(--navBar); }
+.landingStudioPixels i:nth-child(8) { top: 21px; left: 141px; width: 12px; height: 12px; opacity: 0.58; background: var(--piratechsNeon); }
+.landingStudioPixels i:nth-child(9) { top: 48px; left: 165px; width: 7px; height: 7px; opacity: 0.9; background: var(--navBarDeep); }
+.landingStudioPixels i:nth-child(10) { top: 102px; left: 24px; width: 9px; height: 9px; opacity: 0.26; background: var(--piratechsNeon); }
+.landingStudioPixels i:nth-child(11) { top: 90px; left: 57px; width: 7px; height: 7px; opacity: 0.82; background: var(--active_blue); }
+.landingStudioPixels i:nth-child(12) { top: 78px; left: 126px; width: 7px; height: 7px; opacity: 0.76; background: var(--piratechsNeon); }
+.landingStudioPixels i:nth-child(13) { top: 24px; left: 198px; width: 6px; height: 6px; opacity: 0.78; background: var(--navBar); }
 
 .landingStudioMark {
   display: grid;
@@ -734,9 +777,23 @@ body[data-theme="light"] .landingLogoPlate {
   min-height: 560px;
   overflow: hidden;
   padding: clamp(24px, 3vw, 38px);
+  color: inherit;
+  cursor: pointer;
   align-content: space-between;
+  text-decoration: none;
   background: var(--navy-deep);
   border: 1px solid rgba(4, 57, 123, 0.18);
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.landingStudioMark:hover {
+  border-color: rgba(var(--piratechsNeon_rgb), 0.52);
+  box-shadow: 0 24px 54px rgba(4, 27, 68, 0.22), 0 0 34px rgba(var(--piratechsNeon_rgb), 0.12);
+}
+
+.landingStudioMark:focus-visible {
+  outline: 2px solid var(--piratechsTeal);
+  outline-offset: 5px;
 }
 
 .landingStudioMark::before {
@@ -767,23 +824,67 @@ body[data-theme="light"] .landingLogoPlate {
 }
 
 .landingStudioLockup {
-  gap: 16px;
-  display: flex;
+  display: grid;
   position: relative;
   z-index: 1;
-  align-items: center;
-  flex-direction: column;
+  min-height: 250px;
+  isolation: isolate;
+  place-items: center;
 }
 
-.landingStudioLogo {
-  width: min(64%, 250px);
-  height: auto;
+.landingStudioLogoStage {
+  display: block;
+  width: min(94%, 390px);
+  position: relative;
+  aspect-ratio: 768 / 411;
+  transition: transform 240ms ease;
+}
+
+.landingStudioLegacyLogo,
+.landingStudioDistortion {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.landingStudioLegacyLogo {
+  z-index: 2;
+  opacity: 1;
+  animation: landingStudioLogoSwap 4.2s steps(1, end) infinite;
   filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.28));
 }
 
-.landingStudioWordmark {
-  width: min(94%, 390px);
-  height: auto;
+.landingStudioDistortion {
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  transform: scale(0.64);
+  animation: landingStudioDistortionSwap 4.2s steps(1, end) infinite;
+  filter: drop-shadow(0 0 18px rgba(var(--piratechsNeon_rgb), 0.34));
+}
+
+.landingStudioMark:hover .landingStudioLogoStage {
+  transform: scale(1.025);
+}
+
+.landingStudioMark:hover .landingStudioLegacyLogo {
+  opacity: 1;
+  animation: none;
+}
+
+.landingStudioMark:hover .landingStudioDistortion {
+  opacity: 0;
+  animation: none;
+}
+
+.legacyDescription a {
+  color: var(--navBarDeep);
+  font-weight: 800;
+  text-decoration-color: rgba(4, 57, 123, 0.34);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 .landingStudioCopy {
@@ -880,33 +981,64 @@ body[data-theme="light"] .landingLogoPlate {
   letter-spacing: -0.045em;
 }
 
-.landingStackList {
+.landingStackMarquee {
   display: grid;
+  gap: 9px;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
   padding: 0;
   margin: 0;
-  list-style: none;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid var(--landing-line);
-  border-left: 1px solid var(--landing-line);
+  contain: layout paint;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
-.landingStackList li {
+.landingStackList {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.landingStackListTrack {
+  display: flex;
+  width: max-content;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+  will-change: transform;
+
+  &.isDragging { cursor: grabbing; }
+}
+
+.landingStackItem {
   gap: 8px;
   display: flex;
+  flex: 0 0 auto;
+  min-width: 152px;
   min-height: 64px;
-  padding: 12px;
+  padding: 12px 18px;
   align-items: center;
   justify-content: center;
   color: var(--foregroundMuted);
   font-size: 0.72rem;
   font-weight: 800;
   text-align: center;
+  white-space: nowrap;
+  border-block: 1px solid var(--landing-line);
   border-right: 1px solid var(--landing-line);
-  border-bottom: 1px solid var(--landing-line);
+  background: color-mix(in srgb, var(--surfaceStrong) 42%, transparent);
+  transition: color 180ms ease, background 180ms ease;
 }
 
 .landingStackList .techIcon {
   font-size: 1rem;
+}
+
+@media (hover: hover) {
+  .landingStackItem:hover {
+    color: var(--foreground);
+    background: rgba(var(--piratechsNeon_rgb), 0.08);
+  }
 }
 
 .landingContactSection {
@@ -1020,6 +1152,16 @@ body[data-theme="light"] .landingLogoPlate {
     filter: blur(0);
     transform: translate3d(0, 0, 0) skewY(0);
   }
+}
+
+@keyframes landingStudioLogoSwap {
+  0%, 77%, 82%, 86%, 93%, 100% { opacity: 1; }
+  78%, 81%, 87%, 92% { opacity: 0; }
+}
+
+@keyframes landingStudioDistortionSwap {
+  0%, 77%, 82%, 86%, 93%, 100% { opacity: 0; }
+  78%, 81%, 87%, 92% { opacity: 1; }
 }
 
 @media (max-width: 1200px) {
@@ -1249,8 +1391,15 @@ body[data-theme="light"] .landingLogoPlate {
     padding-inline: var(--space);
   }
 
-  .landingStackList {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .landingStackMarquee {
+    mask-image: linear-gradient(90deg, transparent, #000 11%, #000 89%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 11%, #000 89%, transparent);
+  }
+
+  .landingStackItem {
+    min-width: 138px;
+    min-height: 58px;
+    padding-inline: 14px;
   }
 
   .landingContactCard {
@@ -1264,6 +1413,39 @@ body[data-theme="light"] .landingLogoPlate {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .landingStackMarquee {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .landingStackList {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .landingStackList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .landingStackListTrack {
+    cursor: auto;
+    touch-action: auto;
+    will-change: auto;
+  }
+
+  .landingStudioLegacyLogo,
+  .landingStudioDistortion {
+    animation: none;
+  }
+
+  .landingStudioLegacyLogo {
+    opacity: 1;
+  }
+
+  .landingStudioDistortion {
+    opacity: 0;
+  }
+
   .landingMotionPending [data-landing-reveal],
   .landingMotionPending .landingSplitWord,
   .landingMotionReady [data-landing-reveal][data-landing-visible="true"],

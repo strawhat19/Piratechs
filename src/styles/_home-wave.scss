@@ -457,7 +457,7 @@
 
 @media (min-width: 901px) {
   .homeWaveEstimator .servicesWidgetCards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .homeWaveEstimator .servicesWidgetStage { padding: 22px; gap: 18px; }
+  .homeWaveEstimator .servicesWidgetStage { padding: 22px; gap: 18px; padding-bottom: 0; }
   .homeWaveEstimator .servicesWidgetRadioCards { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
   .homeWaveEstimator .servicesWidgetRadioCards {
     &.webAppServices {

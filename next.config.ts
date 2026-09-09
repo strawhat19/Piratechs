@@ -55,6 +55,11 @@ const nextConfig: NextConfig = {
         protocol: `https`,
         hostname: `raw.githubusercontent.com`,
       },
+      {
+        pathname: `/wp-content/uploads/**`,
+        protocol: `https`,
+        hostname: `piratechs.com`,
+      },
     ],
   },
   allowedDevOrigins: [
