@@ -6,7 +6,7 @@ import {
 } from './service-estimator-catalog';
 
 export type { ServiceId } from './service-estimator-catalog';
-export type BuildStepId = 'build-pages' | 'build-detail' | 'build-content' | 'build-design'
+export type BuildStepId = 'build-services' | 'build-pages' | 'build-detail' | 'build-content' | 'build-design'
   | 'build-data' | 'build-connect' | 'build-experience' | 'build-customers' | 'build-operations' | 'build-care';
 export type EstimatorStage = 'services' | ServiceId | BuildStepId | 'mentoring-session' | 'marketing-tools' | 'payment' | 'review' | 'cart';
 export type MaintenanceChoice = 'self' | 'managed' | null;
@@ -71,6 +71,7 @@ export const getIncludedBuildFeatures = (draft: ServiceEstimatorDraft): readonly
 // Only identical deliverables are shared across services; ongoing campaigns remain separate.
 export function getIncludedServiceOptions(draft: ServiceEstimatorDraft, service: ServiceId): string[] {
   const included = getIncludedBuildFeatures(draft);
+  if (service === 'video' && draft.selectedServices.includes('build') && getSelectedBuildFeatures(draft).includes('game')) return ['game'];
   if (service === 'marketing') {
     const equivalents = { cms: 'cms-database', automations: 'automations', 'customer-feedback': 'capture' } as const;
     return Object.entries(equivalents).filter(([, feature]) => included.includes(feature)).map(([option]) => option);
@@ -86,6 +87,7 @@ export type ServiceEstimatorDraft = {
   creativeOptions: Record<CreativeServiceId, string[]>;
   mentoringTopics: MentoringTopicId[];
   marketingOptions: MarketingOptionId[];
+  // Legacy platform choices are migrated to optional service add-ons.
   buildTypes: BuildTypeId[];
   buildFeatures: BuildFeatureId[];
   buildPageCount: BuildPageCountId | null;
@@ -127,7 +129,7 @@ export type ServicePaymentProjection = {
 };
 export type ServiceCartItem = {
   id: string;
-  pricingVersion: 2 | 3 | 4;
+  pricingVersion: 2 | 3 | 4 | 5;
   title: string;
   draft: ServiceEstimatorDraft;
   estimate: ServiceEstimate;
@@ -182,8 +184,8 @@ export function cloneDraft(draft: ServiceEstimatorDraft): ServiceEstimatorDraft 
       service, [...(draft.creativeOptions?.[service as CreativeServiceId] ?? values)],
     ])) as ServiceEstimatorDraft['creativeOptions'],
     mentoringTopics: [...draft.mentoringTopics], marketingOptions: [...draft.marketingOptions],
-    buildTypes: draft.buildTypes.length ? [...draft.buildTypes] : ['website-only'],
-    buildFeatures: [...draft.buildFeatures], buildPageCount: draft.buildPageCount ?? 'one',
+    buildTypes: ['website-only'],
+    buildFeatures: getSelectedBuildFeatures(draft), buildPageCount: draft.buildPageCount ?? 'one',
     buildEffort: draft.buildEffort ?? 'simple', maintenance: draft.maintenance ?? 'self',
   };
 }
@@ -196,17 +198,29 @@ export function getBuildPlatforms(selectedTypes: readonly BuildTypeId[]): BuildP
   return (['website', 'mobile', 'game'] as const).filter(platform => selected.has(platform));
 }
 
+export function getSelectedBuildFeatures(draft: ServiceEstimatorDraft): BuildFeatureId[] {
+  const selected = new Set(draft.buildFeatures);
+  const legacy = getBuildPlatforms(draft.buildTypes);
+  if (legacy.includes('mobile')) selected.add('mobile-app');
+  if (legacy.includes('game')) selected.add('game');
+  return [...selected];
+}
+
 const pricedItems = (options: readonly ServiceOption[], selected: readonly string[]): ServiceEstimateItem[] => (
   options.filter(option => selected.includes(option.id)).map(option => ({ id: option.id, label: option.label, amount: option.price ?? 0 }))
 );
 
 export function calculateServiceEstimate(draft: ServiceEstimatorDraft): ServiceEstimate {
   const groups: ServiceEstimateGroup[] = [];
-  const platforms = draft.selectedServices.includes('build') ? getBuildPlatforms(draft.buildTypes) : [];
+  const hasBuild = draft.selectedServices.includes('build');
+  const selectedFeatures = getSelectedBuildFeatures(draft);
+  const platforms: BuildPlatform[] = hasBuild ? ['website'] : [];
+  if (hasBuild && selectedFeatures.includes('mobile-app')) platforms.push('mobile');
+  if (hasBuild && selectedFeatures.includes('game')) platforms.push('game');
   const hasVideoGame = draft.selectedServices.includes('video') && draft.creativeOptions.video.includes('game');
   const scopePrice = getBuildScopePrice(draft.buildPageCount, draft.buildEffort, draft.buildPackage);
   const included = getIncludedBuildFeatures(draft);
-  const featureItems = buildFeatures.filter(feature => included.includes(feature.id) || draft.buildFeatures.includes(feature.id)).map(feature => ({ id: feature.id, label: feature.label, amount: included.includes(feature.id) ? 0 : feature.price }));
+  const featureItems = buildFeatures.filter(feature => (hasBuild || !['mobile-app', 'game'].includes(feature.id)) && (included.includes(feature.id) || selectedFeatures.includes(feature.id))).map(feature => ({ id: feature.id, label: feature.label, amount: included.includes(feature.id) ? 0 : feature.price }));
   const scopeLabel = `${buildEffortLevels.find(option => option.id === draft.buildEffort)?.label ?? 'Simple'} · ${buildPageCounts.find(option => option.id === draft.buildPageCount)?.shortLabel ?? '1 screen'} · ${buildPackages.find(option => option.id === (draft.buildPackage ?? 'essential'))?.label}`;
   for (const service of serviceCards) {
     if (!draft.selectedServices.includes(service.id)) continue;
@@ -217,7 +231,7 @@ export function calculateServiceEstimate(draft: ServiceEstimatorDraft): ServiceE
       items = pricedItems(creativeOptions[service.id], [...new Set([...draft.creativeOptions[service.id], ...covered])]).map(item => covered.includes(item.id) ? { ...item, amount: 0 } : item);
       if (service.id === 'video' && hasVideoGame) {
         items = items.map(item => item.id === 'game'
-          ? { ...item, label: `Game · ${scopeLabel}`, amount: platforms.includes('game') ? 0 : scopePrice }
+          ? { ...item, label: hasBuild ? 'Website Game' : `Game · ${scopeLabel}`, amount: platforms.includes('game') ? 0 : hasBuild ? buildFeatures.find(feature => feature.id === 'game')!.price : scopePrice }
           : item);
         if (!draft.selectedServices.includes('build')) items.push(...featureItems);
       }
@@ -232,7 +246,7 @@ export function calculateServiceEstimate(draft: ServiceEstimatorDraft): ServiceE
       items = [{ id: 'marketing-base', label: 'Marketing engagement', amount: 200 }, ...pricedItems(marketingOptions, [...new Set([...draft.marketingOptions, ...covered])]).map(item => covered.includes(item.id) ? { ...item, amount: 0 } : item)];
     } else if (service.id === 'build') {
       items = [
-        ...platforms.map(platform => ({ id: `platform-${platform}`, label: `${platformLabels[platform]} · ${scopeLabel}`, amount: scopePrice })),
+        { id: 'website-package', label: `Website · ${scopeLabel}`, amount: scopePrice },
         ...featureItems,
       ];
     }

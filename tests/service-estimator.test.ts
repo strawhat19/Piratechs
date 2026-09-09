@@ -31,15 +31,15 @@ for (const [effort, pages, prices] of [
 
 test('specialized extras remain billable, and tier changes recalculate selected features', () => {
   const plan = draft({ buildEffort: 'enterprise', buildPageCount: 'ten-plus', buildPackage: 'complete', buildFeatures: ['auth', 'multiplayer'] });
-  assert.equal(calculateServiceEstimate(plan).total, 3950);
-  assert.equal(calculateServiceEstimate({ ...plan, buildEffort: 'simple', buildPageCount: 'one', buildPackage: 'essential' }).total, 1083);
+  assert.equal(calculateServiceEstimate(plan).total, 3850);
+  assert.equal(calculateServiceEstimate({ ...plan, buildEffort: 'simple', buildPageCount: 'one', buildPackage: 'essential' }).total, 933);
 });
 
 test('included deliverables are not charged again through creative or marketing services', () => {
   const plan = draft({ selectedServices: ['build', 'ai', 'art', 'writing', 'marketing'], buildEffort: 'enterprise', buildPageCount: 'ten-plus', buildPackage: 'recommended', marketingOptions: ['cms', 'automations', 'customer-feedback', 'advertising'] });
   assert.deepEqual(getIncludedServiceOptions(plan, 'ai'), ['ai-chatbot', 'automations']);
-  assert.equal(calculateServiceEstimate(plan).total, 3333 + 200 + 300);
-  assert.equal(calculateServiceEstimate({ ...plan, selectedServices: ['ai'], creativeOptions: { ...plan.creativeOptions, ai: ['ai-chatbot'] } }).total, 200);
+  assert.equal(calculateServiceEstimate(plan).total, 3333 + 200 + 250);
+  assert.equal(calculateServiceEstimate({ ...plan, selectedServices: ['ai'], creativeOptions: { ...plan.creativeOptions, ai: ['ai-chatbot'] } }).total, 150);
 });
 
 test('no-service consultation skips payment in both directions', () => {
@@ -50,9 +50,48 @@ test('no-service consultation skips payment in both directions', () => {
   assert.ok(getServiceEstimatorFlow(draft()).some(step => step.id === 'payment'));
 });
 
-test('multiple platforms are counted once each, with shared add-ons', () => {
-  const plan = draft({ buildTypes: ['website-only', 'website-mobile'], buildFeatures: ['multiplayer'] });
-  assert.equal(calculateServiceEstimate(plan).total, 333 * 2 + 450);
+test('website starts at Pages and has no platform selection tab', () => {
+  const flow = getServiceEstimatorFlow(draft({ buildTypes: [] }));
+  assert.equal(flow[1].id, 'build-pages');
+  assert.ok(!flow.some(step => step.id === 'build'));
+  assert.ok(flow.some(step => step.id === 'build-services'));
+  assert.ok(flow.some(step => step.id === 'build-care'));
+});
+
+test('mobile is optional and costs exactly $150 for every page count and package', () => {
+  for (const buildEffort of ['simple', 'business', 'enterprise'] as const) {
+    for (const buildPageCount of ['one', 'three', 'five-plus', 'ten-plus'] as const) {
+      for (const { id: buildPackage } of buildPackages) {
+        const base = draft({ buildEffort, buildPageCount, buildPackage });
+        const mobile = { ...base, buildFeatures: ['mobile-app'] as const };
+        assert.ok(!getIncludedBuildFeatures(base).includes('mobile-app'));
+        const withMobile = calculateServiceEstimate({ ...mobile, buildFeatures: [...mobile.buildFeatures] });
+        assert.equal(withMobile.total - calculateServiceEstimate(base).total, 150);
+        assert.deepEqual(withMobile.platforms, ['website', 'mobile']);
+      }
+    }
+  }
+});
+
+test('legacy mobile selections migrate to one removable flat add-on', () => {
+  const old = draft({ buildTypes: ['website-only', 'website-mobile'], buildFeatures: ['mobile-app', 'multiplayer'] });
+  assert.equal(calculateServiceEstimate(old).total, 333 + 150 + 350);
+  const migrated = cloneDraft(old);
+  assert.deepEqual(migrated.buildTypes, ['website-only']);
+  assert.equal(migrated.buildFeatures.filter(id => id === 'mobile-app').length, 1);
+  assert.equal(calculateServiceEstimate(migrated).total, 833);
+  assert.equal(calculateServiceEstimate({ ...migrated, buildFeatures: ['multiplayer'] }).total, 683);
+});
+
+test('website games are charged once even when selected through Video', () => {
+  const plan = draft({ selectedServices: ['build', 'video'], buildFeatures: ['game'], creativeOptions: { ai: [], art: [], writing: [], video: ['game'] } });
+  assert.equal(calculateServiceEstimate(plan).total, 333 + 300);
+  assert.equal(calculateServiceEstimate({ ...plan, buildFeatures: [] }).total, 333 + 300);
+  const standalone = { ...plan, selectedServices: ['video'] as const, buildFeatures: ['mobile-app', 'game'] as const };
+  const estimate = calculateServiceEstimate({ ...standalone, selectedServices: [...standalone.selectedServices], buildFeatures: [...standalone.buildFeatures] });
+  assert.equal(estimate.total, 333);
+  assert.deepEqual(estimate.platforms, ['game']);
+  assert.ok(!getServiceEstimatorFlow({ ...plan, selectedServices: ['video'] }).some(step => step.id === 'build-services'));
 });
 
 test('saved plans preserve n/a, packages, and independently editable financing inputs', () => {

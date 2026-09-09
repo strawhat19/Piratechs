@@ -1,5 +1,5 @@
 import { buildFeatures, marketingOptions, serviceCards } from './service-estimator-catalog';
-import { getBuildPlatforms, type BuildFeatureId, type BuildStepId, type EstimatorStage, type ServiceEstimatorDraft } from './service-estimator-model';
+import { type BuildFeatureId, type BuildStepId, type EstimatorStage, type ServiceEstimatorDraft } from './service-estimator-model';
 
 export type ServiceEstimatorStep = { id: EstimatorStage; label: string; title: string; icon: string };
 
@@ -10,6 +10,7 @@ const featureGroups: {
   icon: string;
   features: readonly BuildFeatureId[];
 }[] = [
+  { id: 'build-services', label: 'Add-ons', title: 'Optional service add-ons', icon: 'fa-puzzle-piece', features: ['mobile-app', 'game'] },
   { id: 'build-content', label: 'Content', title: 'Content and publishing', icon: 'fa-file-lines', features: ['blog', 'news', 'content', 'announcements', 'images', 'cms-database', 'news-letter', 'search'] },
   { id: 'build-design', label: 'Design', title: 'Brand, design, and motion', icon: 'fa-palette', features: ['logo', 'sliders', 'loader', 'design', 'fonts', 'themes', 'animations', 'adv-animations'] },
   { id: 'build-data', label: 'Data', title: 'Useful tools and data', icon: 'fa-chart-column', features: ['to-do', 'grids', 'charts', 'stocks', 'clock', 'weather', 'dashboard', 'analytics', 'adv-analytics'] },
@@ -35,7 +36,7 @@ export function getServiceEstimatorFlow(draft: ServiceEstimatorDraft): ServiceEs
 
   for (const service of serviceCards) {
     if (!draft.selectedServices.includes(service.id)) continue;
-    flow.push({ id: service.id, label: service.tab, title: service.label, icon: service.icon });
+    if (service.id !== 'build') flow.push({ id: service.id, label: service.tab, title: service.label, icon: service.icon });
 
     if (service.id === 'mentoring') {
       flow.push({ id: 'mentoring-session', label: 'Session', title: 'Plan your mentoring session', icon: 'fa-clock' });
@@ -49,9 +50,9 @@ export function getServiceEstimatorFlow(draft: ServiceEstimatorDraft): ServiceEs
       flow.push(
         { id: 'build-pages', label: 'Pages', title: 'How much room does your idea need?', icon: 'fa-window-restore' },
         { id: 'build-detail', label: 'Detail', title: 'Choose the level of detail', icon: 'fa-sliders' },
-        ...buildAddOnSteps,
+        ...buildAddOnSteps.filter(step => hasBuild || step.id !== 'build-services'),
       );
-      if (hasBuild && getBuildPlatforms(draft.buildTypes).includes('website')) {
+      if (hasBuild) {
         flow.push({ id: 'build-care', label: 'Care', title: 'Plan for after launch', icon: 'fa-life-ring' });
       }
     }

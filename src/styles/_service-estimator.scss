@@ -35,6 +35,8 @@
   gap: 12px;
   min-height: 56px;
   padding: 8px 16px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   background: linear-gradient(105deg, rgba(var(--piratechsNeon_rgb), 0.09), rgba(var(--piratechsTeal_rgb), 0.035));
 }
 

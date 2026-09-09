@@ -8,7 +8,7 @@ import {
 import { buildDetails, marketingDetails, mentoringDetails } from './service-estimator-copy';
 import {
   calculatePaymentProjection, calculateServiceEstimate, cloneDraft, createEmptyServiceEstimatorDraft,
-  buildPackages, getIncludedBuildFeatures, getIncludedServiceOptions, getBuildPlatforms, getBuildScopePrice, isCreativeService, money, toggleValue,
+  buildPackages, getIncludedBuildFeatures, getIncludedServiceOptions, getBuildScopePrice, isCreativeService, money, toggleValue,
   type BuildPackageId, type BuildEffortId, type BuildPageCountId, type EstimatorStage, type HomeServiceEstimatorProps,
   type ServiceCartItem, type ServiceEstimatorDraft,
 } from './service-estimator-model';
@@ -58,11 +58,6 @@ function reducer(state: EstimatorState, action: Action): EstimatorState {
 }
 
 const creativeDetails = { ...marketingDetails, ...buildDetails };
-const platformOptions = [
-  { id: 'website-only', label: 'Website', icon: 'fa-globe', description: 'A responsive home for your business, ready for customers on any device.' },
-  { id: 'mobile-only', label: 'Mobile App', icon: 'fa-mobile-screen-button', description: 'Bring your service to customers through a dedicated mobile experience.' },
-  { id: 'game-only', label: 'Game', icon: 'fa-gamepad', description: 'Engage your audience with interactive play, challenges, and shared experiences.' },
-] as const;
 
 function ChoiceCards({
   label, options, selected, onToggle, included = [], details = {}, showPrices = true, pricePrefix = '+',
@@ -158,9 +153,7 @@ function getScopeIssue(draft: ServiceEstimatorDraft): { stage: EstimatorStage; m
     if (service === 'mentoring' && !draft.mentoringTopics.length) {
       return { stage: service, message: 'Choose at least one topic for your session.' };
     }
-    if (service === 'build' && !draft.buildTypes.length) {
-      return { stage: service, message: 'Choose at least one platform for your project.' };
-    }
+
   }
   return null;
 }
@@ -185,10 +178,11 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
   const addOnStep = buildAddOnSteps.find(step => step.id === stage);
   const scopeIssue = getScopeIssue(draft);
   const patch = (patch: Partial<ServiceEstimatorDraft>) => dispatch({ type: 'patch', patch });
-  const toggleList = <Field extends 'mentoringTopics' | 'marketingOptions' | 'buildTypes' | 'buildFeatures'>(field: Field, value: string) => {
+  const toggleList = <Field extends 'mentoringTopics' | 'marketingOptions' | 'buildFeatures'>(field: Field, value: string) => {
     patch({ [field]: toggleValue(draft[field] as string[], value) });
   };
-  const go = (nextStage: EstimatorStage) => {
+  const go = (requestedStage: EstimatorStage) => {
+    const nextStage = requestedStage === 'build' ? 'build-pages' : requestedStage;
     if (scopeIssue && ['payment', 'review'].includes(nextStage)) {
       dispatch({ type: 'go', stage: scopeIssue.stage });
       dispatch({ type: 'status', message: scopeIssue.message });
@@ -251,7 +245,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
     }
     const existing = state.cart.find(item => item.id === state.editingId);
     const item: ServiceCartItem = {
-      id: state.editingId ?? crypto.randomUUID(), pricingVersion: 4,
+      id: state.editingId ?? crypto.randomUUID(), pricingVersion: 5,
       title: draft.projectName.trim(), draft: cloneDraft({ ...draft, projectName: draft.projectName.trim() }),
       estimate, payment, createdAt: existing?.createdAt ?? new Date().toISOString(),
     };
@@ -279,6 +273,15 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
             </small>
           </span>
         </div>
+        <div className="servicesWidgetTabs" role="tablist" aria-label="Project steps" ref={tabsRef}>
+          {tabs.map((tab, index) => (
+            <button type="button" role="tab" id={`${id}-tab-${tab.id}`} aria-controls={`${id}-panel-${tab.id}`}
+              aria-selected={stage === tab.id} tabIndex={stage === tab.id ? 0 : -1} key={tab.id}
+              onClick={() => go(tab.id)} onKeyDown={event => onTabKeyDown(event, index)}>
+              <i className={`fa-solid ${tab.icon}`} aria-hidden="true" />{tab.label}
+            </button>
+          ))}
+        </div>
         <div className="servicesWidgetEstimate">
           <span>Estimated Price</span>
           <output aria-live="polite" aria-atomic="true" aria-label="Planning estimate">
@@ -286,16 +289,6 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
           </output>
         </div>
       </header>
-
-      <div className="servicesWidgetTabs" role="tablist" aria-label="Project steps" ref={tabsRef}>
-        {tabs.map((tab, index) => (
-          <button type="button" role="tab" id={`${id}-tab-${tab.id}`} aria-controls={`${id}-panel-${tab.id}`}
-            aria-selected={stage === tab.id} tabIndex={stage === tab.id ? 0 : -1} key={tab.id}
-            onClick={() => go(tab.id)} onKeyDown={event => onTabKeyDown(event, index)}>
-            <i className={`fa-solid ${tab.icon}`} aria-hidden="true" />{tab.label}
-          </button>
-        ))}
-      </div>
 
       <form className="servicesWidgetForm" onSubmit={submit} noValidate>
         <div className="servicesWidgetScroll" ref={scrollRef}>
@@ -340,14 +333,9 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
               <ChoiceCards label="Add tools and insights · optional" options={marketingToolOptions} selected={draft.marketingOptions} details={marketingDetails} included={getIncludedServiceOptions(draft, 'marketing')} onToggle={value => toggleList('marketingOptions', value)} />
             ) : null}
 
-            {stage === 'build' ? (
-              <ChoiceCards label="Where should your project live?" options={platformOptions} showPrices={false}
-                selected={getBuildPlatforms(draft.buildTypes).map(platform => `${platform}-only`)}
-                onToggle={value => patch({ buildTypes: toggleValue(getBuildPlatforms(draft.buildTypes).map(platform => `${platform}-only` as 'website-only' | 'mobile-only' | 'game-only'), value as 'website-only' | 'mobile-only' | 'game-only') })} />
-            ) : null}
             {stage === 'build-pages' ? (
               <RadioCards<BuildPageCountId> label="Pages // Screens // Views" name={`${id}-pages`} selected={draft.buildPageCount}
-                options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort, draft.buildPackage))} per platform` }))}
+                options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort, draft.buildPackage))}` }))}
                 onChange={buildPageCount => patch({ buildPageCount })} />
             ) : null}
             {stage === 'build-detail' ? (
@@ -355,12 +343,12 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
                 <RadioCards<BuildEffortId> label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
                   options={buildEffortLevels} onChange={buildEffort => patch({ buildEffort })} />
                 <RadioCards<BuildPackageId> label="Your package" name={`${id}-package`} selected={draft.buildPackage ?? 'essential'}
-                  options={buildPackages.map(option => ({ ...option, description: `${money(getBuildScopePrice(draft.buildPageCount, draft.buildEffort, option.id))}${option.id === 'complete' && draft.buildEffort !== 'simple' ? '+' : ''} per platform · ${getIncludedBuildFeatures({ ...draft, buildPackage: option.id }).length} included features` }))}
+                  options={buildPackages.map(option => ({ ...option, description: `${money(getBuildScopePrice(draft.buildPageCount, draft.buildEffort, option.id))}${option.id === 'complete' && draft.buildEffort !== 'simple' ? '+' : ''} · ${getIncludedBuildFeatures({ ...draft, buildPackage: option.id }).length} included features` }))}
                   onChange={buildPackage => patch({ buildPackage })} />
-                <p className="servicesWidgetNote">Package prices reflect your selected page count. Included features are ready in the following tabs. Specialized extras and additional platforms add to the estimate; ongoing services are quoted separately.</p>
+                <p className="servicesWidgetNote">Package prices reflect your selected page count. Included features are ready in the following tabs. Mobile App is an optional flat $150 add-on. Other optional extras add to the estimate; ongoing services are quoted separately.</p>
               </>
             ) : null}
-            {stage === 'video' && draft.creativeOptions.video.includes('game') && draft.selectedServices.includes('build') ? <p className="servicesWidgetNote">Your game shares scope and add-ons with your website or app. You’ll choose those together in the steps after Website // App.</p> : null}
+            {stage === 'video' && draft.creativeOptions.video.includes('game') && draft.selectedServices.includes('build') ? <p className="servicesWidgetNote">Your game shares scope and add-ons with your website or app. You’ll choose those together in Pages, Detail, and the add-on tabs.</p> : null}
             {addOnStep ? <ChoiceCards label="Make it yours · optional add-ons" options={addOnStep.options} selected={draft.buildFeatures} included={getIncludedBuildFeatures(draft)} details={buildDetails} onToggle={value => toggleList('buildFeatures', value)} /> : null}
             {stage === 'build-care' ? (
               <RadioCards label="After launch" name={`${id}-care`} selected={draft.maintenance}
