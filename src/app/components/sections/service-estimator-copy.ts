@@ -49,7 +49,7 @@ export const buildDetails: Record<string, readonly [string, string]> = {
   maps: ['location-dot', 'Make business locations and directions easy to find.'],
   'drag-drop': ['hand-pointer', 'Make arranging content or uploading files feel intuitive.'],
   weather: ['cloud-sun', 'Show useful local conditions for planning and travel.'],
-  maintenance: ['screwdriver-wrench', 'Keep your digital experience current as business needs change.'],
+  maintenance: ['screwdriver-wrench', 'A focused support session after launch. Ongoing maintenance is quoted separately.'],
   content: ['file-lines', 'Give each page clear, useful words that explain your value.'],
   music: ['music', 'Bring music into an experience that suits your brand.'],
   haptics: ['hand', 'Reinforce mobile interactions with subtle touch feedback.'],

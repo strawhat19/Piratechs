@@ -348,7 +348,7 @@ body[data-theme="light"] .servicesWidgetCard[data-selected="true"] .servicesWidg
 }
 
 @media (hover: hover) {
-  .servicesWidgetCard:hover, .servicesWidgetRadio:hover, .servicesWidgetSecondary:hover { border-color: var(--widget-accent); background-color: rgba(var(--piratechsNeon_rgb), 0.055); }
+  .servicesWidgetCard:not([data-included="true"]):hover, .servicesWidgetRadio:hover, .servicesWidgetSecondary:hover { border-color: var(--widget-accent); background-color: rgba(var(--piratechsNeon_rgb), 0.055); }
   .servicesWidgetPrimary:hover { filter: brightness(1.08); }
 }
 
@@ -377,3 +377,10 @@ body[data-theme="light"] .servicesWidgetCard[data-selected="true"] .servicesWidg
   .servicesWidgetStage { animation: none; }
   .servicesWidget *, .servicesWidget *::before, .servicesWidget *::after { transition: none; }
 }
+
+.servicesWidgetCard[data-included="true"] {
+  cursor: default;
+  border-color: color-mix(in srgb, var(--widget-accent) 45%, var(--border));
+  .servicesWidgetCardCopy > small { width: fit-content; padding: 2px 7px; border-radius: 4px; background: rgba(var(--piratechsTeal_rgb), 0.1); }
+}
+.servicesWidgetName input:disabled { opacity: 0.6; cursor: default; }

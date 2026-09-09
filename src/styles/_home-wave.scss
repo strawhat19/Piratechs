@@ -133,11 +133,11 @@
   .homeWaveContent {
     margin-top: 28px;
     gap: clamp(24px, 3vw, 42px);
-    grid-template-columns: auto 1fr;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
   }
 
   .homeWaveCopy {
-    gap: 36px;
+    gap: 24px;
     display: flex;
     max-width: none;
     flex-direction: column;
@@ -151,12 +151,15 @@
 }
 
 .homeWaveSection[data-estimator-active="true"] {
-  --home-wave-bottom-space: 78px;
+  --home-wave-bottom-space: 24px;
 
   .homeWaveContent {
     gap: 22px;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: stretch;
+    min-height: 0;
+    margin-top: 0;
   }
 
   .homeWaveCopy h2 {
@@ -166,7 +169,15 @@
     span { margin-left: 0.3em; }
   }
 
-  .homeWaveEstimator .servicesWidget { height: clamp(460px, 61svh, 680px); }
+  .homeWaveEstimator { min-height: 0; }
+  .homeWaveEstimator .servicesWidget { height: 100%; }
+
+  @media (min-width: 981px) {
+    display: grid;
+    box-sizing: border-box;
+    height: var(--home-wave-resting-height, 600px);
+    padding-block: 24px;
+  }
 }
 
 .homeWaveServices {
@@ -245,6 +256,14 @@
   > i:first-child { color: var(--piratechsTeal); font-size: 1.1rem; }
   > span { display: inline-flex; align-items: center; gap: 14px; font-size: 0.95rem; font-weight: 750; }
   > i:last-child { position: absolute; right: 20px; color: var(--piratechsTeal); font-size: 0.85rem; }
+}
+
+.homeWaveStart[data-ready="true"] {
+  color: var(--navy-deep);
+  border-color: var(--piratechsTeal);
+  background: linear-gradient(105deg, var(--piratechsNeon), var(--piratechsTeal));
+  box-shadow: 0 0 28px rgba(var(--piratechsTeal_rgb), 0.24);
+  > i:first-child, > i:last-child, .homeWaveStartDetail { color: inherit; }
 }
 
 .homeWaveStartDetail { color: var(--white-smoke); font-size: 0.75rem; font-weight: 400; }
@@ -365,69 +384,27 @@
   .homeWaveCoordinates .homeWaveCoordinatesStudio { display: none; }
 }
 
-@media (max-width: 980px) and (orientation: portrait) {
-  .homeWaveSection {
-    --home-wave-footer-space: calc(42px + env(safe-area-inset-bottom, 0px));
-    display: flex;
-    flex-direction: column;
-    gap: clamp(8px, 1.4svh, 14px);
-    height: calc(100svh - var(--home-wave-header-height, 104px));
-    min-height: 0;
-    padding-block: clamp(10px, 1.6svh, 16px) var(--home-wave-footer-space);
-    scroll-margin-top: var(--home-wave-header-height, 104px);
-  }
-
-  .homeWaveTopline { flex: 0 0 auto; }
-
-  .homeWaveSection[data-service-estimator] .homeWaveContent {
-    flex: 1 1 0;
-    min-height: 0;
-    margin-top: 0;
-    gap: clamp(10px, 1.6svh, 18px);
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    align-items: stretch;
-  }
-
-  .homeWaveCopy {
-    max-height: 30svh;
-    overflow-y: auto;
-    scrollbar-width: thin;
-  }
-
-  .homeWaveSection[data-service-estimator] .homeWaveCopy h2 {
-    font-size: clamp(1.6rem, 6.5vw, 2.15rem);
-    line-height: 1.05;
-  }
-
-  .homeWaveSection[data-service-estimator] .homeWaveCopy p {
-    max-width: 560px;
-    margin-block: 8px;
-    font-size: 0.875rem;
-    line-height: 1.45;
-  }
-
-  .homeWaveLink { min-height: 36px; font-size: 0.8rem; }
-  .homeWaveEstimator { min-height: 0; height: 100%; }
-
-  // The viewport owns the height here, rather than extending into section padding.
-  .homeWaveEstimator .servicesWidget {
-    position: relative;
-    inset: auto;
-    height: 100%;
-  }
-
-  .homeWaveAuth { min-height: 0; max-height: 100%; overflow-y: auto; }
-  .homeWaveOcean { height: clamp(110px, 24svh, 175px); }
-  .homeWaveCoordinates { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+@media (max-width: 1100px) and (min-width: 981px) {
+  .homeWaveServiceButtons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .homeWaveServiceButton { min-height: 72px; gap: 8px; padding: 12px; }
 }
 
-@media (max-width: 1100px) {
-  .homeWaveServiceButtons {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    > :last-child { grid-column: span 2; }
+@media (max-width: 980px) {
+  .homeWaveSection[data-service-estimator="true"] {
+    padding-block: 28px 100px;
+    scroll-margin-top: var(--home-wave-header-height, 104px);
+    .homeWaveContent { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .homeWaveCopy { gap: 18px; }
+    .homeWaveCopy h2 { font-size: clamp(2rem, 5.5vw, 3.8rem); }
+    .homeWaveIntro { max-width: 600px; }
   }
-  .homeWaveServiceButton { min-height: 72px; gap: 8px; padding: 12px; }
+  .homeWaveServiceButton { min-height: 90px; padding: 12px; }
+  .homeWaveSection[data-estimator-active="true"] {
+    padding-block: 20px;
+    .homeWaveContent { margin-top: 0; gap: 16px; }
+    .homeWaveCopy h2 { font-size: clamp(1.35rem, 3vw, 2rem); }
+    .homeWaveEstimator .servicesWidget { height: max(300px, calc(100svh - var(--home-wave-header-height, 104px) - 110px)); }
+  }
 }
 
 @media (min-width: 901px) {
@@ -459,33 +436,10 @@
     .homeWaveServiceCheck { top: 7px; right: 6px; font-size: 0.55rem; }
   }
   .homeWaveStart { min-height: 50px; padding-inline: 14px; }
-  .homeWaveStart > span { gap: 10px; }
+  .homeWaveStart > span { gap: 4px; flex-direction: column; }
   .homeWaveStart > i:last-child { right: 14px; }
   .homeWaveStartDetail { font-size: 0.68rem; }
 }
-
-@media (max-width: 980px) and (orientation: portrait) {
-  .homeWaveSection[data-service-estimator="true"] {
-    height: auto;
-    min-height: calc(100svh - var(--home-wave-header-height, 104px));
-
-    .homeWaveContent {
-      gap: 22px;
-      flex: 1 0 auto;
-      margin-top: 12px;
-      grid-template-rows: auto auto;
-    }
-
-    .homeWaveCopy { max-height: none; overflow: visible; }
-    .homeWaveEstimator { height: auto; }
-  }
-
-  .homeWaveSection[data-estimator-active="true"] {
-    .homeWaveContent { flex: 1 1 auto; gap: 16px; }
-    .homeWaveEstimator .servicesWidget { height: max(460px, calc(100svh - var(--home-wave-header-height, 104px) - 150px)); }
-  }
-}
-
 
 @media (prefers-reduced-motion: reduce) {
   .homeWaveLayer { animation: none; }
@@ -494,4 +448,10 @@
   .homeWaveLayer--near { transform: translateX(-5%); }
   .homeWaveToggle { display: none; }
   .homeWaveServiceButton, .homeWaveStart { transition: none; }
+}
+
+// Keep the floating page shortcut from covering estimator navigation.
+body:has(.homeWaveSection[data-estimator-active="true"][data-running="true"]) .scrollToTop {
+  visibility: hidden;
+  pointer-events: none;
 }

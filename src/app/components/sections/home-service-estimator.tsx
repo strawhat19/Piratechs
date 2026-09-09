@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useReducer, useRef, type FormEvent, type KeyboardEvent } from 'react';
+import { useEffect, useId, useReducer, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import {
   buildEffortLevels, buildPageCounts, creativeOptions,
   mentoringTopics, serviceCards, type CreativeServiceId, type ServiceId, type ServiceOption,
@@ -8,8 +8,8 @@ import {
 import { buildDetails, marketingDetails, mentoringDetails } from './service-estimator-copy';
 import {
   calculatePaymentProjection, calculateServiceEstimate, cloneDraft, createEmptyServiceEstimatorDraft,
-  getBuildPlatforms, getBuildScopePrice, isCreativeService, money, toggleValue,
-  type BuildEffortId, type BuildPageCountId, type EstimatorStage, type HomeServiceEstimatorProps,
+  buildPackages, getIncludedBuildFeatures, getIncludedServiceOptions, getBuildPlatforms, getBuildScopePrice, isCreativeService, money, toggleValue,
+  type BuildPackageId, type BuildEffortId, type BuildPageCountId, type EstimatorStage, type HomeServiceEstimatorProps,
   type ServiceCartItem, type ServiceEstimatorDraft,
 } from './service-estimator-model';
 import { buildAddOnSteps, getServiceEstimatorFlow, marketingCampaignOptions, marketingToolOptions } from './service-estimator-steps';
@@ -65,11 +65,11 @@ const platformOptions = [
 ] as const;
 
 function ChoiceCards({
-  label, options, selected, onToggle, details = {}, showPrices = true, pricePrefix = '+',
+  label, options, selected, onToggle, included = [], details = {}, showPrices = true, pricePrefix = '+',
 }: {
   label: string; options: readonly ServiceOption[]; selected: readonly string[];
   onToggle: (id: string) => void; details?: Record<string, readonly [string, string]>;
-  showPrices?: boolean; pricePrefix?: string;
+  showPrices?: boolean; pricePrefix?: string; included?: readonly string[];
 }) {
   return (
     <fieldset className="servicesWidgetChoices">
@@ -77,14 +77,15 @@ function ChoiceCards({
       <div className="servicesWidgetCards">
         {options.map(option => {
           const detail = details[option.id];
+          const isIncluded = included.includes(option.id);
           return (
-            <label className="servicesWidgetCard" data-selected={selected.includes(option.id)} key={option.id}>
-              <input type="checkbox" checked={selected.includes(option.id)} onChange={() => onToggle(option.id)} />
+            <label className="servicesWidgetCard" data-selected={isIncluded || selected.includes(option.id)} data-included={isIncluded} key={option.id}>
+              <input type="checkbox" disabled={isIncluded} checked={isIncluded || selected.includes(option.id)} onChange={() => onToggle(option.id)} />
               <span className="servicesWidgetCardIcon" aria-hidden="true"><i className={`fa-solid ${option.icon ?? `fa-${detail?.[0] ?? 'wand-magic-sparkles'}`}`} /></span>
               <span className="servicesWidgetCardCopy">
                 <strong>{option.label}</strong>
                 <span>{option.description ?? detail?.[1]}</span>
-                {showPrices && typeof option.price === 'number' ? <small>{pricePrefix}{money(option.price)}</small> : null}
+                {isIncluded ? <small>Included</small> : showPrices && typeof option.price === 'number' ? <small>{pricePrefix}{money(option.price)}</small> : null}
               </span>
               <span className="servicesWidgetCheck" aria-hidden="true"><i className="fa-solid fa-check" /></span>
             </label>
@@ -126,9 +127,32 @@ function RangeField({ label, value, min, max, step = 1, display, onChange }: {
   );
 }
 
+const paymentMoney = (amount: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(amount);
+
+function NumberField({ label, value, min, max, step = 1, disabled = false, onChange }: {
+  label: string; value: number; min: number; max: number; step?: number; disabled?: boolean; onChange: (value: number) => void;
+}) {
+  const id = useId();
+  const [editing, setEditing] = useState<string | null>(null);
+  return (
+    <label className="servicesWidgetName" htmlFor={id}>
+      <span>{label}</span>
+      <input id={id} type="number" inputMode="decimal" min={min} max={max} step={step} value={editing ?? value} disabled={disabled}
+        onChange={event => setEditing(event.target.value)}
+        onBlur={event => {
+          const number = event.target.valueAsNumber;
+          const next = Number.isFinite(number) ? Math.min(max, Math.max(min, Math.round(number / step) * step)) : value;
+          onChange(next);
+          setEditing(null);
+        }}
+        onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); event.currentTarget.blur(); } }} />
+    </label>
+  );
+}
+
 function getScopeIssue(draft: ServiceEstimatorDraft): { stage: EstimatorStage; message: string } | null {
   for (const { id: service } of serviceCards.filter(service => draft.selectedServices.includes(service.id))) {
-    if (isCreativeService(service) && !draft.creativeOptions[service].length) {
+    if (isCreativeService(service) && !draft.creativeOptions[service].length && !getIncludedServiceOptions(draft, service).length) {
       return { stage: service, message: 'Choose at least one option, or remove this service in the Services tab.' };
     }
     if (service === 'mentoring' && !draft.mentoringTopics.length) {
@@ -220,14 +244,14 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
     }
     if (scopeIssue) { go(scopeIssue.stage); dispatch({ type: 'status', message: scopeIssue.message }); return; }
     if (draft.projectName.trim().length < 2) {
-      dispatch({ type: 'status', message: 'Give your project a name with at least two characters.' });
+      dispatch({ type: 'status', message: 'Enter a project name with at least two characters, or n/a.' });
       nameRef.current?.focus({ preventScroll: true });
       if (nameRef.current && scrollRef.current) scrollRef.current.scrollTop = nameRef.current.offsetTop;
       return;
     }
     const existing = state.cart.find(item => item.id === state.editingId);
     const item: ServiceCartItem = {
-      id: state.editingId ?? crypto.randomUUID(), pricingVersion: 3,
+      id: state.editingId ?? crypto.randomUUID(), pricingVersion: 4,
       title: draft.projectName.trim(), draft: cloneDraft({ ...draft, projectName: draft.projectName.trim() }),
       estimate, payment, createdAt: existing?.createdAt ?? new Date().toISOString(),
     };
@@ -246,10 +270,20 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
   return (
     <section className="servicesWidget" aria-label="Service estimator">
       <header className="servicesWidgetHeader">
-        <div className="servicesWidgetBrand"><i className="fa-solid fa-compass" aria-hidden="true" /><span>Build your voyage<small>{selectedCards.length ? `${selectedCards.length} service${selectedCards.length === 1 ? '' : 's'} selected` : 'Choose as many as you like'}</small></span></div>
+        <div className="servicesWidgetBrand">
+          <i className="fa-solid fa-compass" aria-hidden="true" />
+          <span>
+            Services Estimator
+            <small>
+              {selectedCards.length ? `${selectedCards.length} service${selectedCards.length === 1 ? '' : 's'} selected` : 'Choose Services'}
+            </small>
+          </span>
+        </div>
         <div className="servicesWidgetEstimate">
-          <span>Live estimate</span>
-          <output aria-live="polite" aria-atomic="true" aria-label="Planning estimate">{money(estimate.total)}</output>
+          <span>Estimated Price</span>
+          <output aria-live="polite" aria-atomic="true" aria-label="Planning estimate">
+            {money(estimate.total)}
+          </output>
         </div>
       </header>
 
@@ -274,7 +308,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
             ) : null}
 
             {isCreativeService(stage) ? (
-              <ChoiceCards label="Choose what you need" options={creativeOptions[stage]} selected={draft.creativeOptions[stage]} details={creativeDetails} pricePrefix=""
+              <ChoiceCards label="Choose what you need" options={creativeOptions[stage]} selected={draft.creativeOptions[stage]} details={creativeDetails} pricePrefix="" included={getIncludedServiceOptions(draft, stage)}
                 onToggle={value => patch({ creativeOptions: { ...draft.creativeOptions, [stage]: toggleValue(draft.creativeOptions[stage as CreativeServiceId], value) } })} />
             ) : null}
 
@@ -299,11 +333,11 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
 
             {stage === 'marketing' ? (
               <><p className="servicesWidgetNote">Your $200 engagement starts with a focused growth plan. Add the tools and content you need.</p>
-                <ChoiceCards label="Build your campaign" options={marketingCampaignOptions} selected={draft.marketingOptions} details={marketingDetails} onToggle={value => toggleList('marketingOptions', value)} /></>
+                <ChoiceCards label="Build your campaign" options={marketingCampaignOptions} selected={draft.marketingOptions} details={marketingDetails} included={getIncludedServiceOptions(draft, 'marketing')} onToggle={value => toggleList('marketingOptions', value)} /></>
             ) : null}
 
             {stage === 'marketing-tools' ? (
-              <ChoiceCards label="Add tools and insights · optional" options={marketingToolOptions} selected={draft.marketingOptions} details={marketingDetails} onToggle={value => toggleList('marketingOptions', value)} />
+              <ChoiceCards label="Add tools and insights · optional" options={marketingToolOptions} selected={draft.marketingOptions} details={marketingDetails} included={getIncludedServiceOptions(draft, 'marketing')} onToggle={value => toggleList('marketingOptions', value)} />
             ) : null}
 
             {stage === 'build' ? (
@@ -313,15 +347,21 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
             ) : null}
             {stage === 'build-pages' ? (
               <RadioCards<BuildPageCountId> label="Pages // Screens // Views" name={`${id}-pages`} selected={draft.buildPageCount}
-                options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort))} per platform` }))}
+                options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort, draft.buildPackage))} per platform` }))}
                 onChange={buildPageCount => patch({ buildPageCount })} />
             ) : null}
             {stage === 'build-detail' ? (
-              <RadioCards<BuildEffortId> label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
-                options={buildEffortLevels} onChange={buildEffort => patch({ buildEffort })} />
+              <>
+                <RadioCards<BuildEffortId> label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
+                  options={buildEffortLevels} onChange={buildEffort => patch({ buildEffort })} />
+                <RadioCards<BuildPackageId> label="Your package" name={`${id}-package`} selected={draft.buildPackage ?? 'essential'}
+                  options={buildPackages.map(option => ({ ...option, description: `${money(getBuildScopePrice(draft.buildPageCount, draft.buildEffort, option.id))}${option.id === 'complete' && draft.buildEffort !== 'simple' ? '+' : ''} per platform · ${getIncludedBuildFeatures({ ...draft, buildPackage: option.id }).length} included features` }))}
+                  onChange={buildPackage => patch({ buildPackage })} />
+                <p className="servicesWidgetNote">Package prices reflect your selected page count. Included features are ready in the following tabs. Specialized extras and additional platforms add to the estimate; ongoing services are quoted separately.</p>
+              </>
             ) : null}
             {stage === 'video' && draft.creativeOptions.video.includes('game') && draft.selectedServices.includes('build') ? <p className="servicesWidgetNote">Your game shares scope and add-ons with your website or app. You’ll choose those together in the steps after Website // App.</p> : null}
-            {addOnStep ? <ChoiceCards label="Make it yours · optional add-ons" options={addOnStep.options} selected={draft.buildFeatures} details={buildDetails} onToggle={value => toggleList('buildFeatures', value)} /> : null}
+            {addOnStep ? <ChoiceCards label="Make it yours · optional add-ons" options={addOnStep.options} selected={draft.buildFeatures} included={getIncludedBuildFeatures(draft)} details={buildDetails} onToggle={value => toggleList('buildFeatures', value)} /> : null}
             {stage === 'build-care' ? (
               <RadioCards label="After launch" name={`${id}-care`} selected={draft.maintenance}
                 options={[{ id: 'self', label: 'I’ll handle updates', description: 'Simple tools and a handoff. No ongoing care added.' }, { id: 'managed', label: 'Piratechs handles it', description: 'Request ongoing care, quoted separately.' }]}
@@ -336,19 +376,21 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
                 {draft.paymentMethod === 'finance' ? (
                   <>
                     <div className="servicesWidgetRanges">
-                      <RangeField label="Monthly target" min={5} max={350} step={5} value={draft.monthlyTarget} display={`${money(draft.monthlyTarget)} / month`} onChange={monthlyTarget => patch({ monthlyTarget })} />
-                      <RangeField label="Down payment" min={0} max={estimate.total} value={draft.downPayment} display={money(draft.downPayment)} onChange={downPayment => patch({ downPayment })} />
+                      <NumberField label="Term (months)" min={payment.principal ? 1 : 0} max={120} value={payment.months} disabled={!payment.principal}
+                        onChange={financeTermMonths => patch({ financeTermMonths, financingControl: 'term' })} />
+                      <NumberField label="Monthly payment ($)" min={1} max={Math.ceil(estimate.total * 1.18)} step={0.01} value={payment.monthlyPayment} disabled={!payment.principal}
+                        onChange={monthlyTarget => patch({ monthlyTarget, financingControl: 'monthly' })} />
+                      <NumberField label="Down payment ($)" min={0} max={estimate.total} value={draft.downPayment}
+                        onChange={downPayment => patch({ downPayment })} />
                     </div>
-                    <RadioCards label="Use my down payment to" name={`${id}-down-mode`} selected={draft.downPaymentMode}
-                      options={[{ id: 'finish-sooner', label: 'Finish sooner', description: 'Keep the monthly target and shorten the term.' }, { id: 'lower-monthly', label: 'Lower monthly payments', description: 'Spread the remaining balance over the original term.' }]}
-                      onChange={downPaymentMode => patch({ downPaymentMode })} />
+                    <p className="servicesWidgetNote">Edit a field, then press Enter or leave it to recalculate your schedule. Maximum term: 120 months (10 years). Payments adjust to repay the balance within that limit. The final payment may be slightly smaller.</p>
                     <dl className="servicesWidgetFacts">
-                      <div><dt>Projected payment</dt><dd>{money(payment.monthlyPayment)} / month</dd></div>
+                      <div><dt>Projected payment</dt><dd>{paymentMoney(payment.monthlyPayment)} / month</dd></div>
                       <div><dt>Term</dt><dd>{payment.months} months</dd></div>
                       <div><dt>Illustrative rate</dt><dd>{payment.interestRate.toFixed(1)}%</dd></div>
                       <div><dt>Financing fee</dt><dd>{money(payment.financeFee)}</dd></div>
                     </dl>
-                    <p className="servicesWidgetNote">{payment.customReviewRequired ? 'This term exceeds 60 months and requires a custom payment review. ' : ''}Planning illustration only. Financing and final terms require review and an agreement.</p>
+                    <p className="servicesWidgetNote">Planning illustration only. Financing and final terms require review and an agreement.</p>
                   </>
                 ) : null}
                 <p className="servicesWidgetNote">{payment.completionWeeks ? `Projected delivery: ${payment.completionWeeks} weeks after kickoff. ${payment.cadence} updates.` : 'We’ll schedule your first conversation together.'}</p>
@@ -361,18 +403,18 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
                   {estimate.groups.length ? estimate.groups.map(group => (
                     <details key={group.service}>
                       <summary>{group.label}<span>{group.items.length} item{group.items.length === 1 ? '' : 's'}</span></summary>
-                      <ul>{group.items.map(item => <li key={item.id}>{item.label}</li>)}</ul>
+                      <ul>{group.items.map(item => <li key={item.id}>{item.label} · {item.amount === 0 ? 'Included' : money(item.amount)}</li>)}</ul>
                       {group.service === 'mentoring' && draft.mentoringPricingMode === 'hourly' ? <p>{mentoringTopics.filter(topic => draft.mentoringTopics.includes(topic.id)).map(topic => topic.label).join(' · ')}</p> : null}
                       <button type="button" className="servicesWidgetTextButton" onClick={() => go(group.service)}>Edit selections</button>
                     </details>
                   )) : <p className="servicesWidgetNote">A free consultation to find the right direction for your idea.</p>}
                 </div>
-                <p className="servicesWidgetNote">{draft.paymentMethod === 'full' ? 'Pay in full · no financing fee.' : `Financing requested · ${money(payment.monthlyPayment)} / month for ${payment.months} months, plus ${money(draft.downPayment)} down. Financing fee: ${money(payment.financeFee)}.`} {draft.maintenance === 'managed' && estimate.platforms.includes('website') ? 'Ongoing website care will be quoted separately.' : ''}</p>
+                <p className="servicesWidgetNote">{estimate.isFreeConsultation ? 'Free consultation · no payment needed.' : draft.paymentMethod === 'full' ? 'Pay in full · no financing fee.' : `Financing requested · ${paymentMoney(payment.monthlyPayment)} / month for ${payment.months} months, plus ${money(draft.downPayment)} down. Financing fee: ${money(payment.financeFee)}.`} {draft.maintenance === 'managed' && estimate.platforms.includes('website') ? 'Ongoing website care will be quoted separately.' : ''}</p>
                 <label className="servicesWidgetName" htmlFor={`${id}-name`}>
                   <span>What’s your project called?</span>
                   <input id={`${id}-name`} ref={nameRef} name="projectName" autoComplete="off" type="text" required minLength={2} maxLength={80} aria-invalid={Boolean(state.status && draft.projectName.trim().length < 2)}
-                    placeholder="e.g. North Star Studio" value={draft.projectName} onChange={event => patch({ projectName: event.target.value })} />
-                  <small>One name for everything in this plan.</small>
+                    placeholder="e.g. North Star Studio or n/a" value={draft.projectName} onChange={event => patch({ projectName: event.target.value })} />
+                  <small>One name for everything in this plan. Enter n/a if you don’t have one yet.</small>
                 </label>
                 <p className="servicesWidgetNote">This is a planning estimate. Adding a plan to your cart does not charge you.</p>
               </>

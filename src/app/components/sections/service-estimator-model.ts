@@ -11,7 +11,7 @@ export type BuildStepId = 'build-pages' | 'build-detail' | 'build-content' | 'bu
 export type EstimatorStage = 'services' | ServiceId | BuildStepId | 'mentoring-session' | 'marketing-tools' | 'payment' | 'review' | 'cart';
 export type MaintenanceChoice = 'self' | 'managed' | null;
 export type PaymentMethod = 'full' | 'finance';
-export type DownPaymentMode = 'lower-monthly' | 'finish-sooner';
+export type BuildPackageId = 'essential' | 'recommended' | 'complete';
 export type MentoringTopicId = typeof mentoringTopics[number]['id'];
 export type MarketingOptionId = typeof marketingOptions[number]['id'];
 export type BuildTypeId = typeof buildTypes[number]['id'];
@@ -24,14 +24,59 @@ export const SERVICE_ESTIMATOR_CATALOG = {
   ...Object.fromEntries(serviceCards.map(service => [service.id, service])),
   mentoring: { label: 'Tutoring // Mentoring', basePrice: 100, maximum: 2000, topics: mentoringTopics },
   marketing: { label: 'Marketing // Analytics', basePrice: 200, maximum: 3000, options: marketingOptions },
-  build: { label: 'Website // Mobile App', startingPrice: 300, maximum: 10000, types: buildTypes, features: buildFeatures },
+  build: { label: 'Website // Mobile App', startingPrice: 333, types: buildTypes, features: buildFeatures },
 };
 
 export const buildPricingMatrix: Record<BuildEffortId, Record<BuildPageCountId, number>> = {
-  simple: { one: 300, three: 500, 'five-plus': 1000, 'ten-plus': 1500 },
-  business: { one: 500, three: 1000, 'five-plus': 2000, 'ten-plus': 3500 },
-  enterprise: { one: 1000, three: 2000, 'five-plus': 3500, 'ten-plus': 5500 },
+  simple: { one: 333, three: 600, 'five-plus': 900, 'ten-plus': 1111 },
+  business: { one: 900, three: 1200, 'five-plus': 1500, 'ten-plus': 2000 },
+  enterprise: { one: 1800, three: 2200, 'five-plus': 2600, 'ten-plus': 3000 },
 };
+
+// Package prices at 1 page (Simple), 5+ pages (Business), and 10+ pages (Enterprise).
+export const buildPackages = [
+  { id: 'essential', label: 'Essentials' },
+  { id: 'recommended', label: 'Recommended' },
+  { id: 'complete', label: 'Complete' },
+] as const;
+export const buildPackagePrices: Record<BuildEffortId, Record<BuildPackageId, number>> = {
+  simple: { essential: 333, recommended: 777, complete: 1111 },
+  business: { essential: 1500, recommended: 2222, complete: 2500 },
+  enterprise: { essential: 3000, recommended: 3333, complete: 3500 },
+};
+const essentialFeatures: BuildFeatureId[] = ['design', 'images', 'fonts', 'contact-form', 'social-media', 'testing', 'security', 'accessibility'];
+const businessFeatures: BuildFeatureId[] = [...essentialFeatures, 'blog', 'cms-database', 'search', 'analytics', 'content', 'animations', 'maps', 'reviews'];
+const enterpriseFeatures: BuildFeatureId[] = [...businessFeatures, 'dashboard', 'adv-analytics', 'api-server', 'functions', 'auth', 'storage', 'automations', 'advanced-contact-form', 'capture', 'email'];
+const packageFeatures: Record<BuildEffortId, Record<BuildPackageId, BuildFeatureId[]>> = {
+  simple: {
+    essential: essentialFeatures,
+    recommended: [...essentialFeatures, 'content', 'logo', 'analytics', 'animations', 'maps'],
+    complete: [...essentialFeatures, 'content', 'logo', 'analytics', 'animations', 'maps', 'themes', 'booking-calendar', 'news-letter'],
+  },
+  business: {
+    essential: businessFeatures,
+    recommended: [...businessFeatures, 'logo', 'themes', 'email', 'advanced-contact-form', 'booking-calendar', 'news-letter', 'capture', 'automations'],
+    complete: [...businessFeatures, 'logo', 'themes', 'email', 'advanced-contact-form', 'booking-calendar', 'news-letter', 'capture', 'automations', 'auth', 'ecommerce', 'customer-order-tracking', 'dashboard'],
+  },
+  enterprise: {
+    essential: [...enterpriseFeatures, 'logo', 'themes', 'booking-calendar', 'news-letter', 'ecommerce', 'customer-order-tracking'],
+    recommended: [...enterpriseFeatures, 'logo', 'themes', 'booking-calendar', 'news-letter', 'ecommerce', 'customer-order-tracking', 'ai-chatbot', 'notifications', 'pwa', 'adv-animations'],
+    complete: [...enterpriseFeatures, 'logo', 'themes', 'booking-calendar', 'news-letter', 'ecommerce', 'customer-order-tracking', 'ai-chatbot', 'notifications', 'pwa', 'adv-animations', 'international', 'charts', 'grids', 'drag-drop'],
+  },
+};
+export const getIncludedBuildFeatures = (draft: ServiceEstimatorDraft): readonly BuildFeatureId[] => (
+  draft.selectedServices.includes('build') || (draft.selectedServices.includes('video') && draft.creativeOptions.video.includes('game'))
+    ? packageFeatures[draft.buildEffort ?? 'simple'][draft.buildPackage ?? 'essential'] : []
+);
+// Only identical deliverables are shared across services; ongoing campaigns remain separate.
+export function getIncludedServiceOptions(draft: ServiceEstimatorDraft, service: ServiceId): string[] {
+  const included = getIncludedBuildFeatures(draft);
+  if (service === 'marketing') {
+    const equivalents = { cms: 'cms-database', automations: 'automations', 'customer-feedback': 'capture' } as const;
+    return Object.entries(equivalents).filter(([, feature]) => included.includes(feature)).map(([option]) => option);
+  }
+  return isCreativeService(service) ? creativeOptions[service].filter(option => included.includes(option.id as BuildFeatureId)).map(option => option.id) : [];
+}
 
 export type ServiceEstimatorDraft = {
   selectedServices: ServiceId[];
@@ -45,6 +90,7 @@ export type ServiceEstimatorDraft = {
   buildFeatures: BuildFeatureId[];
   buildPageCount: BuildPageCountId | null;
   buildEffort: BuildEffortId | null;
+  buildPackage?: BuildPackageId;
   mentoringPricingMode: 'package' | 'hourly';
   hourlyRate: number;
   mentoringHours: number;
@@ -52,7 +98,10 @@ export type ServiceEstimatorDraft = {
   paymentMethod: PaymentMethod;
   monthlyTarget: number;
   downPayment: number;
-  downPaymentMode: DownPaymentMode;
+  financeTermMonths?: number;
+  financingControl?: 'term' | 'monthly';
+  // Legacy saved plans can still be loaded. New plans use direct inputs.
+  downPaymentMode?: 'lower-monthly' | 'finish-sooner';
 };
 
 export type ServiceEstimateItem = { id: string; label: string; amount: number };
@@ -78,7 +127,7 @@ export type ServicePaymentProjection = {
 };
 export type ServiceCartItem = {
   id: string;
-  pricingVersion: 2 | 3;
+  pricingVersion: 2 | 3 | 4;
   title: string;
   draft: ServiceEstimatorDraft;
   estimate: ServiceEstimate;
@@ -106,18 +155,20 @@ export const toggleValue = <Value extends string>(values: readonly Value[], valu
 );
 export const platformLabels: Record<BuildPlatform, string> = { website: 'Website', mobile: 'Mobile App', game: 'Game' };
 export const isCreativeService = (service: string): service is CreativeServiceId => Object.hasOwn(creativeOptions, service);
-export const getBuildScopePrice = (pageCount: BuildPageCountId | null, effort: BuildEffortId | null) => (
-  buildPricingMatrix[effort ?? 'simple'][pageCount ?? 'one']
-);
+export const getBuildScopePrice = (pageCount: BuildPageCountId | null, effort: BuildEffortId | null, packageId: BuildPackageId = 'essential') => {
+  const tier = effort ?? 'simple';
+  const base = buildPricingMatrix[tier][pageCount ?? 'one'];
+  return base + buildPackagePrices[tier][packageId] - buildPackagePrices[tier].essential;
+};
 
 export function createEmptyServiceEstimatorDraft(): ServiceEstimatorDraft {
   return {
     selectedServices: [], projectName: '',
     creativeOptions: { ai: ['ai-chatbot'], video: ['short-form-video'], art: ['logo'], writing: ['content'] },
     mentoringTopics: ['ai'], marketingOptions: [], buildTypes: ['website-only'], buildFeatures: [],
-    buildPageCount: 'one', buildEffort: 'simple', mentoringPricingMode: 'hourly',
+    buildPageCount: 'one', buildEffort: 'simple', buildPackage: 'essential', mentoringPricingMode: 'hourly',
     hourlyRate: 20, mentoringHours: 1, maintenance: 'self',
-    paymentMethod: 'full', monthlyTarget: 175, downPayment: 0, downPaymentMode: 'finish-sooner',
+    paymentMethod: 'full', monthlyTarget: 175, downPayment: 0, financeTermMonths: 24, financingControl: 'term',
   };
 }
 
@@ -153,19 +204,22 @@ export function calculateServiceEstimate(draft: ServiceEstimatorDraft): ServiceE
   const groups: ServiceEstimateGroup[] = [];
   const platforms = draft.selectedServices.includes('build') ? getBuildPlatforms(draft.buildTypes) : [];
   const hasVideoGame = draft.selectedServices.includes('video') && draft.creativeOptions.video.includes('game');
-  const scopePrice = getBuildScopePrice(draft.buildPageCount, draft.buildEffort);
-  const scopeLabel = `${buildEffortLevels.find(option => option.id === draft.buildEffort)?.label ?? 'Simple'} · ${buildPageCounts.find(option => option.id === draft.buildPageCount)?.shortLabel ?? '1 screen'}`;
+  const scopePrice = getBuildScopePrice(draft.buildPageCount, draft.buildEffort, draft.buildPackage);
+  const included = getIncludedBuildFeatures(draft);
+  const featureItems = buildFeatures.filter(feature => included.includes(feature.id) || draft.buildFeatures.includes(feature.id)).map(feature => ({ id: feature.id, label: feature.label, amount: included.includes(feature.id) ? 0 : feature.price }));
+  const scopeLabel = `${buildEffortLevels.find(option => option.id === draft.buildEffort)?.label ?? 'Simple'} · ${buildPageCounts.find(option => option.id === draft.buildPageCount)?.shortLabel ?? '1 screen'} · ${buildPackages.find(option => option.id === (draft.buildPackage ?? 'essential'))?.label}`;
   for (const service of serviceCards) {
     if (!draft.selectedServices.includes(service.id)) continue;
     let items: ServiceEstimateItem[] = [];
     let maximum = Infinity;
     if (isCreativeService(service.id)) {
-      items = pricedItems(creativeOptions[service.id], draft.creativeOptions[service.id]);
+      const covered = getIncludedServiceOptions(draft, service.id);
+      items = pricedItems(creativeOptions[service.id], [...new Set([...draft.creativeOptions[service.id], ...covered])]).map(item => covered.includes(item.id) ? { ...item, amount: 0 } : item);
       if (service.id === 'video' && hasVideoGame) {
         items = items.map(item => item.id === 'game'
           ? { ...item, label: `Game · ${scopeLabel}`, amount: platforms.includes('game') ? 0 : scopePrice }
           : item);
-        if (!draft.selectedServices.includes('build')) items.push(...pricedItems(buildFeatures, draft.buildFeatures));
+        if (!draft.selectedServices.includes('build')) items.push(...featureItems);
       }
     } else if (service.id === 'mentoring') {
       maximum = 2000;
@@ -174,12 +228,12 @@ export function calculateServiceEstimate(draft: ServiceEstimatorDraft): ServiceE
         : [{ id: 'mentoring-base', label: 'Mentoring engagement', amount: 100 }, ...pricedItems(mentoringTopics, draft.mentoringTopics)];
     } else if (service.id === 'marketing') {
       maximum = 3000;
-      items = [{ id: 'marketing-base', label: 'Marketing engagement', amount: 200 }, ...pricedItems(marketingOptions, draft.marketingOptions)];
+      const covered = getIncludedServiceOptions(draft, service.id);
+      items = [{ id: 'marketing-base', label: 'Marketing engagement', amount: 200 }, ...pricedItems(marketingOptions, [...new Set([...draft.marketingOptions, ...covered])]).map(item => covered.includes(item.id) ? { ...item, amount: 0 } : item)];
     } else if (service.id === 'build') {
-      maximum = 10000;
       items = [
         ...platforms.map(platform => ({ id: `platform-${platform}`, label: `${platformLabels[platform]} · ${scopeLabel}`, amount: scopePrice })),
-        ...pricedItems(buildFeatures, draft.buildFeatures),
+        ...featureItems,
       ];
     }
     groups.push({ service: service.id, label: service.label, items, total: Math.min(maximum, items.reduce((sum, item) => sum + item.amount, 0)) });
@@ -215,28 +269,25 @@ export function calculatePaymentProjection(
     };
   }
 
-  const monthlyTarget = clamp(5, Math.round(draft.monthlyTarget / 5) * 5, 350);
   const downPayment = clamp(0, Math.round(draft.downPayment), total);
-  const speed = (monthlyTarget - 5) / 345;
   const downRatio = total > 0 ? downPayment / total : 0;
-  const interestRate = clamp(3, 18 - (10 * speed) - (5 * downRatio), 18);
   const principal = Math.max(0, total - downPayment);
-  const financeFee = Math.round(principal * (interestRate / 100));
-  const financedTotal = principal + financeFee;
-  const baselineRate = clamp(3, 18 - (10 * speed), 18);
-  const baselineTotal = Math.round(total * (1 + baselineRate / 100));
-  const baselineMonths = total > 0 ? Math.max(1, Math.ceil(baselineTotal / monthlyTarget)) : 0;
-
-  const months = principal === 0
-    ? 0
-    : draft.downPaymentMode === 'lower-monthly'
-      ? baselineMonths
-      : Math.ceil(financedTotal / monthlyTarget);
-  const monthlyPayment = principal === 0
-    ? 0
-    : draft.downPaymentMode === 'lower-monthly'
-      ? Math.ceil(financedTotal / Math.max(1, months))
-      : monthlyTarget;
+  const schedule = (months: number) => {
+    const interestRate = clamp(3, 3 + 15 * (months - 1) / 119 - 5 * downRatio, 18);
+    const financeFee = Math.round(principal * interestRate / 100);
+    const financedTotal = principal + financeFee;
+    return { interestRate, financeFee, financedTotal, monthlyPayment: Math.ceil(financedTotal * 100 / months) / 100 };
+  };
+  let months = clamp(1, Math.round(draft.financeTermMonths ?? 24), 120);
+  if (draft.financingControl === 'monthly') {
+    months = 120;
+    for (let term = 1; term <= 120; term++) {
+      if (schedule(term).monthlyPayment <= Math.max(1, draft.monthlyTarget)) { months = term; break; }
+    }
+  }
+  const { interestRate, financeFee, financedTotal, monthlyPayment } = schedule(months);
+  if (principal === 0) months = 0;
+  const speed = 1 - Math.max(0, months - 1) / 119;
   const paceScore = clamp(0, speed + (downRatio * 0.25), 1);
   const cadence = paceScore < 0.34 ? 'Monthly' : paceScore < 0.67 ? 'Every two weeks' : 'Weekly';
   const completionFactor = clamp(0.7, 1.6 - (0.6 * speed) - (0.3 * downRatio), 1.6);
@@ -249,7 +300,7 @@ export function calculatePaymentProjection(
     interestRate,
     monthlyPayment,
     months,
-    customReviewRequired: months > 60,
+    customReviewRequired: false,
     completionWeeks: Math.ceil(getBaseCompletionWeeks(draft.selectedServices) * completionFactor),
     cadence,
   };

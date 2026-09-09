@@ -1,12 +1,13 @@
 {
   "name": "piratechs",
-  "version": "0.1.0.4",
+  "version": "0.1.0.5",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:estimator": "tsc -p tests/tsconfig.estimator.json && node --test tmp/estimator-tests/tests/service-estimator.test.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

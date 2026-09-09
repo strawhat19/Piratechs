@@ -4,9 +4,10 @@ import gsap from 'gsap';
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
-import AuthWidget from '../auth/auth-widget';
+import StartCtaSection from './start-cta';
 import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
+// import AuthWidget from '../auth/auth-widget';
 import HomeWaveSection from './home-wave-section';
 import HomeLandingSections from './home-landing-sections';
 import { useGlobalContext } from '@/shared/global-context';
@@ -19,7 +20,6 @@ import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
 import HomeFeaturedProjectCarousel from './home-featured-project-carousel';
 import { HomeCapabilityRadar, HomeManifestoReveal, HomeProjectBento } from './home-landing-alternatives';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
-import StartCtaSection from './start-cta';
 
 const logoHoverAnimationClass = `logoHoverAnimation`;
 
@@ -29,7 +29,9 @@ type HeroBgAnimationHandlers = {
   signalLineRevealComplete?: () => void;
 };
 
-export default function HomeLanding() {
+export default function HomeLanding({
+  showSeparators = false,
+}: any) {
   const page: any = config?.pages?.home;
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const heroBgAnimationHandlersRef = useRef<HeroBgAnimationHandlers>({});
@@ -217,7 +219,7 @@ export default function HomeLanding() {
         />
       </section>
 
-      <div className={`sep reveal`} />
+      {showSeparators && <div className={`sep reveal`} />}
 
       {/* <section className={`pageSection specialtiesSection`}>
         <div className={`sectionInner backendGrid`}>
@@ -242,7 +244,7 @@ export default function HomeLanding() {
         </div>
       </section>
 
-      <div className={`sep reveal`} /> */}
+      {showSeparators && <div className={`sep reveal`} />} */}
 
       {/* {(isMounted && isChromeOrAdvancedDevice) && (
         <Section className={`homeProjects`} inversed />
@@ -269,16 +271,16 @@ export default function HomeLanding() {
         </div>
       </section>
 
-      <div className={`sep reveal`} /> */}
+      {showSeparators && <div className={`sep reveal`} />} */}
 
       <HomeManifestoReveal />
       <HomeLandingSections />
-      <HomeFeaturedProjectCarousel />
-      <HomeCapabilityRadar />
-      <HomeProjectBento />
+      {/* <HomeFeaturedProjectCarousel /> */}
+      {/* <HomeCapabilityRadar /> */}
+      {/* <HomeProjectBento /> */}
       {/* <HomeVoyageMetrics /> */}
 
-      <div className={`sep reveal`} />
+      {showSeparators && <div className={`sep reveal`} />}
 
       <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>
@@ -298,15 +300,15 @@ export default function HomeLanding() {
         </div>
       </section>
 
-      <div className={`sep reveal`} />
+      {showSeparators && <div className={`sep reveal`} />}
 
       <StartCtaSection />
 
-      <div className={`sep reveal`} />
+      {(showSeparators || true) && <div className={`sep reveal`} />}
 
       <HomeWaveSection includeServiceEstimator={true} />
 
-      <div className={`sep reveal`} />
+      {(showSeparators || true) && <div className={`sep reveal`} />}
     </>
   );
 }

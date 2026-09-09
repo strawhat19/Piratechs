@@ -28,9 +28,9 @@ function WaveServiceSelection({ selectedServices, onToggle, onStart }: ServiceEs
           ))}
         </div>
       </fieldset>
-      <button type="button" className="homeWaveStart" onClick={onStart}>
+      <button type="button" className="homeWaveStart" data-ready={selectedServices.length > 0} onClick={onStart}>
         <i className="fa-solid fa-bolt" aria-hidden="true" />
-        <span>Start<span className="homeWaveStartDetail">{selectedServices.length ? `${selectedServices.length} service${selectedServices.length === 1 ? '' : 's'} selected` : 'Let’s chart your course'}</span></span>
+        <span>Start<span className="homeWaveStartDetail">{selectedServices.length ? `Ready · ${selectedServices.length} service${selectedServices.length === 1 ? '' : 's'}` : 'Let’s chart your course'}</span></span>
         <i className="fa-solid fa-arrow-right" aria-hidden="true" />
       </button>
     </div>
@@ -61,7 +61,7 @@ export default function HomeWaveSection({
   }, []);
 
   useEffect(() => {
-    // Reveal the extra form space on Start; changing form tabs keeps the page still.
+    // Align the estimator on Start; changing its tabs keeps the page still.
     if (estimatorActive) sectionRef.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
   }, [estimatorActive]);
 
@@ -103,7 +103,7 @@ export default function HomeWaveSection({
   const copy = (
     <div className="homeWaveCopy" key="copy">
       <h2 id={`${id}-heading`}>
-        Make waves.<br /><span>Design what's next.</span>
+        Make waves.<br /><span>Design what’s next.</span>
       </h2>
       {!estimatorActive && (
         <div className="homeWaveIntro">
@@ -121,7 +121,11 @@ export default function HomeWaveSection({
       <HomeServiceEstimator 
         onStageChange={onEstimatorStageChange}
         renderServiceSelection={selection => (
-          <WaveServiceSelection {...selection} />
+          <WaveServiceSelection {...selection} onStart={() => {
+            const section = sectionRef.current;
+            if (section) section.style.setProperty('--home-wave-resting-height', `${section.getBoundingClientRect().height}px`);
+            selection.onStart();
+          }} />
         )} 
       />
     </div>
@@ -137,7 +141,7 @@ export default function HomeWaveSection({
       aria-labelledby={`${id}-heading`}
       data-paused={paused}
     >
-      <div className="homeWaveTopline">
+      {!estimatorActive && <div className="homeWaveTopline">
         <span className="eyebrow">
           Our Services
         </span>
@@ -154,12 +158,11 @@ export default function HomeWaveSection({
             <span>{paused ? `Resume waves` : `Pause waves`}</span>
           </button>
         )}
-      </div>
+      </div>}
 
       <div className="homeWaveContent">
         {includeServiceEstimator ? (
-          // Stable keys keep the plan mounted while its position changes.
-          estimatorActive ? [copy, estimator] : [copy, estimator]
+          [copy, estimator]
         ) : (
           <>{copy}<div className="homeWaveAuth">
             <AuthWidget defaultOpen />
@@ -185,13 +188,13 @@ export default function HomeWaveSection({
         ))}
       </div>
 
-      <div className="homeWaveCoordinates" aria-hidden="true">
+      {!estimatorActive && <div className="homeWaveCoordinates" aria-hidden="true">
         <span>PIRATECHS<span className="homeWaveCoordinatesStudio"> <span>{`//`}</span> STUDIOS</span></span>
         <span>
           <span className="homeWaveCoordinatesFull">DESIGN <span>→</span> DEVELOP <span>→</span> DISTORT</span>
           <span className="homeWaveCoordinatesShort">DSGN <span>→</span> DEV <span>→</span> DISTORT</span>
         </span>
-      </div>
+      </div>}
     </section>
   );
 }
