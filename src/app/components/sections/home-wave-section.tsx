@@ -19,19 +19,28 @@ function WaveServiceSelection({ selectedServices, onToggle, onStart }: ServiceEs
         <p>Choose your services, or start with a free consultation.</p>
         <div className="homeWaveServiceButtons">
           {serviceCards.map(service => (
-            <button key={service.id} type="button" className="homeWaveServiceButton"
-              aria-pressed={selectedServices.includes(service.id)} onClick={() => onToggle(service.id)}>
-              <i className={`fa-solid ${service.icon}`} aria-hidden="true" />
+            <button key={service.id} type="button" className="homeWaveServiceButton" aria-pressed={selectedServices.includes(service.id)} onClick={() => onToggle(service.id)}>
+              <div className={`homeWaveServiceTop`}>
+                <i className={`fa-solid gradientTextColor ${service.icon}`} aria-hidden="true" />
+                <span className="homeWaveServiceIconLabel">
+                  <i><span className={`smallText`}>From</span> <strong><span className="gradientTextColor">$</span>{service.price}</strong></i>
+                </span>
+              </div>
               <span>{service.label}</span>
-              <i className="fa-solid fa-check homeWaveServiceCheck" aria-hidden="true" />
+              <i className="fa-solid fa-check homeWaveServiceCheck gradientTextColor" aria-hidden="true" />
             </button>
           ))}
         </div>
       </fieldset>
       <button type="button" className="homeWaveStart" data-ready={selectedServices.length > 0} onClick={onStart}>
-        <i className="fa-solid fa-bolt" aria-hidden="true" />
-        <span>Start<span className="homeWaveStartDetail">{selectedServices.length ? `Ready · ${selectedServices.length} service${selectedServices.length === 1 ? '' : 's'}` : 'Let’s chart your course'}</span></span>
-        <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+        <i className="fa-solid fa-bolt gradientTextColor" aria-hidden="true" />
+        <span>
+          Start
+          <span className="homeWaveStartDetail">
+            {selectedServices.length ? `Ready · ${selectedServices.length} service${selectedServices.length === 1 ? `` : `s`}` : `Set Sail`}
+          </span>
+        </span>
+        <i className="fa-solid fa-arrow-right gradientTextColor" aria-hidden="true" />
       </button>
     </div>
   );

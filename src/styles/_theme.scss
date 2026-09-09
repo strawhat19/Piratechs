@@ -199,7 +199,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-  width: 7px;
+  width: 9px;
   height: 12px;
 }
 
@@ -241,6 +241,10 @@ button {
 img {
   display: block;
   max-width: 100%;
+}
+
+.smallText {
+  font-size: 10px;
 }
 
 .arrow {

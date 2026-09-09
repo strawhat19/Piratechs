@@ -395,7 +395,7 @@ export default function SplitPageTransition({
                 alt={``}
                 width={500}
                 height={177}
-                priority
+                loading={`eager`}
                 unoptimized
               />
             </div>

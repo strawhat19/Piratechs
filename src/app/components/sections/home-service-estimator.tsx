@@ -76,13 +76,17 @@ function ChoiceCards({
           return (
             <label className="servicesWidgetCard" data-selected={isIncluded || selected.includes(option.id)} data-included={isIncluded} key={option.id}>
               <input type="checkbox" disabled={isIncluded} checked={isIncluded || selected.includes(option.id)} onChange={() => onToggle(option.id)} />
-              <span className="servicesWidgetCardIcon" aria-hidden="true"><i className={`fa-solid ${option.icon ?? `fa-${detail?.[0] ?? 'wand-magic-sparkles'}`}`} /></span>
+              <span className="servicesWidgetCardIcon" aria-hidden="true">
+                <i className={`fa-solid gradientTextColor ${option.icon ?? `fa-${detail?.[0] ?? 'wand-magic-sparkles'}`}`} />
+              </span>
               <span className="servicesWidgetCardCopy">
                 <strong>{option.label}</strong>
                 <span>{option.description ?? detail?.[1]}</span>
                 {isIncluded ? <small>Included</small> : showPrices && typeof option.price === 'number' ? <small>{pricePrefix}{money(option.price)}</small> : null}
               </span>
-              <span className="servicesWidgetCheck" aria-hidden="true"><i className="fa-solid fa-check" /></span>
+              <span className="servicesWidgetCheck" aria-hidden="true">
+                <i className="fa-solid fa-check gradientTextColor" />
+              </span>
             </label>
           );
         })}
@@ -91,15 +95,12 @@ function ChoiceCards({
   );
 }
 
-function RadioCards<Value extends string>({ label, name, options, selected, onChange }: {
-  label: string; name: string; options: readonly { id: Value; label: string; description: string }[];
-  selected: Value | null; onChange: (value: Value) => void;
-}) {
+function RadioCards<Value extends string>({ label, name, options, selected, onChange, className }: any) {
   return (
     <fieldset className="servicesWidgetChoices">
       <legend>{label}</legend>
-      <div className="servicesWidgetRadioCards">
-        {options.map(option => (
+      <div className={`servicesWidgetRadioCards ${className ?? ``}`}>
+        {options.map((option: any) => (
           <label className="servicesWidgetRadio" data-selected={selected === option.id} key={option.id}>
             <input type="radio" name={name} checked={selected === option.id} onChange={() => onChange(option.id)} />
             <span><strong>{option.label}</strong><small>{option.description}</small></span>
@@ -314,7 +315,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
               <>
                 <RadioCards label="Session pricing" name={`${id}-mentoring-mode`} selected={draft.mentoringPricingMode}
                   options={[{ id: 'hourly', label: 'By the hour', description: 'Start with one focused hour. Topics are included.' }, { id: 'package', label: 'Project package', description: '$100 base, plus the topics you choose.' }]}
-                  onChange={mentoringPricingMode => patch({ mentoringPricingMode })} />
+                  onChange={(mentoringPricingMode: any) => patch({ mentoringPricingMode })} />
                 {draft.mentoringPricingMode === 'hourly' ? (
                   <div className="servicesWidgetRanges">
                     <RangeField label="Hourly rate" min={20} max={50} step={5} value={draft.hourlyRate} display={`${money(draft.hourlyRate)} / hour`} onChange={hourlyRate => patch({ hourlyRate })} />
@@ -336,15 +337,15 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
             {stage === 'build-pages' ? (
               <RadioCards<BuildPageCountId> label="Pages // Screens // Views" name={`${id}-pages`} selected={draft.buildPageCount}
                 options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort, draft.buildPackage))}` }))}
-                onChange={buildPageCount => patch({ buildPageCount })} />
+                onChange={(buildPageCount: any) => patch({ buildPageCount })} className={`webAppServices`} />
             ) : null}
             {stage === 'build-detail' ? (
               <>
                 <RadioCards<BuildEffortId> label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
-                  options={buildEffortLevels} onChange={buildEffort => patch({ buildEffort })} />
+                  options={buildEffortLevels} onChange={(buildEffort: any) => patch({ buildEffort })} />
                 <RadioCards<BuildPackageId> label="Your package" name={`${id}-package`} selected={draft.buildPackage ?? 'essential'}
                   options={buildPackages.map(option => ({ ...option, description: `${money(getBuildScopePrice(draft.buildPageCount, draft.buildEffort, option.id))}${option.id === 'complete' && draft.buildEffort !== 'simple' ? '+' : ''} · ${getIncludedBuildFeatures({ ...draft, buildPackage: option.id }).length} included features` }))}
-                  onChange={buildPackage => patch({ buildPackage })} />
+                  onChange={(buildPackage: any) => patch({ buildPackage })} />
                 <p className="servicesWidgetNote">Package prices reflect your selected page count. Included features are ready in the following tabs. Mobile App is an optional flat $150 add-on. Other optional extras add to the estimate; ongoing services are quoted separately.</p>
               </>
             ) : null}
@@ -353,14 +354,14 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
             {stage === 'build-care' ? (
               <RadioCards label="After launch" name={`${id}-care`} selected={draft.maintenance}
                 options={[{ id: 'self', label: 'I’ll handle updates', description: 'Simple tools and a handoff. No ongoing care added.' }, { id: 'managed', label: 'Piratechs handles it', description: 'Request ongoing care, quoted separately.' }]}
-                onChange={maintenance => patch({ maintenance })} />
+                onChange={(maintenance: any) => patch({ maintenance })} />
             ) : null}
 
             {stage === 'payment' ? (
               <>
                 <RadioCards label="Payment preference" name={`${id}-payment`} selected={draft.paymentMethod}
                   options={estimate.total ? [{ id: 'full', label: 'Pay in full', description: 'The lowest total cost. No financing fee.' }, { id: 'finance', label: 'Explore financing', description: 'See an illustrative payment schedule for review.' }] : [{ id: 'full', label: 'Free consultation', description: 'Talk through your idea with the crew.' }]}
-                  onChange={paymentMethod => patch({ paymentMethod })} />
+                  onChange={(paymentMethod: any) => patch({ paymentMethod })} />
                 {draft.paymentMethod === 'finance' ? (
                   <>
                     <div className="servicesWidgetRanges">

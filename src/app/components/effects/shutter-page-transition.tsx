@@ -361,7 +361,7 @@ export default function ShutterPageTransition({
             )}
             <div className={`pageTransitionLoaderInner`}>
               <Image
-                priority
+                loading={`eager`}
                 unoptimized
                 aria-hidden
                 alt={``}

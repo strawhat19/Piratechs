@@ -30,7 +30,7 @@ type HeroBgAnimationHandlers = {
 };
 
 export default function HomeLanding({
-  showSeparators = false,
+  showSeparators = true,
 }: any) {
   const page: any = config?.pages?.home;
   const heroSectionRef = useRef<HTMLElement | null>(null);
@@ -304,11 +304,11 @@ export default function HomeLanding({
 
       <StartCtaSection />
 
-      {(showSeparators || true) && <div className={`sep reveal`} />}
+      {showSeparators && <div className={`sep reveal`} />}
 
       <HomeWaveSection includeServiceEstimator={true} />
 
-      {(showSeparators || true) && <div className={`sep reveal`} />}
+      {showSeparators && <div className={`sep reveal`} />}
     </>
   );
 }
