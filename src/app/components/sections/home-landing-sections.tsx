@@ -1,34 +1,6 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import type { CSSProperties } from 'react';
+import HomeAboutSection from './home-about-section';
+import HomeFeaturedProjectsSection from './home-featured-projects-section';
 // import { config } from '@/shared/config/config';
-import TextReveal from '@/app/components/effects/text-reveal';
-import LandingReveal from '@/app/components/effects/landing-reveal';
-import ElementReveal from '@/app/components/effects/element-reveal';
-import { getCaseStudyHref, getProjects } from '@/app/components/projects/project-data';
-import LandingFeaturedProjects, { type LandingFeaturedProject } from '@/app/components/sections/landing-featured-projects';
-
-type SplitToken = {
-  accent?: boolean;
-  accentPart?: string;
-  text: string;
-};
-
-type SplitHeadingProps = {
-  as: `h1` | `h2`;
-  className: string;
-  hero?: boolean;
-  id?: string;
-  lines: SplitToken[][];
-  reveal?: boolean;
-};
-
-type StudioPixelsProps = {
-  compact?: boolean;
-  round?: boolean;
-  tone?: `blue` | `navy`;
-  position: `TopLeft` | `TopRight` | `BottomLeft` | `BottomRight`;
-};
 
 const selectedWork = [
   {
@@ -67,98 +39,10 @@ const process = [
   { phase: `Launch`, detail: `Test the full experience, ship with confidence, and keep it healthy after release.` },
 ];
 
-const landingFeaturedProjects = getProjects()
-  .filter(project => project?.featured)
-  .map((project, index): LandingFeaturedProject => ({
-    id: String(project?.id ?? project?.name ?? index),
-    name: String(project?.name ?? project?.title ?? index),
-    title: String(project?.title ?? project?.name ?? `Project`),
-    status: String(project?.status ?? `Code`),
-    summary: String(project?.summary ?? project?.description ?? ``),
-    mediaURL: project?.mediaURL ? String(project.mediaURL) : undefined,
-    topics: Array.isArray(project?.topics) ? project.topics.map(String) : [],
-    liveUrl: project?.liveUrl ? String(project.liveUrl) : undefined,
-    codeUrl: project?.codeUrl ? String(project.codeUrl) : undefined,
-    viewHref: getCaseStudyHref(project),
-    number: String(index + 1).padStart(2, `0`),
-  }));
-
-const StudioPixels = ({ compact = false, position, round = false, tone = `blue` }: StudioPixelsProps) => (
-  <span
-    data-tone={tone}
-    aria-hidden={`true`}
-    className={`landingStudioPixels landingStudioPixels${position}${compact ? ` landingStudioPixelsCompact` : ``}${round ? ` landingStudioPixelsRound` : ``}`}
-  >
-    {Array.from({ length: 13 }, (_, index) => <i key={index} />)}
-  </span>
-);
-
-function SplitHeading({ as, className, hero = false, id, lines, reveal = false }: SplitHeadingProps) {
-  const Heading = as;
-  let splitIndex = 0;
-
+export default function HomeLandingSections({ about = true, projects = true }: { about?: boolean; projects?: boolean }) {
   return (
-    <Heading
-      id={id}
-      className={className}
-      aria-label={lines.map(line => line.map(token => token.text).join(` `).replace(/\s+([.?])/g, `$1`)).join(` `)}
-      data-landing-hero={hero ? `true` : undefined}
-      data-landing-reveal={reveal ? `true` : undefined}
-    >
-      {lines.map((line, lineIndex) => (
-        <span className={`landingSplitLine`} aria-hidden={`true`} key={`line-${lineIndex}`}>
-          {line.map((token, tokenIndex) => {
-            const index = splitIndex++;
-            return (
-              <span
-                className={`landingSplitWord ${token.accent ? `landingTitleAccent` : ``} ${token.text == `.` || token.text == `?` ? `landingSplitTight` : ``}`}
-                key={`${token.text}-${tokenIndex}`}
-                style={{ '--split-index': index } as CSSProperties}
-              >
-                {token.accentPart ? (
-                  <>
-                    {token.text.slice(0, token.text.indexOf(token.accentPart))}
-                    <span className={`landingTitleAccent`}>{token.accentPart}</span>
-                    {token.text.slice(token.text.indexOf(token.accentPart) + token.accentPart.length)}
-                  </>
-                ) : token.text}
-              </span>
-            );
-          })}
-        </span>
-      ))}
-    </Heading>
-  );
-}
-
-export default function HomeLandingSections() {
-  return (
-    <div className={`piratechsLanding landingMotionPending`} data-piratechs-landing>
-      <LandingReveal />
-      <noscript>
-        <style>{`.landingMotionPending [data-landing-reveal],.landingMotionPending .landingSplitWord{opacity:1!important;filter:none!important;transform:none!important}`}</style>
-      </noscript>
-
-      <div className={`sep reveal`} />
-
-      <section className={`landingStackSection`} aria-labelledby={`landing-stack-title`}>
-        <StudioPixels compact round position={`TopRight`} tone={`navy`} />
-        <StudioPixels compact round position={`BottomLeft`} tone={`navy`} />
-        <div className={`landingStackIntro`} data-landing-reveal>
-          <span className={`landingEyebrow`}>
-            Our Work
-          </span>
-          <SplitHeading
-            as={`h2`}
-            id={`landing-stack-title`}
-            className={`landingStackHeading`}
-            lines={[[{ text: `Featured` }, { text: `Projects` }, { text: `.`, accent: true }]]}
-          />
-        </div>
-        <ElementReveal onScroll as={`div`} y={18} duration={0.68} className={`landingStackMarquee`}>
-          <LandingFeaturedProjects www={false} projects={landingFeaturedProjects} />
-        </ElementReveal>
-      </section>
+    <>
+      {projects && <HomeFeaturedProjectsSection />}
 
       {/* <section id={`selected-work`} className={`landingSection landingWorkSection`}>
         <div className={`landingSectionHeading`} data-landing-blur data-landing-reveal>
@@ -208,75 +92,7 @@ export default function HomeLandingSections() {
         </div>
       </section> */}
 
-      <div className={`sep reveal`} />
-
-      <section className={`landingSection landingStudioSection`}>
-        <StudioPixels position={`TopLeft`} />
-        <StudioPixels position={`BottomRight`} />
-        <div className={`landingStudioCard`} data-landing-reveal>
-          <a
-            href={`https://piratechs.com/`}
-            rel={`noopener noreferrer`}
-            target={`_blank`}
-            className={`landingStudioMark`}
-            aria-label={`Visit Piratechs.com (opens in a new tab)`}
-            data-landing-blur
-          >
-            <span className={`landingStudioCoordinate`}>
-              WILL OF D.
-            </span>
-            <div className={`landingStudioLockup`}>
-              <span className={`landingStudioLogoStage`}>
-                <Image
-                  fill
-                  alt={`Piratechs`}
-                  unoptimized
-                  sizes={`(max-width: 992px) 80vw, 390px`}
-                  className={`landingStudioLegacyLogo`}
-                  src={`https://piratechs.com/wp-content/uploads/2021/11/PiratechsNewLowerCaseWhite-768x411.png`}
-                />
-                <Image
-                  fill
-                  alt={``}
-                  unoptimized
-                  aria-hidden
-                  sizes={`(max-width: 992px) 80vw, 390px`}
-                  className={`landingStudioDistortion`}
-                  src={`/assets/piratechs/animations/piratechs-distortion-loader.webp`}
-                />
-              </span>
-            </div>
-            <span className={`landingStudioCoordinate`}>
-              DESIGN // DEVELOP // DISTORT
-            </span>
-          </a>
-          <div className={`landingStudioCopy`}>
-            <span className={`landingEyebrow`}>
-              Our Story
-            </span>
-            <SplitHeading
-              as={`h2`}
-              className={`landingStatement`}
-              lines={[
-                [{ text: `Where We` }, { text: `Were` }, { text: `.`, accent: true }],
-                [{ text: `Who We` }, { text: `Are` }, { text: `.`, accent: true }],
-              ]}
-            />
-            <div className={`landingStudioDetails`}>
-              <TextReveal
-                html
-                scroll
-                as={`p`}
-                className={`legacyDescription`}
-                text={`Piratechs began with our original digital home at <a href="https://piratechs.com/" rel="noopener noreferrer" target="_blank">piratechs.com</a>, a snapshot of the studio’s earlier identity and the foundation behind our work. The new experience you’re exploring now is the next evolution—designed to make our capabilities, process, and results easier to understand while giving ambitious ideas a clearer path from concept to launch.`}
-              />
-              <Link href={`https://piratechs.com/`} className={`landingInlineLink`} rel={`noopener noreferrer`} target={`_blank`}>
-                Legacy Piratechs <span aria-hidden={`true`}>↗</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {about && <HomeAboutSection />}
 
       {/* <section id={`process`} className={`landingSection landingProcessSection`}>
         <div className={`landingProcessLead`} data-landing-blur data-landing-reveal>
@@ -327,6 +143,6 @@ export default function HomeLandingSections() {
           </div>
         </div>
       </section> */}
-    </div>
+    </>
   );
 }

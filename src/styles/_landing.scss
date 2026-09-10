@@ -767,7 +767,7 @@ body[data-theme="light"] .landingLogoPlate {
   right: clamp(16px, 2vw, 30px);
   bottom: clamp(16px, 2vw, 30px);
   --landing-pixels-orientation: rotate(180deg);
-  transform-origin: bottom right;
+  transform-origin: center;
 }
 
 .landingStudioPixels i {

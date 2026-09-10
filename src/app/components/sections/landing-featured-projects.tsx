@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { createPortal } from 'react-dom';
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 
@@ -15,6 +16,7 @@ export type LandingFeaturedProject = {
   summary: string;
   title: string;
   topics: string[];
+  technologies?: string[];
   viewHref: string;
 };
 
@@ -28,8 +30,13 @@ type ProjectRailStyle = CSSProperties & {
 };
 
 const getWrappedIndex = (index: number, count: number) => (index + count) % count;
+const FeaturedProjectShowcase = dynamic(() => import('./featured-project-showcase'));
 
 export default function LandingFeaturedProjects({ projects, www = false }: LandingFeaturedProjectsProps) {
+  return www ? <FeaturedProjectShowcase projects={projects} /> : <LandingFeaturedProjectsClassic projects={projects} />;
+}
+
+function LandingFeaturedProjectsClassic({ projects, www = false }: LandingFeaturedProjectsProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const deckRef = useRef<HTMLElement>(null);
   const projectTriggerRef = useRef<HTMLButtonElement>(null);

@@ -9,7 +9,7 @@ import HeroContent from '../hero/hero-content';
 import { config } from '@/shared/config/config';
 // import AuthWidget from '../auth/auth-widget';
 import HomeWaveSection from './home-wave-section';
-import HomeLandingSections from './home-landing-sections';
+import HomeAboutSection from './home-about-section';
 import { useGlobalContext } from '@/shared/global-context';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import TextReveal from '@/app/components/effects/text-reveal';
@@ -18,6 +18,7 @@ import { scrollToElement } from '@/shared/common/scripts/globals';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroBg, { type HeroBgMilestoneHandler } from '../hero/hero-bg';
 import HomeFeaturedProjectCarousel from './home-featured-project-carousel';
+import HomeFeaturedProjectsSection from './home-featured-projects-section';
 import { HomeCapabilityRadar, HomeManifestoReveal, HomeProjectBento } from './home-landing-alternatives';
 import { pageTransitionCompleteClass, pageTransitionReadyEvent } from '@/app/components/effects/page-transition-events';
 
@@ -261,6 +262,8 @@ export default function HomeLanding({
         />
       </section>
 
+      <HomeAboutSection />
+
       {showSeparators && <div className={`sep reveal`} />}
 
       {/* <section className={`pageSection specialtiesSection`}>
@@ -316,7 +319,7 @@ export default function HomeLanding({
       {showSeparators && <div className={`sep reveal`} />} */}
 
       <HomeManifestoReveal />
-      <HomeLandingSections />
+      <HomeFeaturedProjectsSection www={true} />
       {/* <HomeFeaturedProjectCarousel /> */}
       {/* <HomeCapabilityRadar /> */}
       {/* <HomeProjectBento /> */}

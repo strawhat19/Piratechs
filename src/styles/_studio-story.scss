@@ -239,15 +239,13 @@
 
 @media (hover: hover) {
   .studioStoryVisual:hover .studioStoryImageActive .studioStoryImagePrimary,
-  .studioStorySection:has(.studioStoryChapterActive:hover) .studioStoryImageActive .studioStoryImagePrimary,
-  .studioStoryChapter:hover .studioStoryMobileVisual .studioStoryImagePrimary {
+  .studioStoryMobileVisual:hover .studioStoryImagePrimary {
     filter: brightness(0.72) saturate(0.86);
     transform: scale(1.055);
   }
 
   .studioStoryVisual:hover .studioStoryImageActive .studioStoryImageAlternate,
-  .studioStorySection:has(.studioStoryChapterActive:hover) .studioStoryImageActive .studioStoryImageAlternate,
-  .studioStoryChapter:hover .studioStoryMobileVisual .studioStoryImageAlternate {
+  .studioStoryMobileVisual:hover .studioStoryImageAlternate {
     opacity: 1;
     filter: blur(0) brightness(0.92) saturate(1.04);
     clip-path: inset(0);
@@ -340,7 +338,7 @@
   line-height: 0.94;
   text-wrap: balance;
   letter-spacing: -0.055em;
-  font-size: clamp(2rem,2.35vw,4.35rem);
+  font-size: clamp(1.6rem,2.2vw,4.35rem);
 }
 
 .studioStoryStageCopyItem p {

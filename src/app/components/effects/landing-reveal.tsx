@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   isPageTransitionPending,
   pageTransitionReadyEvent,
@@ -10,8 +10,10 @@ const landingSelector = `[data-piratechs-landing]`;
 const revealSelector = `[data-landing-reveal]`;
 
 export default function LandingReveal() {
+  const markerRef = useRef<HTMLSpanElement>(null);
+
   useEffect(() => {
-    const landing = document.querySelector<HTMLElement>(landingSelector);
+    const landing = markerRef.current?.closest<HTMLElement>(landingSelector);
     if (!landing) return;
 
     const reducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
@@ -76,5 +78,5 @@ export default function LandingReveal() {
     };
   }, []);
 
-  return null;
+  return <span hidden aria-hidden ref={markerRef} />;
 }
