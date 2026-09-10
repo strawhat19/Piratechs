@@ -7,7 +7,11 @@ export const projectQueryEvent = `piratechs:project-query-change`;
 export const projectSheetOpenEvent = `piratechs:project-sheet-open`;
 
 export const featuredProjects = {
+  [`Forge`]: { name: `Forge` },
+  [`MatchXD`]: { name: `MatchXD` },
+  [`GeoPoliticalMedia`]: { name: `GeoPoliticalMedia` },
   [`MyDex-Pokedex-Clone`]: { name: `MyDex-Pokedex-Clone` },
+  [`bengaliblush`]: { name: `bengaliblush`, title: `Bengali Blush`, },
   [`Piratechs`]: { name: `Piratechs`, urlImage: `/icon-192x192_Circle.png` },
   [`Smart-Garden`]: { name: `Smart-Garden`, urlImage: `https://smart-garden-zeta.vercel.app/assets/SmartGardenIcon.svg` },
   [`React-Netflix-Clone`]: { name: `React-Netflix-Clone`, urlImage: `https://react-netflix-clone-piratechs.vercel.app/favicon.ico` },

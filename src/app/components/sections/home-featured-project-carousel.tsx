@@ -249,7 +249,7 @@ export default function HomeFeaturedProjectCarousel() {
                   <div className={`homeFeaturedScreenBar`}><span /><span /><span /></div>
                   <div className={`homeFeaturedScreenGrid`}>
                     <span className={`homeFeaturedScreenLabel`}>Project signal / {project.number}</span>
-                    <i className={`${project.icon} homeFeaturedIcon`} />
+                    <i className={`${project.icon} homeFeaturedIcon gradientTextColor`} />
                     <strong>{project.title}</strong>
                     <div className={`homeFeaturedSignalBars`}><span /><span /><span /><span /><span /></div>
                   </div>

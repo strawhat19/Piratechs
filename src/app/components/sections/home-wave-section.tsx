@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import AuthWidget from '../auth/auth-widget';
+import ElementReveal from '../effects/element-reveal';
 import { serviceCards } from './service-estimator-catalog';
 import HomeServiceEstimator from './home-service-estimator';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
@@ -110,7 +111,7 @@ export default function HomeWaveSection({
   }, []);
 
   const copy = (
-    <div className="homeWaveCopy" key="copy">
+    <ElementReveal onScroll as={`div`} y={18} duration={0.64} className={`homeWaveCopy`} key={`copy`}>
       <h2 id={`${id}-heading`}>
         Make waves.<br /><span>Design what’s next.</span>
       </h2>
@@ -118,11 +119,11 @@ export default function HomeWaveSection({
         <div className="homeWaveIntro">
           <p>Bold design. Purposeful code. A crew ready to take your next idea beyond the horizon.</p>
           <Link href="/contact" className="homeWaveLink">
-            Chart your course <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+            Chart your course <i className="fa-solid fa-arrow-up-right-from-square gradientTextColor" aria-hidden="true" />
           </Link>
         </div>
       )}
-    </div>
+    </ElementReveal>
   );
 
   const estimator = (
@@ -154,8 +155,8 @@ export default function HomeWaveSection({
       aria-labelledby={`${id}-heading`}
       data-paused={paused}
     >
-      {!estimatorActive && <div className="homeWaveTopline">
-        <span className="eyebrow">
+      {!estimatorActive && <ElementReveal onScroll as={`div`} y={12} className={`homeWaveTopline`}>
+        <span className={`eyebrow`}>
           Our Services
         </span>
 
@@ -167,11 +168,11 @@ export default function HomeWaveSection({
           aria-label="Pause wave animation"
           onClick={() => setPaused(value => !value)}
         >
-            <i className={`fa-solid ${paused ? `fa-play` : `fa-pause`}`} aria-hidden="true" />
+            <i className={`fa-solid gradientTextColor ${paused ? `fa-play` : `fa-pause`}`} aria-hidden="true" />
             <span>{paused ? `Resume waves` : `Pause waves`}</span>
           </button>
         )}
-      </div>}
+      </ElementReveal>}
 
       <div className="homeWaveContent">
         {includeServiceEstimator ? (
@@ -184,10 +185,10 @@ export default function HomeWaveSection({
         )}
       </div>
 
-      <div className="homeWaveOcean" aria-hidden="true">
+      <ElementReveal onScroll as={`div`} y={28} delay={0.12} duration={0.76} className={`homeWaveOcean`} aria-hidden={`true`}>
         {waveLayers.map(layer => (
           <div key={layer} className={`homeWaveLayer homeWaveLayer--${layer}`}>
-            <svg viewBox="0 0 2880 360" preserveAspectRatio="none" focusable="false">
+            <svg viewBox={`0 0 2880 360`} preserveAspectRatio={`none`} focusable={`false`}>
               <defs>
                 <linearGradient id={`${id}-${layer}`} x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" className="homeWaveColor" />
@@ -199,15 +200,15 @@ export default function HomeWaveSection({
             </svg>
           </div>
         ))}
-      </div>
+      </ElementReveal>
 
-      {!estimatorActive && <div className="homeWaveCoordinates" aria-hidden="true">
+      {!estimatorActive && <ElementReveal onScroll as={`div`} y={10} delay={0.18} className={`homeWaveCoordinates`} aria-hidden={`true`}>
         <span>PIRATECHS<span className="homeWaveCoordinatesStudio"> <span>{`//`}</span> STUDIOS</span></span>
         <span>
           <span className="homeWaveCoordinatesFull">DESIGN <span>→</span> DEVELOP <span>→</span> DISTORT</span>
           <span className="homeWaveCoordinatesShort">DSGN <span>→</span> DEV <span>→</span> DISTORT</span>
         </span>
-      </div>}
+      </ElementReveal>}
     </section>
   );
 }

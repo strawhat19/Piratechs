@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
-import { config } from '@/shared/config/config';
+// import { config } from '@/shared/config/config';
 import Slider from '@/app/components/slider/slider';
+import TextReveal from '@/app/components/effects/text-reveal';
 import LandingReveal from '@/app/components/effects/landing-reveal';
+import ElementReveal from '@/app/components/effects/element-reveal';
 import { getTechnologyMeta, type TechnologyMeta } from '@/shared/utils/tech';
 
 type SplitToken = {
@@ -22,7 +24,10 @@ type SplitHeadingProps = {
 };
 
 type StudioPixelsProps = {
-  position: `TopLeft` | `BottomRight`;
+  compact?: boolean;
+  round?: boolean;
+  tone?: `blue` | `navy`;
+  position: `TopLeft` | `TopRight` | `BottomLeft` | `BottomRight`;
 };
 
 const landingTechnologyMeta: Record<string, TechnologyMeta> = {
@@ -92,8 +97,12 @@ const technologyRows = [
   [`REST APIs`, `Shopify`, `Vercel`, `AWS`, `GitHub`, `Docker`, `Figma`, `Stripe`, `GSAP`, `PWA`, `SEO`, `Accessibility`, `Responsive UI`, `API Integrations`, `Cloud Hosting`, `Product Design`],
 ] as const;
 
-const StudioPixels = ({ position }: StudioPixelsProps) => (
-  <span className={`landingStudioPixels landingStudioPixels${position}`} aria-hidden={`true`}>
+const StudioPixels = ({ compact = false, position, round = false, tone = `blue` }: StudioPixelsProps) => (
+  <span
+    data-tone={tone}
+    aria-hidden={`true`}
+    className={`landingStudioPixels landingStudioPixels${position}${compact ? ` landingStudioPixelsCompact` : ``}${round ? ` landingStudioPixelsRound` : ``}`}
+  >
     {Array.from({ length: 13 }, (_, index) => <i key={index} />)}
   </span>
 );
@@ -144,6 +153,49 @@ export default function HomeLandingSections() {
         <style>{`.landingMotionPending [data-landing-reveal],.landingMotionPending .landingSplitWord{opacity:1!important;filter:none!important;transform:none!important}`}</style>
       </noscript>
 
+      <div className={`sep reveal`} />
+
+      <section className={`landingStackSection`} aria-labelledby={`landing-stack-title`}>
+        <StudioPixels compact round position={`TopRight`} tone={`navy`} />
+        <StudioPixels compact round position={`BottomLeft`} tone={`navy`} />
+        <div className={`landingStackIntro`} data-landing-blur data-landing-reveal>
+          <span className={`landingEyebrow`}>
+            Our Specialties
+          </span>
+          <SplitHeading
+            as={`h2`}
+            id={`landing-stack-title`}
+            className={`landingStackHeading`}
+            lines={[[{ text: `Skills` }, { text: `//`, accent: true }, { text: `Technologies` }, { text: `.`, accent: true }]]}
+          />
+        </div>
+        <ElementReveal onScroll as={`div`} y={18} duration={0.68} className={`landingStackMarquee`}>
+          {technologyRows.map((technologies, rowIndex) => (
+            <Slider
+              role={`list`}
+              speed={rowIndex ? 22 : 25}
+              pauseonhover={false}
+              className={`landingStackList`}
+              key={`technology-row-${rowIndex}`}
+              id={`landingStackRow-${rowIndex + 1}`}
+              direction={rowIndex ? `ltr` : `rtl`}
+              trackClassName={`landingStackListTrack`}
+              ariaLabel={`Technologies and services, row ${rowIndex + 1}`}
+            >
+              {technologies.map(technology => {
+                const technologyMeta = getLandingTechnologyMeta(technology);
+                return (
+                  <span className={`landingStackItem`} role={`listitem`} key={technology}>
+                    <i className={`${technologyMeta.icon} techIcon ${technologyMeta.className}`} aria-hidden={`true`} />
+                    <span>{technology}</span>
+                  </span>
+                );
+              })}
+            </Slider>
+          ))}
+        </ElementReveal>
+      </section>
+
       {/* <section id={`selected-work`} className={`landingSection landingWorkSection`}>
         <div className={`landingSectionHeading`} data-landing-blur data-landing-reveal>
           <span className={`landingEyebrow`}>Selected work</span>
@@ -191,6 +243,8 @@ export default function HomeLandingSections() {
           ))}
         </div>
       </section> */}
+
+      <div className={`sep reveal`} />
 
       <section className={`landingSection landingStudioSection`}>
         <StudioPixels position={`TopLeft`} />
@@ -245,11 +299,13 @@ export default function HomeLandingSections() {
               ]}
             />
             <div className={`landingStudioDetails`}>
-              <p className={`legacyDescription`}>
-                Piratechs began with our original digital home at{` `}
-                <Link href={`https://piratechs.com/`} rel={`noopener noreferrer`} target={`_blank`}>piratechs.com</Link>,
-                {` `}a snapshot of the studio&apos;s earlier identity and the foundation behind our work. The new experience you&apos;re exploring now is the next evolution—designed to make our capabilities, process, and results easier to understand while giving ambitious ideas a clearer path from concept to launch.
-              </p>
+              <TextReveal
+                html
+                scroll
+                as={`p`}
+                className={`legacyDescription`}
+                text={`Piratechs began with our original digital home at <a href="https://piratechs.com/" rel="noopener noreferrer" target="_blank">piratechs.com</a>, a snapshot of the studio’s earlier identity and the foundation behind our work. The new experience you’re exploring now is the next evolution—designed to make our capabilities, process, and results easier to understand while giving ambitious ideas a clearer path from concept to launch.`}
+              />
               <Link href={`https://piratechs.com/`} className={`landingInlineLink`} rel={`noopener noreferrer`} target={`_blank`}>
                 Legacy Piratechs <span aria-hidden={`true`}>↗</span>
               </Link>
@@ -282,42 +338,6 @@ export default function HomeLandingSections() {
           ))}
         </ol>
       </section> */}
-
-      <section className={`landingStackSection`} aria-labelledby={`landing-stack-title`}>
-        <div className={`landingStackIntro`} data-landing-blur data-landing-reveal>
-          <span className={`landingEyebrow`}>Built on a practical stack</span>
-          <SplitHeading
-            as={`h2`}
-            id={`landing-stack-title`}
-            className={`landingStackHeading`}
-            lines={[[{ text: `Modern` }, { text: `where` }, { text: `it` }, { text: `matters` }, { text: `.`, accent: true }]]}
-          />
-        </div>
-        <div className={`landingStackMarquee`} data-landing-reveal>
-          {technologyRows.map((technologies, rowIndex) => (
-            <Slider
-              role={`list`}
-              speed={rowIndex ? 22 : 25}
-              className={`landingStackList`}
-              key={`technology-row-${rowIndex}`}
-              id={`landingStackRow-${rowIndex + 1}`}
-              direction={rowIndex ? `ltr` : `rtl`}
-              trackClassName={`landingStackListTrack`}
-              ariaLabel={`Technologies and services, row ${rowIndex + 1}`}
-            >
-              {technologies.map(technology => {
-                const technologyMeta = getLandingTechnologyMeta(technology);
-                return (
-                  <span className={`landingStackItem`} role={`listitem`} key={technology}>
-                    <i className={`${technologyMeta.icon} techIcon ${technologyMeta.className}`} aria-hidden={`true`} />
-                    <span>{technology}</span>
-                  </span>
-                );
-              })}
-            </Slider>
-          ))}
-        </div>
-      </section>
 
       {/* <section className={`landingSection landingContactSection`}>
         <div className={`landingContactCard`} data-landing-blur data-landing-reveal>

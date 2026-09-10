@@ -68,7 +68,7 @@ export default function AuthWidget({
               <span className={`authAvatarLetter`}>
                 {userInitial}
               </span>
-            ) : <i className={`fa-solid fa-user`} />
+            ) : <i className={`fa-solid fa-user gradientTextColor`} />
           ) : <Spinner size={20} thickness={5} />}
         </button>
       )}

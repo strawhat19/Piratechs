@@ -21,6 +21,7 @@ const manifestoPrinciples = [
     stageText: `Real constraints become focused digital decisions that create useful leverage.`,
     text: `We have worked alongside growing businesses, so we know the pain points are rarely abstract: limited time, tight budgets, disconnected tools, and inconsistent lead flow. We find the friction and build the specific website, workflow, or product that creates useful leverage.`,
     image: `/assets/piratechs/studio-story/scalable-business-photo-v3.webp`,
+    alternateImage: `/assets/piratechs/studio-story/scalable-business-photo-hover.webp`,
     imageAlt: `A growing business team reviewing operations together in a working studio`,
     coordinate: `MARIETTA // 33.9526° N, 84.5499° W`,
     signals: [
@@ -40,6 +41,7 @@ const manifestoPrinciples = [
     stageText: `A practiced production rhythm keeps speed, visibility, and craft moving together.`,
     text: `We have partnered with many agencies and understand how they manage volume, track customers and leads, coordinate handoffs, and protect quality under deadline pressure. That experience lets us support an agency workflow with high-volume output and a high-quality standard.`,
     image: `/assets/piratechs/studio-story/agency-operations-photo-v3.webp`,
+    alternateImage: `/assets/piratechs/studio-story/agency-operations-photo-hover.webp`,
     imageAlt: `A creative agency team coordinating projects in an active production studio`,
     coordinate: `KENNESAW // 34.0234° N, 84.6155° W`,
     signals: [
@@ -59,6 +61,7 @@ const manifestoPrinciples = [
     stageText: `Complex requirements become resilient architecture designed for the long run.`,
     text: `We have worked with corporations on custom internal software engineering, so we know how to turn complex, specific requirements into robust solutions. We design for integrations, edge cases, maintainability, security, and the enterprise-level scale the system must support next.`,
     image: `/assets/piratechs/studio-story/enterprise-engineering-photo.webp`,
+    alternateImage: `/assets/piratechs/studio-story/enterprise-engineering-photo-hover.webp`,
     imageAlt: `An enterprise engineering team reviewing a complex system architecture`,
     coordinate: `DULUTH // 34.0029° N, 84.1446° W`,
     signals: [
@@ -214,6 +217,27 @@ export function HomeManifestoReveal() {
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
     media.add(`(min-width: 981px)`, () => {
+      const wave = section.querySelector<HTMLElement>(`.studioStoryWaveWrap`);
+      const watermark = section.querySelector<HTMLElement>(`.studioStoryWatermark`);
+      const reducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+      const createDecorTravel = (element: Element | null, offset: () => number) => {
+        if (!element || reducedMotion) return;
+        gsap.fromTo(element, { y: offset }, {
+          y: 0,
+          ease: `none`,
+          scrollTrigger: {
+            scrub: 0.65,
+            trigger: section,
+            start: `top top`,
+            invalidateOnRefresh: true,
+            end: () => `+=${Math.min(window.innerHeight * 0.9, section.offsetHeight * 0.28)}`,
+          },
+        });
+      };
+
+      createDecorTravel(watermark, () => -Math.min(window.innerHeight * 0.22, 210));
+      createDecorTravel(wave, () => -Math.min(window.innerHeight * 0.62, 620));
+
       chapterRefs.current.forEach((chapter, index) => {
         if (!chapter) return;
         ScrollTrigger.create({
@@ -297,12 +321,14 @@ export function HomeManifestoReveal() {
         <div className={`studioStoryStickyDecor`} aria-hidden={`true`}>
           <div className={`studioStoryStickyDecorFrame`}>
             <div className={`studioStoryWatermark`}>
-              <Logo fullSword className={`studioStoryWatermarkLogo`} />
+              <Logo fullSword className={`studioStoryWatermarkLogo`} height={615} />
             </div>
-            <svg className={`landingAltWave studioStoryWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`}>
-              <path className={`landingAltWaveLine landingAltWaveLineBack`} d={`M0 111C172 37 307 163 493 94C662 31 786 124 947 88C1126 48 1262 108 1440 42`} />
-              <path className={`landingAltWaveLine landingAltWaveLineFront`} d={`M0 146C189 70 320 178 520 124C682 80 852 164 1018 110C1176 59 1303 136 1440 90`} />
-            </svg>
+            <span className={`studioStoryWaveWrap`}>
+              <svg className={`landingAltWave studioStoryWave`} viewBox={`0 0 1440 180`} preserveAspectRatio={`none`}>
+                <path className={`landingAltWaveLine landingAltWaveLineBack`} d={`M0 111C172 37 307 163 493 94C662 31 786 124 947 88C1126 48 1262 108 1440 42`} />
+                <path className={`landingAltWaveLine landingAltWaveLineFront`} d={`M0 146C189 70 320 178 520 124C682 80 852 164 1018 110C1176 59 1303 136 1440 90`} />
+              </svg>
+            </span>
           </div>
         </div>
 
@@ -319,12 +345,13 @@ export function HomeManifestoReveal() {
 
             <div className={`studioStoryVisual`} aria-hidden={`true`}>
               <div className={`studioStoryVisualIdle ${activeIndex === null ? `studioStoryVisualIdleActive` : ``}`}>
-                <Logo fullSword className={`studioStoryVisualIdleLogo`} />
+                <Logo fullSword className={`studioStoryVisualIdleLogo`} height={615} />
               </div>
               <div className={`studioStoryImageStack`}>
                 {manifestoPrinciples.map((principle, index) => (
                   <figure className={`studioStoryImage ${index === activeIndex ? `studioStoryImageActive` : ``}`} key={principle.image}>
-                    <Image fill unoptimized loading={`eager`} src={principle.image} alt={``} sizes={`(max-width: 980px) 92vw, 32vw`} />
+                    <Image fill unoptimized loading={`eager`} className={`studioStoryImageMedia studioStoryImagePrimary`} src={principle.image} alt={``} sizes={`(max-width: 980px) 92vw, 32vw`} />
+                    <Image fill unoptimized loading={`eager`} className={`studioStoryImageMedia studioStoryImageAlternate`} src={principle.alternateImage} alt={``} aria-hidden={`true`} sizes={`(max-width: 980px) 92vw, 32vw`} />
                     <span className={`studioStoryImageShade`} />
                   </figure>
                 ))}
@@ -343,7 +370,7 @@ export function HomeManifestoReveal() {
                   aria-hidden={index !== activeIndex}
                   key={principle.stageTitle}
                 >
-                  <span>{principle.discipline} // 0{index + 1}</span>
+                  <span>{principle.discipline} {`//`} 0{index + 1}</span>
                   <h2>{principle.stageTitle}</h2>
                   <p>{principle.stageText}</p>
                 </div>
@@ -376,22 +403,23 @@ export function HomeManifestoReveal() {
                 key={principle.title}
               >
                 <div className={`studioStoryMobileVisual`}>
-                  <Image fill unoptimized src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
+                  <Image fill unoptimized className={`studioStoryImageMedia studioStoryImagePrimary`} src={principle.image} alt={principle.imageAlt} sizes={`(max-width: 980px) 92vw, 0px`} />
+                  <Image fill unoptimized className={`studioStoryImageMedia studioStoryImageAlternate`} src={principle.alternateImage} alt={``} aria-hidden={`true`} sizes={`(max-width: 980px) 92vw, 0px`} />
                   <span className={`studioStoryImageShade`} aria-hidden={`true`} />
                 </div>
                 <div className={`studioStoryTopline`}>
                   <span className={`studioStoryIndex`}>0{index + 1}</span>
-                  <i className={`${principle.icon} studioStoryIcon`} aria-hidden={`true`} />
+                  <i className={`${principle.icon} studioStoryIcon gradientTextColor`} aria-hidden={`true`} />
                   <span className={`studioStoryDiscipline`}>
                     {principle.about}
                   </span>
                 </div>
                 <TextReveal scroll as={`h3`} text={`${principle.title}.`} />
-                <p>{principle.text}</p>
+                <TextReveal scroll as={`p`} text={principle.text} delay={0.05} />
                 <ul className={`studioStorySignals`} aria-label={`${principle.title} priorities`}>
                   {principle.signals.map(signal => (
                     <li key={signal.label}>
-                      <i className={`${signal.icon} studioStorySignalIcon`} aria-hidden={`true`} />
+                      <i className={`${signal.icon} studioStorySignalIcon gradientTextColor`} aria-hidden={`true`} />
                       <span>{signal.label}</span>
                     </li>
                   ))}
@@ -424,7 +452,7 @@ export function HomeVoyageMetrics() {
               <span className={`landingAltChartKicker`}>Delivery confidence</span>
               <strong>Voyage health</strong>
             </div>
-            <span className={`landingAltChartSignal`}><i className={`fa-solid fa-satellite-dish`} aria-hidden={`true`} /> Live rhythm</span>
+            <span className={`landingAltChartSignal`}><i className={`fa-solid fa-satellite-dish gradientTextColor`} aria-hidden={`true`} /> Live rhythm</span>
           </div>
           <svg
             className={`landingAltVoyageChart`}
@@ -453,7 +481,7 @@ export function HomeVoyageMetrics() {
         <div className={`landingAltMetricGrid`}>
           {voyageMetrics.map((metric, index) => (
             <ElementReveal scroll as={`article`} className={`landingAltMetricCard`} y={24} delay={0.08 + index * 0.08} key={metric.label}>
-              <i className={`${metric.icon} landingAltMetricIcon`} aria-hidden={`true`} />
+              <i className={`${metric.icon} landingAltMetricIcon gradientTextColor`} aria-hidden={`true`} />
               <p className={`landingAltMetricValue`}><strong>{metric.value}</strong><span>{metric.suffix}</span></p>
               <p>{metric.label}</p>
             </ElementReveal>
@@ -492,7 +520,7 @@ export function HomeProjectBento() {
             >
               <div className={`landingAltBentoVisual`} aria-hidden={`true`}>
                 <span className={`landingAltBentoCoordinate`}>ATL / {String(index + 1).padStart(2, `0`)}</span>
-                <i className={`${project.icon} landingAltBentoIcon`} />
+                <i className={`${project.icon} landingAltBentoIcon gradientTextColor`} />
                 <svg className={`landingAltBentoWake`} viewBox={`0 0 420 120`} preserveAspectRatio={`none`}>
                   <path d={`M-20 88C55 12 128 124 205 58C274 0 345 100 440 33`} />
                   <path d={`M-20 112C58 47 126 137 218 81C291 36 354 116 440 66`} />
@@ -567,14 +595,14 @@ export function HomeProjectVoyageSlider() {
           </div>
           <div className={`landingAltSliderControls`}>
             <button type={`button`} onClick={previous} aria-label={`Show previous project`}>
-              <i className={`fa-solid fa-arrow-left`} aria-hidden={`true`} />
+              <i className={`fa-solid fa-arrow-left gradientTextColor`} aria-hidden={`true`} />
             </button>
             <span aria-live={`polite`} aria-atomic={`true`}>
               <strong>{String(activeIndex + 1).padStart(2, `0`)}</strong> / {String(voyageProjects.length).padStart(2, `0`)}
               <span className={`landingAltSrOnly`}>, {activeProject.title}</span>
             </span>
             <button type={`button`} onClick={next} aria-label={`Show next project`}>
-              <i className={`fa-solid fa-arrow-right`} aria-hidden={`true`} />
+              <i className={`fa-solid fa-arrow-right gradientTextColor`} aria-hidden={`true`} />
             </button>
           </div>
         </header>
@@ -589,7 +617,7 @@ export function HomeProjectVoyageSlider() {
           >
             <div className={`landingAltSlideVisual`} aria-hidden={`true`}>
               <span className={`landingAltSlideNumber`}>{activeProject.number}</span>
-              <i className={`${activeProject.icon} landingAltSlideIcon`} />
+              <i className={`${activeProject.icon} landingAltSlideIcon gradientTextColor`} />
               <Logo fullSword className={`landingAltSlideLogo`} />
               <svg className={`landingAltSlideSea`} viewBox={`0 0 760 260`} preserveAspectRatio={`none`}>
                 <path className={`landingAltSlideSeaBack`} d={`M-30 172C91 54 211 226 336 123C458 22 569 202 790 74`} />
@@ -680,7 +708,7 @@ export function HomeCapabilityRadar() {
               </g>
             </svg>
           </div>
-          <figcaption>Illustrative capability profile, scored against Piratechs' current service mix.</figcaption>
+          <figcaption>Illustrative capability profile, scored against Piratechs&apos; current service mix.</figcaption>
         </ElementReveal>
 
         <ul className={`landingAltRadarLegend`} aria-label={`Capability scores`}>

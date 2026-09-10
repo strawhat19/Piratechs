@@ -184,7 +184,7 @@ export default function Nav({
             </ElementReveal>
           )} */}
           <ElementReveal as={`button`} y={-12} type={`button`} blur={false} delay={0.3} replayKey={pathname} className={`iconButton themeButton`} aria-label={`Toggle theme`} onClick={toggleTheme}>
-            <i className={`fa-solid ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
+            <i className={`fa-solid gradientTextColor ${theme == `dark` ? `fa-sun` : `fa-moon`}`} />
           </ElementReveal>
           <ElementReveal as={`span`} y={-12} blur={false} delay={0.34} replayKey={pathname} className={`navActionReveal`}>
             <AuthWidget />

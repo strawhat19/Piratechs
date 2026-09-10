@@ -1,5 +1,6 @@
 'use client';
 
+import ElementReveal from '../effects/element-reveal';
 import { useEffect, useId, useReducer, useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from 'react';
 import {
   buildEffortLevels, buildPageCounts, creativeOptions,
@@ -77,7 +78,7 @@ function ChoiceCards({
       <div className="servicesWidgetChoiceActions" aria-label={`${label} selection controls`}>
         <button type="button" aria-pressed={allOptionsSelected} disabled={!selectableIds.length}
           onClick={() => onSelectionChange(allOptionsSelected ? retainedIds : [...new Set([...retainedIds, ...selectableIds])])}>
-          <i className={`fa-solid ${allOptionsSelected ? `fa-xmark` : `fa-check-double`}`} aria-hidden="true" />
+          <i className={`fa-solid gradientTextColor ${allOptionsSelected ? `fa-xmark` : `fa-check-double`}`} aria-hidden="true" />
           <span>{allOptionsSelected ? `Unselect all` : `Select all`}</span>
           <strong className="servicesWidgetChoiceCost" data-direction={allOptionsSelected ? `remove` : `add`}>
             {allOptionsSelected ? `-${money(toggledCost)}` : `+${money(toggledCost)}`}
@@ -289,7 +290,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
     <section className="servicesWidget" aria-label="Service estimator">
       <header className="servicesWidgetHeader">
         <div className="servicesWidgetBrand">
-          <i className="fa-solid fa-compass" aria-hidden="true" />
+          <i className="fa-solid fa-compass gradientTextColor" aria-hidden="true" />
           <span>
             Services Estimator
             <small>
@@ -302,7 +303,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
             <button type="button" role="tab" id={`${id}-tab-${tab.id}`} aria-controls={`${id}-panel-${tab.id}`}
               aria-selected={stage === tab.id} tabIndex={stage === tab.id ? 0 : -1} key={tab.id}
               onClick={() => go(tab.id)} onKeyDown={event => onTabKeyDown(event, index)}>
-              <i className={`fa-solid ${tab.icon}`} aria-hidden="true" />{tab.label}
+              <i className={`fa-solid gradientTextColor ${tab.icon}`} aria-hidden="true" />{tab.label}
             </button>
           ))}
         </div>
@@ -439,7 +440,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
                 <p className="servicesWidgetNote">Saved in this session. Edit a plan to view its estimate and change any selection, or start another.</p>
                 <ul className="servicesWidgetCart">
                   {state.cart.map(item => (
-                    <li key={item.id}><i className="fa-solid fa-flag" aria-hidden="true" /><span><strong>{item.title}</strong><small>{item.draft.selectedServices.length || 'Free consultation'}{item.draft.selectedServices.length ? ' services' : ''}</small></span>
+                    <li key={item.id}><i className="fa-solid fa-flag gradientTextColor" aria-hidden="true" /><span><strong>{item.title}</strong><small>{item.draft.selectedServices.length || 'Free consultation'}{item.draft.selectedServices.length ? ' services' : ''}</small></span>
                       <button type="button" className="servicesWidgetSecondary" onClick={() => dispatch({ type: 'edit', item })}>Edit<span className="servicesWidgetSrOnly"> {item.title}</span></button></li>
                   ))}
                 </ul>
@@ -447,7 +448,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
             ) : null}
           </div>
         </div>
-        <footer className="servicesWidgetFooter">
+        <ElementReveal onScroll as={`footer`} y={10} delay={0.04} duration={0.42} className={`servicesWidgetFooter`}>
           <p className="servicesWidgetStatus" role="status" aria-live="polite">{state.status || (stage === 'cart' ? `${state.cart.length} saved plan${state.cart.length === 1 ? '' : 's'}` : `Step ${stageIndex + 1} of ${flow.length}${state.editingId ? ' · Editing plan' : ''}`)}</p>
           <div className="servicesWidgetActions">
             {addOnStep ? <button type="button" className="servicesWidgetTextButton" onClick={() => go(flow[afterAddOns].id)}>Finish add-ons</button> : null}
@@ -460,7 +461,7 @@ export function HomeServiceEstimator({ initialItem, onAddToCart, onUpdateCart, r
               </>
             )}
           </div>
-        </footer>
+        </ElementReveal>
       </form>
     </section>
   );

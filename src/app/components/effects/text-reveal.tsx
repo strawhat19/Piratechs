@@ -47,6 +47,7 @@ export default function TextReveal({
   threshold = 0.12,
   replayThreshold = 0.025,
 }: TextRevealProps) {
+  const isParagraph = as === `p`;
   const ref = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -108,8 +109,8 @@ export default function TextReveal({
       const revealOffset = byLetter ? 35 : 25;
       const tweenVars: gsap.TweenVars = {
         delay,
-        duration: duration ?? (byLetter ? 0.5 : 0.6),
-        stagger: stagger ?? (byLetter ? 0.018 : 0.07),
+        duration: duration ?? (byLetter ? 0.5 : isParagraph ? 0.42 : 0.6),
+        stagger: stagger ?? (byLetter || isParagraph ? 0.018 : 0.07),
       };
       if (slide) {
         timeline.from(targets, {
@@ -117,8 +118,8 @@ export default function TextReveal({
           autoAlpha: 0,
           yPercent: 68,
           ease: `power4.out`,
-          duration: duration ?? 0.8,
-          stagger: stagger ?? 0.035,
+          duration: duration ?? (isParagraph ? 0.52 : 0.8),
+          stagger: stagger ?? (isParagraph ? 0.018 : 0.035),
         });
       } else {
         timeline.from(targets, {
@@ -197,7 +198,7 @@ export default function TextReveal({
       split?.revert();
       if (transitionReadyHandler) window.removeEventListener(pageTransitionReadyEvent, transitionReadyHandler);
     };
-  }, [text, byLetter, html, slide, delay, duration, stagger, scroll, onScroll, threshold, replayThreshold]);
+  }, [text, byLetter, html, slide, delay, duration, stagger, scroll, onScroll, threshold, replayThreshold, isParagraph]);
 
   return createElement(as, {
     id,

@@ -549,12 +549,7 @@
   top: clamp(20px, 2.5vw, 32px);
   right: clamp(20px, 2.5vw, 32px);
   position: absolute;
-  color: var(--main);
   font-size: 1rem;
-}
-
-.landingAltMetricCard:nth-child(even) .landingAltMetricIcon {
-  color: var(--piratechsTeal);
 }
 
 .landingAltMetricValue {
@@ -1154,14 +1149,9 @@
 .landingAltBentoIcon {
   z-index: 1;
   padding-right: clamp(10px, 2vw, 28px);
-  color: var(--main);
   font-size: clamp(2.25rem, 5vw, 5.5rem);
   filter: drop-shadow(0 10px 22px rgba(var(--piratechsNeon_rgb), 0.25));
-  transition: transform 480ms var(--landing-alt-ease), color 220ms ease;
-}
-
-.landingAltBentoCard:nth-child(even) .landingAltBentoIcon {
-  color: var(--piratechsTeal);
+  transition: transform 480ms var(--landing-alt-ease);
 }
 
 .landingAltBentoWake {
@@ -1417,7 +1407,6 @@
 
 .landingAltSlideIcon {
   z-index: 2;
-  color: var(--main);
   font-size: clamp(5rem, 11vw, 11rem);
   filter: drop-shadow(0 18px 32px rgba(var(--piratechsNeon_rgb), 0.3));
 }
@@ -1781,7 +1770,6 @@
 
   .landingAltBentoCard:hover .landingAltBentoIcon,
   .landingAltBentoCard:focus-within .landingAltBentoIcon {
-    color: var(--piratechsTeal);
     transform: translateY(-5px) rotate(-4deg) scale(1.05);
   }
 }

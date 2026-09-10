@@ -1,5 +1,6 @@
 export default function Logo({ 
     size = 512,
+    height = size,
     gradient = true, 
     skullWhite = true, 
     fullSword = false,
@@ -8,7 +9,7 @@ export default function Logo({
 }: any) {
     const color = gradient ? `url(#logoGradient)` : colorProp;
     return <>
-        <svg className={`${className} logo`} width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={`${className} logo`} width={size} height={height} viewBox={`0 0 ${size} ${size}`} fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="logoGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={size} y2={size}>
                     <stop offset="0%" stopColor={`var(--piratechsTeal)`} />

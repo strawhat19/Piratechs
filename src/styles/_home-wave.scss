@@ -6,7 +6,7 @@
   scroll-margin-top: 112px;
   padding: 32px var(--contentInset) var(--home-wave-bottom-space);
   border-block: 1px solid var(--border);
-  background: var(--navy-dark);
+  // background: var(--navy-dark);
   color: var(--white-soft);
 
   &::before {
@@ -54,7 +54,6 @@
   font-size: 0.72rem;
   cursor: pointer;
 
-  i { color: var(--piratechsTeal); }
   &:hover { border-color: var(--piratechsTeal); }
 }
 
@@ -263,13 +262,12 @@
     background: linear-gradient(130deg, rgba(var(--piratechsNeon_rgb), 0.14), rgba(var(--piratechsTeal_rgb), 0.11));
   }
 
-  > i:first-child { color: var(--piratechsTeal); font-size: 1.25rem; }
+  > i:first-child { font-size: 1.25rem; }
   > span { font-size: 0.77rem; font-weight: 650; line-height: 1.45; }
   .homeWaveServiceCheck {
     position: absolute;
     top: 12px;
     right: 10px;
-    color: var(--piratechsTeal);
     font-size: 0.65rem;
     opacity: 0;
     transform: translateY(3px) scale(0.7);
@@ -301,9 +299,9 @@
   &::before { background: linear-gradient(105deg, var(--piratechsNeon), var(--piratechsTeal)); }
   > i, .homeWaveStartDetail { transition: color 320ms ease; }
 
-  > i:first-child { color: var(--piratechsTeal); font-size: 1.1rem; }
+  > i:first-child { font-size: 1.1rem; }
   > span { display: inline-flex; align-items: center; gap: 14px; font-size: 0.95rem; font-weight: 750; }
-  > i:last-child { position: absolute; right: 20px; color: var(--piratechsTeal); font-size: 0.85rem; }
+  > i:last-child { position: absolute; right: 20px; font-size: 0.85rem; }
 }
 
 .homeWaveStart[data-ready="true"] {
@@ -311,7 +309,7 @@
   border-color: var(--piratechsTeal);
   &::before { opacity: 1; }
   box-shadow: 0 0 28px rgba(var(--piratechsTeal_rgb), 0.24);
-  > i:first-child, > i:last-child, .homeWaveStartDetail { color: inherit; }
+  .homeWaveStartDetail { color: inherit; }
 }
 
 .homeWaveStartDetail { color: var(--white-smoke); font-size: 0.75rem; font-weight: 400; }
@@ -335,7 +333,6 @@
   font-size: 0.83rem;
   font-weight: 700;
 
-  i { color: var(--piratechsTeal); }
   &:hover { color: var(--piratechsTeal); }
 }
 

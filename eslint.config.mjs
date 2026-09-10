@@ -1,22 +1,21 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import nextTypescript from 'eslint-config-next/typescript';
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
 
 const eslintConfig = [
-  ...compat.extends(`next/core-web-vitals`, `next/typescript`),
+  ...nextCoreWebVitals,
+  ...nextTypescript,
   {
     rules: {
       semi: `off`,
       [`prefer-const`]: `off`,
       [`no-extra-semi`]: `off`,
+      [`react-hooks/refs`]: `off`,
+      [`react-hooks/purity`]: `off`,
       [`react-hooks/exhaustive-deps`]: `off`,
+      [`jsx-a11y/aria-proptypes`]: `off`,
+      [`@next/next/no-img-element`]: `off`,
+      [`react-hooks/set-state-in-effect`]: `off`,
+      [`react-hooks/preserve-manual-memoization`]: `off`,
       [`@typescript-eslint/no-extra-semi`]: `off`,
       [`@typescript-eslint/no-unused-vars`]: `off`,
       [`@typescript-eslint/no-explicit-any`]: `off`,

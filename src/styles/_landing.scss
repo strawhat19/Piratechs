@@ -125,8 +125,9 @@
 }
 
 .landingSplitWord {
-  display: inline-block;
+  padding: 0 0 3px 0;
   margin-right: 0.2em;
+  display: inline-block;
   transform-origin: 50% 100%;
 }
 
@@ -734,27 +735,52 @@ body[data-theme="light"] .landingLogoPlate {
 }
 
 .landingStudioPixels {
+  --landing-pixels-orientation: scaleX(1);
+  --landing-pixels-scale: 1;
   position: absolute;
   z-index: 0;
   width: 204px;
   height: 111px;
   pointer-events: none;
+  transform: var(--landing-pixels-orientation) scale(var(--landing-pixels-scale));
 }
 
 .landingStudioPixelsTopLeft {
   top: clamp(16px, 2vw, 30px);
   left: clamp(16px, 2vw, 30px);
+  transform-origin: top left;
+}
+
+.landingStudioPixelsTopRight {
+  top: clamp(16px, 2vw, 30px);
+  right: clamp(16px, 2vw, 30px);
+  transform-origin: top right;
+}
+
+.landingStudioPixelsBottomLeft {
+  left: clamp(16px, 2vw, 30px);
+  bottom: clamp(16px, 2vw, 30px);
+  transform-origin: bottom left;
 }
 
 .landingStudioPixelsBottomRight {
   right: clamp(16px, 2vw, 30px);
   bottom: clamp(16px, 2vw, 30px);
-  transform: rotate(180deg);
+  --landing-pixels-orientation: rotate(180deg);
+  transform-origin: bottom right;
 }
 
 .landingStudioPixels i {
   display: block;
   position: absolute;
+}
+
+.landingStudioPixelsCompact {
+  --landing-pixels-scale: 0.66;
+}
+
+.landingStudioPixelsRound i {
+  border-radius: 50%;
 }
 
 .landingStudioPixels i:nth-child(1) { top: 3px; left: 0; width: 48px; height: 48px; opacity: 0.18; background: var(--piratechsNeon); }
@@ -771,7 +797,12 @@ body[data-theme="light"] .landingLogoPlate {
 .landingStudioPixels i:nth-child(12) { top: 78px; left: 126px; width: 7px; height: 7px; opacity: 0.76; background: var(--piratechsNeon); }
 .landingStudioPixels i:nth-child(13) { top: 24px; left: 198px; width: 6px; height: 6px; opacity: 0.78; background: var(--navBar); }
 
+.landingStudioPixels[data-tone="navy"] i:nth-child(3n + 1) { background: var(--navy-deep); }
+.landingStudioPixels[data-tone="navy"] i:nth-child(3n + 2) { background: var(--navy); }
+.landingStudioPixels[data-tone="navy"] i:nth-child(3n) { background: var(--navy-dark); }
+
 .landingStudioMark {
+  --landing-studio-cut: clamp(16px, 1.8vw, 26px);
   display: grid;
   position: relative;
   min-height: 560px;
@@ -783,6 +814,16 @@ body[data-theme="light"] .landingLogoPlate {
   text-decoration: none;
   background: var(--navy-deep);
   border: 1px solid rgba(4, 57, 123, 0.18);
+  clip-path: polygon(
+    var(--landing-studio-cut) 0,
+    calc(100% - var(--landing-studio-cut)) 0,
+    100% var(--landing-studio-cut),
+    100% calc(100% - var(--landing-studio-cut)),
+    calc(100% - var(--landing-studio-cut)) 100%,
+    var(--landing-studio-cut) 100%,
+    0 calc(100% - var(--landing-studio-cut)),
+    0 var(--landing-studio-cut)
+  );
   transition: border-color 220ms ease, box-shadow 220ms ease;
 }
 
@@ -960,30 +1001,51 @@ body[data-theme="light"] .landingLogoPlate {
 }
 
 .landingStackSection {
+  --landing-line: rgba(var(--navy_rgb), 0.3);
   display: grid;
   gap: clamp(36px, 6vw, 90px);
+  position: relative;
+  overflow: hidden;
   padding: clamp(46px, 6vw, 76px) var(--contentInset);
   grid-template-columns: minmax(250px, 0.72fr) minmax(0, 1.28fr);
   align-items: center;
-  border-bottom: 1px solid var(--landing-line);
-  background: rgba(0, 191, 255, 0.035);
+  color: var(--navy-deep);
+  // border-bottom: 1px solid var(--landing-line);
+  background: linear-gradient(90deg, rgba(var(--piratechsNeon_rgb), .85), rgba(var(--piratechsTeal_rgb), .85));
   content-visibility: auto;
   contain-intrinsic-size: auto 320px;
+  isolation: isolate;
+}
+
+.landingStackSection > .landingStackIntro,
+.landingStackSection > .landingStackMarquee {
+  z-index: 1;
+  position: relative;
 }
 
 .landingStackIntro {
   gap: 12px;
 }
 
+.landingStackIntro .landingEyebrow,
+.landingStackIntro .landingTitleAccent {
+  color: var(--navy);
+}
+
+.landingStackIntro .landingEyebrow::before {
+  background: var(--navy);
+}
+
 .landingStackIntro h2 {
-  font-size: clamp(1.65rem, 3.2vw, 3.5rem);
   line-height: 1;
   letter-spacing: -0.045em;
+  color: var(--white-soft);
+  font-size: clamp(1.65rem, 3.2vw, 3.5rem);
 }
 
 .landingStackMarquee {
   display: grid;
-  gap: 9px;
+  gap: 4px;
   min-width: 0;
   overflow: hidden;
   position: relative;
@@ -1019,25 +1081,36 @@ body[data-theme="light"] .landingLogoPlate {
   padding: 12px 18px;
   align-items: center;
   justify-content: center;
-  color: var(--foregroundMuted);
+  color: var(--white-soft);
   font-size: 0.72rem;
   font-weight: 800;
   text-align: center;
   white-space: nowrap;
-  border-block: 1px solid var(--landing-line);
-  border-right: 1px solid var(--landing-line);
-  background: color-mix(in srgb, var(--surfaceStrong) 42%, transparent);
-  transition: color 180ms ease, background 180ms ease;
+  // border-block: 1px solid var(--landing-line);
+  // border-right: 1px solid var(--landing-line);
+  border-color: rgba(var(--navy_rgb), 0.38);
+  background: linear-gradient(270deg, var(--navy), var(--navy-dark) 58%, var(--navy-deep));
+  background-size: 180% 100%;
+  background-position: 0 50%;
+  transition: color 240ms ease, border-color 240ms ease, background-position 420ms var(--landing-ease), box-shadow 320ms ease;
 }
 
 .landingStackList .techIcon {
   font-size: 1rem;
+  transition: filter 280ms ease, transform 320ms var(--landing-ease);
 }
 
 @media (hover: hover) {
   .landingStackItem:hover {
-    color: var(--foreground);
-    background: rgba(var(--piratechsNeon_rgb), 0.08);
+    color: var(--white);
+    border-color: rgba(255, 255, 255, 0.42);
+    background-position: 100% 50%;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 30px rgba(0, 9, 27, 0.16);
+  }
+
+  .landingStackItem:hover .techIcon {
+    filter: saturate(1.15) brightness(1.08);
+    transform: translateY(-1px) scale(1.08);
   }
 }
 

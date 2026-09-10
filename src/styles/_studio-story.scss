@@ -72,6 +72,13 @@
   opacity: 0.72;
 }
 
+.studioStoryWaveWrap {
+  inset: 0;
+  z-index: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
 .studioStoryInner {
   display: grid;
   gap: clamp(46px, 6vw, 96px);
@@ -190,9 +197,10 @@
 
 .studioStoryImageActive {
   opacity: 1;
-  filter: blur(0) brightness(0.9) saturate(1.02);
+  cursor: pointer;
   clip-path: inset(0);
   transform: scale(1.015) rotate(0);
+  filter: blur(0) brightness(0.9) saturate(1.02);
 }
 
 .studioStoryImage img,
@@ -200,12 +208,51 @@
   object-fit: cover;
 }
 
-.studioStoryImageShade {
+.studioStoryImageMedia {
+  transition:
+    opacity 480ms ease,
+    filter 760ms var(--landing-alt-ease),
+    transform 980ms var(--landing-alt-ease),
+    clip-path 820ms var(--landing-alt-ease);
+}
+
+.studioStoryImagePrimary {
+  z-index: 0;
+  transform: scale(1.015);
+}
+
+.studioStoryImageAlternate {
   z-index: 1;
+  opacity: 0;
+  filter: blur(10px) brightness(0.72) saturate(0.82);
+  clip-path: inset(0 0 0 100%);
+  transform: scale(1.1) rotate(0.8deg);
+}
+
+.studioStoryImageShade {
+  z-index: 2;
   pointer-events: none;
   background:
     linear-gradient(180deg, rgba(0, 9, 27, 0.08), transparent 48%, rgba(0, 9, 27, 0.62)),
     linear-gradient(90deg, rgba(0, 9, 27, 0.2), transparent 40%);
+}
+
+@media (hover: hover) {
+  .studioStoryVisual:hover .studioStoryImageActive .studioStoryImagePrimary,
+  .studioStorySection:has(.studioStoryChapterActive:hover) .studioStoryImageActive .studioStoryImagePrimary,
+  .studioStoryChapter:hover .studioStoryMobileVisual .studioStoryImagePrimary {
+    filter: brightness(0.72) saturate(0.86);
+    transform: scale(1.055);
+  }
+
+  .studioStoryVisual:hover .studioStoryImageActive .studioStoryImageAlternate,
+  .studioStorySection:has(.studioStoryChapterActive:hover) .studioStoryImageActive .studioStoryImageAlternate,
+  .studioStoryChapter:hover .studioStoryMobileVisual .studioStoryImageAlternate {
+    opacity: 1;
+    filter: blur(0) brightness(0.92) saturate(1.04);
+    clip-path: inset(0);
+    transform: scale(1.015) rotate(0);
+  }
 }
 
 .studioStoryVisualIndex,
@@ -438,7 +485,6 @@
   width: 46px;
   height: 46px;
   flex: 0 0 auto;
-  color: var(--piratechsTeal);
   font-size: 1rem;
   line-height: 1;
   border: 1px solid var(--landing-alt-line-strong);
@@ -505,7 +551,6 @@
   width: 30px;
   height: 30px;
   flex: 0 0 auto;
-  color: var(--piratechsTeal);
   font-size: 0.78rem;
   line-height: 1;
   border: 1px solid var(--landing-alt-teal-line);
@@ -742,6 +787,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .studioStoryImage,
+  .studioStoryImageMedia,
   .studioStoryScanline,
   .studioStoryHeaderSwap,
   .studioStoryVisualIdle,

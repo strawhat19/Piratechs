@@ -55,7 +55,7 @@ export default function HomeLanding({
     const avatarAnimation = heroSection?.querySelector<HTMLElement>(`.homeAvatarAccent`);
     const avatarArcText = avatarAnimation?.querySelector<HTMLElement>(`.avatarArcTextWrap`);
 
-    if (!heroLogoPlate || !avatarAnimation) return;
+    if (!heroSection || !heroLogoPlate || !avatarAnimation) return;
 
     const prefersReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
     if (prefersReducedMotion) {
@@ -66,8 +66,11 @@ export default function HomeLanding({
     }
 
     let accentsComplete = false;
+    let avatarReplayReady = false;
     let laughingTimeline: gsap.core.Timeline | null = null;
     let shuttersComplete = document.body.classList.contains(pageTransitionCompleteClass);
+    const heroBounds = heroSection.getBoundingClientRect();
+    let avatarInView = heroBounds.bottom > 0 && heroBounds.top < window.innerHeight;
     const logoAnimationPause = { progress: 0 };
 
     gsap.set(avatarAnimation, {
@@ -94,10 +97,21 @@ export default function HomeLanding({
       });
     };
 
-    const revealAvatar: HeroBgMilestoneHandler = (releaseAccents) => {
-      if (accentsComplete) return;
-      accentsComplete = true;
-      releaseAccents();
+    const hideAvatar = () => {
+      gsap.killTweensOf([avatarAnimation, avatarArcText]);
+      gsap.set(avatarAnimation, {
+        clipPath: `circle(0% at 100% 50%)`,
+        webkitClipPath: `circle(0% at 100% 50%)`,
+      });
+      if (avatarArcText) {
+        gsap.set(avatarArcText, {
+          clipPath: `circle(0% at 50% 50%)`,
+          webkitClipPath: `circle(0% at 50% 50%)`,
+        });
+      }
+    };
+
+    const playAvatarReveal = () => {
       gsap.to(avatarAnimation, {
         duration: 0.44,
         ease: `power3.out`,
@@ -110,9 +124,37 @@ export default function HomeLanding({
       });
     };
 
+    const revealAvatar: HeroBgMilestoneHandler = (releaseAccents) => {
+      if (accentsComplete) return;
+      accentsComplete = true;
+      releaseAccents();
+      if (!avatarInView) {
+        hideAvatar();
+        avatarReplayReady = true;
+        return;
+      }
+      playAvatarReveal();
+    };
+
+    const avatarObserver = new IntersectionObserver(([entry]) => {
+      avatarInView = (entry?.intersectionRatio ?? 0) >= 0.05;
+      if (!accentsComplete) return;
+      if (!avatarInView) {
+        if (avatarReplayReady) return;
+        hideAvatar();
+        avatarReplayReady = true;
+        return;
+      }
+      if (!avatarReplayReady) return;
+      avatarReplayReady = false;
+      playAvatarReveal();
+    }, { threshold: 0.05 });
+    avatarObserver.observe(heroSection);
+
     const finishWithSkullLaugh = () => {
       if (!shuttersComplete) return;
       laughingTimeline?.kill();
+      avatarObserver.disconnect();
       heroLogoPlate.classList.remove(logoHoverAnimationClass);
       laughingTimeline = gsap.timeline();
       laughingTimeline
@@ -282,7 +324,7 @@ export default function HomeLanding({
 
       {showSeparators && <div className={`sep reveal`} />}
 
-      <section className={`pageSection servicesSection`}>
+      {/* <section className={`pageSection servicesSection`}>
         <div className={`sectionInner`}>
           <div className={`sectionTitle`}>
             <TextReveal scroll as={`span`} className={`eyebrow`} text={`Services`} delay={0.4} />
@@ -302,9 +344,9 @@ export default function HomeLanding({
 
       {showSeparators && <div className={`sep reveal`} />}
 
-      <StartCtaSection />
+      <StartCtaSection /> */}
 
-      {showSeparators && <div className={`sep reveal`} />}
+      {/* {showSeparators && <div className={`sep reveal`} />} */}
 
       <HomeWaveSection includeServiceEstimator={true} />
 
