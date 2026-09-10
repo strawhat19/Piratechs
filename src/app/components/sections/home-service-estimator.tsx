@@ -93,7 +93,11 @@ function ChoiceCards({
             <label className="servicesWidgetCard" data-selected={isIncluded || selected.includes(option.id)} data-included={isIncluded} aria-disabled={isIncluded} key={option.id}>
               <input type="checkbox" disabled={isIncluded} checked={isIncluded || selected.includes(option.id)} onChange={() => onToggle(option.id)} />
               <span className="servicesWidgetCardIcon" aria-hidden="true">
-                <i className={`fa-solid gradientTextColor ${option.icon ?? `fa-${detail?.[0] ?? 'wand-magic-sparkles'}`}`} />
+                {option.icon == `piratechs-drone` ? (
+                  <i className={`piratechsDroneIcon`} />
+                ) : (
+                  <i className={`fa-solid gradientTextColor ${option.icon ?? `fa-${detail?.[0] ?? `wand-magic-sparkles`}`}`} />
+                )}
               </span>
               <span className="servicesWidgetCardCopy">
                 <strong>{option.label}</strong>

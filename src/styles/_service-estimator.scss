@@ -239,6 +239,15 @@
   font-size: 1.125rem;
 }
 
+.piratechsDroneIcon {
+  width: 1.34em;
+  display: block;
+  aspect-ratio: 1;
+  background: var(--main_gradient);
+  mask: url(/assets/piratechs/svg/Piratechs-Drone.svg) center / contain no-repeat;
+  -webkit-mask: url(/assets/piratechs/svg/Piratechs-Drone.svg) center / contain no-repeat;
+}
+
 .servicesWidgetCardCopy {
   gap: 5px;
   min-width: 0;

@@ -22,7 +22,11 @@ function WaveServiceSelection({ selectedServices, onToggle, onStart }: ServiceEs
           {serviceCards.map(service => (
             <button key={service.id} type="button" className="homeWaveServiceButton" aria-pressed={selectedServices.includes(service.id)} onClick={() => onToggle(service.id)}>
               <div className={`homeWaveServiceTop`}>
-                <i className={`fa-solid gradientTextColor ${service.icon}`} aria-hidden="true" />
+                {service.icon == `piratechs-drone` ? (
+                  <i className={`piratechsDroneIcon`} aria-hidden={`true`} />
+                ) : (
+                  <i className={`fa-solid gradientTextColor ${service.icon}`} aria-hidden={`true`} />
+                )}
                 <span className="homeWaveServiceIconLabel">
                   <i><span className={`smallText`}>From</span> <strong><span className="gradientTextColor">$</span>{service.price}</strong></i>
                 </span>

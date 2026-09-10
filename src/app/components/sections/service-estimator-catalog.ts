@@ -9,7 +9,7 @@ export const serviceCards = [
   { id: 'mentoring', label: 'Tutoring // Mentoring', tab: 'Tutoring', icon: 'fa-graduation-cap', description: 'Build practical skills and confidence with guidance for you or your team.', price: 20 },
   { id: 'video', label: 'Video // Game', tab: 'Video // Game', icon: 'fa-gamepad', description: 'Capture attention with video and interactive experiences people want to explore.', price: 100 },
   { id: 'writing', label: 'Writing // Articles', tab: 'Writing', icon: 'fa-pen-nib', description: 'Explain your offer clearly with website copy, useful articles, and brand stories.', price: 75 },
-  { id: 'ai', label: 'AI // Drones', tab: 'AI // Drones', icon: 'fa-robot', description: 'Automate customer support, connect workflows, and turn aerial data into insight.', price: 150 },
+  { id: 'ai', label: 'AI // Drones', tab: 'AI // Drones', icon: 'piratechs-drone', description: 'Automate customer support, connect workflows, and turn aerial data into insight.', price: 150 },
   { id: 'marketing', label: 'Marketing // Analytics', tab: 'Marketing', icon: 'fa-chart-line', description: 'Reach the right audience, understand what works, and turn visitors into customers.', price: 200 },
   { id: 'business', label: 'Strategy // Call', tab: 'Strategy', icon: 'fa-briefcase', description: 'Strategy and consultation for your business needs.', price: 0 },
 ] as const;

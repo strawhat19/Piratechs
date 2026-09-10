@@ -37,6 +37,7 @@ export default function AvatarAnimation({
     textDirection = true,
     textOrientation = false,
     className = `avatarAnimationComponent`,
+    avatarImageSrc = `/assets/teams/developers/rakib/Default.jpeg`,
 }: AvatarAnimationProps) {
     const arcTextRef = useRef<SVGSVGElement>(null);
     const arcPathID = `avatar-text-arc-${useId().replaceAll(`:`, ``)}`;
@@ -71,7 +72,7 @@ export default function AvatarAnimation({
         <Avatar size={size}>
             <figure className={`ceoHeadshotWrapper`}>
                 <div className={`ceoHeadshotWrapperOverlay`} />
-                <img className={`ceoHeadshot`} style={{ maxWidth: size, maxHeight: size }} alt={`Rakib`} src={`/assets/teams/developers/rakib/waterfall.jpg`} />
+                <img className={`ceoHeadshot`} style={{ maxWidth: size, maxHeight: size }} alt={`Rakib`} src={avatarImageSrc} />
             </figure>
             {text ? (
                 <span className={`avatarArcTextWrap`} style={{ width: size * 1.28, height: size * 1.28 }} aria-hidden={`true`}>

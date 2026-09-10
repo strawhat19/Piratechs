@@ -2,11 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
 // import { config } from '@/shared/config/config';
-import Slider from '@/app/components/slider/slider';
 import TextReveal from '@/app/components/effects/text-reveal';
 import LandingReveal from '@/app/components/effects/landing-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
-import { getTechnologyMeta, type TechnologyMeta } from '@/shared/utils/tech';
+import { getCaseStudyHref, getProjects } from '@/app/components/projects/project-data';
+import LandingFeaturedProjects, { type LandingFeaturedProject } from '@/app/components/sections/landing-featured-projects';
 
 type SplitToken = {
   accent?: boolean;
@@ -28,31 +28,6 @@ type StudioPixelsProps = {
   round?: boolean;
   tone?: `blue` | `navy`;
   position: `TopLeft` | `TopRight` | `BottomLeft` | `BottomRight`;
-};
-
-const landingTechnologyMeta: Record<string, TechnologyMeta> = {
-  aws: { icon: `fa-brands fa-aws`, className: `techIcon-api` },
-  seo: { icon: `fa-solid fa-chart-line`, className: `techIcon-data` },
-  gsap: { icon: `fa-solid fa-bolt`, className: `techIcon-motion` },
-  stripe: { icon: `fa-brands fa-stripe`, className: `techIcon-api` },
-  vercel: { icon: `fa-solid fa-triangle`, className: `techIcon-next-js` },
-  nodejs: { icon: `fa-brands fa-node-js`, className: `techIcon-javascript` },
-  graphql: { icon: `fa-solid fa-diagram-project`, className: `techIcon-data` },
-  figma: { icon: `fa-brands fa-figma`, className: `techIcon-design-studies` },
-  docker: { icon: `fa-brands fa-docker`, className: `techIcon-api` },
-  realtime: { icon: `fa-solid fa-network-wired`, className: `techIcon-websockets` },
-  restapis: { icon: `fa-solid fa-cloud`, className: `techIcon-api` },
-  cloudhosting: { icon: `fa-solid fa-cloud-arrow-up`, className: `techIcon-api` },
-  postgresql: { icon: `fa-solid fa-database`, className: `techIcon-data` },
-  accessibility: { icon: `fa-solid fa-universal-access`, className: `techIcon-auth` },
-  responsiveui: { icon: `fa-solid fa-display`, className: `techIcon-pwa` },
-  productdesign: { icon: `fa-solid fa-pen-ruler`, className: `techIcon-design-studies` },
-  apiintegrations: { icon: `fa-solid fa-plug`, className: `techIcon-api` },
-};
-
-const getLandingTechnologyMeta = (label: string): TechnologyMeta => {
-  const key = label.replace(/[^a-zA-Z0-9#]/g, ``).toLowerCase();
-  return landingTechnologyMeta[key] ?? getTechnologyMeta(key);
 };
 
 const selectedWork = [
@@ -92,10 +67,21 @@ const process = [
   { phase: `Launch`, detail: `Test the full experience, ship with confidence, and keep it healthy after release.` },
 ];
 
-const technologyRows = [
-  [`Next.js`, `React`, `TypeScript`, `Node.js`, `JavaScript`, `HTML5`, `CSS3`, `Sass`, `PHP`, `Python`, `WordPress`, `MySQL`, `Firebase`, `PostgreSQL`, `GraphQL`, `WebSockets`],
-  [`REST APIs`, `Shopify`, `Vercel`, `AWS`, `GitHub`, `Docker`, `Figma`, `Stripe`, `GSAP`, `PWA`, `SEO`, `Accessibility`, `Responsive UI`, `API Integrations`, `Cloud Hosting`, `Product Design`],
-] as const;
+const landingFeaturedProjects = getProjects()
+  .filter(project => project?.featured)
+  .map((project, index): LandingFeaturedProject => ({
+    id: String(project?.id ?? project?.name ?? index),
+    name: String(project?.name ?? project?.title ?? index),
+    title: String(project?.title ?? project?.name ?? `Project`),
+    status: String(project?.status ?? `Code`),
+    summary: String(project?.summary ?? project?.description ?? ``),
+    mediaURL: project?.mediaURL ? String(project.mediaURL) : undefined,
+    topics: Array.isArray(project?.topics) ? project.topics.map(String) : [],
+    liveUrl: project?.liveUrl ? String(project.liveUrl) : undefined,
+    codeUrl: project?.codeUrl ? String(project.codeUrl) : undefined,
+    viewHref: getCaseStudyHref(project),
+    number: String(index + 1).padStart(2, `0`),
+  }));
 
 const StudioPixels = ({ compact = false, position, round = false, tone = `blue` }: StudioPixelsProps) => (
   <span
@@ -158,41 +144,19 @@ export default function HomeLandingSections() {
       <section className={`landingStackSection`} aria-labelledby={`landing-stack-title`}>
         <StudioPixels compact round position={`TopRight`} tone={`navy`} />
         <StudioPixels compact round position={`BottomLeft`} tone={`navy`} />
-        <div className={`landingStackIntro`} data-landing-blur data-landing-reveal>
+        <div className={`landingStackIntro`} data-landing-reveal>
           <span className={`landingEyebrow`}>
-            Our Specialties
+            Our Work
           </span>
           <SplitHeading
             as={`h2`}
             id={`landing-stack-title`}
             className={`landingStackHeading`}
-            lines={[[{ text: `Skills` }, { text: `//`, accent: true }, { text: `Technologies` }, { text: `.`, accent: true }]]}
+            lines={[[{ text: `Featured` }, { text: `Projects` }, { text: `.`, accent: true }]]}
           />
         </div>
         <ElementReveal onScroll as={`div`} y={18} duration={0.68} className={`landingStackMarquee`}>
-          {technologyRows.map((technologies, rowIndex) => (
-            <Slider
-              role={`list`}
-              speed={rowIndex ? 22 : 25}
-              pauseonhover={false}
-              className={`landingStackList`}
-              key={`technology-row-${rowIndex}`}
-              id={`landingStackRow-${rowIndex + 1}`}
-              direction={rowIndex ? `ltr` : `rtl`}
-              trackClassName={`landingStackListTrack`}
-              ariaLabel={`Technologies and services, row ${rowIndex + 1}`}
-            >
-              {technologies.map(technology => {
-                const technologyMeta = getLandingTechnologyMeta(technology);
-                return (
-                  <span className={`landingStackItem`} role={`listitem`} key={technology}>
-                    <i className={`${technologyMeta.icon} techIcon ${technologyMeta.className}`} aria-hidden={`true`} />
-                    <span>{technology}</span>
-                  </span>
-                );
-              })}
-            </Slider>
-          ))}
+          <LandingFeaturedProjects www={false} projects={landingFeaturedProjects} />
         </ElementReveal>
       </section>
 
