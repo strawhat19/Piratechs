@@ -262,8 +262,6 @@ export default function HomeLanding({
         />
       </section>
 
-      <HomeAboutSection />
-
       {showSeparators && <div className={`sep reveal`} />}
 
       {/* <section className={`pageSection specialtiesSection`}>
@@ -351,7 +349,7 @@ export default function HomeLanding({
 
       {/* {showSeparators && <div className={`sep reveal`} />} */}
 
-      <HomeWaveSection includeServiceEstimator={true} />
+      <HomeWaveSection stretchForm={false} includeServiceEstimator={true} />
 
       {showSeparators && <div className={`sep reveal`} />}
     </>

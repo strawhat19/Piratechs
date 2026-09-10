@@ -9,6 +9,7 @@ import type { RouteID } from '@/shared/types/app';
 import { getTechnologyMeta } from '@/shared/utils/tech';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
+import HomeAboutSection from '../sections/home-about-section';
 
 export default function RoutePage({ pageID }: { pageID: RouteID }) {
   const page: any = config?.pages?.[pageID];
@@ -62,6 +63,12 @@ export default function RoutePage({ pageID }: { pageID: RouteID }) {
       </section>
 
       <div id={`anchor`} className={`sep reveal`} />
+
+      {pageID == `about` && <>
+        <HomeAboutSection />
+
+        <div className={`sep reveal`} />
+      </>}
 
       {pageID == `projects` ? <Section /> : <>
         <section className={`pageSection detailSection subPageSection`}>

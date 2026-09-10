@@ -409,7 +409,7 @@ export function HomeManifestoReveal() {
                 </div>
                 <div className={`studioStoryTopline`}>
                   <span className={`studioStoryIndex`}>0{index + 1}</span>
-                  <i className={`${principle.icon} studioStoryIcon gradientTextColor`} aria-hidden={`true`} />
+                  <span className={`studioStoryIcon`} aria-hidden={`true`}><i className={`${principle.icon} gradientTextColor`} /></span>
                   <span className={`studioStoryDiscipline`}>
                     {principle.about}
                   </span>
@@ -419,7 +419,7 @@ export function HomeManifestoReveal() {
                 <ul className={`studioStorySignals`} aria-label={`${principle.title} priorities`}>
                   {principle.signals.map(signal => (
                     <li key={signal.label}>
-                      <i className={`${signal.icon} studioStorySignalIcon gradientTextColor`} aria-hidden={`true`} />
+                      <span className={`studioStorySignalIcon`} aria-hidden={`true`}><i className={`${signal.icon} gradientTextColor`} /></span>
                       <span>{signal.label}</span>
                     </li>
                   ))}

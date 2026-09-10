@@ -17,6 +17,7 @@ const landingFeaturedProjects = getProjects()
     technologies: [project?.language, project?.type, ...(Array.isArray(project?.tech) ? project.tech : [])].filter((topic): topic is string => typeof topic === `string` && topic !== `Project`),
     liveUrl: project?.liveUrl ? String(project.liveUrl) : undefined,
     codeUrl: project?.codeUrl ? String(project.codeUrl) : undefined,
+    urlImage: project?.urlImage ? String(project.urlImage) : undefined,
     viewHref: getCaseStudyHref(project),
     number: String(index + 1).padStart(2, `0`),
   }));

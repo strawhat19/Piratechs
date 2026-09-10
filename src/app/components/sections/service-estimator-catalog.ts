@@ -73,25 +73,28 @@ export const buildTypes = [
 ] as const;
 
 export const buildPageCounts = [
-  { id: `one`, label: `1 Page // Screen // View`, shortLabel: `1 page // screen // view` },
-  { id: `three`, label: `3 Pages // Screens // Views`, shortLabel: `3 pages // screens // views` },
-  { id: `five-plus`, label: `5+ Pages // Screens // Views`, shortLabel: `5+ pages // screens // views` },
-  { id: `ten-plus`, label: `10+ Pages // Screens // Views`, shortLabel: `10+ pages // screens // views` },
+  { id: `one`, pages: 1, label: `1 Page // Screen // View`, shortLabel: `1 page // screen // view` },
+  { id: `three`, pages: 3, label: `3 Pages // Screens // Views`, shortLabel: `3 pages // screens // views` },
+  { id: `five-plus`, pages: 5, label: `5+ Pages // Screens // Views`, shortLabel: `5+ pages // screens // views` },
+  { id: `ten-plus`, pages: 10, label: `10+ Pages // Screens // Views`, shortLabel: `10+ pages // screens // views` },
 ] as const;
 
 export const buildEffortLevels = [
   {
     id: `simple`,
+    icon: `fa-window-maximize`,
     label: `Simple, Clean, Professional`,
     description: `A polished one-page website from $333 to $1,111, with room to add more.`,
   },
   {
     id: `business`,
+    icon: `fa-building`,
     label: `Business Feature Rich`,
     description: `5+ pages at $1,500 / $2,222 / $2,500+, with content tools and business integrations.`,
   },
   {
     id: `enterprise`,
+    icon: `fa-city`,
     label: `Enterprise Flagship`,
     description: `10+ pages at $3,000 / $3,333 / $3,500+, with advanced systems and more included features.`,
   },

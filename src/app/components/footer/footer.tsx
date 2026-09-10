@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Logo from '../logo/logo';
 import Word from '../logo/word';
+import FooterClock from './footer-clock';
 import { config } from '@/shared/config/config';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ElementReveal from '@/app/components/effects/element-reveal';
@@ -9,11 +10,12 @@ export default function Footer({
   showNav = false,
   titleGraphic = true,
 }: any) {
+  const socialLinks = [...(config?.social ?? []), { label: `Instagram`, href: `https://www.instagram.com/piratechsatl`, icon: `fa-brands fa-instagram` }];
   return (
     <footer className={`footer`}>
       <div className={`footerInner`}>
         <ElementReveal scroll as={`div`} delay={0.04} y={10} className={`footerBrandReveal`}>
-          <Link href={`/`} className={`footerBrand`}>
+          <Link href={`/`} className={`footerBrand`} aria-label={`Piratechs home`}>
             <Logo className={`footerLogo`} />
             <div className={`sep bgReversed`} style={{ minHeight: 54 }} />
             <span className={`footerContent`}>
@@ -21,7 +23,7 @@ export default function Footer({
                 <Word className={`wordLogoFooter`} gradient={false} gradientSword arrows />
               ) : <TextReveal scroll as={`strong`} text={config.title} />}
               <div className={`sep reveal`} />
-              <TextReveal scroll as={`small`} html text={`<i>${config.description}</i>`} delay={0.06} />
+              <FooterClock />
             </span>
           </Link>
         </ElementReveal>
@@ -43,7 +45,7 @@ export default function Footer({
             <TextReveal scroll as={`span`} text={String(new Date()?.getFullYear())} delay={0.04} />
           </ElementReveal>
           <div className={`footerSocials`}>
-            {config?.social?.map((item: any, index: number) => (
+            {socialLinks.map((item: any, index: number) => (
               <ElementReveal scroll as={`span`} key={item.label} delay={0.14 + index * 0.035} className={`footerIconReveal`}>
                 <a href={item.href} target={`_blank`} rel={`noreferrer`} aria-label={item.label} className={`iconButton`}>
                   <i className={item.icon} style={{ color: `white` }} />

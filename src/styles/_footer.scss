@@ -24,6 +24,11 @@ body[data-theme="light"] .footer {
 
 .footerBrandReveal {
   min-width: 0;
+  max-width: 100%;
+}
+
+.footerContent {
+  min-width: 0;
 }
 
 .copyright {
@@ -51,6 +56,23 @@ body[data-theme="light"] .footer {
 .footerBrand small {
   line-height: 1.45;
   color: var(--foregroundMuted);
+}
+
+.footerBrand .footerClock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 325px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 19px;
+  font: 0.75rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  > i { font-size: 0.8rem; }
+  span { gap: 0; display: inline-block; white-space: nowrap; }
+  .footerClockCity { color: var(--main); font-size: 0.65rem; letter-spacing: 0.08em; }
+  .footerClockData { gap: 0 8px; min-width: 0; display: inline-flex; flex-wrap: wrap; }
+  time { font-variant-numeric: tabular-nums; letter-spacing: 0.025em; }
 }
 
 .footerNav, .footerLinks {
@@ -95,4 +117,8 @@ body[data-theme="light"] .footer {
 .footerNav a:hover,
 .footerLinks a:hover {
   color: var(--main);
+}
+
+@media (max-width: 640px) {
+  .footerLinks { flex-direction: column; gap: 10px; }
 }

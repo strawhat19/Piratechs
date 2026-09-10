@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import type { Ref } from 'react';
+import ServicePrice from './service-price';
 import AuthWidget from '../auth/auth-widget';
 import ElementReveal from '../effects/element-reveal';
 import { serviceCards } from './service-estimator-catalog';
@@ -12,12 +14,12 @@ import { type EstimatorStage, type ServiceEstimatorSelectionProps } from './serv
 const waveCrest = `M0 100 C240 20 480 20 720 100 S1200 180 1440 100 S1920 20 2160 100 S2640 180 2880 100`;
 const waveLayers = [`distant`, `middle`, `near`] as const;
 
-function WaveServiceSelection({ selectedServices, onToggle, onStart }: ServiceEstimatorSelectionProps) {
+function WaveServiceSelection({ selectedServices, onToggle, onStart, startButtonRef, instructions = false }: ServiceEstimatorSelectionProps & { instructions?: boolean; startButtonRef: Ref<HTMLButtonElement> }) {
   return (
     <div className="homeWaveServices">
       <fieldset className="homeWaveServiceChoices">
-        <legend>How can we help?</legend>
-        <p>Choose your services, or start with a free consultation.</p>
+        <legend><i className={`fa-solid fa-circle-question gradientTextColor`} aria-hidden={`true`} /> How can we help?</legend>
+        {instructions && <p>Choose your services, or start with a free consultation.</p>}
         <div className="homeWaveServiceButtons">
           {serviceCards.map(service => (
             <button key={service.id} type="button" className="homeWaveServiceButton" aria-pressed={selectedServices.includes(service.id)} onClick={() => onToggle(service.id)}>
@@ -28,7 +30,7 @@ function WaveServiceSelection({ selectedServices, onToggle, onStart }: ServiceEs
                   <i className={`fa-solid gradientTextColor ${service.icon}`} aria-hidden={`true`} />
                 )}
                 <span className="homeWaveServiceIconLabel">
-                  <i><span className={`smallText`}>From</span> <strong><span className="gradientTextColor">$</span>{service.price}</strong></i>
+                  <i><span className={`smallText`}>From</span> <strong><ServicePrice amount={service.price} /></strong></i>
                 </span>
               </div>
               <span>{service.label}</span>
@@ -37,31 +39,37 @@ function WaveServiceSelection({ selectedServices, onToggle, onStart }: ServiceEs
           ))}
         </div>
       </fieldset>
-      <button type="button" className="homeWaveStart" data-ready={selectedServices.length > 0} onClick={onStart}>
-        <i className="fa-solid fa-bolt gradientTextColor" aria-hidden="true" />
+      <button type="button" ref={startButtonRef} className="homeWaveStart" data-ready={selectedServices.length > 0} onClick={onStart}>
+        <i className={`piratechsSailIcon`} aria-hidden={`true`} />
         <span>
           Start
           <span className="homeWaveStartDetail">
             {selectedServices.length ? `Ready · ${selectedServices.length} service${selectedServices.length === 1 ? `` : `s`}` : `Set Sail`}
           </span>
         </span>
-        <i className="fa-solid fa-arrow-right gradientTextColor" aria-hidden="true" />
+        <i className={`fa-solid fa-chevron-right gradientTextColor`} aria-hidden={`true`} />
       </button>
     </div>
   );
 }
 
 export default function HomeWaveSection({
+  stretchForm = false,
+  instructions = false,
   showPlayPauseButton = false,
   includeServiceEstimator = false,
 }: {
+  stretchForm?: boolean;
+  instructions?: boolean;
   showPlayPauseButton?: boolean;
   includeServiceEstimator?: boolean;
 }) {
   const id = useId();
   const sectionRef = useRef<HTMLElement>(null);
+  const startButtonRef = useRef<HTMLButtonElement>(null);
   const [paused, setPaused] = useState(false);
   const [estimatorActive, setEstimatorActive] = useState(false);
+  const expandedEstimator = stretchForm && estimatorActive;
   const estimatorWasActive = useRef(false);
   const onEstimatorStageChange = useCallback((stage: EstimatorStage) => {
     const active = stage !== 'services';
@@ -76,8 +84,8 @@ export default function HomeWaveSection({
 
   useEffect(() => {
     // Align the estimator on Start; changing its tabs keeps the page still.
-    if (estimatorActive) sectionRef.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
-  }, [estimatorActive]);
+    if (estimatorActive && stretchForm) sectionRef.current?.scrollIntoView({ block: `start`, behavior: `instant` });
+  }, [estimatorActive, stretchForm]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -119,12 +127,27 @@ export default function HomeWaveSection({
       <h2 id={`${id}-heading`}>
         Make waves.<br /><span>Design what’s next.</span>
       </h2>
-      {!estimatorActive && (
+      {!expandedEstimator && (
         <div className="homeWaveIntro">
           <p>Bold design. Purposeful code. A crew ready to take your next idea beyond the horizon.</p>
-          <Link href="/contact" className="homeWaveLink">
-            Chart your course <i className="fa-solid fa-arrow-up-right-from-square gradientTextColor" aria-hidden="true" />
-          </Link>
+          {includeServiceEstimator ? (
+            <button type={`button`} className={`homeWaveLink fillButton`} onClick={() => {
+              if (startButtonRef.current) startButtonRef.current.click();
+              else sectionRef.current?.querySelector<HTMLElement>(`.servicesWidgetStageHeading h3`)?.focus({ preventScroll: true });
+            }}>
+              <i className={`fa-solid fa-compass gradientTextColor`} aria-hidden={`true`} /> 
+              <span className={`chartYourCourse`}>
+                CHART YOUR COURSE
+              </span>
+            </button>
+          ) : (
+            <Link href={`/contact`} className={`homeWaveLink fillButton`}>
+              <i className={`fa-solid fa-compass gradientTextColor`} aria-hidden={`true`} /> 
+              <span className={`chartYourCourse`}>
+                CHART YOUR COURSE
+              </span>
+            </Link>
+          )}
         </div>
       )}
     </ElementReveal>
@@ -133,15 +156,22 @@ export default function HomeWaveSection({
   const estimator = (
     <div className="homeWaveEstimator" key="estimator">
       <HomeServiceEstimator 
+        instructions={instructions}
         onStageChange={onEstimatorStageChange}
         renderServiceSelection={selection => (
-          <WaveServiceSelection {...selection} onStart={() => {
+          <WaveServiceSelection {...selection} instructions={instructions} startButtonRef={startButtonRef} onStart={() => {
             const section = sectionRef.current;
             if (section) {
-              const sectionWidth = section.getBoundingClientRect().width;
-              const sectionHeight = section.getBoundingClientRect().height;
-              section.style.setProperty(`--home-wave-resting-height`, `${sectionWidth >= 981 ? (sectionHeight + 193) : sectionHeight}px`);
+              const sectionBounds = section.getBoundingClientRect();
+              const estimatorBounds = section.querySelector(`.homeWaveEstimator`)?.getBoundingClientRect();
+              section.style.setProperty(`--home-wave-resting-height`, `${sectionBounds.height}px`);
+              if (estimatorBounds) {
+                const formHeight = Math.max(estimatorBounds.height, sectionBounds.bottom - estimatorBounds.top - 48);
+                section.style.setProperty(`--home-wave-form-height`, `${formHeight}px`);
+                section.style.setProperty(`--home-wave-selection-height`, `${estimatorBounds.height}px`);
+              }
             }
+            setEstimatorActive(true);
             selection.onStart();
           }} />
         )} 
@@ -154,12 +184,13 @@ export default function HomeWaveSection({
       ref={sectionRef}
       id="waves"
       className="homeWaveSection"
+      data-stretch-form={stretchForm}
       data-service-estimator={includeServiceEstimator}
       data-estimator-active={includeServiceEstimator && estimatorActive}
       aria-labelledby={`${id}-heading`}
       data-paused={paused}
     >
-      {!estimatorActive && <ElementReveal onScroll as={`div`} y={12} className={`homeWaveTopline`}>
+      {!expandedEstimator && <ElementReveal onScroll as={`div`} y={12} className={`homeWaveTopline`}>
         <span className={`eyebrow`}>
           Our Services
         </span>
@@ -206,7 +237,7 @@ export default function HomeWaveSection({
         ))}
       </ElementReveal>
 
-      {!estimatorActive && <ElementReveal onScroll as={`div`} y={10} delay={0.18} className={`homeWaveCoordinates`} aria-hidden={`true`}>
+      {!expandedEstimator && <ElementReveal onScroll as={`div`} y={10} delay={0.18} className={`homeWaveCoordinates`} aria-hidden={`true`}>
         <span>PIRATECHS<span className="homeWaveCoordinatesStudio"> <span>{`//`}</span> STUDIOS</span></span>
         <span>
           <span className="homeWaveCoordinatesFull">DESIGN <span>→</span> DEVELOP <span>→</span> DISTORT</span>

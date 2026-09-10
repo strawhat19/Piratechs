@@ -4,9 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '@/app/components/logo/logo';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
-import { getTechnologyMeta } from '@/shared/utils/tech';
+import { faviconOverwrites } from '@/app/components/url/url';
 import styles from '@/styles/featured-project-showcase.module.scss';
+import { extractRootDomain } from '@/shared/common/scripts/globals';
 import type { LandingFeaturedProject } from './landing-featured-projects';
+import FeaturedProjectTechnologyIcon from './featured-project-technology-icon';
 import { useId, useRef, useState, useEffect, useLayoutEffect, type CSSProperties, type PointerEvent } from 'react';
 
 type FeaturedProjectShowcaseProps = {
@@ -56,6 +58,23 @@ type ProjectThumbnailsProps = FeaturedProjectShowcaseProps & {
 
 const getProjectTopics = (project: LandingFeaturedProject) => Array.from(new Map([...(project.technologies ?? []), ...project.topics].filter(Boolean).map(topic => [topic.toLowerCase(), topic] as const)).values());
 const getImageTransform = (source: DOMRect, target: DOMRect) => `translate(${source.left - target.left}px, ${source.top - target.top}px) scale(${source.width / target.width}, ${source.height / target.height})`;
+
+const ProjectIcon = ({ project }: { project: LandingFeaturedProject }) => {
+  if (!project.urlImage && !project.liveUrl) return null;
+  const rootDomain = String(extractRootDomain(project.liveUrl ?? ``) ?? ``);
+  const override = Object.keys(faviconOverwrites).find(key => rootDomain.includes(key));
+  const source = project.urlImage || `https://www.google.com/s2/favicons?domain=${override ? faviconOverwrites[override] : rootDomain}`;
+  return <img key={source} alt={``} width={18} height={18} src={source} draggable={false} aria-hidden={`true`} className={styles.projectIcon} onError={event => {
+    if (!event.currentTarget.src.endsWith(`/icon-16x16.png`)) event.currentTarget.src = `/icon-16x16.png`;
+  }} />;
+};
+
+const ProjectLinks = ({ project, tabIndex, className = `` }: { tabIndex?: number; className?: string; project: LandingFeaturedProject }) => (
+  <div data-no-swipe className={`${styles.projectLinks} ${className}`}>
+    {project.liveUrl ? <a href={project.liveUrl} target={`_blank`} draggable={false} tabIndex={tabIndex} rel={`noopener noreferrer`} title={`Visit ${project.title}`} aria-label={`Visit ${project.title} (opens in a new tab)`}><ProjectIcon project={project} /></a> : null}
+    {project.codeUrl ? <a href={project.codeUrl} target={`_blank`} draggable={false} tabIndex={tabIndex} rel={`noopener noreferrer`} title={`View ${project.title} on GitHub`} aria-label={`View ${project.title} on GitHub (opens in a new tab)`}><i className={`fa-brands fa-github`} aria-hidden={`true`} /></a> : null}
+  </div>
+);
 
 const ProjectImage = ({ project, sizes, eager = false }: ProjectImageProps) => {
   const [failedSource, setFailedSource] = useState<string | null>(null);
@@ -292,9 +311,12 @@ const ProjectDetail = ({ index, origin, projects, onClose, onSelect, getReturnRe
         selectProject(event.key === `ArrowLeft` ? previousIndex : nextIndex, event.key === `ArrowLeft` ? -1 : 1);
       }}
     >
-      <button type={`button`} onClick={() => void closeDetail()} className={styles.closeButton} aria-label={`Close project details`} data-detail-chrome>
-        <i className={`fa-solid fa-xmark`} aria-hidden={`true`} />
-      </button>
+      <div className={styles.detailTopActions} data-detail-chrome>
+        <ProjectLinks project={project} />
+        <button type={`button`} onClick={() => void closeDetail()} className={styles.closeButton} aria-label={`Close project details`}>
+          <i className={`fa-solid fa-xmark`} aria-hidden={`true`} />
+        </button>
+      </div>
       <div className={styles.detailWatermark} aria-hidden={`true`} data-detail-chrome>
         <Logo fullSword gradient={false} skullWhite={false} color={`var(--main)`} className={styles.watermarkLogo} />
       </div>
@@ -320,7 +342,7 @@ const ProjectDetail = ({ index, origin, projects, onClose, onSelect, getReturnRe
               </div>
               <div className={styles.detailText} tabIndex={0} role={`region`} aria-label={`${project.title} overview`}>
                 <p>{project.summary || project.title}</p>
-                {topics.length ? <ul className={styles.topics} aria-label={`Project technologies`}>{topics.map(topic => <li key={topic}><i className={getTechnologyMeta(topic.toLowerCase()).icon} aria-hidden={`true`} />{topic}</li>)}</ul> : null}
+                {topics.length ? <ul className={styles.topics} aria-label={`Project technologies`}>{topics.map(topic => <li key={topic}><span className={styles.technologyIcon}><FeaturedProjectTechnologyIcon label={topic} /></span>{topic}</li>)}</ul> : null}
               </div>
               <div className={styles.detailActions}>
                 {project.liveUrl ? (
@@ -331,7 +353,6 @@ const ProjectDetail = ({ index, origin, projects, onClose, onSelect, getReturnRe
                 <Link href={project.viewHref} onClick={onClose} className={styles.textLink}>
                   Full Project<i className={`fa-solid fa-arrow-right`} aria-hidden={`true`} />
                 </Link>
-                {project.codeUrl ? <a href={project.codeUrl} target={`_blank`} rel={`noreferrer`} className={styles.codeLink} aria-label={`View ${project.title} source code`}><i className={`fa-brands fa-github`} aria-hidden={`true`} /></a> : null}
               </div>
             </article>
           </div>
@@ -339,13 +360,13 @@ const ProjectDetail = ({ index, origin, projects, onClose, onSelect, getReturnRe
         <footer className={styles.detailFooter} data-detail-chrome>
           <ProjectThumbnails detail index={index} projects={projects} onSelect={selectProject} />
           <button type={`button`} disabled={projects.length < 2} onClick={() => selectProject(previousIndex, -1)} aria-label={`Previous project: ${projects?.[previousIndex]?.title}`}>
-            <i className={`fa-solid fa-arrow-left`} aria-hidden={`true`} />
+            <i className={`fa-solid fa-chevron-left`} aria-hidden={`true`} />
             <span><small>Previous Project</small><strong>{projects?.[previousIndex]?.title}</strong></span>
           </button>
           <span className={styles.detailCount} aria-live={`polite`} aria-atomic={`true`}><strong>{project.number}</strong> / {String(projects.length).padStart(2, `0`)}</span>
           <button type={`button`} disabled={projects.length < 2} onClick={() => selectProject(nextIndex, 1)} aria-label={`Next project: ${projects?.[nextIndex]?.title}`}>
             <span><small>Next Project</small><strong>{projects?.[nextIndex]?.title}</strong></span>
-            <i className={`fa-solid fa-arrow-right`} aria-hidden={`true`} />
+            <i className={`fa-solid fa-chevron-right`} aria-hidden={`true`} />
           </button>
         </footer>
       </div>
@@ -421,10 +442,11 @@ export default function FeaturedProjectShowcase({ projects }: FeaturedProjectSho
   useEffect(() => () => window.cancelAnimationFrame(dragFrameRef.current), []);
 
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {
-    if (!event.isPrimary || event.button !== 0 || projects.length < 2) return;
-    const card = event.currentTarget.querySelector<HTMLButtonElement>(`[data-position="0"]`);
-    if (!card) return;
+    if (!event.isPrimary || event.button !== 0) return;
     didDragRef.current = false;
+    if (projects.length < 2 || !(event.target instanceof Element) || event.target.closest(`a, [data-no-swipe]`)) return;
+    const card = event.currentTarget.querySelector<HTMLDivElement>(`[data-position="0"]`);
+    if (!card) return;
     dragRef.current = {
       id: event.pointerId,
       active: false,
@@ -524,35 +546,40 @@ export default function FeaturedProjectShowcase({ projects }: FeaturedProjectSho
           const midpoint = Math.floor(projects.length / 2);
           const position = (index - selectedIndex + projects.length + midpoint) % projects.length - midpoint;
           return (
-            <button
-              type={`button`}
+            <div
               key={project.id}
               data-position={position}
               style={{ '--card-position': position } as ReelCardStyle}
               className={styles.reelCard}
-              aria-haspopup={`dialog`}
               inert={Math.abs(position) > 1}
-              tabIndex={position === 0 ? 0 : -1}
-              aria-label={`Explore ${project.title}`}
               aria-hidden={Math.abs(position) > 1 ? true : undefined}
-              onClick={event => { setSelectedIndex(index); setDetail({ index, origin: event.currentTarget.getBoundingClientRect() }); }}
             >
-              <span className={styles.cardGlow} aria-hidden={`true`}>
-                {Math.abs(position) <= 1 ? <ProjectImage project={project} sizes={`(max-width: 760px) 65vw, 36vw`} /> : null}
-              </span>
-              <span className={styles.cardSurface}>
-                {Math.abs(position) <= 2 ? <ProjectImage project={project} sizes={`(max-width: 760px) 65vw, 36vw`} /> : null}
-                <span className={styles.cardShade} aria-hidden={`true`} />
-                <span className={styles.cardDimming} aria-hidden={`true`} />
-                <span className={styles.cardGhostNumber} aria-hidden={`true`}>{project.number}</span>
-                <span className={styles.cardNumber}>{project.number}<span className={styles.cardBadges}>{getProjectTopics(project).slice(0, 3).map(topic => <span key={topic}><i className={getTechnologyMeta(topic.toLowerCase()).icon} aria-hidden={`true`} />{topic}</span>)}</span></span>
-                <span className={styles.cardCaption}>
-                  <strong>{project.title}</strong>
-                  {project.summary ? <span className={styles.cardDescription}><span>{project.summary}</span></span> : null}
+              <button
+                type={`button`}
+                aria-haspopup={`dialog`}
+                className={styles.cardTrigger}
+                tabIndex={position === 0 ? 0 : -1}
+                aria-label={`Explore ${project.title}`}
+                onClick={event => { setSelectedIndex(index); setDetail({ index, origin: event.currentTarget.getBoundingClientRect() }); }}
+              >
+                <span className={styles.cardGlow} aria-hidden={`true`}>
+                  {Math.abs(position) <= 1 ? <ProjectImage project={project} sizes={`(max-width: 760px) 65vw, 36vw`} /> : null}
                 </span>
-                {position === 0 ? <span key={project.id} className={styles.reelProgress} aria-hidden={`true`} onAnimationEnd={event => { if (event.target === event.currentTarget && running) setSelectedIndex(current => (current + 1) % projects.length); }} /> : null}
-              </span>
-            </button>
+                <span className={styles.cardSurface}>
+                  {Math.abs(position) <= 2 ? <ProjectImage project={project} sizes={`(max-width: 760px) 65vw, 36vw`} /> : null}
+                  <span className={styles.cardShade} aria-hidden={`true`} />
+                  <span className={styles.cardDimming} aria-hidden={`true`} />
+                  <span className={styles.cardGhostNumber} aria-hidden={`true`}>{project.number}</span>
+                  <span className={styles.cardNumber}>{project.number}<span className={styles.cardBadges}>{getProjectTopics(project).slice(0, 3).map(topic => <span key={topic}><span className={styles.technologyIcon}><FeaturedProjectTechnologyIcon label={topic} /></span>{topic}</span>)}</span></span>
+                  <span className={styles.cardCaption}>
+                    <strong>{project.title}</strong>
+                    {project.summary ? <span className={styles.cardDescription}><span>{project.summary}</span></span> : null}
+                  </span>
+                  {position === 0 ? <span key={project.id} className={styles.reelProgress} aria-hidden={`true`} onAnimationEnd={event => { if (event.target === event.currentTarget && running) setSelectedIndex(current => (current + 1) % projects.length); }} /> : null}
+                </span>
+              </button>
+              <ProjectLinks project={project} className={styles.cardLinks} tabIndex={position === 0 ? 0 : -1} />
+            </div>
           );
         })}
       </div>
@@ -560,9 +587,9 @@ export default function FeaturedProjectShowcase({ projects }: FeaturedProjectSho
         <span className={styles.reelCount}>{selectedProject.number}<span> / {String(projects.length).padStart(2, `0`)}</span></span>
         <ProjectThumbnails projects={projects} index={selectedIndex} onSelect={setSelectedIndex} />
         <div className={styles.reelControls}>
-          <button type={`button`} onClick={() => setSelectedIndex(current => (current - 1 + projects.length) % projects.length)} aria-label={`Previous project preview`} disabled={projects.length < 2}><i className={`fa-solid fa-arrow-left`} aria-hidden={`true`} /></button>
+          <button type={`button`} onClick={() => setSelectedIndex(current => (current - 1 + projects.length) % projects.length)} aria-label={`Previous project preview`} disabled={projects.length < 2}><i className={`fa-solid fa-chevron-left`} aria-hidden={`true`} /></button>
           {!reducedMotion ? <button type={`button`} onClick={() => setPaused(value => !value)} aria-pressed={paused} aria-label={paused ? `Play project slideshow` : `Pause project slideshow`}><i className={`fa-solid ${paused ? `fa-play` : `fa-pause`}`} aria-hidden={`true`} /></button> : null}
-          <button type={`button`} onClick={() => setSelectedIndex(current => (current + 1) % projects.length)} aria-label={`Next project preview`} disabled={projects.length < 2}><i className={`fa-solid fa-arrow-right`} aria-hidden={`true`} /></button>
+          <button type={`button`} onClick={() => setSelectedIndex(current => (current + 1) % projects.length)} aria-label={`Next project preview`} disabled={projects.length < 2}><i className={`fa-solid fa-chevron-right`} aria-hidden={`true`} /></button>
         </div>
       </div>
       {detail ? (
@@ -571,7 +598,7 @@ export default function FeaturedProjectShowcase({ projects }: FeaturedProjectSho
           projects={projects}
           onClose={() => setDetail(null)}
           onSelect={index => { setSelectedIndex(index); setDetail(current => current ? { ...current, index } : null); }}
-          getReturnRect={() => showcaseRef.current?.querySelector<HTMLButtonElement>(`[data-position="0"]`)?.getBoundingClientRect()}
+          getReturnRect={() => showcaseRef.current?.querySelector<HTMLDivElement>(`[data-position="0"]`)?.getBoundingClientRect()}
         />
       ) : null}
     </div>

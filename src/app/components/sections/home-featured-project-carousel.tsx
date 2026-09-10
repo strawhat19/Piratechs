@@ -281,7 +281,7 @@ export default function HomeFeaturedProjectCarousel() {
           </span>
           <div className={`homeFeaturedPaginationDock`}>
             <button className={`homeFeaturedPaginationArrow`} type={`button`} onClick={previous} aria-label={`Previous featured project`}>
-              <i className={`fa-solid fa-arrow-left`} aria-hidden={`true`} />
+              <i className={`fa-solid fa-chevron-left`} aria-hidden={`true`} />
             </button>
             <div className={`homeFeaturedThumbnails`} aria-label={`Choose a featured project`}>
               {featuredProjects.map((project, index) => (
@@ -300,7 +300,7 @@ export default function HomeFeaturedProjectCarousel() {
               ))}
             </div>
             <button className={`homeFeaturedPaginationArrow`} type={`button`} onClick={next} aria-label={`Next featured project`}>
-              <i className={`fa-solid fa-arrow-right`} aria-hidden={`true`} />
+              <i className={`fa-solid fa-chevron-right`} aria-hidden={`true`} />
             </button>
           </div>
         </div>

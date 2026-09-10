@@ -1,3 +1,5 @@
+@use './service-button' as serviceButton;
+
 .homeWaveSection {
   --home-wave-bottom-space: 220px;
   position: relative;
@@ -160,7 +162,7 @@
   .homeWaveCopy p { margin: 0 0 12px; }
 }
 
-.homeWaveSection[data-estimator-active="true"] {
+.homeWaveSection[data-estimator-active="true"][data-stretch-form="true"] {
   --home-wave-bottom-space: 24px;
 
   .homeWaveContent {
@@ -185,7 +187,7 @@
   @media (min-width: 981px) {
     display: grid;
     box-sizing: border-box;
-    height: var(--home-wave-resting-height, 600px);
+    height: max(var(--home-wave-resting-height, 560px), 540px);
     padding-block: 24px;
   }
 }
@@ -203,6 +205,8 @@
   border: 0;
 
   legend { padding: 0; font-size: 1rem; font-weight: 750; letter-spacing: -0.02em; }
+  legend > i { margin-inline-end: 6px; }
+  legend + .homeWaveServiceButtons { margin-top: 12px; }
   > p { margin: 6px 0 16px; color: var(--silver); font-size: 0.8rem; line-height: 1.5; }
 }
 
@@ -214,38 +218,9 @@
 
 .homeWaveServiceButton,
 .homeWaveStart {
-  position: relative;
-  isolation: isolate;
+  @include serviceButton.surface;
   min-width: 0;
-  color: var(--white-soft);
   font: inherit;
-  cursor: pointer;
-  border: 1px solid rgba(var(--piratechsNeon_rgb), 0.26);
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(var(--piratechsNeon_rgb), 0.1), rgba(var(--piratechsTeal_rgb), 0.035));
-  -webkit-backdrop-filter: blur(16px) saturate(130%);
-  backdrop-filter: blur(16px) saturate(130%);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.055), 0 8px 24px rgba(0, 9, 27, 0.1);
-  transition:
-    color 320ms ease,
-    border-color 320ms ease,
-    background-color 320ms ease,
-    box-shadow 420ms ease,
-    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
-
-  // Fade a separate gradient layer; background-image changes otherwise snap.
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  &:focus-visible { outline: 2px solid var(--piratechsTeal); outline-offset: 3px; }
 }
 
 .homeWaveServiceButton {
@@ -286,6 +261,7 @@
 }
 
 .homeWaveStart {
+  @include serviceButton.liquid;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -296,20 +272,11 @@
   border-color: rgba(var(--piratechsTeal_rgb), 0.5);
   background: linear-gradient(105deg, rgba(var(--piratechsNeon_rgb), 0.2), rgba(var(--piratechsTeal_rgb), 0.16));
 
-  &::before { background: linear-gradient(105deg, var(--piratechsNeon), var(--piratechsTeal)); }
   > i, .homeWaveStartDetail { transition: color 320ms ease; }
 
   > i:first-child { font-size: 1.1rem; }
   > span { display: inline-flex; align-items: center; gap: 14px; font-size: 0.95rem; font-weight: 750; }
   > i:last-child { position: absolute; right: 20px; font-size: 0.85rem; }
-}
-
-.homeWaveStart[data-ready="true"] {
-  color: var(--navy-deep);
-  border-color: var(--piratechsTeal);
-  &::before { opacity: 1; }
-  box-shadow: 0 0 28px rgba(var(--piratechsTeal_rgb), 0.24);
-  .homeWaveStartDetail { color: inherit; }
 }
 
 .homeWaveStartDetail { color: var(--white-smoke); font-size: 0.75rem; font-weight: 400; }
@@ -322,18 +289,67 @@
   }
 }
 
+.fillButton {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-inline: 12px;
+  transition: color 0.25s ease;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -18px -50% -1px;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(var(--piratechsNeon_rgb), .85), rgba(var(--piratechsTeal_rgb), .85));
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 12Q25 0 50 12T100 12T150 12T200 12V100H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    transform: translate3d(-10%, 100%, 0);
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  &::before {
+    opacity: 0.4;
+    transform: translate3d(10%, 100%, 0);
+  }
+
+  &::after { transition-delay: 0.07s; }
+
+  &:is(:hover, :focus-visible) {
+    color: var(--navy-deep);
+    transition-delay: 0.18s;
+
+    &::before { transform: translate3d(-10%, 0, 0); }
+    &::after { transform: translate3d(10%, 0, 0); }
+    > i {
+      color: inherit;
+      background: none;
+      -webkit-text-fill-color: currentColor;
+    }
+  }
+}
 
 .homeWaveLink {
   display: inline-flex;
   align-items: center;
   gap: 14px;
   min-height: 44px;
+  padding-block: 0;
+  border: 0;
+  border-radius: 10px;
   border-bottom: 1px solid var(--piratechsTeal);
+  background: transparent;
   color: var(--white-soft);
   font-size: 0.83rem;
   font-weight: 700;
-
-  &:hover { color: var(--piratechsTeal); }
+  .chartYourCourse {
+    font-size: 0.85em;
+  }
+  i {
+    padding-top: 1px;
+    font-size: 1.25em;
+  }
 }
 
 .homeWaveOcean {
@@ -444,7 +460,7 @@
     .homeWaveIntro { max-width: 600px; }
   }
   .homeWaveServiceButton { min-height: 90px; padding: 12px; }
-  .homeWaveSection[data-estimator-active="true"] {
+  .homeWaveSection[data-estimator-active="true"][data-stretch-form="true"] {
     padding-block: 20px;
     .homeWaveContent { margin-top: 0; gap: 16px; }
     .homeWaveCopy h2 { font-size: clamp(1.35rem, 3vw, 2rem); }
@@ -454,7 +470,7 @@
 
 @media (min-width: 901px) {
   .homeWaveEstimator .servicesWidgetCards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .homeWaveEstimator .servicesWidgetStage { padding: 22px; gap: 18px; padding-bottom: 0; }
+  .homeWaveEstimator .servicesWidgetStage { padding: 18px; gap: 14px; }
   .homeWaveEstimator .servicesWidgetRadioCards { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
   .homeWaveEstimator .servicesWidgetRadioCards {
     &.webAppServices {
@@ -469,7 +485,7 @@
     .homeWaveCopy h2 { font-size: clamp(1.65rem, 7vw, 2.3rem); }
     .homeWaveCopy p { margin-block: 10px; font-size: 0.875rem; line-height: 1.5; }
   }
-  .homeWaveSection[data-estimator-active="true"] .homeWaveCopy h2 {
+  .homeWaveSection[data-estimator-active="true"][data-stretch-form="true"] .homeWaveCopy h2 {
     font-size: clamp(1.25rem, 5.2vw, 1.8rem);
   }
   .homeWaveServiceButtons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -491,7 +507,42 @@
   .homeWaveStartDetail { font-size: 0.68rem; }
 }
 
+.homeWaveSection[data-estimator-active="true"][data-stretch-form="false"] {
+  .homeWaveEstimator { height: var(--home-wave-selection-height, 340px); }
+  .homeWaveEstimator .servicesWidget {
+    position: absolute;
+    inset: 0 0 auto;
+    height: var(--home-wave-form-height, var(--home-wave-selection-height, 340px));
+  }
+  .servicesWidgetHeader { gap: 8px; padding-bottom: 6px; }
+  .servicesWidgetBrand { gap: 7px; font-size: 0.75rem; }
+  .servicesWidgetBrand > span { max-width: 80px; }
+  .servicesWidgetStage { gap: 10px; padding: 12px 2px; }
+  .servicesWidgetCards,
+  .servicesWidgetRadioCards {
+    grid-auto-rows: minmax(0, auto);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    &.stageRadios_build-detail {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    &.servicesWidgetCards {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .servicesWidgetRadio small { font-size: 0.75rem; line-height: 1.35; }
+  .servicesWidgetCareChoices .servicesWidgetRadio { min-height: 0; padding: 12px 30px 12px 12px; }
+  .servicesWidgetRanges:not(.servicesWidgetPaymentRanges) { grid-template-columns: minmax(0, 1fr); }
+
+  @media (max-width: 640px) {
+    .servicesWidgetCards,
+    .servicesWidgetRadioCards { grid-template-columns: minmax(0, 1fr); }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .homeWaveLink {
+    &, &::before, &::after { transition: none; }
+  }
   .homeWaveLayer { animation: none; }
   .homeWaveLayer--distant { transform: translateX(-15%); }
   .homeWaveLayer--middle { transform: translateX(-30%); }

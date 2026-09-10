@@ -35,9 +35,9 @@ export const buildPricingMatrix: Record<BuildEffortId, Record<BuildPageCountId, 
 
 // Package prices at 1 page (Simple), 5+ pages (Business), and 10+ pages (Enterprise).
 export const buildPackages = [
-  { id: 'essential', label: 'Essentials' },
-  { id: 'recommended', label: 'Recommended' },
-  { id: 'complete', label: 'Complete' },
+  { id: `essential`, icon: `fa-cube`, label: `Essentials` },
+  { id: `recommended`, icon: `fa-cubes`, label: `Recommended` },
+  { id: `complete`, icon: `fa-gem`, label: `Complete` },
 ] as const;
 export const buildPackagePrices: Record<BuildEffortId, Record<BuildPackageId, number>> = {
   simple: { essential: 333, recommended: 777, complete: 1111 },
@@ -142,6 +142,7 @@ export type ServiceEstimatorSelectionProps = {
   onStart: () => void;
 };
 export type HomeServiceEstimatorProps = {
+  instructions?: boolean;
   initialItem?: ServiceCartItem | null;
   onAddToCart?: (item: ServiceCartItem) => void;
   onUpdateCart?: (item: ServiceCartItem) => void;

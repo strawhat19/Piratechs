@@ -9,6 +9,7 @@ export type LandingFeaturedProject = {
   codeUrl?: string;
   id: string;
   liveUrl?: string;
+  urlImage?: string;
   mediaURL?: string;
   name: string;
   number: string;
@@ -208,7 +209,7 @@ function LandingFeaturedProjectsClassic({ projects, www = false }: LandingFeatur
 
         <footer className={`landingProjectDeckFooter`}>
           <button type={`button`} onClick={showPreviousProject} aria-label={`Previous featured project`}>
-            <i className={`fa-solid fa-arrow-left`} /><span>Previous</span>
+            <i className={`fa-solid fa-chevron-left`} /><span>Previous</span>
           </button>
           <div className={`landingProjectDeckRail`} aria-label={`Choose a featured project`}>
             {projects.map((project, index) => (
@@ -225,7 +226,7 @@ function LandingFeaturedProjectsClassic({ projects, www = false }: LandingFeatur
             ))}
           </div>
           <button type={`button`} onClick={showNextProject} aria-label={`Next featured project`}>
-            <span>Next</span><i className={`fa-solid fa-arrow-right`} />
+            <span>Next</span><i className={`fa-solid fa-chevron-right`} />
           </button>
         </footer>
       </section>

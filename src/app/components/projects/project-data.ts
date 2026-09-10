@@ -8,11 +8,11 @@ export const projectSheetOpenEvent = `piratechs:project-sheet-open`;
 
 export const featuredProjects = {
   [`Forge`]: { name: `Forge` },
-  [`MatchXD`]: { name: `MatchXD` },
-  [`GeoPoliticalMedia`]: { name: `GeoPoliticalMedia` },
+  [`MatchXD`]: { name: `MatchXD`, title: `Match XD` },
   [`MyDex-Pokedex-Clone`]: { name: `MyDex-Pokedex-Clone` },
   [`bengaliblush`]: { name: `bengaliblush`, title: `Bengali Blush`, },
   [`Piratechs`]: { name: `Piratechs`, urlImage: `/icon-192x192_Circle.png` },
+  [`GeoPoliticalMedia`]: { name: `GeoPoliticalMedia`, title: `Geo Political Media` },
   [`Smart-Garden`]: { name: `Smart-Garden`, urlImage: `https://smart-garden-zeta.vercel.app/assets/SmartGardenIcon.svg` },
   [`React-Netflix-Clone`]: { name: `React-Netflix-Clone`, urlImage: `https://react-netflix-clone-piratechs.vercel.app/favicon.ico` },
   [`CreativeWorkshop`]: { name: `CreativeWorkshop`, title: `Creative Workshop`, urlImage: `https://creative-workshop.vercel.app/assets/images/CatIcon.png` },
