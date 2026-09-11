@@ -1,6 +1,6 @@
 # Piratechs
 
-![Piratechs](./public/assets/versions/Piratechs_v0100_0.gif)
+![Piratechs](./public/assets/versions/Piratechs_v0108_1.gif)
 
 Piratechs is built with Next, TypeScript, GSAP, etc.
 

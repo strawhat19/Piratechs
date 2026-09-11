@@ -520,7 +520,7 @@ export const gitUser_strawhat19 = {
 "title": "Piratechs",
 "status": "Live",
 "summary": "Full-Stack Design // Development Studio Portfolio. Piratechs is built with Next, TypeScript, GSAP, etc.",
-"mediaURL": "https://raw.githubusercontent.com/strawhat19/Piratechs/refs/heads/main/public/assets/versions/Piratechs_v0100_0.gif",
+"mediaURL": "https://raw.githubusercontent.com/strawhat19/Piratechs/refs/heads/main/public/assets/versions/Piratechs_v0108_1.gif",
 "number": 1,
 "properties": 131,
 "tech": [
