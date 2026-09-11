@@ -1,6 +1,6 @@
 import { Project } from '@/shared/models/Project';
-import { devEnv, publicImageURLs } from '@/shared/common/database/constants';
 import { gitUser } from '@/shared/common/database/github/users/strawhat19/user';
+import { devEnv, publicImageURLs, shuffleArray } from '@/shared/common/database/constants';
 
 export const projectSheetRouteSync = false;
 export const projectQueryEvent = `piratechs:project-query-change`;
@@ -41,7 +41,7 @@ export const getCaseStudyHref = (project: Project | string | any) => {
   return `/case-studies/${encodeURIComponent(projectName)}`;
 };
 
-export const getProjects = () => {
+export const getProjects = (shuffle: boolean = false) => {
   const gitProjects = gitUser?.projects ?? [];
   const projects = gitProjects.map((gp, index) => {
     const gitProject = gp as Project | any;
@@ -54,8 +54,16 @@ export const getProjects = () => {
     };
   });
   const sortedProjects = [...projects].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-  devEnv && console.log(`Project(s)`, { featuredProjects, allProjects: sortedProjects, user: gitUser });
-  return sortedProjects;
+  // const shuffledProjects = shuffleArray(sortedProjects);
+  const returnedProjects = shuffle ? shuffleArray(sortedProjects) : sortedProjects;
+  devEnv && console.log(`Project(s)`, { 
+    user: gitUser,
+    featuredProjects, 
+    returnedProjects,
+    // shuffledProjects,
+    allProjects: sortedProjects, 
+  });
+  return returnedProjects;
 };
 
 export const findProjectByID = (projectID: string) => {

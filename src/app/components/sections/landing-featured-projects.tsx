@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { createPortal } from 'react-dom';
-import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { shuffleArray } from '@/shared/common/database/constants';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 
 export type LandingFeaturedProject = {
   codeUrl?: string;
@@ -24,6 +25,7 @@ export type LandingFeaturedProject = {
 type LandingFeaturedProjectsProps = {
   projects: LandingFeaturedProject[];
   www?: boolean;
+  shuffle?: boolean;
 };
 
 type ProjectRailStyle = CSSProperties & {
@@ -33,8 +35,14 @@ type ProjectRailStyle = CSSProperties & {
 const getWrappedIndex = (index: number, count: number) => (index + count) % count;
 const FeaturedProjectShowcase = dynamic(() => import('./featured-project-showcase'));
 
-export default function LandingFeaturedProjects({ projects, www = false }: LandingFeaturedProjectsProps) {
-  return www ? <FeaturedProjectShowcase projects={projects} /> : <LandingFeaturedProjectsClassic projects={projects} />;
+export default function LandingFeaturedProjects({ projects, www = false, shuffle = false }: LandingFeaturedProjectsProps) {
+  const [orderedProjects, setOrderedProjects] = useState(projects);
+
+  useEffect(() => {
+    setOrderedProjects(shuffle ? shuffleArray(projects).map((project, index) => ({ ...project, number: String(index + 1).padStart(2, `0`) })) : projects);
+  }, [projects, shuffle]);
+
+  return www ? <FeaturedProjectShowcase projects={orderedProjects} /> : <LandingFeaturedProjectsClassic projects={orderedProjects} />;
 }
 
 function LandingFeaturedProjectsClassic({ projects, www = false }: LandingFeaturedProjectsProps) {

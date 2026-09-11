@@ -21,10 +21,11 @@ export const gitUser_strawhat19 = {
 "name": "MatchXD",
 "number": 1,
 "properties": 126,
-"summary": "MatchXD",
+"summary": "MatchXD is a mobile-first dating app prototype for iOS, Android, and web, built with Expo SDK 57, React Native, TypeScript, and Expo Router. The interface combines Coral Classic with a charcoal dark theme, a compact mobile app icon, and the connected-X pass action.",
 "topics": [
 "Code"
 ],
+"mediaURL": "https://raw.githubusercontent.com/strawhat19/MatchXD/main/public/assets/versions/MatchXD_v0000_0.gif",
 "status": "Code",
 "featured": false,
 "title": "MatchXD",
@@ -272,6 +273,7 @@ export const gitUser_strawhat19 = {
 "number": 3,
 "properties": 121,
 "summary": "Bengali Blush — a beauty atelier for soft glam, expressive lashes, hair styling, and party makeup. Storefront built with Next.js, TypeScript, Sass, and PWA. Business back end and database will be connected via Firebase.",
+"mediaURL": "https://raw.githubusercontent.com/strawhat19/bengaliblush/main/public/assets/versions/BengaliBlush_v0000_0.gif",
 "topics": [
 "Code"
 ],

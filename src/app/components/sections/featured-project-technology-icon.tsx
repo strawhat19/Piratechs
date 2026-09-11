@@ -35,13 +35,11 @@ export default function FeaturedProjectTechnologyIcon({ label }: { label: string
   const normalizedLabel = label.toLowerCase().replace(/[^a-z0-9#]/g, ``);
   const technology = aliases[normalizedLabel] ?? normalizedLabel;
   const path = brandPaths[technology];
+  const iconMask = path ? `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="${path}"/></svg>`)}") center / contain no-repeat` : undefined;
 
   return path ? (
-    <svg width={`1em`} height={`1em`} fill={`currentColor`} viewBox={`0 0 24 24`} aria-hidden={`true`} focusable={`false`}>
-      <path d={path} />
-    </svg>
+    <span aria-hidden={`true`} style={{ width: `1em`, height: `1em`, mask: iconMask, WebkitMask: iconMask, background: `var(--main_gradient)` }} />
   ) : (
-    <i aria-hidden={`true`} style={{ width: `1em`, height: `1em` }} className={topicIcons[technology] ?? getTechnologyMeta(technology).icon} />
+    <i aria-hidden={`true`} style={{ width: `1em`, height: `1em` }} className={`${topicIcons[technology] ?? getTechnologyMeta(technology).icon} gradientTextColor`} />
   );
 }
-

@@ -19,6 +19,7 @@ type ProjectImageProps = {
   sizes: string;
   eager?: boolean;
   project: LandingFeaturedProject;
+  onLoad?: (image: HTMLImageElement) => void;
 };
 
 type OpenProject = {
@@ -76,7 +77,7 @@ const ProjectLinks = ({ project, tabIndex, className = `` }: { tabIndex?: number
   </div>
 );
 
-const ProjectImage = ({ project, sizes, eager = false }: ProjectImageProps) => {
+const ProjectImage = ({ project, sizes, eager = false, onLoad }: ProjectImageProps) => {
   const [failedSource, setFailedSource] = useState<string | null>(null);
   const imageSource = project.mediaURL ?? ``;
   const optimizeImage = !/\.gif(?:$|\?)/i.test(imageSource) && (imageSource.startsWith(`/`) || imageSource.startsWith(`https://raw.githubusercontent.com/`) || imageSource.startsWith(`https://piratechs.com/wp-content/uploads/`));
@@ -95,6 +96,7 @@ const ProjectImage = ({ project, sizes, eager = false }: ProjectImageProps) => {
           unoptimized={!optimizeImage}
           className={styles.projectImage}
           loading={eager ? `eager` : `lazy`}
+          onLoad={event => onLoad?.(event.currentTarget)}
           onError={() => setFailedSource(imageSource)}
         />
       ) : null}
@@ -389,6 +391,7 @@ export default function FeaturedProjectShowcase({ projects }: FeaturedProjectSho
   const dragRef = useRef<ReelDrag | null>(null);
   const reelRef = useRef<HTMLDivElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
+  const projectGlowRefs = useRef(new Map<string, HTMLCanvasElement>());
   const selectedProject = projects?.[selectedIndex] ?? projects?.[0];
   const running = visible && pageVisible && !paused && !hovered && !focused && !dragging && !detail && !reducedMotion && projects.length > 1;
 
@@ -440,6 +443,16 @@ export default function FeaturedProjectShowcase({ projects }: FeaturedProjectSho
   }, [detail, reducedMotion]);
 
   useEffect(() => () => window.cancelAnimationFrame(dragFrameRef.current), []);
+
+  const captureProjectGlow = (projectId: string, image: HTMLImageElement) => {
+    const canvas = projectGlowRefs.current.get(projectId);
+    const context = canvas?.getContext(`2d`);
+    if (!canvas || !context || canvas.dataset.source === image.currentSrc || !image.naturalWidth || !image.naturalHeight) return;
+    const scale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, (canvas.width - image.naturalWidth * scale) / 2, 0, image.naturalWidth * scale, image.naturalHeight * scale);
+    canvas.dataset.source = image.currentSrc;
+  };
 
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {
     if (!event.isPrimary || event.button !== 0) return;
@@ -562,11 +575,10 @@ export default function FeaturedProjectShowcase({ projects }: FeaturedProjectSho
                 aria-label={`Explore ${project.title}`}
                 onClick={event => { setSelectedIndex(index); setDetail({ index, origin: event.currentTarget.getBoundingClientRect() }); }}
               >
-                <span className={styles.cardGlow} aria-hidden={`true`}>
-                  {Math.abs(position) <= 1 ? <ProjectImage project={project} sizes={`(max-width: 760px) 65vw, 36vw`} /> : null}
-                </span>
+                <canvas width={160} height={90} className={styles.cardGlow} aria-hidden={`true`}
+                  ref={canvas => { if (canvas) projectGlowRefs.current.set(project.id, canvas); else projectGlowRefs.current.delete(project.id); }} />
                 <span className={styles.cardSurface}>
-                  {Math.abs(position) <= 2 ? <ProjectImage project={project} sizes={`(max-width: 760px) 65vw, 36vw`} /> : null}
+                  {Math.abs(position) <= 2 ? <ProjectImage project={project} sizes={`(max-width: 760px) 65vw, 36vw`} onLoad={image => captureProjectGlow(project.id, image)} /> : null}
                   <span className={styles.cardShade} aria-hidden={`true`} />
                   <span className={styles.cardDimming} aria-hidden={`true`} />
                   <span className={styles.cardGhostNumber} aria-hidden={`true`}>{project.number}</span>

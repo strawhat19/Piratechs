@@ -22,7 +22,7 @@ const landingFeaturedProjects = getProjects()
     number: String(index + 1).padStart(2, `0`),
   }));
 
-export default function HomeFeaturedProjectsSection({ www = true }: { www?: boolean }) {
+export default function HomeFeaturedProjectsSection({ www = true, shuffle = false }: { www?: boolean; shuffle?: boolean }) {
   return (
     <HomeLandingSection>
       <div className={`sep reveal`} />
@@ -42,7 +42,7 @@ export default function HomeFeaturedProjectsSection({ www = true }: { www?: bool
           />
         </div>
         <ElementReveal scroll={www} onScroll={!www} as={`div`} y={18} duration={0.68} className={`landingStackMarquee`}>
-          <LandingFeaturedProjects www={www} projects={landingFeaturedProjects} />
+          <LandingFeaturedProjects www={www} shuffle={shuffle} projects={landingFeaturedProjects} />
         </ElementReveal>
       </section>
     </HomeLandingSection>

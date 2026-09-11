@@ -317,7 +317,7 @@ export default function HomeLanding({
       {showSeparators && <div className={`sep reveal`} />} */}
 
       <HomeManifestoReveal />
-      <HomeFeaturedProjectsSection www={true} />
+      <HomeFeaturedProjectsSection shuffle www={true} />
       {/* <HomeFeaturedProjectCarousel /> */}
       {/* <HomeCapabilityRadar /> */}
       {/* <HomeProjectBento /> */}
