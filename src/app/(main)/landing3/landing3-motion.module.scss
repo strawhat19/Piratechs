@@ -1,0 +1,12 @@
+.line { display: block; }
+.word { display: inline-block; }
+.wordMask { margin: -0.14em -0.055em; padding: 0.14em 0.055em; vertical-align: baseline; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion [data-l3-state='pending'] { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion :where([data-l3-reveal], [data-l3-image], [data-l3-split]) { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  .motion .word, .motion .word > span { opacity: 1 !important; transform: none !important; }
+}

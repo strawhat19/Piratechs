@@ -1,0 +1,177 @@
+.section { width: min(calc(100% - 2 * var(--l3-inset)), 1440px); margin-inline: auto; padding-block: clamp(76px, 9vw, 140px); color: var(--l3-ink); scroll-margin-top: 104px; }
+.label { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-top: 22px; border-top: 1px solid var(--l3-line); font-size: 10px; font-weight: 500; line-height: 1.6; letter-spacing: .1em; text-transform: uppercase; }
+.label > span:first-child { color: var(--l3-accent); }
+.label > span:last-child { color: var(--l3-muted); }
+.heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; padding-block: 36px 70px; }
+.heading h2 { margin: 0; font-size: clamp(60px, 8.1vw, 124px); font-weight: 500; line-height: .98; letter-spacing: -.075em; }
+.heading h2 em { color: var(--l3-accent); font-family: Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -.07em; }
+.heading > p { max-width: 260px; margin: 0 0 6px auto; color: var(--l3-muted); font-size: 14px; line-height: 1.9; }
+.workCount { margin-bottom: 8px; color: transparent; font-size: clamp(96px, 11vw, 166px); font-weight: 500; line-height: .8; letter-spacing: -.085em; -webkit-text-stroke: 1px var(--l3-line); }
+.projects { display: grid; gap: clamp(60px, 7vw, 100px); }
+.project { display: block; min-width: 0; color: inherit; text-decoration: none; }
+.project:focus-visible, .footer a:focus-visible { outline: 2px solid var(--l3-accent); outline-offset: 7px; }
+.frame { position: relative; min-height: 490px; overflow: hidden; isolation: isolate; }
+.frameIndex { position: absolute; z-index: 2; top: 28px; right: 32px; left: 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; color: #ffffffb3; font-size: 10px; font-weight: 500; line-height: 1.6; letter-spacing: .1em; text-transform: uppercase; }
+.frameIndex > span:first-child { display: grid; width: 27px; height: 27px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 9px; letter-spacing: 0; }
+.blushFrame { padding: 78px 7% 70px; background: #1c0f1a; background-image: radial-gradient(ellipse at 78% 18%, #69434a 0%, transparent 65%); }
+.blushBrowser { position: relative; z-index: 1; overflow: hidden; border: 1px solid #eeced52b; box-shadow: 0 24px 60px #08020b4d; transform: rotate(-1.5deg); }
+.browserBar, .gardenBar { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 31px; padding: 9px 15px; color: #dfced5b3; background: #271d28; font-size: 8px; line-height: 1.2; letter-spacing: .075em; }
+.browserDots { display: inline-flex; flex-shrink: 0; align-items: center; gap: 5px; }
+.browserDots i { width: 4px; height: 4px; border: 1px solid currentColor; border-radius: 50%; }
+.blushScreen { display: grid; grid-template-columns: .84fr 1.16fr; min-height: clamp(365px, 34vw, 490px); background: #442234; }
+.blushEditorial { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; padding: 36px 10%; color: #fce9dc; }
+.blushWordmark { font-family: Georgia, 'Times New Roman', serif; font-size: 37px; font-weight: 400; line-height: .84; letter-spacing: -.065em; }
+.blushWordmark > em { margin-left: 30px; font-weight: 400; }
+.blushWordmark > span { display: block; margin-top: 12px; font-family: var(--font); font-size: 6px; line-height: 1.6; letter-spacing: .2em; }
+.blushEditorial p { position: relative; z-index: 1; width: 150%; margin: 32px 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(42px, 4.8vw, 73px); font-weight: 400; line-height: .97; letter-spacing: -.065em; }
+.blushEditorial p em { font-weight: 400; }
+.blushNote { font-size: 8px; line-height: 1.8; letter-spacing: .055em; text-transform: uppercase; }
+.blushPhoto { position: relative; min-height: 100%; overflow: hidden; }
+.blushPhoto img { object-fit: cover; object-position: 50% 44%; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.photoStamp { position: absolute; right: 7%; bottom: 7%; display: grid; align-content: center; width: 90px; height: 90px; border: 1px solid #fff4e6a3; border-radius: 50%; color: #fff4e6; font-size: 11px; line-height: 1.4; text-align: center; transform: rotate(10deg); }
+.photoStamp em { font-family: Georgia, 'Times New Roman', serif; font-size: 27px; line-height: 1; }
+.frameFootnote { position: absolute; right: 32px; bottom: 23px; color: #d4b6c1; font-size: 8px; line-height: 1.7; letter-spacing: .13em; text-transform: uppercase; }
+.caption { display: flex; align-items: center; gap: 28px; padding-block: 23px; border-bottom: 1px solid var(--l3-line); }
+.caption h3 { min-width: 27%; margin: 0; font-size: clamp(24px, 2.5vw, 36px); font-weight: 500; line-height: 1.2; letter-spacing: -.05em; }
+.caption > p { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 0; color: var(--l3-muted); font-size: 10px; line-height: 1.8; letter-spacing: .025em; text-transform: uppercase; }
+.caption > p > span { color: var(--l3-accent); }
+.caseStudy { display: inline-flex; flex-shrink: 0; align-items: center; gap: 22px; margin-left: auto; font-size: 11px; }
+.arrow { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid var(--l3-line); border-radius: 50%; font-size: 24px; transition: color .25s ease, background-color .25s ease, border-color .25s ease, transform .25s ease; }
+.forgeFrame { min-height: clamp(440px, 42vw, 600px); color: #e7efff; background: #062860; background-image: radial-gradient(ellipse at 66% 38%, #114ba3, transparent 68%); }
+.forgeGrid { position: absolute; inset: 0; opacity: .55; background-image: linear-gradient(#76a5ff17 1px, transparent 1px), linear-gradient(90deg, #76a5ff17 1px, transparent 1px); background-size: 68px 68px; }
+.forgeCopy { position: absolute; z-index: 1; top: 21%; left: 7%; }
+.forgeCopy > span { font-size: 9px; line-height: 1.8; letter-spacing: .1em; text-transform: uppercase; }
+.forgeCopy > p { margin: 20px 0 25px; font-size: clamp(45px, 5.3vw, 80px); font-weight: 500; line-height: .99; letter-spacing: -.07em; }
+.forgeCopy > p > em { color: #90bdff; font-style: normal; font-weight: 400; }
+.forgeArt { position: absolute; top: 0; right: 8%; bottom: 0; display: grid; width: 39%; place-items: center; }
+.forgeOrbit { position: absolute; top: 50%; left: 50%; width: 100%; aspect-ratio: 1; border: 1px solid #94bfff36; border-radius: 50%; transform: translate(-50%, -50%); }
+.forgeOrbit::before, .forgeOrbit::after { position: absolute; content: ''; inset: 13%; border: 1px solid #94bfff2e; border-radius: 50%; }
+.forgeOrbit::after { inset: -15%; border-color: #94bfff1a; }
+.forgeMark { position: relative; display: block; width: clamp(145px, 18vw, 260px); height: auto; transform: rotate(7deg); transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.forgeWordmark { position: absolute; right: 4%; bottom: -8%; color: #96c1ff13; font-size: clamp(160px, 23vw, 340px); font-weight: 600; line-height: 1; letter-spacing: -.08em; }
+.forgeWordmark > span { display: inline-block; margin-left: 12px; font-size: 22px; vertical-align: top; }
+.forgeCoordinates { position: absolute; bottom: 31px; left: 7%; font-family: monospace; color: #94bfff; font-size: 10px; line-height: 1.6; letter-spacing: .04em; }
+.gardenFrame { min-height: clamp(445px, 43vw, 620px); color: #e7f1de; background: #062d30; }
+.gardenFrame .frameIndex { color: #c0d9c7; }
+.gardenRing { position: absolute; top: -50%; right: -10%; width: 80%; aspect-ratio: 1; border: 85px solid #144746; border-radius: 50%; }
+.gardenCopy { position: absolute; z-index: 2; top: 22%; left: 7%; }
+.gardenCopy > span { font-size: 9px; line-height: 1.8; letter-spacing: .08em; text-transform: uppercase; }
+.gardenCopy > p { margin: 20px 0 28px; font-size: clamp(47px, 5.8vw, 87px); font-weight: 400; line-height: .98; letter-spacing: -.065em; }
+.gardenCopy em { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; }
+.gardenScreen { position: absolute; top: 28%; right: -6%; width: 70%; overflow: hidden; border: 1px solid #d2e5d329; border-radius: 7px; background: #0b0d10; box-shadow: 0 22px 60px #00161640; transform: rotate(-7deg); }
+.gardenBar { justify-content: flex-start; gap: 20px; padding: 10px 13px; color: #b9ccc7; background: #162927; font-size: 7px; }
+.gardenImage { display: block; width: 100%; height: auto; }
+.gardenStar { position: absolute; bottom: 28px; left: 7%; color: #9dddab; font-size: 49px; line-height: 1; }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding-top: 40px; }
+.footer > span { color: var(--l3-muted); font-size: 10px; line-height: 1.7; letter-spacing: .045em; text-transform: uppercase; }
+.footer a { display: inline-flex; align-items: center; justify-content: space-between; gap: 54px; padding-block: 12px; color: var(--l3-ink); font-size: 13px; text-decoration: none; }
+.footer a > span { color: var(--l3-accent); font-size: 25px; transition: transform .25s ease; }
+
+@media (hover: hover) {
+  .project:hover .arrow { color: var(--navy-dark); border-color: var(--l3-accent); background: var(--l3-accent); transform: rotate(45deg); }
+  .project:hover .blushPhoto img { transform: scale(1.035); }
+  .project:hover .forgeMark { transform: rotate(0); }
+  .footer a:hover { color: var(--l3-accent); }
+  .footer a:hover > span { transform: translate(3px, -3px); }
+}
+
+@media (max-width: 1100px) {
+  .heading { gap: 32px; }
+  .heading > p { max-width: 215px; font-size: 13px; }
+  .workCount { font-size: 110px; }
+  .caption { gap: 20px; }
+  .caseStudy { gap: 14px; font-size: 10px; }
+  .caption > p { max-width: 230px; gap: 8px; font-size: 9px; }
+  .blushEditorial { padding-block: 28px; }
+  .forgeFrame { min-height: 470px; }
+  .forgeCopy > p { font-size: 62px; }
+  .gardenFrame { min-height: 460px; }
+  .gardenScreen { top: 33%; }
+}
+
+@media (max-width: 760px) {
+  .label { align-items: flex-start; font-size: 9px; }
+  .label > span:last-child { max-width: 145px; text-align: right; }
+  .heading { position: relative; align-items: flex-start; flex-direction: column; gap: 27px; padding-block: 34px 44px; }
+  .heading h2 { font-size: clamp(60px, 12vw, 87px); }
+  .heading > p { max-width: 330px; margin: 0; padding-right: 50px; font-size: 13px; }
+  .workCount { position: absolute; right: 0; bottom: 44px; margin: 0; font-size: 78px; }
+  .frameIndex { top: 20px; right: 22px; left: 22px; font-size: 8px; letter-spacing: .055em; }
+  .frameIndex > span:first-child { width: 23px; height: 23px; font-size: 8px; }
+  .blushFrame { min-height: 0; padding: 70px 6% 59px; }
+  .blushScreen { min-height: 350px; }
+  .blushEditorial { padding: 28px 10%; }
+  .blushEditorial p { font-size: 45px; }
+  .blushWordmark { font-size: 30px; }
+  .blushNote { font-size: 7px; }
+  .photoStamp { right: 10%; width: 68px; height: 68px; font-size: 9px; }
+  .photoStamp em { font-size: 22px; }
+  .browserBar { padding: 8px 10px; font-size: 6px; }
+  .frameFootnote { right: 22px; bottom: 18px; left: 22px; font-size: 7px; text-align: center; }
+  .caption { display: grid; grid-template-columns: 1fr auto; gap: 10px 20px; padding-block: 20px; }
+  .caption h3 { font-size: 27px; }
+  .caption > p { grid-column: 1; grid-row: 2; max-width: none; }
+  .caseStudy { grid-column: 2; grid-row: 1 / 3; width: 44px; overflow: hidden; font-size: 0; gap: 0; }
+  .arrow { flex-shrink: 0; }
+  .forgeFrame { min-height: 460px; }
+  .forgeCopy { top: 24%; }
+  .forgeCopy > p { font-size: 54px; }
+  .forgeCopy > span { font-size: 8px; }
+  .forgeArt { right: 7%; width: 40%; }
+  .forgeMark { width: 145px; }
+  .forgeWordmark { right: 1%; bottom: -4%; font-size: 180px; }
+  .forgeCoordinates { font-size: 8px; }
+  .gardenFrame { min-height: 475px; }
+  .gardenCopy { top: 20%; }
+  .gardenCopy > p { font-size: 61px; }
+  .gardenCopy > span { font-size: 8px; }
+  .gardenScreen { top: 43%; right: -12%; width: 77%; }
+  .gardenStar { font-size: 39px; }
+  .gardenRing { top: -10%; right: -25%; width: 105%; border-width: 55px; }
+  .footer { align-items: flex-start; flex-direction: column; gap: 12px; padding-top: 27px; }
+  .footer a { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .section { width: calc(100% - 2 * var(--l3-inset)); }
+  .heading h2 { font-size: 64px; }
+  .heading > p { max-width: 285px; padding-right: 32px; font-size: 12px; }
+  .workCount { font-size: 65px; }
+  .blushFrame { padding: 67px 16px 54px; }
+  .blushScreen { min-height: 355px; grid-template-columns: .76fr 1.24fr; }
+  .blushBrowser { width: calc(100% + 46px); margin-left: -12px; transform: rotate(-3deg); }
+  .blushEditorial { padding: 28px 14px 26px 21px; }
+  .blushEditorial p { width: 160%; margin-block: 25px; font-size: 39px; }
+  .blushWordmark { font-size: 27px; }
+  .blushWordmark > em { margin-left: 18px; }
+  .blushWordmark > span { font-size: 5px; }
+  .blushNote { font-size: 6px; }
+  .photoStamp { right: 20%; bottom: 7%; }
+  .frameIndex { right: 18px; left: 18px; gap: 14px; font-size: 7px; }
+  .forgeFrame { min-height: 480px; }
+  .forgeCopy { top: 20%; left: 8%; }
+  .forgeCopy > p { margin-block: 19px; font-size: 52px; }
+  .forgeCopy > span:last-child { display: inline-block; max-width: 110px; }
+  .forgeArt { top: 28%; right: 3%; width: 47%; }
+  .forgeMark { width: 126px; }
+  .forgeWordmark { right: 5%; bottom: 3%; font-size: 138px; }
+  .forgeWordmark > span { margin-left: 7px; font-size: 13px; }
+  .forgeCoordinates { bottom: 25px; left: 8%; font-size: 7px; }
+  .gardenFrame { min-height: 505px; }
+  .gardenCopy { top: 20%; left: 8%; }
+  .gardenCopy > p { margin-block: 18px; font-size: 59px; }
+  .gardenCopy > span:last-child { display: none; }
+  .gardenScreen { top: 55%; right: -18%; width: 102%; }
+  .gardenBar { gap: 10px; padding: 8px; font-size: 5px; }
+  .gardenStar { top: 23%; right: 8%; bottom: auto; left: auto; font-size: 32px; }
+  .gardenRing { top: -2%; width: 125%; right: -65%; }
+  .caption { gap: 9px 16px; }
+  .caption h3 { font-size: 26px; }
+  .caption > p { font-size: 8px; gap: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow, .forgeMark, .footer a > span, .blushPhoto img { transition: none; }
+  .project:hover .arrow, .project:hover .blushPhoto img, .footer a:hover > span { transform: none; }
+  .project:hover .forgeMark { transform: rotate(7deg); }
+}
