@@ -149,13 +149,18 @@ function ChoiceCards({
   );
 }
 
-function RadioCards<Value extends string>({ label, name, options, selected, onChange, className, stage }: {
+function RadioCards<Value extends string>({ label, name, options, selected, onChange, className, stage, heading }: {
+  heading?: ReactNode;
   name: string; label: string; className?: string; selected: Value | null; onChange: (value: Value) => void; stage?: any;
   options: readonly { id: Value; label: string; icon?: string; pages?: number; description?: string }[];
 }) {
   return (
     <fieldset className="servicesWidgetChoices">
-      <legend>{label}</legend>
+      <legend className={heading ? `servicesWidgetSrOnly` : undefined}>{label}</legend>
+      {heading ? <header className={`servicesWidgetStageHeading`}>
+        {heading}
+        <span className={`servicesWidgetStageLabel`} aria-hidden={`true`}>{label}</span>
+      </header> : null}
       <div className={`servicesWidgetRadioCards stageRadios_${stage ?? ``} radios_${className ?? ``}`} data-count={options.length}>
         {options.map(option => (
           <label className="servicesWidgetRadio" data-selected={selected === option.id} key={option.id}>
@@ -323,6 +328,7 @@ export function HomeServiceEstimator({ instructions = false, initialItem, onAddT
   };
 
   const panelTitle = stage === `cart` ? `Your saved plans` : instructions ? currentStep?.title : currentStep?.label;
+  const radioStage = [`build-care`, `build-pages`, `build-detail`, `mentoring-session`].includes(stage);
   const choiceStage = isCreativeService(stage) || [`services`, `mentoring`, `marketing`, `marketing-tools`].includes(stage) || Boolean(addOnStep);
   const stageHeading = <h3 ref={headingRef} tabIndex={-1}><EstimatorIcon icon={currentStep?.icon ?? `fa-cart-shopping`} /><span>{panelTitle}</span></h3>;
   const toggleService = (service: ServiceId) => patch({ selectedServices: toggleValue(draft.selectedServices, service) });
@@ -363,7 +369,7 @@ export function HomeServiceEstimator({ instructions = false, initialItem, onAddT
       <form className="servicesWidgetForm" onSubmit={submit} noValidate>
         <div className="servicesWidgetScroll" ref={scrollRef}>
           <div className={`servicesWidgetStage stage_${stage ?? ``}`} role="tabpanel" id={`${id}-panel-${stage}`} aria-labelledby={`${id}-tab-${stage}`} key={stage}>
-            {!choiceStage && <header className={`servicesWidgetStageHeading`}>{stageHeading}</header>}
+            {!choiceStage && !radioStage && <header className={`servicesWidgetStageHeading`}>{stageHeading}</header>}
 
             {stage === 'services' ? (
               <ChoiceCards stage={stage} heading={stageHeading} label="Select your services" options={serviceCards} selected={draft.selectedServices} pricePrefix="From "
@@ -384,7 +390,7 @@ export function HomeServiceEstimator({ instructions = false, initialItem, onAddT
 
             {stage === 'mentoring-session' ? (
               <>
-                <RadioCards stage={stage} label="Session pricing" name={`${id}-mentoring-mode`} selected={draft.mentoringPricingMode}
+                <RadioCards stage={stage} heading={stageHeading} label="Session pricing" name={`${id}-mentoring-mode`} selected={draft.mentoringPricingMode}
                   options={[{ id: `hourly`, icon: `fa-clock`, label: `By the hour`, description: `Topics included` }, { id: `package`, icon: `fa-box-open`, label: `Project package`, description: `$100 + selected topics` }]}
                   onChange={mentoringPricingMode => patch({ mentoringPricingMode })} />
                 {draft.mentoringPricingMode === 'hourly' ? (
@@ -408,13 +414,13 @@ export function HomeServiceEstimator({ instructions = false, initialItem, onAddT
             ) : null}
 
             {stage === 'build-pages' ? (
-              <RadioCards<BuildPageCountId> stage={stage} label="Pages // Screens // Views" name={`${id}-pages`} selected={draft.buildPageCount}
+              <RadioCards<BuildPageCountId> stage={stage} heading={stageHeading} label="Pages // Screens // Views" name={`${id}-pages`} selected={draft.buildPageCount}
                 options={buildPageCounts.map(option => ({ ...option, description: `${money(getBuildScopePrice(option.id, draft.buildEffort, draft.buildPackage))}` }))}
                 onChange={buildPageCount => patch({ buildPageCount })} className={`webAppServices`} />
             ) : null}
             {stage === 'build-detail' ? (
               <>
-                <RadioCards<BuildEffortId> stage={stage} label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
+                <RadioCards<BuildEffortId> stage={stage} heading={stageHeading} label="Level of detail" name={`${id}-effort`} selected={draft.buildEffort}
                   options={buildEffortLevels.map(option => ({ ...option, description: instructions ? option.description : undefined }))} onChange={buildEffort => patch({ buildEffort })} />
                 <RadioCards<BuildPackageId> stage={stage} label="Your package" name={`${id}-package`} selected={draft.buildPackage ?? 'essential'}
                   options={buildPackages.map(option => ({ ...option, description: `${money(getBuildScopePrice(draft.buildPageCount, draft.buildEffort, option.id))}${option.id === 'complete' && draft.buildEffort !== 'simple' ? '+' : ''} · ${getIncludedBuildFeatures({ ...draft, buildPackage: option.id }).length} included features` }))}
@@ -426,7 +432,7 @@ export function HomeServiceEstimator({ instructions = false, initialItem, onAddT
             {addOnStep ? <ChoiceCards stage={stage} heading={stageHeading} label="Make it yours · optional add-ons" options={addOnStep.options} selected={draft.buildFeatures} included={getIncludedBuildFeatures(draft)} details={buildDetails}
               onToggle={value => toggleList('buildFeatures', value)} onSelectionChange={values => patch({ buildFeatures: values as ServiceEstimatorDraft['buildFeatures'] })} /> : null}
             {stage === 'build-care' ? (
-              <RadioCards stage={stage} label="After launch" name={`${id}-care`} selected={draft.maintenance} className="servicesWidgetCareChoices"
+              <RadioCards stage={stage} heading={stageHeading} label="After launch" name={`${id}-care`} selected={draft.maintenance} className="servicesWidgetCareChoices"
                 options={[{ id: `self`, icon: `fa-user-gear`, label: `I’ll handle updates`, description: `No ongoing care added` }, { id: `managed`, icon: `fa-life-ring`, label: `Piratechs handles it`, description: `Ongoing care · Quoted separately` }]}
                 onChange={maintenance => patch({ maintenance })} />
             ) : null}

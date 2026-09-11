@@ -152,7 +152,18 @@
   }
 }
 
-.servicesWidgetChoices > legend {
+.servicesWidgetChoices > .servicesWidgetStageHeading { flex-wrap: wrap; margin-bottom: 9px; }
+
+.servicesWidgetStageLabel {
+  min-width: 0;
+  margin-left: auto;
+  text-align: right;
+  color: var(--widget-muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.servicesWidgetChoices > legend:not(.servicesWidgetSrOnly) {
   margin-bottom: 9px;
   color: var(--widget-muted);
   font-size: 0.875rem;

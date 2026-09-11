@@ -80,6 +80,8 @@
   position: relative;
   max-width: 920px;
 
+  &.elementReveal { will-change: transform; }
+
   h2 {
     margin: 0;
     font-size: clamp(2.6rem, 6.3vw, 6.5rem);
