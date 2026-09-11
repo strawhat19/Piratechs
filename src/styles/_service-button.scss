@@ -1,3 +1,25 @@
+@use 'sass:map';
+
+$liquid-fill-transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+$liquid-fill-presets: (
+  navy: (
+    text: var(--white-soft),
+    fill: linear-gradient(105deg, var(--navy), var(--navy-deep)),
+  ),
+  seafoam: (
+    text: var(--navy-deep),
+    fill: linear-gradient(105deg, color-mix(in srgb, var(--piratechsTeal) 25%, var(--white-soft)), color-mix(in srgb, var(--piratechsNeon) 18%, var(--white-soft))),
+  ),
+  wave-depth: (
+    text: var(--white-soft),
+    fill: var(--navy-deep),
+  ),
+  bright: (
+    text: var(--navy-deep),
+    fill: linear-gradient(105deg, color-mix(in srgb, var(--piratechsNeon) 85%, var(--white)), color-mix(in srgb, var(--piratechsTeal) 85%, var(--white))),
+  ),
+);
+
 @mixin surface {
   position: relative;
   isolation: isolate;
@@ -45,7 +67,8 @@
   &::before { opacity: 1; }
 }
 
-@mixin liquid {
+@mixin liquid($preset: bright) {
+  $palette: map.get($liquid-fill-presets, $preset);
   overflow: hidden;
   border-radius: 10px;
 
@@ -61,13 +84,12 @@
     background: linear-gradient(105deg, var(--piratechsNeon), var(--piratechsTeal));
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 12Q25 0 50 12T100 12T150 12T200 12V100H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
     transform: translate3d(10%, 100%, 0);
-    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: $liquid-fill-transition;
   }
 
   &::after {
-    background: linear-gradient(105deg, var(--navy), var(--navy-deep));
+    background: map.get($palette, fill);
     transform: translate3d(-10%, 100%, 0);
-    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &[data-ready="true"] {
@@ -81,7 +103,7 @@
   }
 
   &[data-ready="true"]:not(:disabled):not([aria-disabled="true"]):focus-visible {
-    color: var(--white-soft);
+    color: map.get($palette, text);
     border-color: transparent;
     box-shadow: none;
     transition:
@@ -93,7 +115,7 @@
 
   @media (hover: hover) {
     &[data-ready="true"]:not(:disabled):not([aria-disabled="true"]):hover {
-      color: var(--white-soft);
+      color: map.get($palette, text);
       border-color: transparent;
       box-shadow: none;
       transition:

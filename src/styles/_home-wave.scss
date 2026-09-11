@@ -217,7 +217,8 @@
 }
 
 .homeWaveServiceButton,
-.homeWaveStart {
+.homeWaveStart,
+.homeWaveLink {
   @include serviceButton.surface;
   min-width: 0;
   font: inherit;
@@ -274,7 +275,7 @@
 
   > i, .homeWaveStartDetail { transition: color 320ms ease; }
 
-  > i:first-child { font-size: 1.1rem; }
+  > i:first-child { font-size: 0.95rem; }
   > span { display: inline-flex; align-items: center; gap: 14px; font-size: 0.95rem; font-weight: 750; }
   > i:last-child { position: absolute; right: 20px; font-size: 0.85rem; }
 }
@@ -294,7 +295,6 @@
   isolation: isolate;
   overflow: hidden;
   padding-inline: 12px;
-  transition: color 0.25s ease;
 
   &::before,
   &::after {
@@ -306,7 +306,7 @@
     background: linear-gradient(90deg, rgba(var(--piratechsNeon_rgb), .85), rgba(var(--piratechsTeal_rgb), .85));
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 12Q25 0 50 12T100 12T150 12T200 12V100H0Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
     transform: translate3d(-10%, 100%, 0);
-    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: serviceButton.$liquid-fill-transition;
   }
 
   &::before {
@@ -318,7 +318,7 @@
 
   &:is(:hover, :focus-visible) {
     color: var(--navy-deep);
-    transition-delay: 0.18s;
+    transition-delay: 0.18s, 0s, 0s, 0s, 0s;
 
     &::before { transform: translate3d(-10%, 0, 0); }
     &::after { transform: translate3d(10%, 0, 0); }
@@ -334,13 +334,8 @@
   display: inline-flex;
   align-items: center;
   gap: 14px;
-  min-height: 44px;
-  padding-block: 0;
-  border: 0;
-  border-radius: 10px;
-  border-bottom: 1px solid var(--piratechsTeal);
-  background: transparent;
-  color: var(--white-soft);
+  min-height: 54px;
+  padding: 12px 20px;
   font-size: 0.83rem;
   font-weight: 700;
   .chartYourCourse {
