@@ -26,19 +26,18 @@ export default function HomeFeaturedProjectsSection({ www = true, shuffle = fals
   return (
     <HomeLandingSection>
       <div className={`sep reveal`} />
-
       <section className={`landingStackSection${www ? ` ${featuredProjectStyles.section}` : ``}`} aria-labelledby={`landing-stack-title`}>
         <StudioPixels compact round position={`TopRight`} tone={`navy`} />
         <StudioPixels compact round position={`BottomLeft`} tone={`navy`} />
         <div className={`landingStackIntro`} data-landing-reveal>
           <span className={`landingEyebrow`}>
-            Our Work
+            Our Fleet
           </span>
           <SplitHeading
             as={`h2`}
             id={`landing-stack-title`}
             className={`landingStackHeading`}
-            lines={[[{ text: `Featured` }, { text: `Projects` }, { text: `.`, accent: true }]]}
+            lines={[[{ text: `Flagship` }, { text: `Projects` }, { text: `.`, accent: true }]]}
           />
         </div>
         <ElementReveal scroll={www} onScroll={!www} as={`div`} y={18} duration={0.68} className={`landingStackMarquee`}>

@@ -8,17 +8,18 @@ export const projectSheetOpenEvent = `piratechs:project-sheet-open`;
 
 export const featuredProjects = {
   [`Forge`]: { name: `Forge` },
-  [`kalashi`]: { name: `Kalashi Music` },
-  [`MatchXD`]: { name: `MatchXD`, title: `Match XD` },
-  [`GeoCorp`]: { name: `GeoCorp`, title: `Geo Corp` },
   [`MyDex-Pokedex-Clone`]: { name: `MyDex-Pokedex-Clone` },
   [`bengaliblush`]: { name: `bengaliblush`, title: `Bengali Blush`, },
   [`Piratechs`]: { name: `Piratechs`, urlImage: `/icon-192x192_Circle.png` },
   // [`GeoPoliticalMedia`]: { name: `GeoPoliticalMedia`, title: `Geo Political Media` },
   [`Smart-Garden`]: { name: `Smart-Garden`, urlImage: `https://smart-garden-zeta.vercel.app/assets/SmartGardenIcon.svg` },
   [`React-Netflix-Clone`]: { name: `React-Netflix-Clone`, urlImage: `https://react-netflix-clone-piratechs.vercel.app/favicon.ico` },
+  [`kalashi`]: { name: `Kalashi Music`, urlImage: `https://raw.githubusercontent.com/strawhat19/kalashi/refs/heads/main/assets/brand/icon.png` },
   [`CreativeWorkshop`]: { name: `CreativeWorkshop`, title: `Creative Workshop`, urlImage: `https://creative-workshop.vercel.app/assets/images/CatIcon.png` },
+  [`MatchXD`]: { name: `MatchXD`, title: `Match XD`, urlImage: `https://raw.githubusercontent.com/strawhat19/MatchXD/refs/heads/main/assets/brand/favicon.png` },
+  [`GeoCorp`]: { name: `GeoCorp`, title: `Geo Corp`, urlImage: `https://raw.githubusercontent.com/strawhat19/GeoCorp/refs/heads/main/assets/brand/01-core-earth.png` },
   [`Dyer-Posta`]: { name: `Dyer-Posta`, title: `Dyer & Posta`, urlImage: `https://dyerposta.com/wp-content/uploads/2021/03/cropped-Official-Logo-Icon-GreenCircle.png` },
+  [`Sumit-Transcription-Form`]: { name: `Sumit-Transcription-Form`, title: `Sumit`, urlImage: `https://raw.githubusercontent.com/strawhat19/Sumit-Transcription-Form/refs/heads/main/assets/images/Sumit-Favicon.png` },
 } satisfies { [key: string]: Partial<Project> };
 
 export const featuredProjectNames = Object.keys(featuredProjects);
