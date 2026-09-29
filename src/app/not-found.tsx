@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import { config } from '@/shared/config/config';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
@@ -43,6 +44,7 @@ export default function GlobalNotFound() {
             <span>Back To Home</span>
           </Link>
         </main>
+        <Analytics />
       </body>
     </html>
   );

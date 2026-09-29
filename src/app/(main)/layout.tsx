@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Script from 'next/script';
 import Nav from '@/app/components/nav/nav';
 import type { Metadata, Viewport } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import { config } from '@/shared/config/config';
 import Footer from '@/app/components/footer/footer';
 import { Plus_Jakarta_Sans } from 'next/font/google';
@@ -86,6 +87,7 @@ export default function RootLayout({
             <ScrollToTop />
           </PageTransition>
         </GlobalProvider>
+        <Analytics />
       </body>
     </html>
   );

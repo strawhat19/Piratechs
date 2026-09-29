@@ -2,6 +2,7 @@ import '../globals.scss';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 
 import './lab.scss';
 import LabLoader from './lab-loader';
@@ -55,6 +56,7 @@ export default function LabLayout({ children }: { children: React.ReactNode }) {
           </PageTransition> */}
         </GlobalProvider>
         {/* Drop a custom <Footer /> here */}
+        <Analytics />
       </body>
     </html>
   );
